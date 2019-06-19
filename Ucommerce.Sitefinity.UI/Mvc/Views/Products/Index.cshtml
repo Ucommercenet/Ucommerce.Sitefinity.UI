@@ -1,0 +1,166 @@
+﻿@model Ucommerce.Sitefinity.UI.Mvc.ViewModels.ProductListViewModel
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers
+@using Telerik.Sitefinity.Services
+@using Ucommerce.Sitefinity.UI.Mvc.ViewModels
+
+@{
+    ViewBag.Title = "Products";
+}
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/moment.min.js"), "head", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/angular.min.js"), "head", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/app.js"), "head", false)
+    @Html.Script(Url.WidgetContent("Mvc/Scripts/productsController/ProductsController.js"), "head", false)
+}
+
+<div ng-controller="productsController">
+    <div class="sfCatalogTotalCount">
+        <div>
+            <em>@Model.TotalCount products</em>
+        </div>
+    </div>
+    @if (Model.ShowPager)
+    {
+        @Html.Action("Index", "ContentPager", new
+        {
+           currentPage = Model.CurrentPage,
+           totalPagesCount = Model.TotalPagesCount.Value,
+           redirectUrlTemplate = Model.PagingUrlTemplate
+        })
+    }
+    <ul class="sfproductsList">
+        @foreach (var product in Model.Products)
+        {
+            <li class="sfproductListItem sfProductCtnTmbmedium">
+                <div class="sfproductTmbWrp">
+                    <a title="@product.DisplayName" class=" sfProductTmbWrpmedium" href="@product.ProductUrl">
+                        <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@product.DisplayName">
+                    </a>
+                </div>
+                <h2 class="sfproductTitle">
+                    <a class="sfproductTitleLnk" href="@product.ProductUrl">@product.DisplayName</a>
+                </h2>
+                <div class="sfproductPrice bottomPrice">
+                    <div>
+                        <div class="sfTxtContent"></div>
+                        <div>
+                            <span class="sfRegPrice">@product.Price</span>
+                        </div>
+
+                        <div class="sfcommentsThreadRatingWrp sfcommentsThreadRatingFull sfRatingReadOnly">
+                            <a href="#" class="sfRatingClosingText" onclick="return false;">Write a review</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+    <div class="product-list-paging">
+        <div class="sfCatalogTotalCount">
+            <div>
+                <em>@Model.TotalCount products</em>
+            </div>
+        </div>
+        @if (Model.ShowPager)
+        {
+            @Html.Action("Index", "ContentPager", new
+            {
+                currentPage = Model.CurrentPage,
+                totalPagesCount = Model.TotalPagesCount.Value,
+                redirectUrlTemplate = Model.PagingUrlTemplate
+            })
+        }
+    </div>
+</div>
+
+<style>
+    .pagination {
+        margin: 1% 2% 2% 1%;
+    }
+
+        .pagination > li > a {
+            color: #00b4c9;
+            font-size: 16px;
+            margin: 10px;
+            padding: 0;
+            border: none;
+        }
+
+            .pagination > li > a:hover {
+                color: #23527c;
+                background-color: transparent;
+            }
+
+        .pagination > li.active > a {
+            color: white !important;
+            background-color: #00b4c9 !important;
+            padding: 4px 10px;
+            border-radius: 80%;
+            margin-top: 6px;
+        }
+
+    .sfCatalogTotalCount em {
+        font-size: 14px;
+        line-height: 1.428571429;
+        color: #333;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+
+    .sfproductPrice .sfRegPrice {
+        line-height: 1.428571429;
+        color: #333;
+    }
+
+    .sfcommentsThreadRatingWrp.sfcommentsThreadRatingFull.sfRatingReadOnly, .sfRatingClosingText, .sfproductPrice {
+        font-size: 14px;
+        line-height: 1.428571429;
+    }
+
+
+        .sfproductPrice.bottomPrice {
+            bottom: 0px;
+        }
+
+    .sfproductsList .sfproductListItem {
+        vertical-align: top;
+        float: none;
+        list-style: none;
+        width: 30%;
+        border-bottom: 1px solid #eee;
+        display: inline-block;
+        height: 400px;
+        padding: 0px 0px 0px 10px;
+    }
+
+    .product-list-paging {
+        margin-bottom: 20px;
+    }
+
+    .sfcurrenciesHorizontalList li a {
+        font-size: 14px;
+    }
+
+        .sfcurrenciesHorizontalList li a:hover {
+            text-decoration: underline;
+        }
+
+    a.sflnkToggleCart .sflnkToggleCartLbl {
+        font-size: 14px;
+    }
+
+    .sfcartSummaryWrp.sfcartSummaryExpandableWrp {
+        margin: 0;
+    }
+</style>
+
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
+}

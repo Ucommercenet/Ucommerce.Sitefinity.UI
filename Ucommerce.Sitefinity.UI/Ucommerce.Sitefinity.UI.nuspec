@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Ucommerce.Sitefinity.UI</id>
+    <version>0.8.0.0</version>
+    <authors>Ucommerce</authors>
+    <owners>Ucommerce</owners>
+    <iconUrl>https://ucommerce.net/media/1750/ucommerce-nuget-250x250.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Ucommerce Sitefinity UI</description>
+    <tags>Ucommerce Sitefinity ecommerce commerce</tags>
+    <dependencies>
+      <dependency id="uCommerce" version="[8.1.0.19093]" />
+      <dependency id="Telerik.DataAccess.Core" version="2018.0.1127.1" />
+      <dependency id="Telerik.Sitefinity.Core" version="11.2.6900" />
+      <dependency id="Telerik.Sitefinity.Feather.Core" version="11.2.6900" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="../readme.txt" target="" />
+    <file src="bin\Release\Ucommerce.Sitefinity.UI.dll" target="lib/net471" />
+  </files>
+</package>

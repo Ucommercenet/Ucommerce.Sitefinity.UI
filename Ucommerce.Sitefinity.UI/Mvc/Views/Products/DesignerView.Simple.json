@@ -1,0 +1,30 @@
+﻿{
+  "priority": 1,
+  "components": [
+    "sf-provider-selector",
+    "sf-news-selector",
+    "sf-filter-selector",
+    "sf-page-selector",
+    "sf-expander",
+    "sf-style-dropdown"
+  ],
+  "scripts": [
+    "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/UCommerceClientMgr.js",
+    "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/tree.controller.js",
+    "/ucommerce/scripts/app/Resources/content.resource.js",
+    "/ucommerce/scripts/app/Services/content-picker.service.js",
+    "/ucommerce/scripts/app/Services/treeNodeIconService.service.js",
+    "/ucommerce/scripts/app/Controllers/preselected-values-list.controller.js",
+    "/ucommerce/scripts/app/Controllers/content-tree.controller.js",
+    "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/catalog-search.controller.js",
+    "/ucommerce/scripts/app/Controllers/content-picker.controller.js",
+    "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/multi-picker.controller.js",
+    "/ucommerce/scripts/app/Directives/ucommerce-catalog-search/ucommerce.catalog.search.directive.js",
+    "/ucommerce/scripts/app/Directives/ucommerce-preselected-values-list/preselectedValuesList.js",
+    "/ucommerce/scripts/app/Directives/ucommerce-tree/ucommerce.tree.directive.js",
+    "/ucommerce/scripts/app/Directives/ucommerce-content-tree/ucommerce.content-tree.directive.js",
+    "/ucommerce/scripts/app/Directives/ucommerce-multi-picker/ucommerce.multi-picker.directive.js",
+    "/ucommerce/scripts/app/Directives/ucommerce-multi-picker/ucommerce.multi-picker.directive.js",
+    "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/factory.js"
+  ]
+}

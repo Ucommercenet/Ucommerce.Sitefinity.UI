@@ -1,0 +1,690 @@
+﻿@model dynamic
+
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers
+@using Telerik.Sitefinity.Services;
+@using Ucommerce.Sitefinity.UI.Mvc.Model;
+@using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+
+@helper DisplayCategories(IList<CategoryNavigationCategoryViewModel> categories, bool topLevel)
+{
+    var categoryClass = "category-parent";
+    if (!topLevel)
+    {
+        categoryClass = "category-child closed";
+    }
+
+    <ul class=" @categoryClass">
+        @foreach (var category in categories)
+        {
+            var selected = category.IsActive ? "selected" : "";
+            var categoryHref = category.Url;
+            <li class="@selected">
+
+                @if (category.Categories.Count > 0)
+                {
+                    categoryHref = "";
+                }
+                <a style="" href="@categoryHref">
+                    @category.DisplayName
+                    @if (topLevel && category.Categories.Count > 0)
+                    {
+                        <i class="fa fa-chevron-down"></i>
+                    }
+                    @if (!topLevel && category.Categories.Count > 0)
+                    {
+                        <i class="fa fa-chevron-right"></i>
+                    }
+                </a>
+
+                @if (category.Categories.Count > 0)
+                {
+                    @DisplayCategories(category.Categories, false)
+                }
+            </li>
+        }
+    </ul>
+}
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/moment.min.js"), "head", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/angular.min.js"), "head", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/app.js"), "head", false)
+}
+<header class="top top--light" ng-controller="categoryNavigationController">
+    <div class="top-inner top-inner--center">
+        <nav class="logo-wrap">
+            <a href="/" class="logo logo--on-light" alt="">
+                <img src="@Model.ImageUrl" alt="">
+            </a>
+        </nav>
+
+        @if (Model.Categories.Count > 0)
+        {
+            <nav class="main-nav">
+                @DisplayCategories(Model.Categories, true)
+            </nav>
+        }
+        <nav class="main-nav main-nav--right hide--m">
+            <ul>
+                @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
+                {
+                    <li class="lang currency">
+                        @if (Model.CurrentCurrency != null)
+                        {
+                            <a class="ng-binding">
+                                <span style="display: inline-block;" class="ng-scope">@Model.CurrentCurrency.DisplayName</span><i class="fa fa-chevron-down"></i>
+                            </a>
+                        }
+                        <ul>
+                            @foreach (var currency in Model.Currencies)
+                            {
+                                <li><a href="" ng-click="basketService.setCurrency('@currency.PriceGroupId')"><span>@currency.DisplayName</span></a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+                <li class="toggle-search" ng-click="searchService.toggleSearchBar()"><a href=""><i class="fa fa-search"></i></a></li>
+
+                @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
+                {
+                    <li class="toggle-cart" ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
+                        <a href="">
+                            <span>
+                                <span class="">{{basketService.basket.NumberOfItemsInBasket}}</span>
+                                <i class="fa fa-shopping-cart"></i>
+                            </span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="search" ng-controller="fullTextSearchController">
+
+    <button class="search__close" ng-click="searchService.toggleSearchBar()"><i class="fa fa-times"></i></button>
+
+    <div class="search__stage">
+
+        @if (Model.SearchPageUrl != null)
+        {
+            <form action="@Model.SearchPageUrl" class="search__form" _lpchecked="1">
+                <i class="fa fa-search"></i>
+                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="search__input ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+            </form>
+        }
+        else
+        {
+            <form class="search__form" _lpchecked="1">
+                <i class="fa fa-search"></i>
+                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="search__input ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+            </form>
+        }
+
+        <div class="search__autocomplete" ng-hide="searchService.searchResult.length == 0 && searchService.suggestion.length == 0">
+            <ul class="search__suggest">
+                <li ng-repeat="suggestion in searchService.suggestions" class="ng-scope" ng-click="searchService.searchQuery = suggestion;searchService.search()">
+                    <span class="search__suggest-image">
+                    </span>
+                    <span class="search__suggest-info">
+                        <span class="search__suggest-title ng-binding">{{suggestion}}</span>
+                    </span>
+                </li>
+                <li ng-repeat="product in searchService.searchResult" class="ng-scope">
+                    <a href="{{product.Url}}">
+                        <span class="search__suggest-image">
+                            <img ng-src="{{product.ThumbnailImageUrl}}" alt="">
+                        </span>
+                        <span class="search__suggest-info">
+                            <span class="search__suggest-title ng-binding">{{product.Name}}</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+            @if (Model.SearchPageUrl != null)
+            {
+                <a href="@Model.SearchPageUrl?search={{searchService.searchQuery}}" class="button button--block">Show all results</a>
+            }
+        </div>
+    </div>
+
+</div>
+
+<script>
+    (function () {
+        var categories = document.querySelectorAll('.category-parent > li');
+
+        for (var i = 0; i < categories.length; i++) {
+            categories[i].addEventListener('click', function () {
+
+                var children = this.children;
+                var otherChildren = document.querySelectorAll('.category-child');
+                for (var i = 0; i < children.length; i++) {
+
+                    if (children[i].classList.contains('closed')) {
+
+                        for (var j = 0; j < otherChildren.length; j++) {
+
+                            if (otherChildren[j].classList.contains('open')) {
+                                otherChildren[j].classList.remove("open");
+                                otherChildren[j].classList.add("closed");
+                            }
+                        }
+
+                        this.children[i].classList.remove("closed");
+                        this.children[i].classList.add("open");
+                    } else if (children[i].classList.contains('open')) {
+
+                        var otherChildren = document.querySelectorAll('.category-child');
+                        for (var j = 0; j < otherChildren.length; j++) {
+
+                            if (otherChildren[j].classList.contains('open')) {
+                                otherChildren[j].classList.remove("open");
+                                otherChildren[j].classList.add("closed");
+                            }
+                        }
+                    }
+                }
+            }, false);
+        }
+    })();
+</script>
+
+<style>
+
+    .top.top--light {
+        background: #fff;
+        -webkit-box-shadow: 0 0 15px rgba(0,0,0,.05);
+        box-shadow: 0 0 15px rgba(0,0,0,.05);
+    }
+
+        .top.top--light:hover {
+            -webkit-box-shadow: 0 0 35px rgba(0,0,0,.1);
+            box-shadow: 0 0 35px rgba(0,0,0,.1);
+        }
+
+    .top, .top-inner {
+        height: 70px;
+    }
+
+        .top .top-inner {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 0 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+    .top {
+        position: inherit;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 500;
+        -webkit-transition: all .4s ease;
+        transition: all .4s ease;
+        background: #111;
+    }
+
+    .top-inner.top-inner--center {
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+
+    header {
+        display: block;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+    }
+
+    .main-nav {
+        display: block;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+        width: 55%;
+    }
+
+        .main-nav > ul {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+
+            .main-nav > ul > li {
+                display: block;
+                position: relative;
+                -webkit-transition: all .2s ease;
+                transition: all .2s ease;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-size: 100%;
+                font: inherit;
+                vertical-align: baseline;
+                line-height: 70px;
+            }
+
+                .main-nav > ul > li:hover {
+                    background: rgba(0,0,0,.02);
+                }
+
+    .top--light .main-nav > ul > li a {
+        color: #111;
+    }
+
+    @@media only screen and (max-width: 1200px) {
+        .main-nav > ul > li > a {
+            padding: 0 15px;
+        }
+    }
+
+    .main-nav > ul > li > a {
+        line-height: 70px;
+        padding: 0 30px;
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        -webkit-transition: all .2s ease;
+        transition: all .2s ease;
+        position: relative;
+        white-space: nowrap;
+        margin: 0;
+        border: 0;
+        font: inherit;
+        vertical-align: baseline;
+    }
+
+    .main-nav.main-nav--right.hide--m {
+        width: 15%;
+    }
+
+    .main-nav .toggle-cart a {
+        width: 70px;
+        height: 70px;
+        padding: 0;
+        text-align: center;
+        font-size: 17px !important;
+    }
+
+    .toggle-cart a > span {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+    }
+
+    svg:not(:root).svg-inline--fa {
+        overflow: visible;
+    }
+
+    .svg-inline--fa.fa-w-18 {
+        width: 1.125em;
+    }
+
+    .svg-inline--fa {
+        display: inline-block;
+        font-size: inherit;
+        height: 1em;
+        overflow: visible;
+        vertical-align: -.125em;
+    }
+
+    .toggle-cart a > span span {
+        background-color: #45aaf2;
+        color: #fff;
+        opacity: 1;
+        transform: scale(1);
+        position: absolute;
+        top: -6px;
+        right: -10px;
+        font-size: 11px;
+        line-height: 1;
+        font-weight: bold;
+        min-width: 16px;
+        height: 16px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        border-radius: 100%;
+        padding: 0 3px;
+        -webkit-transition: all .2s ease;
+        transition: all .2s ease;
+    }
+
+    .search {
+        position: relative;
+        top: -70px;
+        left: 0;
+        height: 70px;
+        width: 100%;
+        background-color: #fff;
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        -webkit-transition: all .3s ease;
+        transition: all .3s ease;
+        -webkit-box-shadow: 0 0 15px rgba(0,0,0,.05);
+        box-shadow: 0 0 15px rgba(0,0,0,.05);
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+    }
+
+    .search-visible .search {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .search-visible .search__close {
+        opacity: 1;
+        visibility: visible;
+        -webkit-transform: scale(1) rotate(0);
+        transform: scale(1) rotate(0);
+        -webkit-transition-delay: .5s;
+        transition-delay: .5s;
+    }
+
+    .search__close {
+        position: absolute;
+        top: 50%;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        margin-top: -25px;
+        border-radius: 100%;
+        background-color: rgba(0,0,0,.05);
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        font-size: 20px;
+        -webkit-transition: all .3s ease;
+        transition: all .3s ease;
+        opacity: 0;
+        visibility: hidden;
+        -webkit-transform: scale(.8) rotate(90deg);
+        transform: scale(.8) rotate(90deg);
+        z-index: 10;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: 0;
+        padding: 0;
+        line-height: inherit;
+        cursor: pointer;
+        outline: 0;
+        text-transform: none;
+        overflow: visible;
+        color: inherit;
+        font: inherit;
+    }
+
+    .search__stage {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+    }
+
+    .search-visible .search__form {
+        opacity: 1;
+        -webkit-transition-delay: .3s;
+        transition-delay: .3s;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+
+    .search__form {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-transition: all .3s ease;
+        transition: all .3s ease;
+        opacity: 0;
+        -webkit-transform: translateY(-20px);
+        transform: translateY(-20px);
+        position: relative;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+    }
+
+        .search__form > .fa-search {
+            position: absolute;
+            top: 50%;
+            left: 23px;
+            opacity: .3;
+            font-size: 18px;
+            line-height: 1;
+            z-index: 1;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+    .svg-inline--fa.fa-w-16 {
+        width: 1em;
+    }
+
+    .search__form .search__input {
+        margin-bottom: 0;
+        height: 70px;
+        font-size: 18px;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        display: block;
+        padding: 15px 15px 15px 55px;
+        color: #444;
+        width: 100%;
+        border: 0;
+        background-color: #fff;
+        transition: box-shadow .3s ease,-webkit-box-shadow .3s ease;
+        border-radius: 4px;
+        line-height: normal;
+        font: inherit;
+        margin: 0;
+    }
+
+    .search-visible .search__autocomplete {
+        opacity: 1;
+        -webkit-transition-delay: .3s;
+        transition-delay: .3s;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+
+    .search__autocomplete {
+        position: absolute;
+        top: 100%;
+        background-color: #fff;
+        border-radius: 0 0 4px 4px;
+        width: 100%;
+        max-width: 600px;
+        -webkit-transition: all .3s ease;
+        transition: all .3s ease;
+        opacity: 0;
+        padding: 15px;
+        -webkit-transform: translateY(20px);
+        transform: translateY(20px);
+        -webkit-box-shadow: 0 10px 24px rgba(0,0,0,.15);
+        box-shadow: 0 10px 24px rgba(0,0,0,.15);
+        border-top: 1px solid rgba(0,0,0,.05);
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    ul.search__suggest {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font: 16px/1.4em "Helvetica Neue",Helvetica,Arial,sans-serif;
+        color: #444;
+    }
+
+        ul.search__suggest li a {
+            padding: 10px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-transition: all .3s ease;
+            transition: all .3s ease;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+            ul.search__suggest li a:hover {
+                background-color: rgba(0,0,0,.03);
+            }
+
+            ul.search__suggest li a .search__suggest-image {
+                width: 60px;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-size: 100%;
+                font: inherit;
+                vertical-align: baseline;
+            }
+
+                ul.search__suggest li a .search__suggest-image img {
+                    display: block;
+                    max-width: 100%;
+                    border: 0;
+                    margin: 0;
+                    padding: 0;
+                    font-size: 100%;
+                    font: inherit;
+                    vertical-align: baseline;
+                }
+
+            ul.search__suggest li a .search__suggest-info {
+                -webkit-box-flex: 1;
+                -ms-flex-positive: 1;
+                flex-grow: 1;
+                margin-left: 15px;
+                padding-top: 5px;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                color: #111;
+                font-weight: bold;
+            }
+
+            ul.search__suggest li a .search__suggest-title {
+                font-size: 14px;
+                display: block;
+            }
+
+    .top-inner.top-inner--center .logo-wrap {
+        height: 100%;
+        width: 30%;
+    }
+
+    .logo {
+        position: relative;
+        height: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-transition: all .3s ease;
+        transition: all .3s ease;
+        z-index: 5;
+    }
+
+        .logo img {
+            height: 100%;
+            display: block;
+            max-width: 100%;
+            padding: 21px 0;
+            border: 0;
+            vertical-align: baseline;
+        }
+
+    .top--light .logo--on-light {
+        display: block;
+    }
+
+    .closed {
+        display: none;
+    }
+
+    .category-child.open {
+        position: absolute;
+        list-style: none;
+        text-align: center;
+        padding-left: 25%;
+        padding-right: 25%;
+        z-index: 1001;
+        top: 100%;
+        float: left;
+        background-color: #fff;
+    }
+
+    .open {
+        display: block;
+    }
+</style>
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("Mvc/Scripts/FullTextSearchController/FullTextSearchController.js"), "bottom")
+    @Html.Script(Url.WidgetContent("Mvc/Scripts/CategoryNavigationController/CategoryNavigationController.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
+}
