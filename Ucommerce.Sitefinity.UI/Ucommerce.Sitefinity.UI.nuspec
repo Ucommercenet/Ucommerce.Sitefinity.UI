@@ -10,7 +10,7 @@
     <description>Ucommerce Sitefinity UI</description>
     <tags>Ucommerce Sitefinity ecommerce commerce</tags>
     <dependencies>
-      <dependency id="uCommerce" version="[8.1.0.19093]" />
+      <dependency id="uCommerce.Sitefinity" version="[8.1.0.19093]" />
       <dependency id="Telerik.DataAccess.Core" version="2018.0.1127.1" />
       <dependency id="Telerik.Sitefinity.Core" version="11.2.6900" />
       <dependency id="Telerik.Sitefinity.Feather.Core" version="11.2.6900" />
