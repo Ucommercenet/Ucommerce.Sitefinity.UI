@@ -27,16 +27,16 @@ namespace Ucommerce.Sitefinity.UI.App_Start
             if (e.CommandName == "RegisterRoutes")
             {
                 UcommerceUIModule.Register();
-                UcommerceUIModule.CreateIoCContainer();
+                UcommerceUIModule.InitializeContainer();
             }
         }
 
         private static void Bootstrapper_Bootstrapped(object sender, EventArgs e)
         {
-            RegisterIoCContainer(UcommerceUIModule.IoCContainer);
+            RegisterContainer(UcommerceUIModule.Container);
         }
 
-        private static void RegisterIoCContainer(IWindsorContainer container)
+        private static void RegisterContainer(IWindsorContainer container)
         {
             ObjectFactory.Container.RegisterInstance(
                    typeof(ISitefinityControllerFactory),

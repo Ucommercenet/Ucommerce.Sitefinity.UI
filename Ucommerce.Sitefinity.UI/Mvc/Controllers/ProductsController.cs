@@ -64,7 +64,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         private IProductModel ResolveModel()
         {
-            var container = UcommerceUIModule.IoCContainer;
+            var container = UcommerceUIModule.Container;
             var model = container.Resolve<IProductModel>(
                 new
                 {

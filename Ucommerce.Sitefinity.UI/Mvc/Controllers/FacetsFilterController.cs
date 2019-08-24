@@ -40,7 +40,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         private IFacetsFilterModel ResolveModel()
         {
-            return UcommerceUIModule.IoCContainer.Resolve<IFacetsFilterModel>();
+            return UcommerceUIModule.Container.Resolve<IFacetsFilterModel>();
         }
     }
 }

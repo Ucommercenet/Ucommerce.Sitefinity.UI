@@ -36,7 +36,13 @@ namespace Ucommerce.Sitefinity.UI
             }
         }
 
-        public static IWindsorContainer IoCContainer { get; private set; }
+        public static IWindsorContainer Container
+        {
+            get
+            {
+                return container;
+            }
+        }
 
         public static void Register()
         {
@@ -102,18 +108,10 @@ namespace Ucommerce.Sitefinity.UI
                     {
                         Content = systemErrorMessage
                     };
-                }             
+                }
             }
 
             return result;
-        }
-
-        public static void CreateIoCContainer()
-        {
-            var container = new WindsorContainer().
-                Install(FromAssembly.This());
-
-            IoCContainer = container;
         }
 
         public override void Install(SiteInitializer initializer)
@@ -148,6 +146,14 @@ namespace Ucommerce.Sitefinity.UI
         protected override ConfigSection GetModuleConfig()
         {
             return null;
+        }
+
+        internal static void InitializeContainer()
+        {
+            var windsorContainer = new WindsorContainer().
+                Install(FromAssembly.This());
+
+            container = windsorContainer;
         }
 
         private void SubscribeToEvents()
@@ -242,5 +248,7 @@ namespace Ucommerce.Sitefinity.UI
         private const string NO_CATALOT_ERROR_MESSAGE = "There is no product catalog configured.";
         private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
         private const string RAVEN_SOURCE = "Raven.Database";
+
+        private static volatile IWindsorContainer container;
     }
 }
