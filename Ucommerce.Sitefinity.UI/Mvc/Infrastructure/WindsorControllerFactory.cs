@@ -6,11 +6,11 @@ using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Infrastructure
 {
-    public class CastleWindsorControllerFactory : FrontendControllerFactory
+    public class WindsorControllerFactory : FrontendControllerFactory
     {
         readonly IWindsorContainer container;
 
-        public CastleWindsorControllerFactory(IWindsorContainer container)
+        public WindsorControllerFactory(IWindsorContainer container)
         {
             this.container = container;
         }

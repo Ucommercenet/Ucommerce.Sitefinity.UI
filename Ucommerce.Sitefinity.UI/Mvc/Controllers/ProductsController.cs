@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
-using Ucommerce.Sitefinity.UI.Mvc.Filters;
-using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -11,15 +9,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uProducts_MVC", Title = "Products", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
     public class ProductsController : Controller
     {
-        public ProductsController(IModelFactory modelFactory)
-        {
-            this.modelFactory = modelFactory;
-        }
-
-        public ProductsController()
-        {
-        }
-
         public int ItemsPerPage { get; set; } = 10;
 
         public bool OpenInSamePage { get; set; }
@@ -75,11 +64,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         private IProductModel ResolveModel()
         {
-            var model = modelFactory.CreateProductModel(this.ItemsPerPage, this.OpenInSamePage, this.IsManualSelectionMode, this.DetailsPageId, this.ProductIds, this.CategoryIds);
+            var container = UcommerceUIModule.IoCContainer;
+            var model = container.Resolve<IProductModel>(
+                new
+                {
+                    itemsPerPage = this.ItemsPerPage,
+                    openInSamePage = this.OpenInSamePage,
+                    isManualSelectionMode = this.IsManualSelectionMode,
+                    detailsPageId = this.DetailsPageId,
+                    productIds = this.ProductIds,
+                    categoryIds = this.CategoryIds
+                });
 
             return model;
         }
-
-        private IModelFactory modelFactory;
     }
 }

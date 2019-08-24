@@ -1,29 +1,31 @@
-﻿using Castle.Facilities.TypedFactory;
+﻿using System.Web.Mvc;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Infrastructure
+namespace Ucommerce.Sitefinity.UI.DI.CastleWindsor
 {
-    public class ServiceInstaller : IWindsorInstaller
+    public class DependencyInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            RegisterFactories(container);
-            RegisterModels(container);
+            InstallControllers(container);
+
+            InstallServices(container);
         }
 
-        private void RegisterFactories(IWindsorContainer container)
+        private void InstallControllers(IWindsorContainer container)
         {
-            container.AddFacility<TypedFactoryFacility>();
             container.Register(
-                 Component
-                 .For<IModelFactory>()
-                 .AsFactory());
+                Classes.
+                    FromThisAssembly().
+                    BasedOn<IController>().
+                    If(c => c.Name.EndsWith("Controller")).
+                    LifestylePerWebRequest());
         }
 
-        private void RegisterModels(IWindsorContainer container)
+        private void InstallServices(IWindsorContainer container)
         {
             container.Register(
                  Component

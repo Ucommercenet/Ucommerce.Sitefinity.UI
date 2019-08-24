@@ -13,6 +13,8 @@ using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Pages;
 using Ucommerce.Sitefinity.UI.Mvc.Filters;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
 
 namespace Ucommerce.Sitefinity.UI
 {
@@ -33,6 +35,8 @@ namespace Ucommerce.Sitefinity.UI
                 return new Type[0];
             }
         }
+
+        public static IWindsorContainer IoCContainer { get; private set; }
 
         public static void Register()
         {
@@ -102,6 +106,14 @@ namespace Ucommerce.Sitefinity.UI
             }
 
             return result;
+        }
+
+        public static void CreateIoCContainer()
+        {
+            var container = new WindsorContainer().
+                Install(FromAssembly.This());
+
+            IoCContainer = container;
         }
 
         public override void Install(SiteInitializer initializer)
