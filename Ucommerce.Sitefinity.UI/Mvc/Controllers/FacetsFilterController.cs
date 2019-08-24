@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
@@ -8,6 +9,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uFacetsFilter_MVC", Title = "Facets Filter", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
     public class FacetsFilterController : Controller
     {
+        public FacetsFilterController(IModelFactory modelFactory)
+        {
+            this.modelFactory = modelFactory;
+        }
+
         public string TemplateName { get; set; } = "FacetsFilter.Main";
 
         [RelativeRoute("{categoryName?}/{page?}")]
@@ -38,9 +44,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        private FacetsFilterModel ResolveModel()
+        private IFacetsFilterModel ResolveModel()
         {
-            return new FacetsFilterModel();
+            return modelFactory.CreateFacetsFilterModel();
         }
+
+        private IModelFactory modelFactory;
     }
 }

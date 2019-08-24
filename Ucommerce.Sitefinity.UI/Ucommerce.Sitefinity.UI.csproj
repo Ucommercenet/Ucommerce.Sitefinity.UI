@@ -247,6 +247,9 @@
     <Compile Include="Mvc\Model\AddToBasketViewModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
     <Compile Include="Mvc\Model\FacetsFilterModel.cs" />
+    <Compile Include="Mvc\Model\Interfaces\ICategoryModel.cs" />
+    <Compile Include="Mvc\Model\Interfaces\IFacetsFilterModel.cs" />
+    <Compile Include="Mvc\Model\Interfaces\IProductModel.cs" />
     <Compile Include="Mvc\Model\ProductModel.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCategoryViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCurrencyViewModel.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -10,6 +11,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
     public class CategoryNavigationController : Controller
     {
+        public CategoryNavigationController(IModelFactory modelFactory)
+        {
+            this.modelFactory = modelFactory;
+        }
+
         public Guid? ImageId { get; set; }
 
         public bool HideMiniBasket { get; set; }
@@ -50,9 +56,13 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        private CategoryModel ResolveModel()
+        private ICategoryModel ResolveModel()
         {
-            return new CategoryModel(this.ImageId, this.HideMiniBasket, this.AllowChangingCurrency, this.CategoryPageId, this.SearchPageId);
+            var model = this.modelFactory.CreateCategoryModel(this.HideMiniBasket, this.AllowChangingCurrency, this.ImageId, this.CategoryPageId, this.SearchPageId);
+
+            return model;
         }
+
+        private IModelFactory modelFactory;
     }
 }

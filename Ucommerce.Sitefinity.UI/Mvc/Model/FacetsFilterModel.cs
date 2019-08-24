@@ -13,7 +13,7 @@ using UCommerce.Search;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
-    public class FacetsFilterModel
+    public class FacetsFilterModel : IFacetsFilterModel
     {
         public IList<FacetViewModel> CreateViewModel(string categoryName)
         {
