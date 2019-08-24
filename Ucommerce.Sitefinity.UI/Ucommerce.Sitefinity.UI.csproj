@@ -233,12 +233,17 @@
     <Compile Include="Api\Model\UpdateLineItemModel.cs" />
     <Compile Include="Api\ProductController.cs" />
     <Compile Include="Api\SearchApiController.cs" />
+    <Compile Include="App_Start\CastleWindsorContainerBootstrapper.cs" />
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Mvc\Controllers\CategoryNavigationController.cs" />
     <Compile Include="Mvc\Controllers\FacetsFilterController.cs" />
     <Compile Include="Mvc\Controllers\ProductsController.cs" />
     <Compile Include="Mvc\Filters\ContextResolverAttribute.cs" />
+    <Compile Include="Mvc\Infrastructure\CastleWindsorControllerFactory.cs" />
+    <Compile Include="Mvc\Infrastructure\ControllersInstaller.cs" />
+    <Compile Include="Mvc\Infrastructure\IModelFactory.cs" />
+    <Compile Include="Mvc\Infrastructure\ServiceInstaller.cs" />
     <Compile Include="Mvc\Model\AddToBasketViewModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
     <Compile Include="Mvc\Model\FacetsFilterModel.cs" />
