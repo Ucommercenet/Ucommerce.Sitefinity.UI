@@ -19,7 +19,7 @@ using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
 
 namespace Ucommerce.Sitefinity.UI
 {
-    internal class UcommerceUIModule : ModuleBase
+    public class UcommerceUIModule : ModuleBase
     {
         public override Guid LandingPageId
         {
