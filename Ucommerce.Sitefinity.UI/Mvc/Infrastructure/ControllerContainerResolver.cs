@@ -140,9 +140,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Infrastructure
             return Assembly.ReflectionOnlyLoad(assignedWithPolicy);
         }
 
-        private static IEnumerable<Assembly> controllerContainerAssemblies;
-        private static readonly object ControllerContainerAssembliesLock = new object();
-
         #endregion
     }
 }
