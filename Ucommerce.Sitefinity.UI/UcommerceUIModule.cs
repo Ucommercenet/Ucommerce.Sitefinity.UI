@@ -16,6 +16,8 @@ using Ucommerce.Sitefinity.UI.Mvc.Filters;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
+using Telerik.Microsoft.Practices.Unity;
+using Telerik.Sitefinity.Mvc;
 
 namespace Ucommerce.Sitefinity.UI
 {
@@ -160,6 +162,18 @@ namespace Ucommerce.Sitefinity.UI
             }
 
             container = windsorContainer;
+        }
+
+        internal static void RegisterControllerFactory()
+        {
+            ObjectFactory.Container.RegisterInstance(
+                   typeof(ISitefinityControllerFactory),
+                   typeof(WindsorControllerFactory).Name,
+                   new WindsorControllerFactory(Container),
+                   new ContainerControlledLifetimeManager());
+
+            var factory = ObjectFactory.Resolve<ISitefinityControllerFactory>(typeof(WindsorControllerFactory).Name);
+            ControllerBuilder.Current.SetControllerFactory(factory);
         }
 
         private void SubscribeToEvents()

@@ -29,31 +29,18 @@ namespace Ucommerce.Sitefinity.UI.App_Start
             if (e.CommandName == "RegisterRoutes")
             {
                 UcommerceUIModule.Register();
+                UcommerceUIModule.InitializeContainer();
             }
         }
 
         private static void Bootstrapper_Bootstrapped(object sender, EventArgs e)
         {
-            UcommerceUIModule.InitializeContainer();
-                       
+            UcommerceUIModule.RegisterControllerFactory();
+
             EventHub.Raise(new WindsorContainerInitializedEvent
             {
                 Container = UcommerceUIModule.Container
             });
-
-            RegisterContainer(UcommerceUIModule.Container);
-        }
-
-        private static void RegisterContainer(IWindsorContainer container)
-        {
-            ObjectFactory.Container.RegisterInstance(
-                   typeof(ISitefinityControllerFactory),
-                   typeof(WindsorControllerFactory).Name,
-                   new WindsorControllerFactory(container),
-                   new ContainerControlledLifetimeManager());
-
-            var factory = ObjectFactory.Resolve<ISitefinityControllerFactory>(typeof(WindsorControllerFactory).Name);
-            ControllerBuilder.Current.SetControllerFactory(factory);
         }
     }
 }

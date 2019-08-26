@@ -4,9 +4,9 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 
-namespace Ucommerce.Sitefinity.UI.DI.CastleWindsor
+namespace Ucommerce.Sitefinity.UI.DI
 {
-    public class DependencyInstaller : IWindsorInstaller
+    public class WindsorInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
