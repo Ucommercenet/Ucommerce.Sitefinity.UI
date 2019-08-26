@@ -6,6 +6,8 @@ using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Services;
+using Ucommerce.Sitefinity.UI.DI.Events;
 using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
 
 namespace Ucommerce.Sitefinity.UI.App_Start
@@ -27,12 +29,18 @@ namespace Ucommerce.Sitefinity.UI.App_Start
             if (e.CommandName == "RegisterRoutes")
             {
                 UcommerceUIModule.Register();
-                UcommerceUIModule.InitializeContainer();
             }
         }
 
         private static void Bootstrapper_Bootstrapped(object sender, EventArgs e)
         {
+            UcommerceUIModule.InitializeContainer();
+                       
+            EventHub.Raise(new WindsorContainerInitializedEvent
+            {
+                Container = UcommerceUIModule.Container
+            });
+
             RegisterContainer(UcommerceUIModule.Container);
         }
 

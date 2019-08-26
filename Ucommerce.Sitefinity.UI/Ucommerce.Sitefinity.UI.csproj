@@ -236,6 +236,8 @@
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="DI\CastleWindsor\DependencyInstaller.cs" />
+    <Compile Include="DI\Events\IWindsorContainerInitializedEvent.cs" />
+    <Compile Include="DI\Events\WindsorContainerInitializedEvent.cs" />
     <Compile Include="Mvc\Controllers\CategoryNavigationController.cs" />
     <Compile Include="Mvc\Controllers\FacetsFilterController.cs" />
     <Compile Include="Mvc\Controllers\ProductsController.cs" />
