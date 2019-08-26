@@ -240,6 +240,7 @@
     <Compile Include="Mvc\Controllers\FacetsFilterController.cs" />
     <Compile Include="Mvc\Controllers\ProductsController.cs" />
     <Compile Include="Mvc\Filters\ContextResolverAttribute.cs" />
+    <Compile Include="Mvc\Infrastructure\ControllerContainerResolver.cs" />
     <Compile Include="Mvc\Infrastructure\WindsorControllerFactory.cs" />
     <Compile Include="Mvc\Model\AddToBasketViewModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
