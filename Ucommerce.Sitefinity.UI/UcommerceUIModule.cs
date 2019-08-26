@@ -15,6 +15,7 @@ using Ucommerce.Sitefinity.UI.Pages;
 using Ucommerce.Sitefinity.UI.Mvc.Filters;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
 
 namespace Ucommerce.Sitefinity.UI
 {
@@ -150,8 +151,13 @@ namespace Ucommerce.Sitefinity.UI
 
         internal static void InitializeContainer()
         {
-            var windsorContainer = new WindsorContainer().
-                Install(FromAssembly.This());
+            var windsorContainer = new WindsorContainer();
+
+            var widgetAssemblies = ControllerContainerResolver.RetrieveAssemblies();
+            foreach (var assembly in widgetAssemblies)
+            {
+                windsorContainer.Install(FromAssembly.Instance(assembly));
+            }
 
             container = windsorContainer;
         }
