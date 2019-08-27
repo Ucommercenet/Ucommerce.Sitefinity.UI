@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
+﻿namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
 {
     public class ProductViewModel
     {
@@ -9,6 +7,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public string VariantSku { get; set; }
 
         public string Price { get; set; }
+
+        public string Discount { get; set; }
 
         public string DisplayName { get; set; }
 

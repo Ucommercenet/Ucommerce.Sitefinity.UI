@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Raven.Client.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Raven.Client.Linq;
 using Telerik.Sitefinity;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
@@ -77,15 +77,17 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 var productPrice = CatalogLibrary.CalculatePrice(new List<Product>() { currentProduct }).Items.FirstOrDefault();
 
                 decimal price = 0;
+                decimal discount = 0;
 
                 if (productPrice != null)
                 {
                     price = productPrice.PriceExclTax;
-
+                    discount = productPrice.DiscountExclTax;
                     var currentCatalog = SiteContext.Current.CatalogContext.CurrentCatalog;
                     if (currentCatalog != null && currentCatalog.ShowPricesIncludingVAT)
                     {
                         price = productPrice.PriceInclTax;
+                        discount = productPrice.DiscountInclTax;
                     }
                 }
 
@@ -101,7 +103,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                     ShortDescription = currentProduct.ShortDescription(),
                     ProductUrl = CatalogLibrary.GetNiceUrlForProduct(currentProduct, currentCategory),
                     Price = new Money(price, SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency).ToString(),
-
+                    Discount = new Money(discount, SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency).ToString(),
                     Sku = currentProduct.Sku,
                     Rating = Convert.ToInt32(Math.Round(currentProduct.Rating.GetValueOrDefault())),
                     VariantSku = currentProduct.VariantSku,
@@ -306,12 +308,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 var singleProductPrice = productsPrices.Items.Where(x => x.ProductGuid == product.Guid).FirstOrDefault();
 
                 decimal price = 0;
+                decimal discount = 0;
 
                 if (singleProductPrice != null)
                 {
                     price = singleProductPrice.PriceExclTax;
+                    discount = singleProductPrice.DiscountExclTax;
                     if (currentCatalog.ShowPricesIncludingVAT)
+                    {
                         price = singleProductPrice.PriceInclTax;
+                        discount = singleProductPrice.DiscountInclTax;
+                    }
+
                 }
 
                 var productViewModel = new ProductViewModel()
@@ -319,6 +327,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                     Sku = product.Sku,
                     VariantSku = product.VariantSku,
                     Price = new Money(price, SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency).ToString(),
+                    Discount = new Money(discount, SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency).ToString(),
                     DisplayName = product.DisplayName(),
                     ThumbnailImageMediaUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url,
                     ProductUrl = this.GetProductUrl(category, product, openInSamePage, detailPageId),

@@ -39,8 +39,9 @@
                         <div class="sfTxtContent"></div>
                         <div>
                             <span class="sfRegPrice">@product.Price</span>
+                            <p class="paragraph-top">Discount:</p>
+                            <span class="sfDiscPrice">@product.Discount</span>
                         </div>
-
                         <div class="sfcommentsThreadRatingWrp sfcommentsThreadRatingFull sfRatingReadOnly">
                             <a href="#" class="sfRatingClosingText" onclick="return false;">Write a review</a>
                         </div>
@@ -105,6 +106,10 @@
         color: #333;
     }
 
+    .sfproductPrice .sfDiscPrice {
+        color: red;
+    }
+
     .sfcommentsThreadRatingWrp.sfcommentsThreadRatingFull.sfRatingReadOnly, .sfRatingClosingText, .sfproductPrice {
         font-size: 14px;
         line-height: 1.428571429;
@@ -145,4 +150,10 @@
     .sfcartSummaryWrp.sfcartSummaryExpandableWrp {
         margin: 0;
     }
+
+    .paragraph-top {
+        margin-top: 1rem;
+        margin-bottom: 0;
+    }
+    
 </style>
