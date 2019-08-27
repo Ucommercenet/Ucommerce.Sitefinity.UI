@@ -38,9 +38,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        private FacetsFilterModel ResolveModel()
+        private IFacetsFilterModel ResolveModel()
         {
-            return new FacetsFilterModel();
+            return UcommerceUIModule.Container.Resolve<IFacetsFilterModel>();
         }
     }
 }

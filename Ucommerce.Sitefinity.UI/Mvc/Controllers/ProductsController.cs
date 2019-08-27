@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
-using Ucommerce.Sitefinity.UI.Mvc.Filters;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -63,9 +62,21 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        private ProductModel ResolveModel()
+        private IProductModel ResolveModel()
         {
-            return new ProductModel(this.ItemsPerPage, this.OpenInSamePage, this.DetailsPageId, this.IsManualSelectionMode, this.ProductIds, this.CategoryIds);
+            var container = UcommerceUIModule.Container;
+            var model = container.Resolve<IProductModel>(
+                new
+                {
+                    itemsPerPage = this.ItemsPerPage,
+                    openInSamePage = this.OpenInSamePage,
+                    isManualSelectionMode = this.IsManualSelectionMode,
+                    detailsPageId = this.DetailsPageId,
+                    productIds = this.ProductIds,
+                    categoryIds = this.CategoryIds
+                });
+
+            return model;
         }
     }
 }

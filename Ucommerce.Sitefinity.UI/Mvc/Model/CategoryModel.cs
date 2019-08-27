@@ -15,13 +15,13 @@ using UCommerce.Runtime;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
-    internal class CategoryModel
+    internal class CategoryModel : ICategoryModel
     {
-        public CategoryModel(Guid? imageId, bool hideMiniBasket, bool allowChangingCurrency, Guid? categoryPageId, Guid? searchPageId)
+        public CategoryModel(bool hideMiniBasket, bool allowChangingCurrency, Guid? imageId = null, Guid? categoryPageId = null, Guid? searchPageId = null)
         {
-            this.imageId = imageId ?? Guid.Empty;
             this.hideMiniBasket = hideMiniBasket;
             this.allowChangingCurrency = allowChangingCurrency;
+            this.imageId = imageId ?? Guid.Empty;
             this.categoryPageId = categoryPageId ?? Guid.Empty;
             this.searchPageId = searchPageId ?? Guid.Empty;
         }

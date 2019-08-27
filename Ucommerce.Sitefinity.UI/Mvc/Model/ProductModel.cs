@@ -20,14 +20,14 @@ using UCommerce.Search;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
-    internal class ProductModel
+    internal class ProductModel : IProductModel
     {
-        public ProductModel(int itemsPerPage, bool openInSamePage, Guid? detailsPageId, bool isManualSelectionMode, string productIds, string categoryIds)
+        public ProductModel(int itemsPerPage, bool openInSamePage, bool isManualSelectionMode, Guid? detailsPageId = null, string productIds = null, string categoryIds = null)
         {
             this.itemsPerPage = itemsPerPage;
             this.openInSamePage = openInSamePage;
-            this.detailsPageId = detailsPageId.HasValue ? detailsPageId.Value : Guid.Empty;
             this.isManualSelectionMode = isManualSelectionMode;
+            this.detailsPageId = detailsPageId.HasValue ? detailsPageId.Value : Guid.Empty;
             this.productIds = productIds;
             this.categoryIds = categoryIds;
         }

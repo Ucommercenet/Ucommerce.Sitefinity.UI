@@ -50,9 +50,20 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        private CategoryModel ResolveModel()
+        private ICategoryModel ResolveModel()
         {
-            return new CategoryModel(this.ImageId, this.HideMiniBasket, this.AllowChangingCurrency, this.CategoryPageId, this.SearchPageId);
+            var container = UcommerceUIModule.Container;
+            var model = container.Resolve<ICategoryModel>(
+                new
+                {
+                    hideMiniBasket = this.HideMiniBasket,
+                    allowChangingCurrency = this.AllowChangingCurrency,
+                    imageId = this.ImageId,
+                    categoryPageId = this.CategoryPageId,
+                    searchPageId = this.SearchPageId
+                });
+
+            return model;
         }
     }
 }

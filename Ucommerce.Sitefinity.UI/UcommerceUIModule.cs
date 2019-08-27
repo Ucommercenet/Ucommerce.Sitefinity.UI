@@ -13,10 +13,15 @@ using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Pages;
 using Ucommerce.Sitefinity.UI.Mvc.Filters;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
+using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
+using Telerik.Microsoft.Practices.Unity;
+using Telerik.Sitefinity.Mvc;
 
 namespace Ucommerce.Sitefinity.UI
 {
-    internal class UcommerceUIModule : ModuleBase
+    public class UcommerceUIModule : ModuleBase
     {
         public override Guid LandingPageId
         {
@@ -31,6 +36,14 @@ namespace Ucommerce.Sitefinity.UI
             get
             {
                 return new Type[0];
+            }
+        }
+
+        public static IWindsorContainer Container
+        {
+            get
+            {
+                return container;
             }
         }
 
@@ -98,7 +111,7 @@ namespace Ucommerce.Sitefinity.UI
                     {
                         Content = systemErrorMessage
                     };
-                }             
+                }
             }
 
             return result;
@@ -136,6 +149,31 @@ namespace Ucommerce.Sitefinity.UI
         protected override ConfigSection GetModuleConfig()
         {
             return null;
+        }
+
+        internal static void InitializeContainer()
+        {
+            var windsorContainer = new WindsorContainer();
+
+            var widgetAssemblies = ControllerContainerResolver.RetrieveAssemblies();
+            foreach (var assembly in widgetAssemblies)
+            {
+                windsorContainer.Install(FromAssembly.Instance(assembly));
+            }
+
+            container = windsorContainer;
+        }
+
+        internal static void RegisterControllerFactory()
+        {
+            ObjectFactory.Container.RegisterInstance(
+                   typeof(ISitefinityControllerFactory),
+                   typeof(WindsorControllerFactory).Name,
+                   new WindsorControllerFactory(Container),
+                   new ContainerControlledLifetimeManager());
+
+            var factory = ObjectFactory.Resolve<ISitefinityControllerFactory>(typeof(WindsorControllerFactory).Name);
+            ControllerBuilder.Current.SetControllerFactory(factory);
         }
 
         private void SubscribeToEvents()
@@ -230,5 +268,7 @@ namespace Ucommerce.Sitefinity.UI
         private const string NO_CATALOT_ERROR_MESSAGE = "There is no product catalog configured.";
         private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
         private const string RAVEN_SOURCE = "Raven.Database";
+
+        private static volatile IWindsorContainer container;
     }
 }
