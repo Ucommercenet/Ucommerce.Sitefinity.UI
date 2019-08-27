@@ -1,0 +1,199 @@
+﻿@model dynamic
+
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers
+@using Telerik.Sitefinity.Services;
+@using Ucommerce.Sitefinity.UI.Mvc.Model;
+@using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+
+@helper DisplayCategories(IList<CategoryNavigationCategoryViewModel> categories, bool topLevel)
+{
+    var categoryClass = "category-parent";
+    if (!topLevel)
+    {
+        categoryClass = "category-child closed";
+    }
+
+    <ul class="navbar-nav mr-auto @categoryClass">
+        @foreach (var category in categories)
+        {
+            var selected = category.IsActive ? "selected" : "";
+            var categoryHref = category.Url;
+            <li class="nav-item ml-4 mr-4 @selected">
+
+                @if (category.Categories.Count > 0)
+                {
+                    categoryHref = "";
+                }
+                <a class="nav-link h4" href="@categoryHref">
+                    @category.DisplayName
+                    @if (topLevel && category.Categories.Count > 0)
+                    {
+                        <i class="glyphicon glyphicon-menu-down"></i>
+                    }
+                    @if (!topLevel && category.Categories.Count > 0)
+                    {
+                        <i class="glyphicon glyphicon-menu-right"></i>
+                    }
+                </a>
+
+                @if (category.Categories.Count > 0)
+                {
+                    @DisplayCategories(category.Categories, false)
+                }
+            </li>
+        }
+    </ul>
+}
+
+<header class="container" ng-controller="categoryNavigationController">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg mb-0">
+                <a href="/" class="navbar-brand" alt="">
+                    <img src="@Model.ImageUrl" width="40" height="40" class="d-inline-block align-top" alt="">
+                </a>
+                @if (Model.Categories.Count > 0)
+                {
+
+                    @DisplayCategories(Model.Categories, true)
+
+                }
+                <ul class="navbar-nav">
+                    @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
+                    {
+                        <li class="nav-item ml-4 mr-4">
+                            @if (Model.CurrentCurrency != null)
+                            {
+                                <a class="nav-link h4">
+                                    <span style="display: inline-block;" class="ng-scope">@Model.CurrentCurrency.DisplayName</span><i class="glyphicon glyphicon-menu-down"></i>
+                                </a>
+                            }
+                            <ul class="navbar-nav dropdown">
+                                @foreach (var currency in Model.Currencies)
+                                {
+                                    <li class="nav-item ml-4 mr-4"><a href="" class="nav-link h4" ng-click="basketService.setCurrency('@currency.PriceGroupId')"><span>@currency.DisplayName</span></a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    <li class="nav-item ml-4 mr-4" ng-click="searchService.toggleSearchBar()"><a class="nav-link h4" href=""><i class="glyphicon glyphicon-search"></i></a></li>
+
+                    @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
+                    {
+                        <li class="nav-item ml-4 mr-4" ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
+                            <a class="nav-link h4" href="">
+                                <span>
+                                    <span class="">{{basketService.basket.NumberOfItemsInBasket}}</span>
+                                    <i class="glyphicon glyphicon-shopping-cart"></i>
+                                </span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div class="container" ng-controller="fullTextSearchController">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <button class="close" aria-label="Close" ng-click="searchService.toggleSearchBar()"><i aria-hidden="true" class="glyphicon glyphicon-remove p-3"></i></button>
+
+            <div class="bg-white shadow-lg p-3 rounded">
+
+                @if (Model.SearchPageUrl != null)
+                {
+                    <form action="@Model.SearchPageUrl" class="input-group" _lpchecked="1">
+                        <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+                        <span class="input-group-append">
+                            <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </span>
+                    </form>
+                }
+                else
+                {
+                    <form class="input-group" _lpchecked="1">
+                        <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+                        <span class="input-group-append">
+                            <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </span>
+                    </form>
+                }
+
+                <div ng-hide="searchService.searchResult.length == 0 && searchService.suggestion.length == 0">
+                    <ul class="list-group">
+                        <li ng-repeat="suggestion in searchService.suggestions" class="ng-scope list-group-item" ng-click="searchService.searchQuery = suggestion;searchService.search()">
+                            <span class="img">
+                            </span>
+                            <span class="stext-info">
+                                <span class="h4 p-3 ng-binding">{{suggestion}}</span>
+                            </span>
+                        </li>
+                        <li ng-repeat="product in searchService.searchResult" class="ng-scope list-group-item">
+                            <a class="nav-link" href="{{product.Url}}">
+                                <span class="img">
+                                    <img height="50" width="50" ng-src="{{product.ThumbnailImageUrl}}" alt="">
+                                </span>
+                                <span class="text-info">
+                                    <span class="h3 p-3 ng-binding">{{product.Name}}</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    @if (Model.SearchPageUrl != null)
+                    {
+                        <a href="@Model.SearchPageUrl?search={{searchService.searchQuery}}" class="btn btn-block">Show all results</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-offset-3">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var categories = document.querySelectorAll('.category-parent > li');
+
+        for (var i = 0; i < categories.length; i++) {
+            categories[i].addEventListener('click', function () {
+
+                var children = this.children;
+                var otherChildren = document.querySelectorAll('.category-child');
+                for (var i = 0; i < children.length; i++) {
+
+                    if (children[i].classList.contains('closed')) {
+
+                        for (var j = 0; j < otherChildren.length; j++) {
+
+                            if (otherChildren[j].classList.contains('open')) {
+                                otherChildren[j].classList.remove("open");
+                                otherChildren[j].classList.add("closed");
+                            }
+                        }
+
+                        this.children[i].classList.remove("closed");
+                        this.children[i].classList.add("open");
+                    } else if (children[i].classList.contains('open')) {
+
+                        var otherChildren = document.querySelectorAll('.category-child');
+                        for (var j = 0; j < otherChildren.length; j++) {
+
+                            if (otherChildren[j].classList.contains('open')) {
+                                otherChildren[j].classList.remove("open");
+                                otherChildren[j].classList.add("closed");
+                            }
+                        }
+                    }
+                }
+            }, false);
+        }
+    })();
+</script>
