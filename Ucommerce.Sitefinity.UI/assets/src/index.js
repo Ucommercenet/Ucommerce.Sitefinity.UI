@@ -12,4 +12,4 @@ if (process.env.NODE_ENV === "development") {
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
-import "./js/facet-filter";
+import "./js/widgets/facet-filter";

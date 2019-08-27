@@ -410,20 +410,23 @@
     <EmbeddedResource Include="Mvc\Views\Products\DesignerView.Simple.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
+    <None Include="Mvc\Views\CategoryNavigation\IndexOld.cshtml" />
+    <None Include="Mvc\Views\FacetsFilter\FacetsFilter.MainOld.cshtml" />
+    <None Include="Mvc\Views\Products\Bootstrap4Details.cshtml" />
+    <None Include="Mvc\Views\Products\Bootstrap4Index.cshtml" />
+    <None Include="Mvc\Views\Products\IndexOld.cshtml" />
+    <None Include="Mvc\Views\Products\QuantumDetails.cshtml" />
+    <None Include="Mvc\Views\Products\QuantumIndex.cshtml" />
     <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="assets\src\js\components\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="assets\src\index.js" />
-    <Content Include="assets\src\js\test.js" />
+    <Content Include="assets\src\js\widgets\facet-filter.js" />
     <Content Include="webpack.config.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
