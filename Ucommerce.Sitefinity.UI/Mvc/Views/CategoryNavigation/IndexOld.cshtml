@@ -45,6 +45,12 @@
     </ul>
 }
 
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/moment.min.js"), "head", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/angular.min.js"), "head", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/app.js"), "head", false)
+}
 <header class="top top--light" ng-controller="categoryNavigationController">
     <div class="top-inner top-inner--center">
         <nav class="logo-wrap">
@@ -183,7 +189,7 @@
                 }
             }, false);
         }
-    });
+    })();
 </script>
 
 <style>
@@ -671,3 +677,14 @@
         display: block;
     }
 </style>
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("Mvc/Scripts/FullTextSearchController/FullTextSearchController.js"), "bottom")
+    @Html.Script(Url.WidgetContent("Mvc/Scripts/CategoryNavigationController/CategoryNavigationController.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
+}
