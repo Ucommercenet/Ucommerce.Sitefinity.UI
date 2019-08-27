@@ -1,0 +1,62 @@
+{
+  "name": "ucommerce-sitefinity-ui",
+  "version": "1.0.0",
+  "description": "Frontend app for the UCommerce Sitefinity UI SDK",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --progress --colors",
+    "dev": "webpack --watch --mode development && npm run start",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/athracian/ucommerce-ui/src/master/"
+  },
+  "keywords": [
+    "UCommerce",
+    "Sitefinity",
+    "Vue"
+  ],
+  "author": "UCommerce",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "core-js": "^3.2.1",
+    "css-loader": "^3.2.0",
+    "cssnano": "^4.1.10",
+    "exports-loader": "^0.7.0",
+    "expose-loader": "^0.7.5",
+    "file-loader": "^4.2.0",
+    "imports-loader": "^0.8.0",
+    "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "sass-loader": "^7.3.1",
+    "script-loader": "^0.7.2",
+    "scss-loader": "0.0.1",
+    "strip-loader": "^0.1.2",
+    "style-loader": "^1.0.0",
+    "terser-webpack-plugin": "^1.4.1",
+    "url-loader": "^2.1.0",
+    "vue": "^2.6.10",
+    "vue-loader": "^15.7.1",
+    "vue-resource": "^1.5.1",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security"
+  }
+}

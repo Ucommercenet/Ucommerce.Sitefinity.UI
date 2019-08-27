@@ -1,0 +1,145 @@
+﻿@model  IList<Ucommerce.Sitefinity.UI.Mvc.ViewModels.FacetViewModel>
+
+    @using Telerik.Sitefinity.Services
+    @using Telerik.Sitefinity.Frontend.Mvc.Helpers
+
+
+
+    @if (!SystemManager.IsDesignMode)
+    {
+        @Html.Script(Url.WidgetContent("assets/dist/javascript/moment.min.js"), "head", false)
+        @Html.Script(Url.WidgetContent("assets/dist/javascript/angular.min.js"), "head", false)
+        @Html.Script(Url.WidgetContent("assets/dist/javascript/app.js"), "head", false)
+        @Html.Script(Url.WidgetContent("Mvc/Scripts/FacetSelectorController/FacetSelectorController.js"), "head", false)
+    }
+
+    <div ng-controller="facetSelectorController">
+        <h2 class="sffilterTitle">
+            Filter products
+        </h2>
+        <a class="sffilterClearLnk" ng-click="clearFilters()">Clear filter</a>
+
+        <ul class="sfShopByFilterGroupList sfVerticalList">
+            @foreach (var facet in Model)
+            {
+                if (facet.FacetValues.Count > 0)
+                {
+                    var showFacets = facet.Name.Replace(' ', '_') + "ShowFacets";
+
+                    <li class="sfShopByFilterGroupListItem">
+                        <h3 class="sfGroupTitle" ng-click="@showFacets = !@showFacets">by @facet.DisplayName</h3>
+                        <ul class="sfShopByFilterList">
+                            @foreach (var filterItem in facet.FacetValues)
+                            {
+                                <li class="sfShopByFilterListItem" ng-style="@filterItem.FacetValueHits == 0 && {'opacity' : '0.5'}">
+                                    <label class="cb-wrap">
+                                        <input type="checkbox" class="js-facets sfFilterItem" checklist-model="@facet.Name" checklist-value="@filterItem.FacetValueName" data-facets-name="@facet.Name" data-facets-value="@filterItem.FacetValueName" ng-click="createQueryString()" />
+                                        <span class="checkmark"></span>
+                                        @filterItem.FacetValueName
+                                    </label>
+                                    @*<span class="filter-count">@filterItem.FacetValueHits</span>*@
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    <script>
+        window.onload = function () {
+            var labels = document.querySelectorAll('label.cb-wrap');
+            for (var i = 0; i < labels.length; i++) {
+                makeActive(labels[i]);
+            }
+        };
+
+        function makeActive(elem) {
+            var isActive = elem.children[0].checked;
+            if (isActive) {
+                elem.classList.add('active');
+            } else {
+                elem.classList.remove('active')
+            }
+        }
+    </script>
+
+    <style>
+    .sfShopByFilterListItem {
+        background: 0 0;
+        padding: 0 0 0 25px;
+        color: #888;
+        position: relative;
+    }
+
+        .sfShopByFilterListItem:hover {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .cb-wrap {
+        font-weight: normal;
+    }
+
+        .cb-wrap:hover {
+            cursor: pointer;
+        }
+
+    .js-facets {
+        display: none;
+    }
+
+    .cb-wrap:before {
+        width: 14px;
+        height: 14px;
+        display: block;
+        left: 0;
+        top: 2px;
+        position: absolute;
+        content: "";
+        border-radius: 2px;
+        border: 1px solid #fff;
+        background: #eee;
+    }
+
+    .cb-wrap.active {
+        font-weight: 700;
+        color: #444;
+    }
+
+        .cb-wrap.active:before {
+            background: #3aa4bf;
+        }
+
+    .cb-wrap:hover:before {
+        border: 1px solid #ccc;
+    }
+
+    h2.sffilterTitle {
+        line-height: 1.1;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+
+    a.sffilterClearLnk {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+
+    ul.sfShopByFilterGroupList {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
+}
+
+    </style>
