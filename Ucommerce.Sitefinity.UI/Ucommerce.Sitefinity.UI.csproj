@@ -411,6 +411,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="assets\src\js\components\Search.vue" />
     <None Include="Mvc\Views\CategoryNavigation\IndexOld.cshtml" />
     <None Include="Mvc\Views\FacetsFilter\FacetsFilter.MainOld.cshtml" />
     <None Include="Mvc\Views\Products\Bootstrap4Details.cshtml" />
@@ -421,10 +422,9 @@
     <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="assets\src\js\components\" />
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="assets\build\**\*.*" />
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\widgets\facet-filter.js" />
     <Content Include="webpack.config.js" />
