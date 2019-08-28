@@ -9,7 +9,13 @@
 
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-quantum.css"), "head")
-<div>
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+}
+<div data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
     <div class="sfCatalogTotalCount">
         <div>
             <em>@Model.TotalCount products</em>
@@ -44,6 +50,9 @@
                             <p class="paragraph-top">Discount:</p>
                             <span class="sfDiscPrice">@product.Discount</span>
                         </div>
+
+                        <Basket :product-sku="'@product.Sku'"></Basket>
+
                         <div class="sfcommentsThreadRatingWrp sfcommentsThreadRatingFull sfRatingReadOnly">
                             <a href="#" class="sfRatingClosingText" onclick="return false;">Write a review</a>
                         </div>

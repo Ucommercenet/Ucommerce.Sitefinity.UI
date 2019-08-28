@@ -10,12 +10,11 @@
 {
     if (!SystemManager.IsDesignMode)
     {
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/moment.min.js"), "head", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/angular.min.js"), "head", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/app.js"), "head", false)
+        @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+        @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
     }
 
-    <div class="container-fluid">
+    <div class="container-fluid" data-component="products" id="@Html.UniqueId("product-details")"  v-cloak>
         <div class="row">
             <div class="col-sx-12 col-sm-5 col-md-5 col-lg-5 border-right">
                 <div class="img">
@@ -85,22 +84,8 @@
                 </div>
                 <div class="row">
                     <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6">
-                        <div class="mt-2">
-                            <label for="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantity" class="font-weight-bold">Quantity:</label>
-                            <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" style="display:none;">
-                                <span class="text-danger">
-                                    When adding product to a cart you must specify the quantity
-                                </span>
-                            </span>
-                            <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityValidator" style="display:none;">
-                                <span class="text-danger">
-                                    The quantity must be greater than 0 and less than 9,999.
-                                </span>
-                            </span>
-                            <input name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" value="1" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantity" class="form-control" />
 
-                            <input type="submit" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" onclick="return false;" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
-                        </div>
+                        <Basket :product-sku="'@Model.Sku'"></Basket>
                     </div>
                 </div>
                 <div class="row">
@@ -125,13 +110,4 @@
             </div>
         </div>
     </div>
-
-    if (!SystemManager.IsDesignMode)
-    {
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
-    }
 }

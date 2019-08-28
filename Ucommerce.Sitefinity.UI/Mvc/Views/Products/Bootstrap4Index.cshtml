@@ -11,13 +11,11 @@
 
 @if (!SystemManager.IsDesignMode)
 {
-    @Html.Script(Url.WidgetContent("assets/dist/javascript/moment.min.js"), "head", false)
-    @Html.Script(Url.WidgetContent("assets/dist/javascript/angular.min.js"), "head", false)
-    @Html.Script(Url.WidgetContent("assets/dist/javascript/app.js"), "head", false)
-    @Html.Script(Url.WidgetContent("Mvc/Scripts/productsController/ProductsController.js"), "head", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<div class="container" ng-controller="productsController">
+<div class="container" data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
     <div class="row">
         <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
             <em class="h5 p-1">@Model.TotalCount products</em>
@@ -62,6 +60,8 @@
                                                 <span class="h5">@product.Price</span>
                                             </div>
 
+                                            <Basket :product-sku="'@product.Sku'"></Basket>
+
                                             <div>
                                                 <a href="#" class="card-link text-info h5" onclick="return false;">Write a review</a>
                                             </div>
@@ -96,12 +96,3 @@
         </div>
     </div>
 </div>
-
-@if (!SystemManager.IsDesignMode)
-{
-    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
-    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
-    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
-    @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
-    @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
-}

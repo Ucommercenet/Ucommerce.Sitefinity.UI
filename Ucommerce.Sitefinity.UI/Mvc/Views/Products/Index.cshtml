@@ -9,22 +9,29 @@
 
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
 
-<div>
-    <em>@Model.TotalCount products</em>
-</div>
-
-@if (Model.ShowPager)
+@if (!SystemManager.IsDesignMode)
 {
-    @Html.Action("Index", "ContentPager", new
-    {
-       currentPage = Model.CurrentPage,
-       totalPagesCount = Model.TotalPagesCount.Value,
-       redirectUrlTemplate = Model.PagingUrlTemplate
-    })
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
-<ul>
-    @foreach (var product in Model.Products)
+
+<div data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
+    <div>
+        <em>@Model.TotalCount products</em>
+    </div>
+
+    @if (Model.ShowPager)
     {
+        @Html.Action("Index", "ContentPager", new
+        {
+           currentPage = Model.CurrentPage,
+           totalPagesCount = Model.TotalPagesCount.Value,
+           redirectUrlTemplate = Model.PagingUrlTemplate
+        })
+    }
+    <ul>
+        @foreach (var product in Model.Products)
+        {
         <li>
             <a title="@product.DisplayName" href="@product.ProductUrl">
                 <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@product.DisplayName">
@@ -37,24 +44,26 @@
                 <p>Discount:</p>
                 <span>@product.Discount</span>
             </div>
+
+            <Basket :product-sku="'@product.Sku'"></Basket>
+
             <div>
                 <a href="#" onclick="return false;">Write a review</a>
             </div>
         </li>
-    }
-</ul>
+        }
+    </ul>
 
-<div>
-    <em>@Model.TotalCount products</em>
-</div>
-@if (Model.ShowPager)
-{
-    @Html.Action("Index", "ContentPager", new
+    <div>
+        <em>@Model.TotalCount products</em>
+    </div>
+    @if (Model.ShowPager)
     {
-        currentPage = Model.CurrentPage,
-        totalPagesCount = Model.TotalPagesCount.Value,
-        redirectUrlTemplate = Model.PagingUrlTemplate
-    })
-}
-
-
+        @Html.Action("Index", "ContentPager", new
+        {
+            currentPage = Model.CurrentPage,
+            totalPagesCount = Model.TotalPagesCount.Value,
+            redirectUrlTemplate = Model.PagingUrlTemplate
+        })
+    }
+</div>
