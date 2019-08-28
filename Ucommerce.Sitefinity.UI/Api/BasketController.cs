@@ -60,6 +60,13 @@ namespace Ucommerce.Sitefinity.UI.Api
             return Json(this.GetBasketModel());
         }
 
+        [Route("AddToBasketMock")]
+        [HttpPost]
+        public IHttpActionResult AddToBasketMock(AddToBasketModel model)
+        {
+            return Ok();
+        }
+
         private BasketModel GetBasketModel()
         {
             var model = new BasketModel();
