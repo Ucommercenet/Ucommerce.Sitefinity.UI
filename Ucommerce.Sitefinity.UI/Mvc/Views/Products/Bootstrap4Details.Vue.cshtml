@@ -1,0 +1,133 @@
+﻿@model Ucommerce.Sitefinity.UI.Mvc.ViewModels.ProductDetailViewModel
+
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers
+@using Telerik.Sitefinity.Services;
+
+@Html.StyleSheet(Url.WidgetContent("~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css"), "head")
+
+@if (Model != null)
+{
+    if (!SystemManager.IsDesignMode)
+    {
+        @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+        @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+    }
+
+    <div class="container-fluid" data-component="products" id="@Html.UniqueId("products")"  v-cloak>
+        <div class="row">
+            <div class="col-sx-12 col-sm-5 col-md-5 col-lg-5 border-right">
+                <div class="img">
+                    <a href="@Model.PrimaryImageMediaUrl" rel="fancybox">
+                        <img src="@Model.PrimaryImageMediaUrl" />
+                    </a>
+                </div>
+
+                <div>
+                    @if (Model.Variants.Any())
+                    {
+                        <ul>
+                            @foreach (var variant in Model.Variants)
+                            {
+                                if (!string.IsNullOrEmpty(variant.PrimaryImageMediaUrl))
+                                {
+                                    <li>
+                                        <a href="@variant.PrimaryImageMediaUrl" rel="fancybox">
+                                            <img src="@variant.PrimaryImageMediaUrl" />
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+            <div class="col-sx-12 offset-1 col-sm-6 col-md-6 col-lg-6">
+                <div class="row">
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                        <h1 class="h2">
+                            @Model.DisplayName
+                        </h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                        <a href="#" onclick="return false;" class="text-info">Write a review</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                        <span class="p-1 bg-info text-white">@Model.Price</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="mt-2">
+                            @Model.ShortDescription
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="mt-3">
+                            <strong>Availability:</strong>
+                            @if (Model.AllowOrdering)
+                            {
+                                <span class="pl-2 text-info">In stock</span>
+                            }
+                            else
+                            {
+                                <span class="pl-2 text-danger">Out of stock</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6">
+                        <div class="mt-2">
+                            <label for="productQuantityInput" class="font-weight-bold">Quantity:</label>
+                            <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" style="display:none;">
+                                <span class="text-danger">
+                                    When adding product to a cart you must specify the quantity
+                                </span>
+                            </span>
+                            <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityValidator" style="display:none;">
+                                <span class="text-danger">
+                                    The quantity must be greater than 0 and less than 9,999.
+                                </span>
+                            </span>
+                            <input id="productQuantityInput" ref="@Model.Sku" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" value="1" class="form-control" />
+
+                            <input type="submit" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addProductToBasket('@Model.Sku')" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
+                            <span v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="mt-3"> <a class="text-info font-weight-bold text-capitalize" href="#" onclick="return false;">add to wish list</a></div>
+                        <div class="text-danger" style="display: none; ">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                        <span></span>
+                        <div id="commentsWidget" class="mt-3">
+                            <div class="">
+                                <div class=""></div>
+                                <a href="#" onclick="return false;" class="text-info">Write a review</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    [v-cloak] {
+        display: none
+    }
+</style>
