@@ -3,6 +3,9 @@
 @using Telerik.Sitefinity.Frontend.Mvc.Helpers
 @using Telerik.Sitefinity.Services;
 
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/vanilla.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/quantum.css"), "head")
+
 @if (Model != null)
 {
     if (!SystemManager.IsDesignMode)
@@ -167,74 +170,6 @@
             </div>
         </div>
     </div>
-
-    <style>
-
-        .sfproductTitle {
-            font-size: 36px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-            font-weight: 500;
-            line-height: 1.1;
-            color: #333;
-        }
-
-        .sfproductDescription {
-            font-size: 14px;
-            line-height: 1.428571429;
-            color: #333;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-        }
-
-        .sfcommentsThreadRatingWrp.sfcommentsThreadRatingFull.sfRatingReadOnly, .sfRatingClosingText, .sfproductPrice {
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-        }
-
-        .sfproductInventory .sfProductInventoryWrp {
-            color: #333;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-        }
-
-        .sfAddToCartWidget > .sfAddToCartWrp {
-            font-size: 14px;
-            line-height: 1.428571429;
-            color: #333;
-        }
-
-        .sfAddToWishlistWidget .sfAddToWishListLnkWrp {
-            font-size: 14px;
-            line-height: 1.428571429;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-        }
-
-        .sfAddToWishListLnkWrp a:hover {
-            color: #23527c;
-        }
-
-        a.sfRatingClosingText {
-            font-size: 14px;
-            line-height: 1.428571429;
-        }
-
-            a.sfRatingClosingText:hover {
-                text-decoration: underline;
-            }
-
-        div.sfproductPrice {
-            font-size: 14px;
-            line-height: 1.428571429;
-        }
-
-        .paragraph-top {
-            margin-top: 1rem;
-            margin-bottom: 0;
-        }
-        .sfproductPrice .sfDiscPrice {
-        color: red;
-    }
-    </style>
-
 
     if (!SystemManager.IsDesignMode)
     {

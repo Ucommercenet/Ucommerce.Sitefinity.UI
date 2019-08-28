@@ -5,6 +5,7 @@
 @using Ucommerce.Sitefinity.UI.Mvc.Model;
 @using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/vanilla.css"), "head")
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/quantum.css"), "head")
 
 @helper DisplayCategories(IList<CategoryNavigationCategoryViewModel> categories, bool topLevel)
@@ -30,11 +31,11 @@
                     @category.DisplayName
                     @if (topLevel && category.Categories.Count > 0)
                     {
-                        <i class="fa fa-chevron-down"></i>
+                        <i></i>
                     }
                     @if (!topLevel && category.Categories.Count > 0)
                     {
-                        <i class="fa fa-chevron-right"></i>
+                        <i></i>
                     }
                 </a>
 
@@ -47,29 +48,26 @@
     </ul>
 }
 
-<header class="top top--light" ng-controller="categoryNavigationController">
-    <div class="top-inner top-inner--center">
-        <nav class="logo-wrap">
-            <a href="/" class="logo logo--on-light" alt="">
+<header ng-controller="categoryNavigationController">
+    <div>
+        <nav>
+            <a href="/" alt="">
                 <img src="@Model.ImageUrl" alt="">
             </a>
-        </nav>
 
-        @if (Model.Categories.Count > 0)
-        {
-            <nav class="main-nav">
+            @if (Model.Categories.Count > 0)
+            {
                 @DisplayCategories(Model.Categories, true)
-            </nav>
-        }
-        <nav class="main-nav main-nav--right hide--m">
+            }
+
             <ul>
                 @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
                 {
-                    <li class="lang currency">
+                    <li>
                         @if (Model.CurrentCurrency != null)
                         {
-                            <a class="ng-binding">
-                                <span style="display: inline-block;" class="ng-scope">@Model.CurrentCurrency.DisplayName</span><i class="fa fa-chevron-down"></i>
+                            <a>
+                                <span style="display: inline-block;" class="ng-scope">@Model.CurrentCurrency.DisplayName</span><i></i>
                             </a>
                         }
                         <ul>
@@ -80,15 +78,15 @@
                         </ul>
                     </li>
                 }
-                <li class="toggle-search" ng-click="searchService.toggleSearchBar()"><a href=""><i class="fa fa-search"></i></a></li>
+                <li ng-click="searchService.toggleSearchBar()"><a href=""><i></i></a></li>
 
                 @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
                 {
-                    <li class="toggle-cart" ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
+                    <li ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
                         <a href="">
                             <span>
-                                <span class="">{{basketService.basket.NumberOfItemsInBasket}}</span>
-                                <i class="fa fa-shopping-cart"></i>
+                                <span>{{basketService.basket.NumberOfItemsInBasket}}</span>
+                                <i></i>
                             </span>
                         </a>
                     </li>
@@ -98,50 +96,48 @@
     </div>
 </header>
 
-<div class="search" ng-controller="fullTextSearchController">
+<div ng-controller="fullTextSearchController">
 
-    <button class="search__close" ng-click="searchService.toggleSearchBar()"><i class="fa fa-times"></i></button>
+    <button ng-click="searchService.toggleSearchBar()"><i></i></button>
 
-    <div class="search__stage">
+    <div>
 
         @if (Model.SearchPageUrl != null)
         {
-            <form action="@Model.SearchPageUrl" class="search__form" _lpchecked="1">
-                <i class="fa fa-search"></i>
-                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="search__input ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+            <form action="@Model.SearchPageUrl" _lpchecked="1">
+                <i></i>
+                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
             </form>
         }
         else
         {
-            <form class="search__form" _lpchecked="1">
-                <i class="fa fa-search"></i>
-                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="search__input ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+            <form _lpchecked="1">
+                <i></i>
+                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
             </form>
         }
 
-        <div class="search__autocomplete" ng-hide="searchService.searchResult.length == 0 && searchService.suggestion.length == 0">
-            <ul class="search__suggest">
+        <div ng-hide="searchService.searchResult.length == 0 && searchService.suggestion.length == 0">
+            <ul>
                 <li ng-repeat="suggestion in searchService.suggestions" class="ng-scope" ng-click="searchService.searchQuery = suggestion;searchService.search()">
-                    <span class="search__suggest-image">
-                    </span>
-                    <span class="search__suggest-info">
-                        <span class="search__suggest-title ng-binding">{{suggestion}}</span>
+                    <span>
+                        <span class="ng-binding">{{suggestion}}</span>
                     </span>
                 </li>
                 <li ng-repeat="product in searchService.searchResult" class="ng-scope">
                     <a href="{{product.Url}}">
-                        <span class="search__suggest-image">
+                        <span>
                             <img ng-src="{{product.ThumbnailImageUrl}}" alt="">
                         </span>
-                        <span class="search__suggest-info">
-                            <span class="search__suggest-title ng-binding">{{product.Name}}</span>
+                        <span>
+                            <span class="ng-binding">{{product.Name}}</span>
                         </span>
                     </a>
                 </li>
             </ul>
             @if (Model.SearchPageUrl != null)
             {
-                <a href="@Model.SearchPageUrl?search={{searchService.searchQuery}}" class="button button--block">Show all results</a>
+                <a href="@Model.SearchPageUrl?search={{searchService.searchQuery}}">Show all results</a>
             }
         </div>
     </div>

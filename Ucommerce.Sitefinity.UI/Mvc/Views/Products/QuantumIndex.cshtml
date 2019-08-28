@@ -7,6 +7,9 @@
     ViewBag.Title = "Products";
 }
 
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/vanilla.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/quantum.css"), "head")
+
 <div>
     <div class="sfCatalogTotalCount">
         <div>
@@ -67,93 +70,3 @@
         }
     </div>
 </div>
-
-<style>
-    .pagination {
-        margin: 1% 2% 2% 1%;
-    }
-
-        .pagination > li > a {
-            color: #00b4c9;
-            font-size: 16px;
-            margin: 10px;
-            padding: 0;
-            border: none;
-        }
-
-            .pagination > li > a:hover {
-                color: #23527c;
-                background-color: transparent;
-            }
-
-        .pagination > li.active > a {
-            color: white !important;
-            background-color: #00b4c9 !important;
-            padding: 4px 10px;
-            border-radius: 80%;
-            margin-top: 6px;
-        }
-
-    .sfCatalogTotalCount em {
-        font-size: 14px;
-        line-height: 1.428571429;
-        color: #333;
-        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    }
-
-    .sfproductPrice .sfRegPrice {
-        line-height: 1.428571429;
-        color: #333;
-    }
-
-    .sfproductPrice .sfDiscPrice {
-        color: red;
-    }
-
-    .sfcommentsThreadRatingWrp.sfcommentsThreadRatingFull.sfRatingReadOnly, .sfRatingClosingText, .sfproductPrice {
-        font-size: 14px;
-        line-height: 1.428571429;
-    }
-
-
-        .sfproductPrice.bottomPrice {
-            bottom: 0px;
-        }
-
-    .sfproductsList .sfproductListItem {
-        vertical-align: top;
-        float: none;
-        list-style: none;
-        width: 30%;
-        border-bottom: 1px solid #eee;
-        display: inline-block;
-        height: 400px;
-        padding: 0px 0px 0px 10px;
-    }
-
-    .product-list-paging {
-        margin-bottom: 20px;
-    }
-
-    .sfcurrenciesHorizontalList li a {
-        font-size: 14px;
-    }
-
-        .sfcurrenciesHorizontalList li a:hover {
-            text-decoration: underline;
-        }
-
-    a.sflnkToggleCart .sflnkToggleCartLbl {
-        font-size: 14px;
-    }
-
-    .sfcartSummaryWrp.sfcartSummaryExpandableWrp {
-        margin: 0;
-    }
-
-    .paragraph-top {
-        margin-top: 1rem;
-        margin-bottom: 0;
-    }
-    
-</style>

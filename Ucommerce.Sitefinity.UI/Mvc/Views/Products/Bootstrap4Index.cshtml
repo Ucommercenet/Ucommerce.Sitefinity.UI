@@ -7,7 +7,8 @@
     ViewBag.Title = "Products";
 }
 
-<link href="~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css" rel="stylesheet" />
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/vanilla.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -97,11 +98,11 @@
     </div>
 </div>
 
-    @if (!SystemManager.IsDesignMode)
-    {
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
-    }
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
+}
