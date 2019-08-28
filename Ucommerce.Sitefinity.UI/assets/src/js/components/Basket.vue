@@ -19,12 +19,11 @@
 </template>
 
 <script>
-    const addToBasketUrl = '/Basket/AddToBasketMock';
     const addToBasketSuccessMessage = 'Added to basket';
     const addToBasketFailedMessage = 'Not added to basket';
 
     export default {
-        name: "Basket",
+        name: "basket",
         props: {
             productSku: {
                 type: String,
@@ -44,29 +43,34 @@
         methods: {
             addToBasket: function () {
 
-                var productQuantity = 1;
-                if (this.quantity !== '' && !isNaN(this.quantity)) {
-                    productQuantity = parseInt(this.quantity);
-                }
+                var addToBasketUrlContainers = document.querySelectorAll('.addToBasketUrl');
+                if (addToBasketUrlContainers && addToBasketUrlContainers.length > 0) {
+                    var addToBasketUrl = addToBasketUrlContainers[0].value;
 
-                var addToBasketModel = { Quantity: productQuantity, Sku: this.productSku, VariantSku: this.variantSku };
+                    var productQuantity = 1;
+                    if (this.quantity !== '' && !isNaN(this.quantity)) {
+                        productQuantity = parseInt(this.quantity);
+                    }
 
-                this.$http.post(addToBasketUrl, addToBasketModel)
-                    .then(function (response) {
-                        this.addToBasketMessage = addToBasketSuccessMessage;
-                        this.showAddToBasketMessage = true;
+                    var addToBasketModel = { Quantity: productQuantity, Sku: this.productSku, VariantSku: this.variantSku };
 
-                        setTimeout(() =>
-                            this.showAddToBasketMessage = false,
-                            5000);
-                    }, function (error) {
-                        this.addToBasketMessage = addToBasketFailedMessage;
-                        this.showAddToBasketMessage = true;
+                    this.$http.post(addToBasketUrl, addToBasketModel)
+                        .then(function (response) {
+                            this.addToBasketMessage = addToBasketSuccessMessage;
+                            this.showAddToBasketMessage = true;
 
-                        setTimeout(() =>
-                            this.showAddToBasketMessage = false,
-                            5000);
-                    });
+                            setTimeout(() =>
+                                this.showAddToBasketMessage = false,
+                                5000);
+                        }, function (error) {
+                            this.addToBasketMessage = addToBasketFailedMessage;
+                            this.showAddToBasketMessage = true;
+
+                            setTimeout(() =>
+                                this.showAddToBasketMessage = false,
+                                5000);
+                        });
+                }                
             }
         }
     };

@@ -37,6 +37,11 @@
         </div>
     </div>
     <div class="row">
+
+        @foreach (var route in Model.Routes)
+        {
+            <input type="hidden" class="@route.Key" value="@route.Value" />
+        }
         <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
             <div class="card-group">
                 <div class="row">
@@ -60,7 +65,7 @@
                                                 <span class="h5">@product.Price</span>
                                             </div>
 
-                                            <Basket :product-sku="'@product.Sku'"></Basket>
+                                            <basket :product-sku="'@product.Sku'"></basket>
 
                                             <div>
                                                 <a href="#" class="card-link text-info h5" onclick="return false;">Write a review</a>

@@ -14,7 +14,7 @@
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
     }
 
-    <div class="sf_cols" data-component="products" id="@Html.UniqueId("products")"  v-cloak>
+    <div class="sf_cols" data-component="products" id="@Html.UniqueId("products")" v-cloak>
         <div class="sf_colsOut sf_1col_1_100">
             <div class="sf_colsIn sf_1col_1in_100" style="margin: 0px 20px 0px 0px;">
                 <div>
@@ -109,7 +109,12 @@
 
                                             </div>
 
-                                            <Basket :product-sku="'@Model.Sku'"></Basket>
+                                            @foreach (var route in Model.Routes)
+                                            {
+                                                <input type="hidden" class="@route.Key" value="@route.Value" />
+                                            }
+
+                                            <basket :product-sku="'@Model.Sku'"></basket>
 
                                         </div>
 

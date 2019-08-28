@@ -29,28 +29,33 @@
            redirectUrlTemplate = Model.PagingUrlTemplate
         })
     }
+
+    @foreach (var route in Model.Routes)
+    {
+        <input type="hidden" class="@route.Key" value="@route.Value" />
+    }
     <ul>
         @foreach (var product in Model.Products)
         {
-        <li>
-            <a title="@product.DisplayName" href="@product.ProductUrl">
-                <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@product.DisplayName">
-            </a>
+            <li>
+                <a title="@product.DisplayName" href="@product.ProductUrl">
+                    <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@product.DisplayName">
+                </a>
 
-            <a href="@product.ProductUrl">@product.DisplayName</a>
+                <a href="@product.ProductUrl">@product.DisplayName</a>
 
-            <div>
-                <span>@product.Price</span>
-                <p>Discount:</p>
-                <span>@product.Discount</span>
-            </div>
+                <div>
+                    <span>@product.Price</span>
+                    <p>Discount:</p>
+                    <span>@product.Discount</span>
+                </div>
 
-            <Basket :product-sku="'@product.Sku'"></Basket>
+                <basket :product-sku="'@product.Sku'"></basket>
 
-            <div>
-                <a href="#" onclick="return false;">Write a review</a>
-            </div>
-        </li>
+                <div>
+                    <a href="#" onclick="return false;">Write a review</a>
+                </div>
+            </li>
         }
     </ul>
 

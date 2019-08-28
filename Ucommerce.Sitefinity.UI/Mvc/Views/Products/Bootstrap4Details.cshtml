@@ -85,7 +85,12 @@
                 <div class="row">
                     <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6">
 
-                        <Basket :product-sku="'@Model.Sku'"></Basket>
+                        @foreach (var route in Model.Routes)
+                        {
+                            <input type="hidden" class="@route.Key" value="@route.Value" />
+                        }
+
+                        <basket :product-sku="'@Model.Sku'"></basket>
                     </div>
                 </div>
                 <div class="row">

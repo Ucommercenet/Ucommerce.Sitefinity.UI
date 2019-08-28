@@ -417,8 +417,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="assets\src\js\components\Basket.vue" />
-    <None Include="assets\src\js\components\Search.vue" />
+    <None Include="assets\src\js\components\basket.vue" />
+    <None Include="assets\src\js\components\search.vue" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Bootstrap4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\QuantumIndex.cshtml" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Index.cshtml" />
@@ -438,8 +438,8 @@
     <EmbeddedResource Include="assets\build\**\*.*" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\src\css\uc-quantum.css" />
-    <Content Include="assets\src\css\uc-vue-styles.css" />
+    <EmbeddedResource Include="assets\src\css\uc-quantum.css" />
+    <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\functions\init.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />

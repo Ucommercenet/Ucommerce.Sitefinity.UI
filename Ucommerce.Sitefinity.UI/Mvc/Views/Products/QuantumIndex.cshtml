@@ -30,6 +30,12 @@
            redirectUrlTemplate = Model.PagingUrlTemplate
         })
     }
+
+    @foreach (var route in Model.Routes)
+    {
+        <input type="hidden" class="@route.Key" value="@route.Value" />
+    }
+
     <ul class="sfproductsList">
         @foreach (var product in Model.Products)
         {
@@ -51,7 +57,7 @@
                             <span class="sfDiscPrice">@product.Discount</span>
                         </div>
 
-                        <Basket :product-sku="'@product.Sku'"></Basket>
+                        <basket :product-sku="'@product.Sku'"></basket>
 
                         <div class="sfcommentsThreadRatingWrp sfcommentsThreadRatingFull sfRatingReadOnly">
                             <a href="#" class="sfRatingClosingText" onclick="return false;">Write a review</a>

@@ -74,7 +74,13 @@
 
             @*Beggining of Add to cart section*@
             <div>
-                <Basket :product-sku="'@Model.Sku'"></Basket>
+
+                @foreach (var route in Model.Routes)
+                {
+                    <input type="hidden" class="@route.Key" value="@route.Value" />
+                }
+
+                <basket :product-sku="'@Model.Sku'"></basket>
             </div>
 
             @*End of Add to cart section *@
