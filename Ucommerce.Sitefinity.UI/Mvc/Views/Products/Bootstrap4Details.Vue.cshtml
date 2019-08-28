@@ -13,7 +13,7 @@
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
     }
 
-    <div class="container-fluid" data-component="products" id="@Html.UniqueId("products")"  v-cloak>
+    <div class="container-fluid" data-component="products" id="@Html.UniqueId("product-details")"  v-cloak>
         <div class="row">
             <div class="col-sx-12 col-sm-5 col-md-5 col-lg-5 border-right">
                 <div class="img">
@@ -83,23 +83,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6">
-                        <div class="mt-2">
-                            <label for="productQuantityInput" class="font-weight-bold">Quantity:</label>
-                            <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" style="display:none;">
-                                <span class="text-danger">
-                                    When adding product to a cart you must specify the quantity
-                                </span>
-                            </span>
-                            <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityValidator" style="display:none;">
-                                <span class="text-danger">
-                                    The quantity must be greater than 0 and less than 9,999.
-                                </span>
-                            </span>
-                            <input id="productQuantityInput" ref="@Model.Sku" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" value="1" class="form-control" />
-
-                            <input type="submit" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addProductToBasket('@Model.Sku')" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
-                            <span v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
-                        </div>
+                        <Basket :product-sku="'@Model.Sku'"></Basket>
                     </div>
                 </div>
                 <div class="row">

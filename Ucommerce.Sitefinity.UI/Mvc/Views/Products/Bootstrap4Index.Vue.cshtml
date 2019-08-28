@@ -7,9 +7,15 @@
     ViewBag.Title = "Products";
 }
 
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+}
+
 <link href="~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css" rel="stylesheet" />
 
-<div class="container">
+<div class="container" data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
     <div class="row">
         <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
             <em class="h5 p-1">@Model.TotalCount products</em>
@@ -53,6 +59,7 @@
                                             <div>
                                                 <span class="h5">@product.Price</span>
                                             </div>
+                                            <Basket :product-sku="'@product.Sku'"></Basket>
                                             <div>
                                                 <a href="#" class="card-link text-info h5" onclick="return false;">Write a review</a>
                                             </div>
@@ -87,3 +94,9 @@
         </div>
     </div>
 </div>
+
+<style>
+    [v-cloak] {
+        display: none
+    }
+</style>
