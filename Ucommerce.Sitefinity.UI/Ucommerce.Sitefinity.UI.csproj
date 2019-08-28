@@ -401,13 +401,7 @@
     <EmbeddedResource Include="Mvc\Scripts\CategoryNavigationController\CategoryNavigationController.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mvc\Scripts\FacetSelectorController\FacetSelectorController.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Mvc\Scripts\FullTextSearchController\FullTextSearchController.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Mvc\Scripts\ProductsController\ProductsController.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\DesignerView.Simple.cshtml" />
@@ -427,12 +421,10 @@
     <None Include="assets\src\js\components\Search.vue" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Bootstrap4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\QuantumIndex.cshtml" />
-    <None Include="Mvc\Views\FacetsFilter\FacetsFilter.MainOld.cshtml" />
     <None Include="Mvc\Views\Products\Bootstrap4Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Bootstrap4Details.Vue.cshtml" />
     <None Include="Mvc\Views\Products\Bootstrap4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Bootstrap4Index.Vue.cshtml" />
-    <None Include="Mvc\Views\Products\IndexOld.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\QuantumDetails.Vue.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\QuantumIndex.Vue.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\QuantumDetails.cshtml" />
