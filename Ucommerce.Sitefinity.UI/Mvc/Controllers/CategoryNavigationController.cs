@@ -20,6 +20,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public Guid? SearchPageId { get; set; }
 
+        public string TemplateName { get; set; } = "Index";
+
         [RelativeRoute("{name?}")]
         public ActionResult Index()
         {
@@ -30,7 +32,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 var model = this.ResolveModel();
                 categoryNavigationViewModel = model.CreateViewModel();
 
-                return this.View(categoryNavigationViewModel);
+                return this.View(this.TemplateName, categoryNavigationViewModel);
             }
             catch (Exception ex)
             {
