@@ -64,6 +64,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.XmlTransform, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.8.1.0.19093\lib\Microsoft.Web.XmlTransform.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -206,11 +209,23 @@
     <Reference Include="UCommerce.Presentation, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\uCommerce.Core.8.1.0.19093\lib\net45\UCommerce.Presentation.dll</HintPath>
     </Reference>
+    <Reference Include="UCommerce.Sitefinity, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.8.1.0.19093\lib\UCommerce.Sitefinity.dll</HintPath>
+    </Reference>
+    <Reference Include="UCommerce.Sitefinity.Installer, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.8.1.0.19093\lib\UCommerce.Sitefinity.Installer.dll</HintPath>
+    </Reference>
+    <Reference Include="Ucommerce.Sitefinity.UI, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.UI.0.8.0\lib\net471\Ucommerce.Sitefinity.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UCommerce.SystemHttp, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\uCommerce.Core.8.1.0.19093\lib\net45\UCommerce.SystemHttp.dll</HintPath>
     </Reference>
     <Reference Include="UCommerce.SystemWeb, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\uCommerce.Core.8.1.0.19093\lib\net45\UCommerce.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="UCommerce.Web.Shell, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.8.1.0.19093\lib\UCommerce.Web.Shell.dll</HintPath>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.0.3\lib\net40\WebActivatorEx.dll</HintPath>
@@ -398,9 +413,6 @@
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\DesignerView.Simple.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Mvc\Views\FacetsFilter\FacetsFilter.Main.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -412,23 +424,26 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="assets\src\js\components\Search.vue" />
-    <None Include="Mvc\Views\CategoryNavigation\IndexOld.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Bootstrap4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\QuantumIndex.cshtml" />
     <None Include="Mvc\Views\FacetsFilter\FacetsFilter.MainOld.cshtml" />
     <None Include="Mvc\Views\Products\Bootstrap4Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Bootstrap4Details.Vue.cshtml" />
     <None Include="Mvc\Views\Products\Bootstrap4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Bootstrap4Index.Vue.cshtml" />
     <None Include="Mvc\Views\Products\IndexOld.cshtml" />
-    <None Include="Mvc\Views\Products\QuantumDetails.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\QuantumDetails.Vue.cshtml" />
-    <None Include="Mvc\Views\Products\QuantumIndex.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\QuantumIndex.Vue.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Products\QuantumDetails.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Products\QuantumIndex.cshtml" />
     <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="assets\build\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\functions\init.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />

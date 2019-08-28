@@ -16,6 +16,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
 
         public string ListPrice { get; set; }
 
+        public string Discount { get; set; }
+
         public string CategoryDisplayName { get; set; }
 
         public string ShortDescription { get; set; }
