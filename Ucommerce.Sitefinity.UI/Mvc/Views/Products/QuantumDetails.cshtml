@@ -66,6 +66,8 @@
                                     <div>
                                         <div>
                                             <span class="sfRegPrice">@Model.Price</span>
+                                            <p class="paragraph-top">Discount:</p>
+                                            <span class="sfDiscPrice">@Model.Discount</span>
                                         </div>
                                     </div>
                                 </div>
@@ -223,6 +225,14 @@
             font-size: 14px;
             line-height: 1.428571429;
         }
+
+        .paragraph-top {
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+        .sfproductPrice .sfDiscPrice {
+        color: red;
+    }
     </style>
 
 
