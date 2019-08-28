@@ -423,6 +423,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="assets\src\js\components\Basket.vue" />
     <None Include="assets\src\js\components\Search.vue" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Bootstrap4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\QuantumIndex.cshtml" />
