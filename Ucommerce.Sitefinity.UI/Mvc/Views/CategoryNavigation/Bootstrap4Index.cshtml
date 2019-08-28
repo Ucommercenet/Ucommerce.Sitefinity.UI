@@ -5,6 +5,9 @@
 @using Ucommerce.Sitefinity.UI.Mvc.Model;
 @using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css"), "head")
+
 @helper DisplayCategories(IList<CategoryNavigationCategoryViewModel> categories, bool topLevel)
 {
     var categoryClass = "category-parent";

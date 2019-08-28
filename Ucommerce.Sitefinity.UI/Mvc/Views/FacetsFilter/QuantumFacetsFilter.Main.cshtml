@@ -4,6 +4,9 @@
     @using Telerik.Sitefinity.Services
     @using Telerik.Sitefinity.Frontend.Mvc.Helpers
 
+    @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
+    @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-quantum.css"), "head")
+
     @if (!SystemManager.IsDesignMode)
     {
         @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
@@ -35,76 +38,3 @@
             </li>
         </ul>
     </div>
-
-    <style>
-        [v-cloak] {
-            display: none
-        }
-    </style>
-    <style>
-        .sfShopByFilterListItem {
-            background: 0 0;
-            padding: 0 0 0 25px;
-            color: #888;
-            position: relative;
-        }
-
-            .sfShopByFilterListItem:hover {
-                color: #000;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-        .cb-wrap {
-            font-weight: normal;
-        }
-
-            .cb-wrap:hover {
-                cursor: pointer;
-            }
-
-        .js-facets {
-            display: none;
-        }
-
-        .cb-wrap:before {
-            width: 14px;
-            height: 14px;
-            display: block;
-            left: 0;
-            top: 2px;
-            position: absolute;
-            content: "";
-            border-radius: 2px;
-            border: 1px solid #fff;
-            background: #eee;
-        }
-
-        .cb-wrap.active {
-            font-weight: 700;
-            color: #444;
-        }
-
-            .cb-wrap.active:before {
-                background: #3aa4bf;
-            }
-
-        .cb-wrap:hover:before {
-            border: 1px solid #ccc;
-        }
-
-        h2.sffilterTitle {
-            line-height: 1.1;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-        }
-
-        a.sffilterClearLnk {
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-        }
-
-        ul.sfShopByFilterGroupList {
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-            color: #333;
-            margin-bottom: 20px;
-        }
-    </style>
