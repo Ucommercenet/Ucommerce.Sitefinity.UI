@@ -426,6 +426,8 @@
   <ItemGroup>
     <EmbeddedResource Include="assets\build\**\*.*" />
     <Content Include="assets\src\index.js" />
+    <Content Include="assets\src\js\functions\init.js" />
+    <Content Include="assets\src\js\widgets\category-navigation.js" />
     <Content Include="assets\src\js\widgets\facet-filter.js" />
     <Content Include="webpack.config.js" />
   </ItemGroup>
