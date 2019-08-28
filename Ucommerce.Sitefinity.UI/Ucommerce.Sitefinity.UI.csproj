@@ -429,6 +429,7 @@
     <Content Include="assets\src\js\functions\init.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />
     <Content Include="assets\src\js\widgets\facet-filter.js" />
+    <Content Include="assets\src\js\widgets\products.js" />
     <Content Include="webpack.config.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
