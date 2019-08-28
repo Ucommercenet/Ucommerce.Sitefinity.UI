@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Castle.Windsor;
+using Castle.Windsor.Installer;
+using System;
 using System.Linq;
 using System.Web.Mvc;
+using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Configuration;
@@ -9,15 +12,12 @@ using Telerik.Sitefinity.Data.Metadata;
 using Telerik.Sitefinity.Metadata.Model;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.Modules.Pages;
+using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Pages;
 using Ucommerce.Sitefinity.UI.Mvc.Filters;
-using Castle.Windsor;
-using Castle.Windsor.Installer;
 using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
-using Telerik.Microsoft.Practices.Unity;
-using Telerik.Sitefinity.Mvc;
+using Ucommerce.Sitefinity.UI.Pages;
 
 namespace Ucommerce.Sitefinity.UI
 {
@@ -89,19 +89,23 @@ namespace Ucommerce.Sitefinity.UI
             string systemErrorMessage = string.Empty;
             Log.Write($"Unhandled Exception was thrown. Full exception below: {Environment.NewLine} {exception}", ConfigurationPolicy.ErrorLog);
 
-            if (exception is InvalidOperationException)
+            if (exception is InvalidOperationException && exception.Message != null)
             {
-                if (exception.Message == RAVEN_SOURCE)
+                if (exception.Message.Contains(RAVEN_SOURCE))
                 {
                     systemErrorMessage = "There was an error processing the product facets configuration in Raven DB. Please delete the uCommerce file in  App_Data\\RavenDatabases folder and run the scratch indexer.";
                 }
-                else if (exception.Message == NO_CATALOT_ERROR_MESSAGE)
+                else if (exception.Message.Contains(NO_CATALOG_ERROR_MESSAGE))
                 {
                     systemErrorMessage = "There are no product catalogs configured for your site. Please configure a product catalog.";
                 }
-                else if (exception.Message == NO_CATEGORIES_ERROR_MESSAGE)
+                else if (exception.Message.Contains(NO_CATEGORIES_ERROR_MESSAGE))
                 {
                     systemErrorMessage = "There are no product categories configured for your site. Please configure a product category.";
+                }
+                else if (exception.Message.Contains(CATALOG_NOT_INDEXED))
+                {
+                    systemErrorMessage = "There was an error processing the product facets configuration in Raven DB. Please delete the uCommerce file in  App_Data\\RavenDatabases folder and run the scratch indexer.";
                 }
 
                 if (!string.IsNullOrEmpty(systemErrorMessage))
@@ -265,9 +269,10 @@ namespace Ucommerce.Sitefinity.UI
         public const string NAME = "UcommerceUIModule";
         public const string TITLE = "Ucommerce UI";
         public const string UCOMMERCE_WIDGET_SECTION = "Ucommerce";
-        private const string NO_CATALOT_ERROR_MESSAGE = "There is no product catalog configured.";
+        private const string NO_CATALOG_ERROR_MESSAGE = "There is no product catalog configured.";
         private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
         private const string RAVEN_SOURCE = "Raven.Database";
+        private const string CATALOG_NOT_INDEXED = "Could not find facets document";
 
         private static volatile IWindsorContainer container;
     }
