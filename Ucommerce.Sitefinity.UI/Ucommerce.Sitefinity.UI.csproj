@@ -429,6 +429,8 @@
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
     <None Include="assets\src\js\components\basket.vue" />
+    <None Include="assets\src\js\components\dropdown-menu.vue" />
+    <None Include="assets\src\js\components\dropdown-node.vue" />
     <None Include="assets\src\js\components\search.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
