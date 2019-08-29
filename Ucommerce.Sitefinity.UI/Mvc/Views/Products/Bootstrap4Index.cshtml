@@ -20,7 +20,7 @@
 <div class="container" ng-controller="productsController">
     <div class="row">
         <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-            <em class="h5 p-1">@Model.TotalCount products</em>
+            <em class="p-1">@Model.TotalCount products</em>
         </div>
     </div>
     <div class="row">
@@ -40,44 +40,46 @@
     </div>
     <div class="row">
         <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-            <div class="card-group">
-                <div class="row">
-                    @foreach (var product in Model.Products)
-                    {
-                        <div class="col-sx-12 col-sm-6 col-md-4 col-lg-4 p-3">
-                            <div class="card h-100">
-                                <div class="card-body">
+            <div class="card-deck">
+                <div class="container">
+                    <div class="row">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="col-sx-12 col-sm-6 col-md-4 col-lg-4 p-3">
+                                <div class="card h-100 w-100">
+                                    <div class="card-body p-0 p-2">
 
-                                    <a title="@product.DisplayName" href="@product.ProductUrl">
-                                        <img title="Top 100 Digital Agencies" class="card-img-top img-thumbnail" src="@product.ThumbnailImageMediaUrl" alt="@product.DisplayName">
-                                    </a>
+                                        <a title="@product.DisplayName" href="@product.ProductUrl">
+                                            <img title="Top 100 Digital Agencies" class="card-img-top img-thumbnail" src="@product.ThumbnailImageMediaUrl" alt="@product.DisplayName">
+                                        </a>
 
-                                    <h2 class="card-title">
-                                        <a class="card-link text-info" href="@product.ProductUrl">@product.DisplayName</a>
-                                    </h2>
-                                    <div class="card-footer">
+                                        <h5 class="card-title mt-2">
+                                            <a class="card-link text-info h5" href="@product.ProductUrl">@product.DisplayName</a>
+                                        </h5>
+                                    </div>
+                                    <div class="card-footer text-muted">
                                         <div>
                                             <div class="card-text"></div>
                                             <div>
-                                                <span class="h5">@product.Price</span>
+                                                <span>@product.Price</span>
                                             </div>
 
                                             <div>
-                                                <a href="#" class="card-link text-info h5" onclick="return false;">Write a review</a>
+                                                <a href="#" class="card-link text-info" onclick="return false;">Write a review</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-            <em class="h5 p-1">@Model.TotalCount products</em>
+            <em class="p-1">@Model.TotalCount products</em>
         </div>
     </div>
     <div class="row">

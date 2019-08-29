@@ -27,15 +27,15 @@
                 {
                     categoryHref = "";
                 }
-                <a class="nav-link h4" href="@categoryHref">
+                <a class="nav-link h5" href="@categoryHref">
                     @category.DisplayName
                     @if (topLevel && category.Categories.Count > 0)
                     {
-                        <i class="glyphicon glyphicon-menu-down"></i>
+                        <span>&#709;</span>
                     }
                     @if (!topLevel && category.Categories.Count > 0)
                     {
-                        <i class="glyphicon glyphicon-menu-right"></i>
+                        <span>&#707;</span>
                     }
                 </a>
 
@@ -55,44 +55,50 @@
                 <a href="/" class="navbar-brand" alt="">
                     <img src="@Model.ImageUrl" width="40" height="40" class="d-inline-block align-top" alt="">
                 </a>
-                @if (Model.Categories.Count > 0)
-                {
-
-                    @DisplayCategories(Model.Categories, true)
-
-                }
-                <ul class="navbar-nav">
-                    @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    @if (Model.Categories.Count > 0)
                     {
-                        <li class="nav-item ml-4 mr-4">
-                            @if (Model.CurrentCurrency != null)
-                            {
-                                <a class="nav-link h4">
-                                    <span style="display: inline-block;" class="ng-scope">@Model.CurrentCurrency.DisplayName</span><i class="glyphicon glyphicon-menu-down"></i>
-                                </a>
-                            }
-                            <ul class="navbar-nav dropdown">
-                                @foreach (var currency in Model.Currencies)
+
+                        @DisplayCategories(Model.Categories, true)
+
+                    }
+
+                    <ul class="navbar-nav">
+                        @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
+                        {
+                            <li class="nav-item ml-4 mr-4">
+                                @if (Model.CurrentCurrency != null)
                                 {
-                                    <li class="nav-item ml-4 mr-4"><a href="" class="nav-link h4" ng-click="basketService.setCurrency('@currency.PriceGroupId')"><span>@currency.DisplayName</span></a></li>
+                                    <a class="nav-link h5">
+                                        <span style="display: inline-block;" class="ng-scope">@Model.CurrentCurrency.DisplayName</span><span>&#709;</span>
+                                    </a>
                                 }
-                            </ul>
-                        </li>
-                    }
-                    <li class="nav-item ml-4 mr-4" ng-click="searchService.toggleSearchBar()"><a class="nav-link h4" href=""><i class="glyphicon glyphicon-search"></i></a></li>
+                                <ul class="navbar-nav">
+                                    @foreach (var currency in Model.Currencies)
+                                    {
+                                        <li class="nav-item ml-4 mr-4"><a href="" class="nav-link h5" ng-click="basketService.setCurrency('@currency.PriceGroupId')"><span>@currency.DisplayName</span></a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        <li class="nav-item ml-4 mr-4" ng-click="searchService.toggleSearchBar()"><a class="nav-link h5" href=""><span>&#128269;</span></a></li>
 
-                    @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
-                    {
-                        <li class="nav-item ml-4 mr-4" ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
-                            <a class="nav-link h4" href="">
-                                <span>
-                                    <span class="">{{basketService.basket.NumberOfItemsInBasket}}</span>
-                                    <i class="glyphicon glyphicon-shopping-cart"></i>
-                                </span>
-                            </a>
-                        </li>
-                    }
-                </ul>
+                        @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
+                        {
+                            <li class="nav-item ml-4 mr-4" ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
+                                <a class="nav-link h5" href="">
+                                    <span>
+                                        <span class="">{{basketService.basket.NumberOfItemsInBasket}}</span>
+                                        <span>&#128722;</span>
+                                    </span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </nav>
         </div>
     </div>
@@ -100,8 +106,8 @@
 
 <div class="container" ng-controller="fullTextSearchController">
     <div class="row">
-        <div class="col-md-offset-3 col-md-6">
-            <button class="close" aria-label="Close" ng-click="searchService.toggleSearchBar()"><i aria-hidden="true" class="glyphicon glyphicon-remove p-3"></i></button>
+        <div class="offset-md-3 col-md-6">
+            <button class="close" aria-label="Close" ng-click="searchService.toggleSearchBar()"><span class="m-1">&#215;</span></button>
 
             <div class="bg-white shadow-lg p-3 rounded">
 
@@ -111,7 +117,7 @@
                         <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
                         <span class="input-group-append">
                             <button class="btn btn-outline-secondary border-left-0 border" type="button">
-                                <i class="glyphicon glyphicon-search"></i>
+                                <span>&#128269;</span>
                             </button>
                         </span>
                     </form>
@@ -122,7 +128,7 @@
                         <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
                         <span class="input-group-append">
                             <button class="btn btn-outline-secondary border-left-0 border" type="button">
-                                <i class="glyphicon glyphicon-search"></i>
+                                <span>&#128269;</span>
                             </button>
                         </span>
                     </form>
@@ -134,7 +140,7 @@
                             <span class="img">
                             </span>
                             <span class="stext-info">
-                                <span class="h4 p-3 ng-binding">{{suggestion}}</span>
+                                <span class="h5 p-3 ng-binding">{{suggestion}}</span>
                             </span>
                         </li>
                         <li ng-repeat="product in searchService.searchResult" class="ng-scope list-group-item">
@@ -143,7 +149,7 @@
                                     <img height="50" width="50" ng-src="{{product.ThumbnailImageUrl}}" alt="">
                                 </span>
                                 <span class="text-info">
-                                    <span class="h3 p-3 ng-binding">{{product.Name}}</span>
+                                    <span class="h4 p-3 ng-binding">{{product.Name}}</span>
                                 </span>
                             </a>
                         </li>
@@ -155,7 +161,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-offset-3">
+        <div class="offset-md-3">
 
         </div>
     </div>
