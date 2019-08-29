@@ -13,3 +13,5 @@ import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
 import "./js/widgets/facet-filter";
+import "./js/widgets/category-navigation";
+import "./js/widgets/products";

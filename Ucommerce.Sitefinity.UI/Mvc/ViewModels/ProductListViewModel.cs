@@ -4,6 +4,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
 {
     public class ProductListViewModel
     {
+        public ProductListViewModel()
+        {
+            this.Routes = new Dictionary<string, string>();
+        }
+
         public string CssClass { get; set; }
 
         public IList<ProductViewModel> Products { get; set; }
@@ -17,5 +22,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public int TotalCount { get; set; }
 
         public string PagingUrlTemplate { get; set; }
+
+        public Dictionary<string, string> Routes { get; set; }
     }
 }

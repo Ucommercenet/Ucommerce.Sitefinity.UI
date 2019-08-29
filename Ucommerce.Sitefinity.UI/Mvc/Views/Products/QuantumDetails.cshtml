@@ -10,12 +10,11 @@
 {
     if (!SystemManager.IsDesignMode)
     {
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/moment.min.js"), "head", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/angular.min.js"), "head", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/app.js"), "head", false)
+        @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+        @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
     }
 
-    <div class="sf_cols">
+    <div class="sf_cols" data-component="products" id="@Html.UniqueId("products")" v-cloak>
         <div class="sf_colsOut sf_1col_1_100">
             <div class="sf_colsIn sf_1col_1in_100" style="margin: 0px 20px 0px 0px;">
                 <div>
@@ -109,22 +108,13 @@
                                             <div class="sfMessage sfTopMsg">
 
                                             </div>
-                                            <div>
-                                                <label for="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantity" class="sfTxtLbl">Quantity:</label>
-                                                <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" class="sfErrorWrp" style="display:none;">
-                                                    <span class="sfError">
-                                                        When adding product to a cart you must specify the quantity
-                                                    </span>
-                                                </span>
-                                                <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityValidator" class="sfErrorWrp" style="display:none;">
-                                                    <span class="sfError">
-                                                        The quantity must be greater than 0 and less than 9,999.
-                                                    </span>
-                                                </span>
-                                                <input name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" value="1" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantity" class="sfTxt sfQuantity" />
 
-                                                <input type="submit" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" onclick="return false;" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="sfAddToCartBtn" />
-                                            </div>
+                                            @foreach (var route in Model.Routes)
+                                            {
+                                                <input type="hidden" class="@route.Key" value="@route.Value" />
+                                            }
+
+                                            <basket :product-sku="'@Model.Sku'" :root-id="$el.id"></basket>
 
                                         </div>
 
@@ -170,13 +160,4 @@
             </div>
         </div>
     </div>
-
-    if (!SystemManager.IsDesignMode)
-    {
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/BasketService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/SearchService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/Services/ProductService.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/mainController.js"), "bottom", false)
-        @Html.Script(Url.WidgetContent("assets/dist/javascript/factory.js"), "bottom", false)
-    }
 }

@@ -1,22 +1,12 @@
-﻿function initFacetFilter() {
-    var facetFilterComponents = document.querySelectorAll("[data-component='facet-selector']");
-    for (var i = 0; i < facetFilterComponents.length; i++) {
-        var facetFilter = facetFilterComponents[i];
-        const scriptElement = facetFilter.querySelector('script[data-facets=true]');
-        const facets = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).facets;
-        vueInitfacetFilter(facetFilter, facets);
-    }
-}
+﻿import { initializeComponent } from "../functions/init";
 
-(function () {
-    document.addEventListener('DOMContentLoaded', function () {
-        initFacetFilter();
-    });
-})();
+initializeComponent("facet-selector", initFacetFilter);
 
-function vueInitfacetFilter(element, facets) {
+function initFacetFilter(rootElement) {
+    const scriptElement = rootElement.querySelector('script[data-facets=true]');
+    const facets = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).facets;
     new Vue({
-        el: '#' + element.id,
+        el: '#' + rootElement.id,
         data: {
             facets: facets
         },
@@ -77,7 +67,3 @@ function vueInitfacetFilter(element, facets) {
         }
     });
 }
-
-
-
-

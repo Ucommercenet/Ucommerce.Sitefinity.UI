@@ -8,6 +8,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public ProductDetailViewModel()
         {
             this.Variants = new List<ProductDetailViewModel>();
+            this.Routes = new Dictionary<string, string>();
         }
 
         public string DisplayName { get; set; }
@@ -51,5 +52,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public Guid Guid { get; set; }
 
         public bool AllowOrdering { get; set; }
+
+        public Dictionary<string, string> Routes { get; set; }
     }
 }

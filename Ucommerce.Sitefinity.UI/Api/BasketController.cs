@@ -11,7 +11,7 @@ using UCommerce.Runtime;
 
 namespace Ucommerce.Sitefinity.UI.Api
 {
-    [RoutePrefix("Basket")]
+    [RoutePrefix("basket")]
     public class BasketController : ApiController
     {
         [Route("GetBasket")]
@@ -58,6 +58,13 @@ namespace Ucommerce.Sitefinity.UI.Api
         {
             TransactionLibrary.AddToBasket(model.Quantity, model.Sku, model.VariantSku);
             return Json(this.GetBasketModel());
+        }
+
+        [Route("add")]
+        [HttpPost]
+        public IHttpActionResult Add(AddToBasketModel model)
+        {
+            return Ok();
         }
 
         private BasketModel GetBasketModel()
