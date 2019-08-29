@@ -52,6 +52,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             viewModel.TotalPagesCount = (viewModel.TotalCount + this.itemsPerPage - 1) / this.itemsPerPage;
             viewModel.ShowPager = viewModel.TotalPagesCount > 1;
             viewModel.PagingUrlTemplate = this.GetPagingUrlTemplate(currentCategory);
+            viewModel.Routes.Add(ADD_TO_BASKET_ROUTE_NAME, ADD_TO_BASKET_ROUTE_VALUE);
 
             return viewModel;
         }
@@ -146,6 +147,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
                     productDetailViewModel.Variants.Add(variantViewModel);
                 }
+
+                productDetailViewModel.Routes.Add(ADD_TO_BASKET_ROUTE_NAME, ADD_TO_BASKET_ROUTE_VALUE);
             }
 
             return productDetailViewModel;
@@ -378,6 +381,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         public const string PAGER_QUERY_STRING_KEY = "page";
         private const string NO_CATALOG_ERROR_MESSAGE = "There is no product catalog configured.";
         private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
+        private const string ADD_TO_BASKET_ROUTE_NAME = "addToBasketUrl";
+        private const string ADD_TO_BASKET_ROUTE_VALUE = "/basket/add";
         private IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog", "page" };
         private int itemsPerPage;
         private bool openInSamePage;
