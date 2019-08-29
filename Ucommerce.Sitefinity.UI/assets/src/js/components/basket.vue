@@ -38,12 +38,14 @@
             quantity: {
                 type: Number,
                 default: 1
-            }
+            },
+            rootId: String
         },
         methods: {
             addToBasket: function () {
 
-                var addToBasketUrlContainers = document.querySelectorAll('.addToBasketUrl');
+                var routesSelector = '#' + this.rootId + ' .addToBasketUrl';
+                var addToBasketUrlContainers = document.querySelectorAll(routesSelector);
                 if (addToBasketUrlContainers && addToBasketUrlContainers.length > 0) {
                     var addToBasketUrl = addToBasketUrlContainers[0].value;
 

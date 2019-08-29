@@ -57,7 +57,7 @@
                             <span class="sfDiscPrice">@product.Discount</span>
                         </div>
 
-                        <basket :product-sku="'@product.Sku'"></basket>
+                        <basket :product-sku="'@product.Sku'" :root-id="$el.id"></basket>
 
                         <div class="sfcommentsThreadRatingWrp sfcommentsThreadRatingFull sfRatingReadOnly">
                             <a href="#" class="sfRatingClosingText" onclick="return false;">Write a review</a>
