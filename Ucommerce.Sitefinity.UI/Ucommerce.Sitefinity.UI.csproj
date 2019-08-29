@@ -428,12 +428,12 @@
     <EmbeddedResource Include="Mvc\Views\Products\QuantumIndex.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
+    <None Include="assets\src\js\components\basket.vue" />
+    <None Include="assets\src\js\components\search.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="assets\src\js\components\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="assets\build\**\*.*" />
   </ItemGroup>
