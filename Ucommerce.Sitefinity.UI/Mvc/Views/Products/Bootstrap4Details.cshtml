@@ -19,21 +19,21 @@
             <div class="col-sx-12 col-sm-5 col-md-5 col-lg-5 border-right">
                 <div class="img">
                     <a href="@Model.PrimaryImageMediaUrl" rel="fancybox">
-                        <img src="@Model.PrimaryImageMediaUrl" />
+                        <img class="mx-auto d-block" src="@Model.PrimaryImageMediaUrl" />
                     </a>
                 </div>
 
                 <div>
                     @if (Model.Variants.Any())
                     {
-                        <ul>
+                        <ul class="list-group">
                             @foreach (var variant in Model.Variants)
                             {
                                 if (!string.IsNullOrEmpty(variant.PrimaryImageMediaUrl))
                                 {
-                                    <li>
+                                    <li class="list-group-item">
                                         <a href="@variant.PrimaryImageMediaUrl" rel="fancybox">
-                                            <img src="@variant.PrimaryImageMediaUrl" />
+                                            <img class="mx-auto d-block" src="@variant.PrimaryImageMediaUrl" />
                                         </a>
                                     </li>
                                 }

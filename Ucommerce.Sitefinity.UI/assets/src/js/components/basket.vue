@@ -14,7 +14,7 @@
         <input id="productQuantityInput" v-model="quantity" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" class="form-control" />
 
         <input type="submit" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addToBasket()" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
-        <span v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
+        <span class="text-success pl-2 pt-1 position-absolute" v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
     </div>
 </template>
 
@@ -47,7 +47,7 @@
                 var routesSelector = '#' + this.rootId + ' .addToBasketUrl';
                 var addToBasketUrlContainers = document.querySelectorAll(routesSelector);
                 if (addToBasketUrlContainers && addToBasketUrlContainers.length > 0) {
-                    var addToBasketUrl = addToBasketUrlContainers[0].value;
+                    var addToBasketUrl = '/' + addToBasketUrlContainers[0].value;
 
                     var productQuantity = 1;
                     if (this.quantity !== '' && !isNaN(this.quantity)) {
