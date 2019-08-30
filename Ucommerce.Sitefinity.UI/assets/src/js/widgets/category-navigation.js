@@ -1,8 +1,6 @@
 ﻿import { initializeComponent } from "../functions/init";
 import dropdownMenu from "../components/dropdown-menu";
-import searchQuantum from '../components/search-quantum';
-import searchBootstrap from '../components/search-bootstrap';
-import searchVanilla from '../components/search-vanilla';
+import search from '../components/search';
 
 initializeComponent("category-navigation", initCategories);
 
@@ -27,9 +25,7 @@ function initCategories(rootElement) {
         },
         components: {
             dropdownMenu,
-            searchQuantum,
-            searchBootstrap,
-            searchVanilla
+            search
         },
         methods: {
             toggleSearchBar: function () {
