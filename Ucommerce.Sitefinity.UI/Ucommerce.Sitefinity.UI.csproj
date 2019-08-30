@@ -432,6 +432,7 @@
     <None Include="assets\src\js\components\dropdown-menu.vue" />
     <None Include="assets\src\js\components\dropdown-node.vue" />
     <None Include="assets\src\js\components\search-bootstrap.vue" />
+    <None Include="assets\src\js\components\search-vanilla.vue" />
     <None Include="assets\src\js\components\search-quantum.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
