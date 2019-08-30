@@ -6,17 +6,17 @@
 
             <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" _lpchecked="1">
                 <i></i>
-                <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search" v-on:keyup.escape="$emit('close-search')" required="" name="search" placeholder="Search for products">
+                <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search(rootId)" v-on:keyup.escape="$emit('close-search')" required="" name="search" placeholder="Search for products">
             </form>
 
             <form v-if="searchPageUrl === ''" v-on:submit.prevent _lpchecked="1">
                 <i></i>
-                <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search" v-on:keyup.escape="$emit('close-search')" required="" name="search" placeholder="Search for products">
+                <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search(rootId)" v-on:keyup.escape="$emit('close-search')" required="" name="search" placeholder="Search for products">
             </form>
 
             <div>
                 <ul v-show="searchResult.length !== 0 || suggestions.length !== 0">
-                    <li v-for="suggestion in suggestions" v-on:click="searchQuery = suggestion;search()">
+                    <li v-for="suggestion in suggestions" v-on:click="searchQuery = suggestion;search(rootId)">
                         <span>
                         </span>
                         <span>
@@ -54,6 +54,7 @@
                 type: String,
                 default: null
             }
-        }
+        },
+        rootId: String
     };
 </script>

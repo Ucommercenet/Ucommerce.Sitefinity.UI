@@ -6,17 +6,17 @@
 
             <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" class="search__form" _lpchecked="1">
                 <i class="fa fa-search"></i>
-                <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="search__input" placeholder="Search for products">
+                <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search(rootId)" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="search__input" placeholder="Search for products">
             </form>
 
             <form v-if="searchPageUrl === ''" v-on:submit.prevent class="search__form" _lpchecked="1">
                 <i class="fa fa-search"></i>
-                <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="search__input" placeholder="Search for products">
+                <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search(rootId)" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="search__input" placeholder="Search for products">
             </form>
 
             <div class="search__autocomplete">
                 <ul class="search__suggest" v-show="searchResult.length !== 0 || suggestions.length !== 0">
-                    <li v-for="suggestion in suggestions" v-on:click="searchQuery = suggestion;search()">
+                    <li v-for="suggestion in suggestions" v-on:click="searchQuery = suggestion;search(rootId)">
                         <span class="search__suggest-image">
                         </span>
                         <span class="search__suggest-info">
@@ -53,7 +53,8 @@
             searchPageUrl: {
                 type: String,
                 default: null
-            }
+            },
+            rootId: String
         }
     };
 </script>

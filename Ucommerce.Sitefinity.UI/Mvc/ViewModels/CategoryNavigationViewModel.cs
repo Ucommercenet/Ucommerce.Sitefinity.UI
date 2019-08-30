@@ -4,6 +4,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
 {
     public class CategoryNavigationViewModel
     {
+        public CategoryNavigationViewModel()
+        {
+            this.Routes = new Dictionary<string, string>();
+        }
+
         public IList<CategoryNavigationCategoryViewModel> Categories { get; set; }
 
         public string ImageUrl { get; set; }
@@ -17,5 +22,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public IList<CategoryNavigationCurrencyViewModel> Currencies { get; set; }
 
         public CategoryNavigationCurrencyViewModel CurrentCurrency { get; set; }
+
+        public Dictionary<string, string> Routes { get; set; }
     }
 }

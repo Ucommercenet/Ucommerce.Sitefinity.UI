@@ -6,7 +6,7 @@
             <div class="bg-white shadow-lg p-3 rounded">
 
                 <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" class="input-group" _lpchecked="1">
-                    <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
+                    <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search(rootId)" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
                     <span class="input-group-append">
                         <button class="btn btn-outline-secondary border-left-0 border" type="button">
                             <i class="glyphicon glyphicon-search"></i>
@@ -15,7 +15,7 @@
                 </form>
 
                 <form v-if="searchPageUrl === ''" v-on:submit.prevent class="input-group" _lpchecked="1">
-                    <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
+                    <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search(rootId)" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
                     <span class="input-group-append">
                         <button class="btn btn-outline-secondary border-left-0 border" type="button">
                             <i class="glyphicon glyphicon-search"></i>
@@ -25,7 +25,7 @@
 
                 <div>
                     <ul class="list-group" v-show="searchResult.length !== 0 || suggestions.length !== 0">
-                        <li v-for="suggestion in suggestions" class="list-group-item" v-on:click="searchQuery = suggestion;search()">
+                        <li v-for="suggestion in suggestions" class="list-group-item" v-on:click="searchQuery = suggestion;search(rootId)">
                             <span class="img">
                             </span>
                             <span class="stext-info">
@@ -66,7 +66,8 @@
             searchPageUrl: {
                 type: String,
                 default: null
-            }
+            },
+            rootId: String
         }
     };
 </script>

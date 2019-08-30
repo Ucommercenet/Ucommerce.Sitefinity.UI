@@ -41,6 +41,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             this.MapConfigurationFields(categoryNavigationViewModel);
 
+            categoryNavigationViewModel.Routes.Add(SEARCH_ROUTE_NAME, SEARCH_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(SEARCH_SUGGESTIONS_ROUTE_NAME, SEARCH_SUGGESTIONS_ROUTE_VALUE);
+
             return categoryNavigationViewModel;
         }
 
@@ -134,6 +137,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             return url;
         }
+
+        private const string SEARCH_ROUTE_NAME = "productSearchUrl";
+        private const string SEARCH_ROUTE_VALUE = "/SearchApi/FullText";
+        private const string SEARCH_SUGGESTIONS_ROUTE_NAME = "searchSuggestionsUrl";
+        private const string SEARCH_SUGGESTIONS_ROUTE_VALUE = "/SearchApi/Suggestions";
 
         private Guid imageId;
         private bool hideMiniBasket;
