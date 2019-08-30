@@ -429,6 +429,7 @@
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
     <None Include="assets\src\js\components\basket.vue" />
+    <None Include="assets\src\js\components\currency-selector.vue" />
     <None Include="assets\src\js\components\dropdown-menu.vue" />
     <None Include="assets\src\js\components\dropdown-node.vue" />
     <None Include="assets\src\js\components\search.vue" />
@@ -444,6 +445,7 @@
     <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\functions\init.js" />
+    <Content Include="assets\src\js\mixins\basket.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />
     <Content Include="assets\src\js\widgets\facet-filter.js" />
     <Content Include="assets\src\js\widgets\products.js" />

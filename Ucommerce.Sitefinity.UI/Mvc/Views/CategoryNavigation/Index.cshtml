@@ -1,11 +1,19 @@
 ﻿@model dynamic
 
+@using Newtonsoft.Json;
 @using Telerik.Sitefinity.Frontend.Mvc.Helpers
 @using Telerik.Sitefinity.Services;
+@using Telerik.Sitefinity.Web;
 @using Ucommerce.Sitefinity.UI.Mvc.Model;
 @using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+}
 
 @helper DisplayCategories(IList<CategoryNavigationCategoryViewModel> categories, bool topLevel)
 {
@@ -47,100 +55,98 @@
     </ul>
 }
 
-<header ng-controller="categoryNavigationController">
-    <div>
-        <nav>
-            <a href="/" alt="">
-                <img src="@Model.ImageUrl" alt="">
-            </a>
+<div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
+    <header ng-controller="categoryNavigationController">
+        <div>
+            <nav>
+                <a href="/" alt="">
+                    <img src="@Model.ImageUrl" alt="">
+                </a>
 
-            @if (Model.Categories.Count > 0)
-            {
-                @DisplayCategories(Model.Categories, true)
-            }
-
-            <ul>
-                @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
+                @if (Model.Categories.Count > 0)
                 {
-                    <li>
-                        @if (Model.CurrentCurrency != null)
-                        {
-                            <a>
-                                <span style="display: inline-block;" class="ng-scope">@Model.CurrentCurrency.DisplayName</span><i></i>
-                            </a>
-                        }
-                        <ul>
-                            @foreach (var currency in Model.Currencies)
-                            {
-                                <li><a href="" ng-click="basketService.setCurrency('@currency.PriceGroupId')"><span>@currency.DisplayName</span></a></li>
-                            }
-                        </ul>
-                    </li>
+                    @DisplayCategories(Model.Categories, true)
                 }
-                <li ng-click="searchService.toggleSearchBar()"><a href=""><i></i></a></li>
 
-                @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
-                {
-                    <li ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
-                        <a href="">
-                            <span>
-                                <span>{{basketService.basket.NumberOfItemsInBasket}}</span>
-                                <i></i>
-                            </span>
-                        </a>
-                    </li>
-                }
-            </ul>
-        </nav>
-    </div>
-</header>
+                <ul>
+                    @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
+                    {
+                        var currencies = JsonConvert.SerializeObject(Model.Currencies);
+                        var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
+                        <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
+                            <li>
+                                <a v-on:click="toggleCurrenciesVisibility">
+                                    <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><i></i>
+                                </a>
+                                <ul v-show="showCurrencies">
+                                    <li v-for="currency in currencies">
+                                        <a href="javascript:void(0)" v-on:click="setCurrency(currency.PriceGroupId)">
+                                            <span>{{currency.DisplayName}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </currency-selector>
+                    }
 
-<div ng-controller="fullTextSearchController">
+                    <li v-on:click="toggleSearchBar()"><a href="javascript:void(0)"><i>Open Search</i></a></li>
 
-    <button ng-click="searchService.toggleSearchBar()"><i></i></button>
-
-    <div>
-
-        @if (Model.SearchPageUrl != null)
-        {
-            <form action="@Model.SearchPageUrl" _lpchecked="1">
-                <i></i>
-                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
-            </form>
-        }
-        else
-        {
-            <form _lpchecked="1">
-                <i></i>
-                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
-            </form>
-        }
-
-        <div ng-hide="searchService.searchResult.length == 0 && searchService.suggestion.length == 0">
-            <ul>
-                <li ng-repeat="suggestion in searchService.suggestions" class="ng-scope" ng-click="searchService.searchQuery = suggestion;searchService.search()">
-                    <span>
-                        <span class="ng-binding">{{suggestion}}</span>
-                    </span>
-                </li>
-                <li ng-repeat="product in searchService.searchResult" class="ng-scope">
-                    <a href="{{product.Url}}">
-                        <span>
-                            <img ng-src="{{product.ThumbnailImageUrl}}" alt="">
-                        </span>
-                        <span>
-                            <span class="ng-binding">{{product.Name}}</span>
-                        </span>
-                    </a>
-                </li>
-            </ul>
-            @if (Model.SearchPageUrl != null)
-            {
-                <a href="@Model.SearchPageUrl?search={{searchService.searchQuery}}">Show all results</a>
-            }
+                </ul>
+            </nav>
         </div>
-    </div>
 
+        @foreach (var route in Model.Routes)
+        {
+            <input type="hidden" class="@route.Key" value="@route.Value" />
+        }
+
+        <div v-show="showSearchBar">
+            <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" v-on:close-search="closeSearch" inline-template>
+                <div>
+                    <button v-on:click="$emit('close-search')"><i>Close Search</i></button>
+
+                    <div>
+
+                        <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" _lpchecked="1">
+                            <i></i>
+                            <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" placeholder="Search for products">
+                        </form>
+
+                        <form v-if="searchPageUrl === ''" v-on:submit.prevent _lpchecked="1">
+                            <i></i>
+                            <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" placeholder="Search for products">
+                        </form>
+
+                        <div>
+                            <ul v-show="searchResult.length !== 0 || suggestions.length !== 0">
+                                <li v-for="suggestion in suggestions" v-on:click="searchQuery = suggestion;search()">
+                                    <span>
+                                    </span>
+                                    <span>
+                                        <span>{{suggestion}}</span>
+                                    </span>
+                                </li>
+                                <li v-for="product in searchResult">
+                                    <a v-bind:href="product.Url">
+                                        <span>
+                                            <img v-bind:src="product.ThumbnailImageUrl" alt="">
+                                        </span>
+                                        <span>
+                                            <span>{{product.Name}}</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <a v-show="searchPageUrl !== ''" v-bind:href="searchPageHref()">Show all results</a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </search>
+        </div>
+    </header>
 </div>
 
 <script>
