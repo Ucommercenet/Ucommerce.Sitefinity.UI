@@ -808,3 +808,10 @@ label[for="productQuantityInput"] {
         padding-left: 20%;
     }
 }
+
+
+@media (max-width: 359px) {
+    .top-inner.top-inner--center {
+        padding-left: 12%;
+    }
+}
