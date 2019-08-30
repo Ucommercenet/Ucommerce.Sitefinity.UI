@@ -432,6 +432,9 @@
     <None Include="assets\src\js\components\dropdown-menu.vue" />
     <None Include="assets\src\js\components\dropdown-node.vue" />
     <None Include="assets\src\js\components\search.vue" />
+    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Bootstrap4Index.Search.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Index.Search.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\QuantumIndex.Search.cshtml" />
     <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
