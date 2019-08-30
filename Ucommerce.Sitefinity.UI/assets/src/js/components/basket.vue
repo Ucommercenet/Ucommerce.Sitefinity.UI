@@ -47,7 +47,7 @@
                 var routesSelector = '#' + this.rootId + ' .addToBasketUrl';
                 var addToBasketUrlContainers = document.querySelectorAll(routesSelector);
                 if (addToBasketUrlContainers && addToBasketUrlContainers.length > 0) {
-                    var addToBasketUrl = addToBasketUrlContainers[0].value;
+                    var addToBasketUrl = '/' + addToBasketUrlContainers[0].value;
 
                     var productQuantity = 1;
                     if (this.quantity !== '' && !isNaN(this.quantity)) {

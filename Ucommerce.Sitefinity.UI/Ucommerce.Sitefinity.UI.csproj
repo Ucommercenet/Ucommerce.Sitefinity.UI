@@ -215,9 +215,6 @@
     <Reference Include="UCommerce.Sitefinity.Installer, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.8.1.0.19093\lib\UCommerce.Sitefinity.Installer.dll</HintPath>
     </Reference>
-    <Reference Include="Ucommerce.Sitefinity.UI, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.UI.0.8.0\lib\net471\Ucommerce.Sitefinity.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UCommerce.SystemHttp, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\uCommerce.Core.8.1.0.19093\lib\net45\UCommerce.SystemHttp.dll</HintPath>
     </Reference>
@@ -250,6 +247,7 @@
     <Compile Include="Api\SearchApiController.cs" />
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="Constants\RouteConstants.cs" />
     <Compile Include="DI\WindsorInstaller.cs" />
     <Compile Include="DI\Events\IWindsorContainerInitializedEvent.cs" />
     <Compile Include="DI\Events\WindsorContainerInitializedEvent.cs" />
@@ -429,6 +427,9 @@
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
     <None Include="assets\src\js\components\basket.vue" />
+    <None Include="assets\src\js\components\currency-selector.vue" />
+    <None Include="assets\src\js\components\dropdown-menu.vue" />
+    <None Include="assets\src\js\components\dropdown-node.vue" />
     <None Include="assets\src\js\components\search.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
@@ -442,6 +443,7 @@
     <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\functions\init.js" />
+    <Content Include="assets\src\js\mixins\basket.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />
     <Content Include="assets\src\js\widgets\facet-filter.js" />
     <Content Include="assets\src\js\widgets\products.js" />

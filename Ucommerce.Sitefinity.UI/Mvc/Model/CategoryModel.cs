@@ -6,6 +6,7 @@ using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
+using Ucommerce.Sitefinity.UI.Constants;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce.Sitefinity.UI.Pages;
 using UCommerce.Api;
@@ -40,6 +41,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             };
 
             this.MapConfigurationFields(categoryNavigationViewModel);
+
+            categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_ROUTE_NAME, RouteConstants.SEARCH_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_NAME, RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.PRICE_GROUP_ROUTE_NAME, RouteConstants.PRICE_GROUP_ROUTE_VALUE);
 
             return categoryNavigationViewModel;
         }
