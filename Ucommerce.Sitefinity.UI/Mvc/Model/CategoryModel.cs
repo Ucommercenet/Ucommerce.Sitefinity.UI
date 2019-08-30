@@ -43,6 +43,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             categoryNavigationViewModel.Routes.Add(SEARCH_ROUTE_NAME, SEARCH_ROUTE_VALUE);
             categoryNavigationViewModel.Routes.Add(SEARCH_SUGGESTIONS_ROUTE_NAME, SEARCH_SUGGESTIONS_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(PRICE_GROUP_ROUTE_NAME, PRICE_GROUP_ROUTE_VALUE);
 
             return categoryNavigationViewModel;
         }
@@ -142,6 +143,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         private const string SEARCH_ROUTE_VALUE = "/SearchApi/FullText";
         private const string SEARCH_SUGGESTIONS_ROUTE_NAME = "searchSuggestionsUrl";
         private const string SEARCH_SUGGESTIONS_ROUTE_VALUE = "/SearchApi/Suggestions";
+        private const string PRICE_GROUP_ROUTE_NAME = "changePriceGroupUrl";
+        private const string PRICE_GROUP_ROUTE_VALUE = "/Basket/ChangePriceGroup";
 
         private Guid imageId;
         private bool hideMiniBasket;

@@ -1,12 +1,20 @@
 ﻿@model dynamic
 
+@using Newtonsoft.Json;
 @using Telerik.Sitefinity.Frontend.Mvc.Helpers
 @using Telerik.Sitefinity.Services;
+@using Telerik.Sitefinity.Web;
 @using Ucommerce.Sitefinity.UI.Mvc.Model;
 @using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-quantum.css"), "head")
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+}
 
 @helper DisplayCategories(IList<CategoryNavigationCategoryViewModel> categories, bool topLevel)
 {
@@ -48,105 +56,100 @@
     </ul>
 }
 
-<header class="top top--light" ng-controller="categoryNavigationController">
-    <div class="top-inner top-inner--center">
-        <nav class="logo-wrap">
-            <a href="/" class="logo logo--on-light" alt="">
-                <img src="@Model.ImageUrl" alt="">
-            </a>
-        </nav>
-
-        @if (Model.Categories.Count > 0)
-        {
-            <nav class="main-nav">
-                @DisplayCategories(Model.Categories, true)
+<div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
+    <header class="top top--light" ng-controller="categoryNavigationController">
+        <div class="top-inner top-inner--center">
+            <nav class="logo-wrap">
+                <a href="/" class="logo logo--on-light" alt="">
+                    <img src="@Model.ImageUrl" alt="">
+                </a>
             </nav>
-        }
-        <nav class="main-nav main-nav--right hide--m">
-            <ul>
-                @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
-                {
-                    <li class="lang currency">
-                        @if (Model.CurrentCurrency != null)
-                        {
-                            <a class="ng-binding">
-                                <span style="display: inline-block;" class="ng-scope">@Model.CurrentCurrency.DisplayName</span><i class="fa fa-chevron-down"></i>
-                            </a>
-                        }
-                        <ul>
-                            @foreach (var currency in Model.Currencies)
-                            {
-                                <li><a href="" ng-click="basketService.setCurrency('@currency.PriceGroupId')"><span>@currency.DisplayName</span></a></li>
-                            }
-                        </ul>
-                    </li>
-                }
-                <li class="toggle-search" ng-click="searchService.toggleSearchBar()"><a href=""><i class="fa fa-search"></i></a></li>
 
-                @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
-                {
-                    <li class="toggle-cart" ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
-                        <a href="">
-                            <span>
-                                <span class="">{{basketService.basket.NumberOfItemsInBasket}}</span>
-                                <i class="fa fa-shopping-cart"></i>
-                            </span>
-                        </a>
-                    </li>
-                }
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<div class="search" ng-controller="fullTextSearchController">
-
-    <button class="search__close" ng-click="searchService.toggleSearchBar()"><i class="fa fa-times"></i></button>
-
-    <div class="search__stage">
-
-        @if (Model.SearchPageUrl != null)
-        {
-            <form action="@Model.SearchPageUrl" class="search__form" _lpchecked="1">
-                <i class="fa fa-search"></i>
-                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="search__input ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
-            </form>
-        }
-        else
-        {
-            <form class="search__form" _lpchecked="1">
-                <i class="fa fa-search"></i>
-                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="search__input ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
-            </form>
-        }
-
-        <div class="search__autocomplete" ng-hide="searchService.searchResult.length == 0 && searchService.suggestion.length == 0">
-            <ul class="search__suggest">
-                <li ng-repeat="suggestion in searchService.suggestions" class="ng-scope" ng-click="searchService.searchQuery = suggestion;searchService.search()">
-                    <span class="search__suggest-image">
-                    </span>
-                    <span class="search__suggest-info">
-                        <span class="search__suggest-title ng-binding">{{suggestion}}</span>
-                    </span>
-                </li>
-                <li ng-repeat="product in searchService.searchResult" class="ng-scope">
-                    <a href="{{product.Url}}">
-                        <span class="search__suggest-image">
-                            <img ng-src="{{product.ThumbnailImageUrl}}" alt="">
-                        </span>
-                        <span class="search__suggest-info">
-                            <span class="search__suggest-title ng-binding">{{product.Name}}</span>
-                        </span>
-                    </a>
-                </li>
-            </ul>
-            @if (Model.SearchPageUrl != null)
+            @if (Model.Categories.Count > 0)
             {
-                <a href="@Model.SearchPageUrl?search={{searchService.searchQuery}}" class="button button--block">Show all results</a>
+                <nav class="main-nav">
+                    @DisplayCategories(Model.Categories, true)
+                </nav>
             }
-        </div>
-    </div>
+            <nav class="main-nav main-nav--right hide--m">
+                <ul>
+                    @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
+                    {
+                        var currencies = JsonConvert.SerializeObject(Model.Currencies);
+                        var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
+                        <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
+                            <li class="lang currency">
+                                <a v-on:click="toggleCurrenciesVisibility">
+                                    <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><i class="fa fa-chevron-down"></i>
+                                </a>
+                                <ul v-show="showCurrencies">
+                                    <li v-for="currency in currencies">
+                                        <a href="javascript:void(0)" v-on:click="setCurrency(currency.PriceGroupId)">
+                                            <span>{{currency.DisplayName}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </currency-selector>
+                    }
+                    <li class="toggle-search" v-on:click="toggleSearchBar()"><a href="javascript:void(0)"><i class="fa fa-search"></i></a></li>
 
+                </ul>
+            </nav>
+        </div>
+
+        @foreach (var route in Model.Routes)
+        {
+            <input type="hidden" class="@route.Key" value="@route.Value" />
+        }
+
+        <div v-bind:class="{ 'search-visible': showSearchBar }">
+            <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" v-on:close-search="closeSearch" inline-template>
+                <div class="search">
+                    <button class="search__close" v-on:click="$emit('close-search')"><i class="fa fa-times"></i></button>
+
+                    <div class="search__stage">
+
+                        <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" class="search__form" _lpchecked="1">
+                            <i class="fa fa-search"></i>
+                            <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="search__input" placeholder="Search for products">
+                        </form>
+
+                        <form v-if="searchPageUrl === ''" v-on:submit.prevent class="search__form" _lpchecked="1">
+                            <i class="fa fa-search"></i>
+                            <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="search__input" placeholder="Search for products">
+                        </form>
+
+                        <div class="search__autocomplete">
+                            <ul class="search__suggest" v-show="searchResult.length !== 0 || suggestions.length !== 0">
+                                <li v-for="suggestion in suggestions" v-on:click="searchQuery = suggestion;search()">
+                                    <span class="search__suggest-image">
+                                    </span>
+                                    <span class="search__suggest-info">
+                                        <span class="search__suggest-title">{{suggestion}}</span>
+                                    </span>
+                                </li>
+                                <li v-for="product in searchResult">
+                                    <a v-bind:href="product.Url">
+                                        <span class="search__suggest-image">
+                                            <img v-bind:src="product.ThumbnailImageUrl" alt="">
+                                        </span>
+                                        <span class="search__suggest-info">
+                                            <span class="search__suggest-title">{{product.Name}}</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <a v-show="searchPageUrl !== ''" v-bind:href="searchPageHref()" class="button button--block">Show all results</a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </search>
+        </div>
+    </header>
 </div>
 
 <script>

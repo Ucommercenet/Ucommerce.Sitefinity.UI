@@ -1,6 +1,7 @@
 ﻿import { initializeComponent } from "../functions/init";
 import dropdownMenu from "../components/dropdown-menu";
 import search from '../components/search';
+import currencySelector from '../components/currency-selector';
 
 initializeComponent("category-navigation", initCategories);
 
@@ -25,7 +26,8 @@ function initCategories(rootElement) {
         },
         components: {
             dropdownMenu,
-            search
+            search,
+            currencySelector
         },
         methods: {
             toggleSearchBar: function () {
