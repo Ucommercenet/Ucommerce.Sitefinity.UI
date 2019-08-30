@@ -75,7 +75,7 @@
                         {
                             var currencies = JsonConvert.SerializeObject(Model.Currencies);
                             var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
-                            <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
+                            <currency-selector v-if="!showSearchBar" :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
                                 <li class="nav-item ml-4 mr-4">
                                     <a class="nav-link h4" v-on:click="toggleCurrenciesVisibility">
                                         <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><i class="glyphicon glyphicon-menu-down"></i>

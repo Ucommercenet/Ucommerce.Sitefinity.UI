@@ -215,9 +215,6 @@
     <Reference Include="UCommerce.Sitefinity.Installer, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.8.1.0.19093\lib\UCommerce.Sitefinity.Installer.dll</HintPath>
     </Reference>
-    <Reference Include="Ucommerce.Sitefinity.UI, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\uCommerce-clean\packages\Ucommerce.Sitefinity.UI.0.8.0\lib\net471\Ucommerce.Sitefinity.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UCommerce.SystemHttp, Version=8.1.0.19093, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\uCommerce.Core.8.1.0.19093\lib\net45\UCommerce.SystemHttp.dll</HintPath>
     </Reference>
@@ -250,6 +247,7 @@
     <Compile Include="Api\SearchApiController.cs" />
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="Constants\RouteConstants.cs" />
     <Compile Include="DI\WindsorInstaller.cs" />
     <Compile Include="DI\Events\IWindsorContainerInitializedEvent.cs" />
     <Compile Include="DI\Events\WindsorContainerInitializedEvent.cs" />

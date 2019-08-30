@@ -6,6 +6,7 @@ using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
+using Ucommerce.Sitefinity.UI.Constants;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce.Sitefinity.UI.Pages;
 using UCommerce.Api;
@@ -41,9 +42,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             this.MapConfigurationFields(categoryNavigationViewModel);
 
-            categoryNavigationViewModel.Routes.Add(SEARCH_ROUTE_NAME, SEARCH_ROUTE_VALUE);
-            categoryNavigationViewModel.Routes.Add(SEARCH_SUGGESTIONS_ROUTE_NAME, SEARCH_SUGGESTIONS_ROUTE_VALUE);
-            categoryNavigationViewModel.Routes.Add(PRICE_GROUP_ROUTE_NAME, PRICE_GROUP_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_ROUTE_NAME, RouteConstants.SEARCH_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_NAME, RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.PRICE_GROUP_ROUTE_NAME, RouteConstants.PRICE_GROUP_ROUTE_VALUE);
 
             return categoryNavigationViewModel;
         }
@@ -138,13 +139,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             return url;
         }
-
-        private const string SEARCH_ROUTE_NAME = "productSearchUrl";
-        private const string SEARCH_ROUTE_VALUE = "/SearchApi/FullText";
-        private const string SEARCH_SUGGESTIONS_ROUTE_NAME = "searchSuggestionsUrl";
-        private const string SEARCH_SUGGESTIONS_ROUTE_VALUE = "/SearchApi/Suggestions";
-        private const string PRICE_GROUP_ROUTE_NAME = "changePriceGroupUrl";
-        private const string PRICE_GROUP_ROUTE_VALUE = "/Basket/ChangePriceGroup";
 
         private Guid imageId;
         private bool hideMiniBasket;

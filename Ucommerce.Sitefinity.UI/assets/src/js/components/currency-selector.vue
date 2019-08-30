@@ -28,8 +28,9 @@
                 var routesSelector = '#' + this.rootId + ' .changePriceGroupUrl';
                 var routeUrlContainers = document.querySelectorAll(routesSelector);
                 if (routeUrlContainers && routeUrlContainers.length > 0) {
-                    var changePriceGroupUrl = routeUrlContainers[0].value;
-                    this.$http.post(changePriceGroupUrl, { PriceGroupId: priceGroupId })
+                    var changePriceGroupUrl = '/' + routeUrlContainers[0].value;
+
+                    this.$http.put(changePriceGroupUrl, { PriceGroupId: priceGroupId })
                         .then(function (response) {
                             console.log("I'm here");
                             location.reload();

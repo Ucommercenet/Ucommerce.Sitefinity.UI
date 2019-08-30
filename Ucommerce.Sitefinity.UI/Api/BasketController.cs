@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Http;
 using Ucommerce.Sitefinity.UI.Api.Model;
+using Ucommerce.Sitefinity.UI.Constants;
 using UCommerce;
 using UCommerce.Api;
 using UCommerce.Catalog;
@@ -11,10 +12,10 @@ using UCommerce.Runtime;
 
 namespace Ucommerce.Sitefinity.UI.Api
 {
-    [RoutePrefix("basket")]
     public class BasketController : ApiController
     {
-        [Route("GetBasket")]
+        [Route(RouteConstants.GET_BASKET_ROUTE_VALUE)]
+        [HttpGet]
         public IHttpActionResult GetBasket()
         {
             if (!TransactionLibrary.HasBasket())
@@ -25,7 +26,8 @@ namespace Ucommerce.Sitefinity.UI.Api
             return Json(this.GetBasketModel());
         }
 
-        [Route("AddVoucher")]
+        [Route(RouteConstants.ADD_VOUCHER_ROUTE_VALUE)]
+        [HttpPost]
         public IHttpActionResult AddVoucher(AddVoucherModel model)
         {
             var voucherAdded = MarketingLibrary.AddVoucher(model.VoucherCode);
@@ -33,7 +35,8 @@ namespace Ucommerce.Sitefinity.UI.Api
             return Json(this.GetBasketModel());
         }
 
-        [Route("ChangePriceGroup")]
+        [Route(RouteConstants.PRICE_GROUP_ROUTE_VALUE)]
+        [HttpPut]
         public IHttpActionResult ChangePriceGroup(ChangePriceGroupModel model)
         {
             var priceGroupRepository = ObjectFactory.Instance.Resolve<IRepository<PriceGroup>>();
@@ -42,7 +45,7 @@ namespace Ucommerce.Sitefinity.UI.Api
             return Ok();
         }
 
-        [Route("UpdateLineItem")]
+        [Route(RouteConstants.UPDATE_LINE_ITEM_ROUTE_VALUE)]
         [HttpPost]
         public IHttpActionResult UpdateLineItem(UpdateLineItemModel model)
         {
@@ -60,7 +63,7 @@ namespace Ucommerce.Sitefinity.UI.Api
             return Json(this.GetBasketModel());
         }
 
-        [Route("add")]
+        [Route(RouteConstants.ADD_TO_BASKET_ROUTE_VALUE)]
         [HttpPost]
         public IHttpActionResult Add(AddToBasketModel model)
         {
