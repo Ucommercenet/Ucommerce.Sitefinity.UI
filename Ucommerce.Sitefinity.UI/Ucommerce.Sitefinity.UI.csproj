@@ -431,7 +431,8 @@
     <None Include="assets\src\js\components\basket.vue" />
     <None Include="assets\src\js\components\dropdown-menu.vue" />
     <None Include="assets\src\js\components\dropdown-node.vue" />
-    <None Include="assets\src\js\components\search.vue" />
+    <None Include="assets\src\js\components\search-bootstrap.vue" />
+    <None Include="assets\src\js\components\search-quantum.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -444,6 +445,7 @@
     <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\functions\init.js" />
+    <Content Include="assets\src\js\mixins\search.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />
     <Content Include="assets\src\js\widgets\facet-filter.js" />
     <Content Include="assets\src\js\widgets\products.js" />
