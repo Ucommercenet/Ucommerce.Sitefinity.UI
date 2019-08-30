@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Http;
 using Ucommerce.Sitefinity.UI.Api.Model;
 using UCommerce;
-using UCommerce.Api;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Search;
@@ -45,14 +44,18 @@ namespace Ucommerce.Sitefinity.UI.Api
 
             var currency = UCommerce.Runtime.SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency;
             var productsPrices = UCommerce.Api.CatalogLibrary.CalculatePrice(products.Select(x => x.Guid).ToList()).Items;
+            ProductCatalog catalog = UCommerce.Api.CatalogLibrary.GetCatalog();
             foreach (var product in products)
             {
+                var productCategoryName = catalog.Categories
+                    .Where(c => c.CategoryId == product.CategoryIds.FirstOrDefault())
+                    .FirstOrDefault()?.Name;
                 var entityProduct = this.productRepository.Get(product.Id);
                 var fullTestSearchResultModel = new FullTextSearchResultModel()
                 {
                     ThumbnailImageUrl = product.ThumbnailImageUrl,
                     Name = product.Name,
-                    Url = CatalogLibrary.GetNiceUrlForProduct(entityProduct),
+                    Url = $"/shop/products/details/{productCategoryName}/{ product.Id }",
                     Price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currency).ToString(),
                 };
 

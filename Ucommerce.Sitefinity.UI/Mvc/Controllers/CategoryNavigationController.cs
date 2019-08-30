@@ -20,7 +20,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public Guid? SearchPageId { get; set; }
 
-        public string TemplateName { get; set; } = "Index";
+        public string TemplateName { get; set; } = "QuantumIndex";
 
         [RelativeRoute("{name?}")]
         public ActionResult Index()
