@@ -30,11 +30,11 @@
                     @category.DisplayName
                     @if (topLevel && category.Categories.Count > 0)
                     {
-                    <span>&#709;</span>
+                        <span>&#709;</span>
                     }
                     @if (!topLevel && category.Categories.Count > 0)
                     {
-                    <span>&#707;</span>
+                        <span>&#707;</span>
                     }
                 </a>
 
@@ -51,7 +51,7 @@
     <div>
         <nav>
             <a href="/" alt="">
-                <img src="@Model.ImageUrl" alt="">
+                <img src="@Model.ImageUrl" alt="Category Navigation Logo">
             </a>
 
             @if (Model.Categories.Count > 0)
@@ -105,14 +105,14 @@
         {
             <form action="@Model.SearchPageUrl" _lpchecked="1">
                 <span>&#128269;</span>
-                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+                <input title="Seatch for products" type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
             </form>
         }
         else
         {
             <form _lpchecked="1">
                 <span>&#128269;</span>
-                <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+                <input title="Seatch for products" type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
             </form>
         }
 

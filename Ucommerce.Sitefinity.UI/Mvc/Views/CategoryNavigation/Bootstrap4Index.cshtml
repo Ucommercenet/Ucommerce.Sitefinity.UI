@@ -13,7 +13,7 @@
         <div class="col-md-12">
             <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg mb-0">
                 <a href="/" class="navbar-brand" alt="">
-                    <img src="@Model.ImageUrl" width="40" height="40" class="d-inline-block align-top" alt="">
+                    <img src="@Model.ImageUrl" width="40" height="40" class="d-inline-block align-top" alt="Category Navigation Logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -131,7 +131,7 @@
                 @if (Model.SearchPageUrl != null)
                 {
                     <form action="@Model.SearchPageUrl" class="input-group" _lpchecked="1">
-                        <input type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+                        <input title="Seatch for products" type="text" autocomplete="off" ng-model="searchService.searchQuery" focus ng-change="searchService.search()" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
                         <span class="input-group-append">
                             <button class="btn btn-outline-secondary border-left-0 border" type="button">
                                 <span>&#128269;</span>
@@ -142,7 +142,7 @@
                 else
                 {
                     <form class="input-group" _lpchecked="1">
-                        <input type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
+                        <input title="Seatch for products" type="text" autocomplete="off" ng-model="searchService.searchQuery" autofocus ng-change="searchService.search()" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched" placeholder="Search for products">
                         <span class="input-group-append">
                             <button class="btn btn-outline-secondary border-left-0 border" type="button">
                                 <span>&#128269;</span>
