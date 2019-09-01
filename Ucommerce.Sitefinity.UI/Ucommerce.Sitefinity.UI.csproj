@@ -384,9 +384,6 @@
     <EmbeddedResource Include="assets\dist\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mvc\Scripts\CategoryNavigationController\CategoryNavigationController.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\DesignerView.Simple.cshtml" />
   </ItemGroup>
   <ItemGroup>
