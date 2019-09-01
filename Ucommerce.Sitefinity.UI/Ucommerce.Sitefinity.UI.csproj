@@ -318,13 +318,7 @@
     <EmbeddedResource Include="assets\dist\javascript\factory.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\MainController.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="assets\dist\javascript\moment.min.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\Services\BasketService.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\catalog-search.controller.js" />
@@ -417,14 +411,17 @@
     <EmbeddedResource Include="Mvc\Views\Products\QuantumIndex.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
-    <None Include="assets\src\js\components\basket.vue" />
+    <None Include="assets\src\js\components\add-to-basket.vue" />
+    <None Include="assets\src\js\components\cart.vue" />
     <None Include="assets\src\js\components\currency-selector.vue" />
     <None Include="assets\src\js\components\dropdown-menu.vue" />
     <None Include="assets\src\js\components\search.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="assets\src\js\mixins\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\build\**\*.*" />
   </ItemGroup>
@@ -433,7 +430,6 @@
     <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\functions\init.js" />
-    <Content Include="assets\src\js\mixins\basket.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />
     <Content Include="assets\src\js\widgets\facet-filter.js" />
     <Content Include="assets\src\js\widgets\products.js" />

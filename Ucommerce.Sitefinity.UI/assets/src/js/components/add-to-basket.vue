@@ -3,7 +3,7 @@
     const addToBasketFailedMessage = 'Not added to basket';
 
     export default {
-        name: "basket",
+        name: "addToBasket",
         props: {
             productSku: {
                 type: String,
