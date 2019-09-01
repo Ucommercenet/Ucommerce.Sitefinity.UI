@@ -327,9 +327,6 @@
     <EmbeddedResource Include="assets\dist\javascript\Services\BasketService.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\Services\ProductService.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="assets\dist\javascript\Services\searchService.js" />
   </ItemGroup>
   <ItemGroup>
