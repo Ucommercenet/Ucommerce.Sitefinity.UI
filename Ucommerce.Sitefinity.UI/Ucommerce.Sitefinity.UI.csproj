@@ -327,9 +327,6 @@
     <EmbeddedResource Include="assets\dist\javascript\Services\BasketService.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\Services\searchService.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\catalog-search.controller.js" />
   </ItemGroup>
   <ItemGroup>
@@ -396,9 +393,6 @@
     <EmbeddedResource Include="Mvc\Scripts\CategoryNavigationController\CategoryNavigationController.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mvc\Scripts\FullTextSearchController\FullTextSearchController.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\DesignerView.Simple.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -426,7 +420,6 @@
     <None Include="assets\src\js\components\basket.vue" />
     <None Include="assets\src\js\components\currency-selector.vue" />
     <None Include="assets\src\js\components\dropdown-menu.vue" />
-    <None Include="assets\src\js\components\dropdown-node.vue" />
     <None Include="assets\src\js\components\search.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
