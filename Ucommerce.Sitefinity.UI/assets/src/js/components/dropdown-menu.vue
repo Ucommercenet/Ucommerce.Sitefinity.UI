@@ -1,12 +1,14 @@
 ﻿<template>
-    <ul v-bind:class="{'closed': isParentOpen == false && isRoot == false, 'category-parent': isRoot, 'category-child': isRoot == false }">
-        <li v-for="node in nodes"
+    <ul class="navbar-nav mr-auto" v-bind:class="{'closed': isParentOpen == false && isRoot == false, 'category-parent': isRoot, 'category-child': isRoot == false }">
+        <li class="nav-item ml-4 mr-4"
+            v-for="node in nodes"
             v-bind:key="node.DisplayName"
+            v-bind:class="{'active': node.IsActive}"
             v-on:click.stop="nodeClicked(node)">
-            <a :href="node.Url">
+            <a :href="node.Url" class="nav-link h4">
                 {{node.DisplayName}}
-                <i v-if="isRoot && node.Categories.length > 0" class="fa fa-chevron-down"></i>
-                <i v-if="!isRoot && node.Categories.length > 0" class="fa fa-chevron-right"></i>
+                <i v-if="isRoot && node.Categories.length > 0" class="glyphicon glyphicon-menu-down"></i>
+                <i v-if="!isRoot && node.Categories.length > 0" class="glyphicon glyphicon-menu-right"></i>
             </a>
 
             <dropdown-menu v-if="node.Categories.length > 0"
