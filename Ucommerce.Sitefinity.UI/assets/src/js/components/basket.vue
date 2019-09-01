@@ -1,6 +1,6 @@
 ﻿<script>
     export default {
-        name: "cart",
+        name: "basket",
         props: {
             basket: {},
             showSidebarBasket: Boolean,

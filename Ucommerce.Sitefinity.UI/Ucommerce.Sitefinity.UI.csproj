@@ -412,7 +412,7 @@
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
     <None Include="assets\src\js\components\add-to-basket.vue" />
-    <None Include="assets\src\js\components\cart.vue" />
+    <None Include="assets\src\js\components\basket.vue" />
     <None Include="assets\src\js\components\currency-selector.vue" />
     <None Include="assets\src\js\components\dropdown-menu.vue" />
     <None Include="assets\src\js\components\search.vue" />
