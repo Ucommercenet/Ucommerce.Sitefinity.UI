@@ -77,7 +77,7 @@
                     {
                         var currencies = JsonConvert.SerializeObject(Model.Currencies);
                         var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
-                        <currency-selector v-if="!showSearchBar" :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
+                        <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
                             <li class="lang currency">
                                 <a v-on:click="toggleCurrenciesVisibility">
                                     <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><i class="fa fa-chevron-down"></i>
@@ -94,6 +94,19 @@
                     }
                     <li class="toggle-search" v-on:click="toggleSearchBar()"><a href="javascript:void(0)"><i class="fa fa-search"></i></a></li>
 
+                    @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
+                    {
+                        <basket :root-id="$el.id" inline-template>
+                            <li class="toggle-cart" v-bind:class="basket && basket.orderLines && basket.orderLines.length > 0 ? 'active' : ''">
+                                <a href="javascript:void(0)">
+                                    <span>
+                                        <span class="">{{basketLoaded ? basket.NumberOfItemsInBasket : ''}}</span>
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </span>
+                                </a>
+                            </li>
+                        </basket>
+                    }
                 </ul>
             </nav>
         </div>
@@ -103,21 +116,22 @@
             <input type="hidden" class="@route.Key" value="@route.Value" />
         }
 
-        <div v-bind:class="{ 'search-visible': showSearchBar }">
-            <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" v-on:close-search="closeSearch" inline-template>
+        <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" ref="search" inline-template>
+
+            <div v-bind:class="{ 'search-visible': showSearchBar }">
                 <div class="search">
-                    <button class="search__close" v-on:click="$emit('close-search')"><i class="fa fa-times"></i></button>
+                    <button class="search__close" v-on:click="closeSearch"><i class="fa fa-times"></i></button>
 
                     <div class="search__stage">
 
                         <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" class="search__form" _lpchecked="1">
                             <i class="fa fa-search"></i>
-                            <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="search__input" placeholder="Search for products">
+                            <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" class="search__input" placeholder="Search for products">
                         </form>
 
                         <form v-if="searchPageUrl === ''" v-on:submit.prevent class="search__form" _lpchecked="1">
                             <i class="fa fa-search"></i>
-                            <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="search__input" placeholder="Search for products">
+                            <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" class="search__input" placeholder="Search for products">
                         </form>
 
                         <div class="search__autocomplete">
@@ -147,8 +161,8 @@
                     </div>
 
                 </div>
-            </search>
-        </div>
+            </div>
+        </search>
     </header>
 </div>
 

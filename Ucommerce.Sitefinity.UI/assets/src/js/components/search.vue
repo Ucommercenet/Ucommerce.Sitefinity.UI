@@ -6,7 +6,11 @@
                 type: String,
                 default: null
             },
-            rootId: String
+            rootId: String,
+            showSearchBar: {
+                type: Boolean,
+                default: false
+            }
         },
         data() {
             return {
@@ -43,6 +47,18 @@
             searchPageHref: function () {
 
                 return this.searchPageUrl + '?search=' + this.searchQuery;
+            },
+            toggleSearchBar: function () {
+                this.showSearchBar = !this.showSearchBar;
+            },
+            closeSearch: function () {
+                setTimeout(() => {
+                    if (this.showSearchBar)
+                        this.toggleSearchBar();
+
+                    if (this.showFilter)
+                        this.toggleFilter();
+                });
             }
         }
     };

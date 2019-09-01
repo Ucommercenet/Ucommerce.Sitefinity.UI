@@ -16,7 +16,7 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<div data-component="category-navigation" id="@Html.UniqueId(" categories")" v-cloak>
+<div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
     <header class="container" ng-controller="categoryNavigationController">
         <div class="row">
             <div class="col-md-12">
@@ -31,117 +31,120 @@
                         <ul class="navbar-nav mr-auto">
                             @foreach (var category in Model.Categories)
                             {
-                            var categoryHref = category.Url;
+                                var categoryHref = category.Url;
 
-                            if (category.Categories.Count > 0)
-                            {
-                            categoryHref = "";
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="@categoryHref" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    @category.DisplayName
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    @foreach (var subCategory in category.Categories)
-                                    {
-                                    var subCategoryHref = subCategory.Url;
-
-                                    if (subCategory.Categories.Count > 0)
-                                    {
+                                if (category.Categories.Count > 0)
+                                {
+                                    categoryHref = "";
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle ml-4" href="@subCategoryHref" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            @subCategory.DisplayName
+                                        <a class="nav-link dropdown-toggle" href="@categoryHref" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            @category.DisplayName
                                         </a>
-                                        <ul class="dropdown-menu ml-5 mt-2" aria-labelledby="navbarDropdownMenuLink">
-                                            @foreach (var subSubCategory in subCategory.Categories)
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            @foreach (var subCategory in category.Categories)
                                             {
-                                            var subSubCategoryHref = subSubCategory.Url;
+                                                var subCategoryHref = subCategory.Url;
 
-                                            <li class="dropdown-item">
-                                                <a class="dropdown-item nav-link" href="@subSubCategory">
-                                                    @subSubCategory.DisplayName
-                                                    <span class="sr-only">(current)</span>
-                                                </a>
-                                            </li>
+                                                if (subCategory.Categories.Count > 0)
+                                                {
+                                                    <li class="nav-item dropdown">
+                                                        <a class="nav-link dropdown-toggle ml-4" href="@subCategoryHref" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            @subCategory.DisplayName
+                                                        </a>
+                                                        <ul class="dropdown-menu ml-5 mt-2" aria-labelledby="navbarDropdownMenuLink">
+                                                            @foreach (var subSubCategory in subCategory.Categories)
+                                                            {
+                                                                var subSubCategoryHref = subSubCategory.Url;
+
+                                                                <li class="dropdown-item">
+                                                                    <a class="dropdown-item nav-link" href="@subSubCategory">
+                                                                        @subSubCategory.DisplayName
+                                                                        <span class="sr-only">(current)</span>
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="dropdown-item">
+                                                        <a class="dropdown-item nav-link" href="@subCategoryHref">
+                                                            @subCategory.DisplayName
+                                                            <span class="sr-only">(current)</span>
+                                                        </a>
+                                                    </li>
+                                                }
                                             }
                                         </ul>
                                     </li>
-                                    }
-                                    else
-                                    {
-                                    <li class="dropdown-item">
-                                        <a class="dropdown-item nav-link" href="@subCategoryHref">
-                                            @subCategory.DisplayName
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link dropdown-item" href="@categoryHref">
+                                            @category.DisplayName
                                             <span class="sr-only">(current)</span>
                                         </a>
                                     </li>
-                                    }
-                                    }
-                                </ul>
-                            </li>
-                            }
-                            else
-                            {
-                            <li class="nav-item">
-                                <a class="nav-link dropdown-item" href="@categoryHref">
-                                    @category.DisplayName
-                                    <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
-                            }
+                                }
                             }
                         </ul>
                         <ul class="navbar-nav">
                             @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
                             {
-                            var currencies = JsonConvert.SerializeObject(Model.Currencies);
-                            var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
-                            <currency-selector v-if="!showSearchBar" :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
-                                <li class="nav-item dropdown ml-4 mr-4">
-                                    <a class="nav-link dropdown-toggle" v-on:click="toggleCurrenciesVisibility">
-                                        <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span>
-                                    </a>
-                                    <ul :class="showCurrencies ? 'tooltip show' : ''" v-show="showCurrencies">
-                                        <li class="list-group-item ml-4 mr-4" v-for="currency in currencies">
-                                            <a href="javascript:void(0)" class="nav-link" v-on:click="setCurrency(currency.PriceGroupId)">
-                                                <span>{{currency.DisplayName}}</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </currency-selector>
+                                var currencies = JsonConvert.SerializeObject(Model.Currencies);
+                                var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
+                                <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
+                                    <li class="nav-item dropdown ml-4 mr-4">
+                                        <a class="nav-link dropdown-toggle" v-on:click="toggleCurrenciesVisibility">
+                                            <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span>
+                                        </a>
+                                        <ul :class="showCurrencies ? 'tooltip show' : ''" v-show="showCurrencies">
+                                            <li class="list-group-item ml-4 mr-4" v-for="currency in currencies">
+                                                <a href="javascript:void(0)" class="nav-link" v-on:click="setCurrency(currency.PriceGroupId)">
+                                                    <span>{{currency.DisplayName}}</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </currency-selector>
                             }
 
                             <li class="nav-item ml-4 mr-4" v-on:click="toggleSearchBar()"><a class="nav-link" href="javascript:void(0)"><span>&#128269;</span></a></li>
 
                             @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
                             {
-                            <li class="nav-item ml-4 mr-4" ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
-                                <a class="nav-link" href="">
-                                    <span>
-                                        @*<span class="">{{basketService.basket.NumberOfItemsInBasket}}</span>*@
-                                        <span>&#128722;</span>
-                                    </span>
-                                </a>
-                            </li>
+                                <basket :root-id="$el.id" inline-template>
+                                    <li class="nav-item ml-4 mr-4" v-bind:class="basket && basket.orderLines && basket.orderLines.length > 0 ? 'active' : ''">
+                                        <a class="nav-link" href="javascript:void(0)">
+                                            <span>
+                                                <span class="">{{basketLoaded ? basket.NumberOfItemsInBasket : ''}}</span>
+                                                <span>&#128722;</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </basket>
                             }
                         </ul>
                 </nav>
             </div>
             @foreach (var route in Model.Routes)
             {
-            <input type="hidden" class="@route.Key" value="@route.Value" />
+                <input type="hidden" class="@route.Key" value="@route.Value" />
             }
 
-            <div class="container mb-5" v-show="showSearchBar">
-                <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" v-on:close-search="closeSearch" inline-template>
+
+            <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" ref="search" inline-template>
+                <div class="container mb-5" v-show="showSearchBar">
                     <div class="row">
                         <div class="offset-md-3 col-md-6">
-                            <button class="close" aria-label="Close" v-on:click="$emit('close-search')"><span class="m-1">&#215;</span></button>
+                            <button class="close" aria-label="Close" v-on:click="closeSearch"><span class="m-1">&#215;</span></button>
 
                             <div class="bg-white shadow-lg p-3 rounded">
 
                                 <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" class="input-group" _lpchecked="1">
-                                    <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
+                                    <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
                                     <span class="input-group-append">
                                         <button class="btn btn-outline-secondary border-left-0 border" type="button">
                                             <span>&#128269;</span>
@@ -150,7 +153,7 @@
                                 </form>
 
                                 <form v-if="searchPageUrl === ''" v-on:submit.prevent class="input-group" _lpchecked="1">
-                                    <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
+                                    <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
                                     <span class="input-group-append">
                                         <button class="btn btn-outline-secondary border-left-0 border" type="button">
                                             <span>&#128269;</span>
@@ -189,8 +192,8 @@
 
                         </div>
                     </div>
-                </search>
-            </div>
+                </div>
+            </search>
         </div>
     </header>
 </div>
