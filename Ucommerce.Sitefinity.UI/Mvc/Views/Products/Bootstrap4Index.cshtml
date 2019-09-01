@@ -67,7 +67,7 @@
                                                 <span>@product.Price</span>
                                             </div>
 
-                                            <basket :product-sku="'@product.Sku'" :root-id="$el.id" inline-template>
+                                            <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id" inline-template>
                                                 <div class="mt-2">
                                                     <span class="font-weight-bold">Quantity:</span>
                                                     <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" style="display:none;">
@@ -85,7 +85,7 @@
                                                     <input type="submit" title="Add to cart button" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addToBasket()" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
                                                     <span class="text-success pl-2 pt-1 position-absolute" v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
                                                 </div>
-                                            </basket>
+                                            </add-to-basket>
 
                                             <div>
                                                 <a href="#" class="card-link text-info" onclick="return false;">Write a review</a>
