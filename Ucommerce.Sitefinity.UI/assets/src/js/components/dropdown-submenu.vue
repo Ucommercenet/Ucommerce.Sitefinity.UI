@@ -13,24 +13,25 @@
         },
         computed: {
             isParentOpen: function () {
-                
-                return this.parentNode.IsOpen;
+                return this.parentNode.IsActive;
             }
         },
-
+        created: function () {
+            this.parentNode.IsActive = false;
+        },
         methods: {
             nodeClicked: function (node) {
                 
-                node.IsOpen = !node.IsOpen;
+                node.IsActive = !node.IsActive;
 
                 if (typeof this.selectedNode !== "undefined" && this.selectedNode !== node) {
-                    this.selectedNode.IsOpen = false;
+                    this.selectedNode.IsActive = false;
                 }
 
                 if (typeof this.selectedNode !== "undefined") {
                     this.selectedNode.Categories = this.selectedNode.Categories.map(c => {
-                        if (c.IsOpen == true)
-                            c.IsOpen = false;
+                        if (c.IsActive == true)
+                            c.IsActive = false;
 
                         return c;
                     });

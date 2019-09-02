@@ -39,12 +39,15 @@
                                 var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
                                 <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
                                     <li class="nav-item dropdown ml-4 mr-4">
-                                        <a class="nav-link dropdown-toggle" v-on:click="toggleCurrenciesVisibility">
+                                        <a class="nav-link float-left" v-on:click="toggleCurrenciesVisibility">
                                             <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span>
                                         </a>
-                                        <ul :class="showCurrencies ? 'tooltip show' : ''" v-show="showCurrencies">
-                                            <li class="list-group-item ml-4 mr-4" v-for="currency in currencies">
-                                                <a href="javascript:void(0)" class="nav-link" v-on:click="setCurrency(currency.PriceGroupId)">
+                                        <button class="btn btn-outline-dark shadow-none dropdown-toggle position-absolute p-0 mt-2 float-left border-0"
+                                                style="width: 25px; height: auto;"
+                                                v-on:click="toggleCurrenciesVisibility"></button>
+                                        <ul :class="showCurrencies ? 'dropdown-menu show' : ''" v-show="showCurrencies">
+                                            <li class="nav-item" v-for="currency in currencies">
+                                                <a href="javascript:void(0)" class="dropdown-item nav-link text-center" v-on:click="setCurrency(currency.PriceGroupId)">
                                                     <span>{{currency.DisplayName}}</span>
                                                 </a>
                                             </li>
@@ -146,25 +149,24 @@
         <li v-for="node in nodes"
             v-bind:key="node.DisplayName"
             class="nav-item"
-            v-bind:class="{'dropdown': node.Categories.length > 0, 'show': node.IsActive}"
-            v-on:click.stop.prevent="nodeClicked(node)">
+            v-bind:class="{'dropdown mr-4': node.Categories.length > 0}">
             <a v-if="node.Categories.length > 0"
                :href="node.Url"
                :id="node.DisplayName"
-               class="nav-link dropdown-toggle"
-               data-toggle="dropdown"
-               aria-haspopup="true"
-               aria-expanded="false">
-                {{node.DisplayName}}
+               class="nav-link float-left">
+                {{node.DisplayName}} {{ node.IsOpen}}
                 <span class="sr-only">(current)</span>
             </a>
             <a v-else
                class="nav-link dropdown-item"
-               v-on:click.stop
                :href="node.Url">
                 {{node.DisplayName}}
-                <span v-if="node.IsActive" class="sr-only">(current)</span>
+                <span v-if="node.IsOpen" class="sr-only">(current)</span>
             </a>
+            <button v-if="node.Categories.length > 0"
+                    class="btn btn-outline-dark shadow-none dropdown-toggle position-absolute p-0 mt-2 float-left border-0"
+                    v-on:click.stop.prevent="nodeClicked(node)"
+                    style="width: 25px; height: auto;"></button>
             <dropdown-submenu :parent-node="node"></dropdown-submenu>
         </li>
     </ul>
@@ -176,26 +178,27 @@
         :aria-labelledby="parentNode.DisplayName">
         <li v-for="node in parentNode.Categories"
             v-bind:key="node.DisplayName"
-            v-bind:class="{'nav-item dropdown': node.Categories.length > 0, 'dropdown-item': node.Categories === 0 }"
-            v-on:click.stop.prevent="nodeClicked(node)">
+            v-bind:class="{'dropdown dropright': node.Categories.length > 0, 'dropdown-item': node.Categories === 0 }"
+            class="nav-item">
             <a v-if="node.Categories.length > 0"
-               class="nav-link dropdown-toggle ml-4"
+               class="nav-link float-left ml-5"
                :href="node.Url"
-               :id="node.DisplayName"
-               data-toggle="dropdown"
-               aria-haspopup="true"
-               aria-expanded="false">
+               :id="node.DisplayName">
                 {{node.DisplayName}}
                 <span class="sr-only">(current)</span>
+                <dropdown-submenu :parent-node="node"></dropdown-submenu>
             </a>
             <a v-else
-               class="dropdown-item nav-link"
-               v-on:click.stop
-               :href="node.Url">
+               class="dropdown-item nav-link text-center"
+               :href="node.Url"
+               v-on:click.stop>
                 {{node.DisplayName}}
                 <span class="sr-only">(current)</span>
             </a>
-            <dropdown-submenu :parent-node="node"></dropdown-submenu>
+            <button v-if="node.Categories.length > 0"
+                    class="btn btn-outline-dark shadow-none dropdown-toggle position-absolute p-0 mt-2 float-left border-0"
+                    v-on:click.stop.prevent="nodeClicked(node)"
+                    style="width: 25px; height: auto;"></button>
         </li>
     </ul>
 </script>

@@ -1,4 +1,5 @@
-﻿<script>
+﻿﻿
+<script>
     import dropdownSubmenu from "./dropdown-submenu";
     export default {
         name: "dropdownMenu",
@@ -14,28 +15,24 @@
         },
         created: function () {
             for (var node = 0; node < this.nodes.length; node++) {
-                for (var property in this.nodes[node]) {
-                    var isOpenProp = "IsOpen";
-                    
-                    if (!this.nodes[node].hasOwnProperty(isOpenProp)) {
-                        this.nodes[node][isOpenProp] = false;
-                    }
+                if (this.nodes[node].hasOwnProperty("IsActive")) {
+                    this.nodes[node]["IsActive"] = false;
                 }
             }
         },
         methods: {
             nodeClicked: function (node) {
 
-                node.IsOpen = !node.IsOpen;
+                node.IsActive = !node.IsActive;
 
                 if (typeof this.selectedNode !== "undefined" && this.selectedNode !== node) {
-                    this.selectedNode.IsOpen = false;
+                    this.selectedNode.IsActive = false;
                 }
 
                 if (typeof this.selectedNode !== "undefined") {
                     this.selectedNode.Categories = this.selectedNode.Categories.map(c => {
-                        if (c.IsOpen == true)
-                            c.IsOpen = false;
+                        if (c.IsActive == true)
+                            c.IsActive = false;
                         return c;
                     });
                 }
