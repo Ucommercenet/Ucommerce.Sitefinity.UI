@@ -15,47 +15,10 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-@helper DisplayCategories(IList<CategoryNavigationCategoryViewModel> categories, bool topLevel)
-{
-    var categoryClass = "category-parent";
-    if (!topLevel)
-    {
-        categoryClass = "category-child closed";
-    }
-
-    <ul class=" @categoryClass">
-        @foreach (var category in categories)
-        {
-            var selected = category.IsActive ? "selected" : "";
-            var categoryHref = category.Url;
-            <li class="@selected">
-
-                @if (category.Categories.Count > 0)
-                {
-                    categoryHref = "";
-                }
-                <a style="" href="@categoryHref">
-                    @category.DisplayName
-                    @if (topLevel && category.Categories.Count > 0)
-                    {
-                        <span>&#709;</span>
-                    }
-                    @if (!topLevel && category.Categories.Count > 0)
-                    {
-                        <span>&#707;</span>
-                    }
-                </a>
-
-                @if (category.Categories.Count > 0)
-                {
-                    @DisplayCategories(category.Categories, false)
-                }
-            </li>
-        }
-    </ul>
-}
-
 <div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
+    <script type="application/json" data-items="true">
+        { "items" : @Html.Raw(JsonConvert.SerializeObject(Model.Categories)) }
+    </script>
     <header>
         <div>
             <nav>
@@ -65,7 +28,7 @@
 
                 @if (Model.Categories.Count > 0)
                 {
-                    @DisplayCategories(Model.Categories, true)
+                    <dropdown-menu :nodes="items"></dropdown-menu>
                 }
 
                 <ul>
@@ -162,42 +125,42 @@
     </header>
 </div>
 
-<script>
-    (function () {
-        var categories = document.querySelectorAll('.category-parent > li');
+<script type="text/x-template" id="dropdown-menu-template">
+    <ul class="navbar-nav mr-auto category-parent">
+        <li v-for="node in nodes"
+            v-bind:key="node.DisplayName"
+            v-on:click.stop.prevent="nodeClicked(node)">
+            <a v-if="node.Categories.length > 0"
+               :href="node.Url"
+               :id="node.DisplayName">
+                {{node.DisplayName}}<i class="fa fa-chevron-down"></i>
+            </a>
+            <a v-else
+               v-on:click.stop
+               :href="node.Url">
+                {{node.DisplayName}}
+            </a>
+            <dropdown-submenu :parent-node="node"></dropdown-submenu>
+        </li>
+    </ul>
+</script>
 
-        for (var i = 0; i < categories.length; i++) {
-            categories[i].addEventListener('click', function () {
-
-                var children = this.children;
-                var otherChildren = document.querySelectorAll('.category-child');
-                for (var i = 0; i < children.length; i++) {
-
-                    if (children[i].classList.contains('closed')) {
-
-                        for (var j = 0; j < otherChildren.length; j++) {
-
-                            if (otherChildren[j].classList.contains('open')) {
-                                otherChildren[j].classList.remove("open");
-                                otherChildren[j].classList.add("closed");
-                            }
-                        }
-
-                        this.children[i].classList.remove("closed");
-                        this.children[i].classList.add("open");
-                    } else if (children[i].classList.contains('open')) {
-
-                        var otherChildren = document.querySelectorAll('.category-child');
-                        for (var j = 0; j < otherChildren.length; j++) {
-
-                            if (otherChildren[j].classList.contains('open')) {
-                                otherChildren[j].classList.remove("open");
-                                otherChildren[j].classList.add("closed");
-                            }
-                        }
-                    }
-                }
-            }, false);
-        }
-    });
+<script type="text/x-template" id="dropdown-submenu-template">
+    <ul :aria-labelledby="parentNode.DisplayName">
+        <li v-for="node in parentNode.Categories"
+            v-bind:key="node.DisplayName"
+            v-on:click.stop.prevent="nodeClicked(node)">
+            <a v-if="node.Categories.length > 0"
+               :href="node.Url"
+               :id="node.DisplayName">
+                {{node.DisplayName}}<i class="fa fa-chevron-right"></i>
+            </a>
+            <a v-else
+               v-on:click.stop
+               :href="node.Url">
+                {{node.DisplayName}}
+            </a>
+            <dropdown-submenu :parent-node="node"></dropdown-submenu>
+        </li>
+    </ul>
 </script>
