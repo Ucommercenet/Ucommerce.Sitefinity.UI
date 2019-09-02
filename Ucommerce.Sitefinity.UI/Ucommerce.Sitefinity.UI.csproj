@@ -318,19 +318,7 @@
     <EmbeddedResource Include="assets\dist\javascript\factory.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\MainController.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="assets\dist\javascript\moment.min.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\Services\BasketService.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\Services\ProductService.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\Services\searchService.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\catalog-search.controller.js" />
@@ -396,12 +384,6 @@
     <EmbeddedResource Include="assets\dist\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mvc\Scripts\CategoryNavigationController\CategoryNavigationController.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Mvc\Scripts\FullTextSearchController\FullTextSearchController.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\DesignerView.Simple.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -426,15 +408,18 @@
     <EmbeddedResource Include="Mvc\Views\Products\QuantumIndex.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
+    <None Include="assets\src\js\components\add-to-basket.vue" />
     <None Include="assets\src\js\components\basket.vue" />
     <None Include="assets\src\js\components\currency-selector.vue" />
     <None Include="assets\src\js\components\dropdown-menu.vue" />
-    <None Include="assets\src\js\components\dropdown-node.vue" />
+    <None Include="assets\src\js\components\dropdown-submenu.vue" />
     <None Include="assets\src\js\components\search.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="assets\src\js\mixins\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\build\**\*.*" />
   </ItemGroup>
@@ -443,11 +428,18 @@
     <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\functions\init.js" />
-    <Content Include="assets\src\js\mixins\basket.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />
     <Content Include="assets\src\js\widgets\facet-filter.js" />
     <Content Include="assets\src\js\widgets\products.js" />
     <Content Include="webpack.config.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+      if '$(Configuration)'=='Release' (
+      cd $(ProjectDir)
+      npm run build
+      )
+</PreBuildEvent>
+  </PropertyGroup>
 </Project>

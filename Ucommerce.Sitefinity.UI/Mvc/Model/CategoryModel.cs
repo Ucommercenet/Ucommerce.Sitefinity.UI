@@ -45,6 +45,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_ROUTE_NAME, RouteConstants.SEARCH_ROUTE_VALUE);
             categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_NAME, RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE);
             categoryNavigationViewModel.Routes.Add(RouteConstants.PRICE_GROUP_ROUTE_NAME, RouteConstants.PRICE_GROUP_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.GET_BASKET_ROUTE_NAME, RouteConstants.GET_BASKET_ROUTE_VALUE);
 
             return categoryNavigationViewModel;
         }

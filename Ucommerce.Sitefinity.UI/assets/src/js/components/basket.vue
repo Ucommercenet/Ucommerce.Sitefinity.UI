@@ -1,78 +1,86 @@
-﻿<template>
-    <div class="mt-2">
-        <span class="font-weight-bold">Quantity:</span>
-        <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" style="display:none;">
-            <span class="text-danger">
-                When adding product to a cart you must specify the quantity
-            </span>
-        </span>
-        <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityValidator" style="display:none;">
-            <span class="text-danger">
-                The quantity must be greater than 0 and less than 9,999.
-            </span>
-        </span>
-        <input title="Product Quantity" id="productQuantityInput" v-model="quantity" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" class="form-control" />
-
-        <input type="submit" title="Add to cart button" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addToBasket()" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
-        <span class="text-success pl-2 pt-1 position-absolute" v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
-    </div>
-</template>
-
-<script>
-    const addToBasketSuccessMessage = 'Added to basket';
-    const addToBasketFailedMessage = 'Not added to basket';
-
+﻿<script>
     export default {
         name: "basket",
         props: {
-            productSku: {
-                type: String,
-                default: null
-            },
-            variantSku: {
-                type: String,
-                default: null
-            },
-            addToBasketMessage: String,
-            showAddToBasketMessage: Boolean,
-            quantity: {
-                type: Number,
-                default: 1
-            },
-            rootId: String
+            basket: {},
+            showSidebarBasket: Boolean,
+            rootId: String,
+            basketLoaded: Boolean
+        },
+        created: function () {
+            this.loadBasket(this.rootId);
         },
         methods: {
-            addToBasket: function () {
+            setCurrency: function (rootId, priceGroupId) {
 
-                var routesSelector = '#' + this.rootId + ' .addToBasketUrl';
-                var addToBasketUrlContainers = document.querySelectorAll(routesSelector);
-                if (addToBasketUrlContainers && addToBasketUrlContainers.length > 0) {
-                    var addToBasketUrl = '/' + addToBasketUrlContainers[0].value;
+                var routesSelector = '#' + rootId + ' .changePriceGroupUrl';
+                var routeUrlContainers = document.querySelectorAll(routesSelector);
+                if (routeUrlContainers && routeUrlContainers.length > 0) {
+                    var changePriceGroupUrl = '/' + routeUrlContainers[0].value;
+                    this.$http.post(changePriceGroupUrl, { PriceGroupId: priceGroupId })
+                        .then(function (response) {
+                            console.log("I'm here");
+                            location.reload();
+                        });
+                }
+            },
+            updateLineItem: function (rootId, orderLineId, newQuantity) {
 
-                    var productQuantity = 1;
-                    if (this.quantity !== '' && !isNaN(this.quantity)) {
-                        productQuantity = parseInt(this.quantity);
-                    }
+                var routesSelector = '#' + rootId + ' .updateLineItemUrl';
+                var routeUrlContainers = document.querySelectorAll(routesSelector);
+                if (routeUrlContainers && routeUrlContainers.length > 0) {
+                    var updateLineItemUrl = '/' + routeUrlContainers[0].value;
+                    this.$http.post(updateLineItemUrl, { OrderlineId: orderLineId, NewQuantity: newQuantity })
+                        .then(function (response) {
+                            this.basket = response.data;
+                        });
+                }
+            },
+            loadBasket: function (rootId) {
 
-                    var addToBasketModel = { Quantity: productQuantity, Sku: this.productSku, VariantSku: this.variantSku };
+                var routesSelector = '#' + rootId + ' .getBasketUrl';
+                var routeUrlContainers = document.querySelectorAll(routesSelector);
+                if (routeUrlContainers && routeUrlContainers.length > 0) {
+                    var getBasketUrl = '/' + routeUrlContainers[0].value;
 
+                    return this.$http.get(getBasketUrl)
+                        .then(function success(response) {
+
+                            this.basket = response.data;
+                            this.basketLoaded = true;
+                        }), function error(err) {
+
+                            console.log(err);
+                        };
+                }
+            },
+            addToBasket: function (rootId, addToBasketModel) {
+
+                var routesSelector = '#' + rootId + ' .addToBasketUrl';
+                var routeUrlContainers = document.querySelectorAll(routesSelector);
+                if (routeUrlContainers && routeUrlContainers.length > 0) {
+                    var addToBasketUrl = '/' + routeUrlContainers[0].value;
                     this.$http.post(addToBasketUrl, addToBasketModel)
                         .then(function (response) {
-                            this.addToBasketMessage = addToBasketSuccessMessage;
-                            this.showAddToBasketMessage = true;
-
-                            setTimeout(() =>
-                                this.showAddToBasketMessage = false,
-                                5000);
-                        }, function (error) {
-                            this.addToBasketMessage = addToBasketFailedMessage;
-                            this.showAddToBasketMessage = true;
-
-                            setTimeout(() =>
-                                this.showAddToBasketMessage = false,
-                                5000);
+                            this.basket = response.data;
+                            this.toggleSideBarBasket();
                         });
-                }                
+                }
+            },
+            applyVoucher: function (rootId, voucherCode) {
+
+                var routesSelector = '#' + rootId + ' .addToBasketUrl';
+                var routeUrlContainers = document.querySelectorAll(routesSelector);
+                if (routeUrlContainers && routeUrlContainers.length > 0) {
+                    var addVoucherUrl = '/' + routeUrlContainers[0].value;
+                    this.$http.post(addVoucherUrl, { VoucherCode: voucherCode })
+                        .then(function (response) {
+                            this.basket = response.data;
+                        });
+                }
+            },
+            toggleSideBarBasket: function () {
+                this.showSidebarBasket = !this.showSidebarBasket;
             }
         }
     };

@@ -2,6 +2,7 @@
 import dropdownMenu from "../components/dropdown-menu";
 import search from '../components/search';
 import currencySelector from '../components/currency-selector';
+import basket from '../components/basket';
 
 initializeComponent("category-navigation", initCategories);
 
@@ -11,10 +12,6 @@ function initCategories(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
         props: {
-            showSearchBar: {
-                type: Boolean,
-                default: false
-            },
             showFilter: {
                 type: Boolean,
                 default: false
@@ -27,25 +24,20 @@ function initCategories(rootElement) {
         components: {
             dropdownMenu,
             search,
-            currencySelector
+            currencySelector,
+            basket
         },
         methods: {
             toggleSearchBar: function () {
 
-                this.showSearchBar = !this.showSearchBar;
+                var searchComponent = this.$refs['search'];
+                if (searchComponent) {
+                    searchComponent.toggleSearchBar();
+                }
             },
             toggleFilter: function () {
 
                 this.showFilter = !this.showFilter;
-            },
-            closeSearch: function () {
-                setTimeout(() => {
-                    if (this.showSearchBar)
-                        this.toggleSearchBar();
-
-                    if (this.showFilter)
-                        this.toggleFilter();
-                });
             }
         }
     });

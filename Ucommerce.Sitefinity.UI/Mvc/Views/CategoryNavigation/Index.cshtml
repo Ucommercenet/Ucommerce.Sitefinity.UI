@@ -73,7 +73,7 @@
                     {
                         var currencies = JsonConvert.SerializeObject(Model.Currencies);
                         var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
-                        <currency-selector v-if="!showSearchBar" :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
+                        <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
                             <li>
                                 <a v-on:click="toggleCurrenciesVisibility">
                                     <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><span>&#709;</span>
@@ -91,14 +91,19 @@
 
                     <li v-on:click="toggleSearchBar()"><a href="javascript:void(0)"><span>&#128269;</span></a></li>
 
-                    <li ng-click="basketService.toggleSideBarBasket()" ng-class="{'active' : basketService.basket.orderLines.length > 0}">
-                        <a href="">
-                            <span>
-                                @*<span>{{basketService.basket.NumberOfItemsInBasket}}</span>*@
-                                <span>&#128722;</span>
-                            </span>
-                        </a>
-                    </li>                    
+                    @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
+                    {
+                        <basket :root-id="$el.id" inline-template>
+                            <li v-bind:class="basket && basket.orderLines && basket.orderLines.length > 0 ? 'active' : ''">
+                                <a href="javascript:void(0)">
+                                    <span>
+                                        <span class="">{{basketLoaded ? basket.NumberOfItemsInBasket : ''}}</span>
+                                        <span>&#128722;</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </basket>
+                    }
                 </ul>
             </nav>
         </div>
@@ -107,21 +112,22 @@
             <input type="hidden" class="@route.Key" value="@route.Value" />
         }
 
-        <div v-show="showSearchBar">
-            <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" v-on:close-search="closeSearch" inline-template>
+        <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" ref="search" inline-template>
+
+            <div v-show="showSearchBar">
                 <div>
-                    <button v-on:click="$emit('close-search')"><span>&#215;</span></button>
+                    <button v-on:click="closeSearch"><span>&#215;</span></button>
 
                     <div>
 
                         <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" _lpchecked="1">
                             <span>&#128269;</span>
-                            <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" placeholder="Search for products">
+                            <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" placeholder="Search for products">
                         </form>
 
                         <form v-if="searchPageUrl === ''" v-on:submit.prevent _lpchecked="1">
                             <span>&#128269;</span>
-                            <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="$emit('close-search')" required="" name="search" placeholder="Search for products">
+                            <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" placeholder="Search for products">
                         </form>
 
                         <div>
@@ -151,8 +157,8 @@
                     </div>
 
                 </div>
-            </search>
-        </div>
+            </div>
+        </search>
     </header>
 </div>
 

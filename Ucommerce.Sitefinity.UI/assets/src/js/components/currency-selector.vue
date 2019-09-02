@@ -14,17 +14,14 @@
             rootId: String
         },
         created() {
-
             this.currencies = JSON.parse(this.serializedCurrencies);
             this.currentCurrency = JSON.parse(this.serializedCurrentCurrency);
         },
         methods: {
             toggleCurrenciesVisibility: function () {
-
                 this.showCurrencies = !this.showCurrencies;
             },
             setCurrency: function (priceGroupId) {
-
                 var routesSelector = '#' + this.rootId + ' .changePriceGroupUrl';
                 var routeUrlContainers = document.querySelectorAll(routesSelector);
                 if (routeUrlContainers && routeUrlContainers.length > 0) {
