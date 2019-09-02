@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Http;
 using Ucommerce.Sitefinity.UI.Api.Model;
+using Ucommerce.Sitefinity.UI.Constants;
 using UCommerce;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
@@ -10,7 +11,6 @@ using Product = UCommerce.Documents.Product;
 
 namespace Ucommerce.Sitefinity.UI.Api
 {
-    [RoutePrefix("SearchApi")]
     public class SearchApiController : ApiController
     {
         private readonly IRepository<UCommerce.EntitiesV2.Product> productRepository;
@@ -20,7 +20,7 @@ namespace Ucommerce.Sitefinity.UI.Api
             this.productRepository = ObjectFactory.Instance.Resolve<IRepository<UCommerce.EntitiesV2.Product>>();
         }
 
-        [Route("FullText")]
+        [Route(RouteConstants.SEARCH_ROUTE_VALUE)]
         [HttpPost]
         public IHttpActionResult FullText(FullTextModel model)
         {
@@ -29,7 +29,7 @@ namespace Ucommerce.Sitefinity.UI.Api
             return Ok(this.ConvertToFullTextSearchResultModel(searchResult));
         }
 
-        [Route("Suggestions")]
+        [Route(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE)]
         [HttpPost]
         public IHttpActionResult Suggestions(FullTextModel model)
         {

@@ -14,26 +14,26 @@
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
     }
 
-    <div class="container-fluid" data-component="products" id="@Html.UniqueId("product-details")"  v-cloak>
+    <div class="container-fluid" data-component="products" id="@Html.UniqueId("product-details")" v-cloak>
         <div class="row">
             <div class="col-sx-12 col-sm-5 col-md-5 col-lg-5 border-right">
                 <div class="img">
                     <a href="@Model.PrimaryImageMediaUrl" rel="fancybox">
-                        <img src="@Model.PrimaryImageMediaUrl" />
+                        <img class="mx-auto d-block" src="@Model.PrimaryImageMediaUrl" />
                     </a>
                 </div>
 
                 <div>
                     @if (Model.Variants.Any())
                     {
-                        <ul>
+                        <ul class="list-group">
                             @foreach (var variant in Model.Variants)
                             {
                                 if (!string.IsNullOrEmpty(variant.PrimaryImageMediaUrl))
                                 {
-                                    <li>
+                                    <li class="list-group-item">
                                         <a href="@variant.PrimaryImageMediaUrl" rel="fancybox">
-                                            <img src="@variant.PrimaryImageMediaUrl" />
+                                            <img class="mx-auto d-block" src="@variant.PrimaryImageMediaUrl" />
                                         </a>
                                     </li>
                                 }
@@ -90,7 +90,25 @@
                             <input type="hidden" class="@route.Key" value="@route.Value" />
                         }
 
-                        <basket :product-sku="'@Model.Sku'" :root-id="$el.id"></basket>
+                        <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" inline-template>
+                            <div class="mt-2">
+                                <span class="font-weight-bold">Quantity:</span>
+                                <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" style="display:none;">
+                                    <span class="text-danger">
+                                        When adding product to a cart you must specify the quantity
+                                    </span>
+                                </span>
+                                <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityValidator" style="display:none;">
+                                    <span class="text-danger">
+                                        The quantity must be greater than 0 and less than 9,999.
+                                    </span>
+                                </span>
+                                <input title="Product Quantity" id="productQuantityInput" v-model="quantity" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" class="form-control" />
+
+                                <input type="submit" title="Add to cart button" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addToBasket()" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
+                                <span class="text-success pl-2 pt-1 position-absolute" v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
+                            </div>
+                        </add-to-basket>
                     </div>
                 </div>
                 <div class="row">
