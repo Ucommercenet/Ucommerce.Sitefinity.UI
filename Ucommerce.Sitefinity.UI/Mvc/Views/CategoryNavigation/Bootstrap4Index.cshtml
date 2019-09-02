@@ -17,7 +17,7 @@
 }
 
 <div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
- <script type="application/json" data-items="true">
+    <script type="application/json" data-items="true">
         { "items" : @Html.Raw(JsonConvert.SerializeObject(Model.Categories)) }
     </script>
     <header class="container" ng-controller="categoryNavigationController">
@@ -31,68 +31,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                        <ul class="navbar-nav mr-auto">
-                            @foreach (var category in Model.Categories)
-                            {
-                                var categoryHref = category.Url;
-
-                                if (category.Categories.Count > 0)
-                                {
-                                    categoryHref = "";
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="@categoryHref" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            @category.DisplayName
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                            @foreach (var subCategory in category.Categories)
-                                            {
-                                                var subCategoryHref = subCategory.Url;
-
-                                                if (subCategory.Categories.Count > 0)
-                                                {
-                                                    <li class="nav-item dropdown">
-                                                        <a class="nav-link dropdown-toggle ml-4" href="@subCategoryHref" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            @subCategory.DisplayName
-                                                        </a>
-                                                        <ul class="dropdown-menu ml-5 mt-2" aria-labelledby="navbarDropdownMenuLink">
-                                                            @foreach (var subSubCategory in subCategory.Categories)
-                                                            {
-                                                                var subSubCategoryHref = subSubCategory.Url;
-
-                                                                <li class="dropdown-item">
-                                                                    <a class="dropdown-item nav-link" href="@subSubCategory">
-                                                                        @subSubCategory.DisplayName
-                                                                        <span class="sr-only">(current)</span>
-                                                                    </a>
-                                                                </li>
-                                                            }
-                                                        </ul>
-                                                    </li>
-                                                }
-                                                else
-                                                {
-                                                    <li class="dropdown-item">
-                                                        <a class="dropdown-item nav-link" href="@subCategoryHref">
-                                                            @subCategory.DisplayName
-                                                            <span class="sr-only">(current)</span>
-                                                        </a>
-                                                    </li>
-                                                }
-                                            }
-                                        </ul>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link dropdown-item" href="@categoryHref">
-                                            @category.DisplayName
-                                            <span class="sr-only">(current)</span>
-                                        </a>
-                                    </li>
-                                }
-                            }
-                        </ul>
+                        <dropdown-menu :nodes="items"></dropdown-menu>
                         <ul class="navbar-nav">
                             @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
                             {
@@ -130,6 +69,7 @@
                                 </basket>
                             }
                         </ul>
+                    </div>
                 </nav>
             </div>
             @foreach (var route in Model.Routes)

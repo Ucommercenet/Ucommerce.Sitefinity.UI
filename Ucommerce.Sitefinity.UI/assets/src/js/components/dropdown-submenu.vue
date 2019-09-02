@@ -1,14 +1,15 @@
 ﻿<template>
-    <ul class="navbar-nav mr-auto">
-        <li v-for="node in nodes"
+    <ul class="dropdown-menu"
+        v-bind:class="{'show': isParentOpen}"
+        :aria-labelledby="parentNode.DisplayName">
+        <li v-for="node in parentNode.Categories"
             v-bind:key="node.DisplayName"
-            class="nav-item"
-            v-bind:class="{'dropdown': node.Categories.length > 0, 'show': node.IsActive}"
+            v-bind:class="{'nav-item dropdown': node.Categories.length > 0, 'dropdown-item': node.Categories === 0 }"
             v-on:click.stop.prevent="nodeClicked(node)">
             <a v-if="node.Categories.length > 0"
+               class="nav-link dropdown-toggle ml-4"
                :href="node.Url"
                :id="node.DisplayName"
-               class="nav-link dropdown-toggle"
                data-toggle="dropdown"
                aria-haspopup="true"
                aria-expanded="false">
@@ -17,26 +18,30 @@
                 <dropdown-submenu :parent-node="node"></dropdown-submenu>
             </a>
             <a v-else
-               class="nav-link dropdown-item"
+               class="dropdown-item nav-link"
                :href="node.Url">
                 {{node.DisplayName}}
-                <span v-if="node.IsActive" class="sr-only">(current)</span>
+                <span class="sr-only">(current)</span>
             </a>
         </li>
     </ul>
 </template>
 
 <script>
-    import dropdownSubmenu from "./dropdown-submenu";
     export default {
-        name: "dropdownMenu",
+        name: "dropdownSubmenu",
         data: {
             selectedNode: null
         },
         props: {
-            nodes: {
-                type: Array,
+            parentNode: {
+                type: Object,
                 default: []
+            }
+        },
+        computed: {
+            isParentOpen: function () {
+                return this.parentNode.IsActive;
             }
         },
         methods: {
@@ -46,7 +51,7 @@
                 if (typeof this.selectedNode !== "undefined" && this.selectedNode !== node) {
                     this.selectedNode.IsActive = false;
                 }
-    
+
                 if (typeof this.selectedNode !== "undefined") {
                     this.selectedNode.Categories = this.selectedNode.Categories.map(c => {
                         if (c.IsActive == true)
@@ -58,9 +63,6 @@
 
                 this.selectedNode = node;
             }
-        },
-        components: {
-            dropdownSubmenu
         }
     };
 </script>
