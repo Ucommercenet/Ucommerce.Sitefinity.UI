@@ -72,7 +72,7 @@
                 </nav>
             }
             <nav class="main-nav main-nav--right hide--m">
-                <ul>
+                <ul class="category-parent">
                     @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
                     {
                         var currencies = JsonConvert.SerializeObject(Model.Currencies);
@@ -82,7 +82,7 @@
                                 <a v-on:click="toggleCurrenciesVisibility">
                                     <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><i class="fa fa-chevron-down"></i>
                                 </a>
-                                <ul v-show="showCurrencies">
+                                <ul v-show="showCurrencies" class="category-child" v-bind:class="{'open': showCurrencies}">
                                     <li v-for="currency in currencies">
                                         <a href="javascript:void(0)" v-on:click="setCurrency(currency.PriceGroupId)">
                                             <span>{{currency.DisplayName}}</span>
