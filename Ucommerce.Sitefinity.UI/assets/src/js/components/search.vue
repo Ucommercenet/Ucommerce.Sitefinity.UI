@@ -1,6 +1,7 @@
 ﻿<script>
     export default {
         name: "search",
+        template: '#search-template',
         props: {
             searchPageUrl: {
                 type: String,
