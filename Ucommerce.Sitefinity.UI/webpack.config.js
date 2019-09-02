@@ -70,8 +70,8 @@ module.exports = {
         jsonpFunction: 'jsonpFunction',
         filename: 'js/[name].js',
         chunkFilename: 'js/[name].bundle.js',
-        path: path.resolve(__dirname, '../../uquantum/TelerikSitefinitySamplesQuantum/assets/build'),
-        // path: path.resolve(__dirname, './assets/build'),
+        //path: path.resolve(__dirname, '../../uquantum/TelerikSitefinitySamplesQuantum/assets/build'),
+        path: path.resolve(__dirname, './assets/build'),
         publicPath: "assets/build/"
     },
     mode: "development",
