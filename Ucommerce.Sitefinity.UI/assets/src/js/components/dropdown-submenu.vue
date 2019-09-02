@@ -19,7 +19,8 @@
             </a>
             <a v-else
                class="dropdown-item nav-link"
-               :href="node.Url">
+               :href="node.Url"
+               v-on:click.stop>
                 {{node.DisplayName}}
                 <span class="sr-only">(current)</span>
             </a>
@@ -41,21 +42,24 @@
         },
         computed: {
             isParentOpen: function () {
-                return this.parentNode.IsActive;
+                
+                return this.parentNode.IsOpen;
             }
         },
+
         methods: {
             nodeClicked: function (node) {
-                node.IsActive = !node.IsActive;
+                
+                node.IsOpen = !node.IsOpen;
 
                 if (typeof this.selectedNode !== "undefined" && this.selectedNode !== node) {
-                    this.selectedNode.IsActive = false;
+                    this.selectedNode.IsOpen = false;
                 }
 
                 if (typeof this.selectedNode !== "undefined") {
                     this.selectedNode.Categories = this.selectedNode.Categories.map(c => {
-                        if (c.IsActive == true)
-                            c.IsActive = false;
+                        if (c.IsOpen == true)
+                            c.IsOpen = false;
 
                         return c;
                     });
