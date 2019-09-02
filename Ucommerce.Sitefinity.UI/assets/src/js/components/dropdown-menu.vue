@@ -1,35 +1,8 @@
-﻿<template>
-    <ul class="navbar-nav mr-auto">
-        <li v-for="node in nodes"
-            v-bind:key="node.DisplayName"
-            class="nav-item"
-            v-bind:class="{'dropdown': node.Categories.length > 0, 'show': node.IsActive}"
-            v-on:click.stop.prevent="nodeClicked(node)">
-            <a v-if="node.Categories.length > 0"
-               :href="node.Url"
-               :id="node.DisplayName"
-               class="nav-link dropdown-toggle"
-               data-toggle="dropdown"
-               aria-haspopup="true"
-               aria-expanded="false">
-                {{node.DisplayName}}
-                <span class="sr-only">(current)</span>
-                <dropdown-submenu :parent-node="node"></dropdown-submenu>
-            </a>
-            <a v-else
-               class="nav-link dropdown-item"
-               :href="node.Url">
-                {{node.DisplayName}}
-                <span v-if="node.IsActive" class="sr-only">(current)</span>
-            </a>
-        </li>
-    </ul>
-</template>
-
-<script>
+﻿<script>
     import dropdownSubmenu from "./dropdown-submenu";
     export default {
         name: "dropdownMenu",
+        template: '#dropdown-menu-template',
         data: {
             selectedNode: null
         },

@@ -1,35 +1,7 @@
-﻿<template>
-    <ul class="dropdown-menu"
-        v-bind:class="{'show': isParentOpen}"
-        :aria-labelledby="parentNode.DisplayName">
-        <li v-for="node in parentNode.Categories"
-            v-bind:key="node.DisplayName"
-            v-bind:class="{'nav-item dropdown': node.Categories.length > 0, 'dropdown-item': node.Categories === 0 }"
-            v-on:click.stop.prevent="nodeClicked(node)">
-            <a v-if="node.Categories.length > 0"
-               class="nav-link dropdown-toggle ml-4"
-               :href="node.Url"
-               :id="node.DisplayName"
-               data-toggle="dropdown"
-               aria-haspopup="true"
-               aria-expanded="false">
-                {{node.DisplayName}}
-                <span class="sr-only">(current)</span>
-                <dropdown-submenu :parent-node="node"></dropdown-submenu>
-            </a>
-            <a v-else
-               class="dropdown-item nav-link"
-               :href="node.Url">
-                {{node.DisplayName}}
-                <span class="sr-only">(current)</span>
-            </a>
-        </li>
-    </ul>
-</template>
-
-<script>
+﻿<script>
     export default {
         name: "dropdownSubmenu",
+        template: '#dropdown-submenu-template',
         data: {
             selectedNode: null
         },
