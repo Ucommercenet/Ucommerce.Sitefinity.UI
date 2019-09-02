@@ -4,6 +4,7 @@
 
     export default {
         name: "addToBasket",
+        template: '#add-to-basket-template',
         props: {
             productSku: {
                 type: String,
