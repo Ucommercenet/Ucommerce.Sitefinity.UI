@@ -412,6 +412,7 @@
     <None Include="assets\src\js\components\basket.vue" />
     <None Include="assets\src\js\components\currency-selector.vue" />
     <None Include="assets\src\js\components\dropdown-menu.vue" />
+    <None Include="assets\src\js\components\dropdown-submenu.vue" />
     <None Include="assets\src\js\components\search.vue" />
     <None Include="package.json" />
     <None Include="packages.config" />
@@ -433,4 +434,12 @@
     <Content Include="webpack.config.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+      if '$(Configuration)'=='Release' (
+      cd $(ProjectDir)
+      npm run build
+      )
+</PreBuildEvent>
+  </PropertyGroup>
 </Project>
