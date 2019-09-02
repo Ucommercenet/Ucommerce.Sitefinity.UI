@@ -1,6 +1,7 @@
 ﻿<script>
     export default {
         name: "basket",
+        template: '#basket-template',
         props: {
             basket: {},
             showSidebarBasket: Boolean,
