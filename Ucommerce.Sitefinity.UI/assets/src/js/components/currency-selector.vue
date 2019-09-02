@@ -1,6 +1,7 @@
 ﻿<script>
     export default {
         name: "currencySelector",
+        template: '#currency-selector-template',
         data() {
             return {
                 showCurrencies: false
