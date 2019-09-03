@@ -26,7 +26,13 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 return this.MapFacetsByManualSelection(categoryIds, productIds);
             }
 
-            var currentCategory = Category.FirstOrDefault(c => c.Name == SiteContext.Current.CatalogContext.CurrentCategory.Name);
+            Category currentCategory = null;
+
+            if (SiteContext.Current.CatalogContext.CurrentCategory != null)
+            {
+                currentCategory = Category.FirstOrDefault(c => c.Name == SiteContext.Current.CatalogContext.CurrentCategory.Name);
+            }
+
             return this.GetAllFacets(currentCategory);
         }
 

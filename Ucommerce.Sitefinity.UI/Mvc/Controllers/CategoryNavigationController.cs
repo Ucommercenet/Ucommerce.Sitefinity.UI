@@ -22,7 +22,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public Guid? ProductDetailsPageId { get; set; }
 
-        public string TemplateName { get; set; } = "QuantumIndex";
+        public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
         {
