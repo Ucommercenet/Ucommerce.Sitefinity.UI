@@ -59,7 +59,7 @@
             <input type="hidden" class="@route.Key" value="@route.Value" />
         }
 
-        <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :page-id="'@Model.PageId'" :category-id="'@Model.CategoryId'" :root-id="$el.id" ref="search">
+        <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :product-details-page-id="'@Model.ProductDetailsPageId'" :root-id="$el.id" ref="search">
         </search>
     </header>
 </div>

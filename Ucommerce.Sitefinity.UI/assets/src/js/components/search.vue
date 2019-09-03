@@ -12,11 +12,10 @@
                 type: Boolean,
                 default: false
             },
-            pageId: {
+            productDetailsPageId: {
                 type: String,
                 default: null
             },
-            categoryId: Number
         },
         data() {
             return {
@@ -33,7 +32,7 @@
                 if (searchUrlContainers && searchUrlContainers.length > 0) {
                     var searchUrl = '/' + searchUrlContainers[0].value;
 
-                    this.$http.post(searchUrl, { SearchQuery: this.searchQuery, PageId: this.pageId, CategoryId: this.categoryId })
+                    this.$http.post(searchUrl, { SearchQuery: this.searchQuery, ProductDetailsPageId: this.productDetailsPageId})
                         .then(function (response) {
                             if (response.data)
                                 this.searchResult = response.data;
@@ -45,7 +44,7 @@
                 if (suggestionsUrlContainers && suggestionsUrlContainers.length > 0) {
                     var searchSuggestionsUrl = '/' + suggestionsUrlContainers[0].value;
 
-                    this.$http.post(searchSuggestionsUrl, { SearchQuery: this.searchQuery, PageId: this.pageId, CategoryId: this.categoryId })
+                    this.$http.post(searchSuggestionsUrl, { SearchQuery: this.searchQuery, ProductDetailsPageId: this.productDetailsPageId })
                         .then(function (response) {
                             if (response.data)
                                 this.suggestions = response.data;

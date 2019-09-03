@@ -26,8 +26,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
 
         public Dictionary<string, string> Routes { get; set; }
 
-        public Guid PageId { get; set; }
+        public Guid ProductDetailsPageId { get; set; }
 
-        public int CategoryId { get; set; }
     }
 }
