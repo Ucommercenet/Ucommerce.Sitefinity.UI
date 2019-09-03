@@ -24,7 +24,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public string TemplateName { get; set; } = "QuantumIndex";
 
-        [RelativeRoute("{name?}")]
         public ActionResult Index()
         {
             CategoryNavigationViewModel categoryNavigationViewModel = null;
