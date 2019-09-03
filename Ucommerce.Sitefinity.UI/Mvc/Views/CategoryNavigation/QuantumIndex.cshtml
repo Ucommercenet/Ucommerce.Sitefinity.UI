@@ -22,7 +22,7 @@
     </script>
     <header class="top top--light">
         <div class="top-inner top-inner--center">
-            <nav class="logo-wrap">
+            <nav class="logo-wrap hide-element-sm">
                 <a href="/" class="logo logo--on-light" alt="">
                     <img src="@Model.ImageUrl" alt="">
                 </a>
@@ -93,7 +93,7 @@
         :aria-labelledby="parentNode.DisplayName">
         <li v-for="node in parentNode.Categories"
             v-bind:key="node.DisplayName"
-            v-bind:class="{'selected': node.IsActive}">
+            v-bind:class="{'selected': node.IsActive, 'mr-14p-sm': node.Categories.length > 0}">
             <a v-if="node.Categories.length > 0"
                :href="node.Url"
                :id="node.DisplayName"
