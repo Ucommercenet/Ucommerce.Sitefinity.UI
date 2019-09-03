@@ -35,13 +35,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
             IList<UCommerce.Search.Facets.Facet> allFacets;
 
-
             if (category != null)
             {
-
-
-                var productsWithCatalogApi = CatalogLibrary.GetProducts(category).ToList();
-                var productsWithSearchApi = SearchLibrary.GetProductsFor(category, facetsForQuerying);
                 allFacets = SearchLibrary.GetFacetsFor(category, facetsForQuerying);
             }
             else
