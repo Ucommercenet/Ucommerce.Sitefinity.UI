@@ -39,6 +39,17 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 DisplayName = currentPriceGroup.Name,
                 PriceGroupId = currentPriceGroup.PriceGroupId,
             };
+            var currentNode = SiteMapBase.GetActualCurrentNode();
+
+            if (currentNode != null)
+            {
+                categoryNavigationViewModel.PageId = currentNode.Id;
+            }
+
+            if (SiteContext.Current != null && SiteContext.Current.CatalogContext != null && SiteContext.Current.CatalogContext.CurrentCategory != null)
+            {
+                categoryNavigationViewModel.CategoryId = SiteContext.Current.CatalogContext.CurrentCategory.CategoryId;
+            }
 
             this.MapConfigurationFields(categoryNavigationViewModel);
 

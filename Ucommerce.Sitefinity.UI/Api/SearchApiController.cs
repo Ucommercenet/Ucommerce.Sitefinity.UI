@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Http;
+using Telerik.Sitefinity.Web;
 using Ucommerce.Sitefinity.UI.Api.Model;
 using Ucommerce.Sitefinity.UI.Constants;
 using UCommerce;
@@ -26,7 +29,7 @@ namespace Ucommerce.Sitefinity.UI.Api
         {
             var searchResult = UCommerce.Api.SearchLibrary.GetProductsByName(model.SearchQuery);
 
-            return Ok(this.ConvertToFullTextSearchResultModel(searchResult));
+            return Ok(this.ConvertToFullTextSearchResultModel(searchResult, model.PageId, model.CategoryId));
         }
 
         [Route(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE)]
@@ -38,24 +41,41 @@ namespace Ucommerce.Sitefinity.UI.Api
             return Ok(searchResult);
         }
 
-        private IList<FullTextSearchResultModel> ConvertToFullTextSearchResultModel(IList<Product> products)
+        private IList<FullTextSearchResultModel> ConvertToFullTextSearchResultModel(IList<Product> products, Guid pageId, int categoryId)
         {
             var fullTextSearchResultModels = new List<FullTextSearchResultModel>();
 
             var currency = UCommerce.Runtime.SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency;
             var productsPrices = UCommerce.Api.CatalogLibrary.CalculatePrice(products.Select(x => x.Guid).ToList()).Items;
             ProductCatalog catalog = UCommerce.Api.CatalogLibrary.GetCatalog();
+
+            var productCategory = catalog.Categories
+                .Where(c => c.CategoryId == categoryId)
+                .FirstOrDefault();
+            var culture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+
             foreach (var product in products)
             {
-                var productCategoryName = catalog.Categories
-                    .Where(c => c.CategoryId == product.CategoryIds.FirstOrDefault())
-                    .FirstOrDefault()?.Name;
+                string categoryName = null;
+
+                if (productCategory != null)
+                {
+                    categoryName = productCategory.Name;
+                }
+                else
+                {
+                    categoryName = "General";
+                }
+
+                var url = string.Concat(GetUrlByPageNodeIdAlternative(pageId, culture, true) + "/" + categoryName + "/" + product.Id);
                 var entityProduct = this.productRepository.Get(product.Id);
+
+
                 var fullTestSearchResultModel = new FullTextSearchResultModel()
                 {
                     ThumbnailImageUrl = product.ThumbnailImageUrl,
                     Name = product.Name,
-                    Url = $"/shop/products/details/{productCategoryName}/{ product.Id }",
+                    Url = url,
                     Price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currency).ToString(),
                 };
 
@@ -63,6 +83,31 @@ namespace Ucommerce.Sitefinity.UI.Api
             }
 
             return fullTextSearchResultModels;
+        }
+
+        private string GetUrlByPageNodeIdAlternative(Guid pageNodeId, CultureInfo targetCulture, bool resolveAsAbsolutUrl)
+        {
+            var siteMap = SiteMapBase.GetCurrentProvider();
+
+            // Get the siteMapNode
+            var siteMapNode = siteMap.FindSiteMapNodeFromKey(pageNodeId.ToString()) as PageSiteNode;
+
+
+            var url = String.Empty;
+
+            if (siteMapNode != null)
+            {
+                // Get the URL of the siteMapNode
+                url = siteMapNode.GetUrl(targetCulture, false);
+
+                if (resolveAsAbsolutUrl)
+                {
+                    // Get the absolute URL of the pageNode
+                    url = UrlPath.ResolveUrl(url, true, true);
+                }
+            }
+
+            return url;
         }
     }
 }

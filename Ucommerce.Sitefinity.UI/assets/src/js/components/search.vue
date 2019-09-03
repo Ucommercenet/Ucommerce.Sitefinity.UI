@@ -10,7 +10,12 @@
             showSearchBar: {
                 type: Boolean,
                 default: false
-            }
+            },
+            pageId: {
+                type: String,
+                default: null
+            },
+            categoryId: Number
         },
         data() {
             return {
@@ -26,7 +31,8 @@
                 var searchUrlContainers = document.querySelectorAll(searchRoutesSelector);
                 if (searchUrlContainers && searchUrlContainers.length > 0) {
                     var searchUrl = '/' + searchUrlContainers[0].value;
-                    this.$http.post(searchUrl, { SearchQuery: this.searchQuery })
+
+                    this.$http.post(searchUrl, { SearchQuery: this.searchQuery, PageId: this.pageId, CategoryId: this.categoryId })
                         .then(function (response) {
                             if (response.data)
                                 this.searchResult = response.data;
@@ -37,7 +43,8 @@
                 var suggestionsUrlContainers = document.querySelectorAll(suggestionRoutesSelector);
                 if (suggestionsUrlContainers && suggestionsUrlContainers.length > 0) {
                     var searchSuggestionsUrl = '/' + suggestionsUrlContainers[0].value;
-                    this.$http.post(searchSuggestionsUrl, { SearchQuery: this.searchQuery })
+
+                    this.$http.post(searchSuggestionsUrl, { SearchQuery: this.searchQuery, PageId: this.pageId, CategoryId: this.categoryId })
                         .then(function (response) {
                             if (response.data)
                                 this.suggestions = response.data;
