@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
 {
@@ -24,5 +25,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public CategoryNavigationCurrencyViewModel CurrentCurrency { get; set; }
 
         public Dictionary<string, string> Routes { get; set; }
+
+        public Guid ProductDetailsPageId { get; set; }
+
     }
 }

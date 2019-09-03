@@ -18,13 +18,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     internal class CategoryModel : ICategoryModel
     {
-        public CategoryModel(bool hideMiniBasket, bool allowChangingCurrency, Guid? imageId = null, Guid? categoryPageId = null, Guid? searchPageId = null)
+        public CategoryModel(bool hideMiniBasket, bool allowChangingCurrency, Guid? imageId = null, Guid? categoryPageId = null, Guid? searchPageId = null, Guid? productDetailsPageId = null)
         {
             this.hideMiniBasket = hideMiniBasket;
             this.allowChangingCurrency = allowChangingCurrency;
             this.imageId = imageId ?? Guid.Empty;
             this.categoryPageId = categoryPageId ?? Guid.Empty;
             this.searchPageId = searchPageId ?? Guid.Empty;
+            this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
         }
 
         public CategoryNavigationViewModel CreateViewModel()
@@ -39,6 +40,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 DisplayName = currentPriceGroup.Name,
                 PriceGroupId = currentPriceGroup.PriceGroupId,
             };
+
+            categoryNavigationViewModel.ProductDetailsPageId = this.productDetailsPageId;
 
             this.MapConfigurationFields(categoryNavigationViewModel);
 
@@ -146,5 +149,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         private bool allowChangingCurrency;
         private Guid categoryPageId;
         private Guid searchPageId;
+        private Guid productDetailsPageId;
     }
 }

@@ -20,6 +20,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public Guid? SearchPageId { get; set; }
 
+        public Guid? ProductDetailsPageId { get; set; }
+
         public string TemplateName { get; set; } = "QuantumIndex";
 
         [RelativeRoute("{name?}")]
@@ -62,7 +64,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                     allowChangingCurrency = this.AllowChangingCurrency,
                     imageId = this.ImageId,
                     categoryPageId = this.CategoryPageId,
-                    searchPageId = this.SearchPageId
+                    searchPageId = this.SearchPageId,
+                    productDetailsPageId = this.ProductDetailsPageId 
                 });
 
             return model;

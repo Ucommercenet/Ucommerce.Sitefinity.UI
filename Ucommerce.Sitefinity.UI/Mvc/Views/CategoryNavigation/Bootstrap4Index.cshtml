@@ -58,7 +58,7 @@
             }
 
 
-            <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" ref="search">
+            <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :product-details-page-id="'@Model.ProductDetailsPageId'" :root-id="$el.id" ref="search">
             </search>
         </div>
     </header>
