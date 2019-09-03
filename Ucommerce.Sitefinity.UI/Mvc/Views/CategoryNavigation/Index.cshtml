@@ -15,47 +15,10 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-@helper DisplayCategories(IList<CategoryNavigationCategoryViewModel> categories, bool topLevel)
-{
-    var categoryClass = "category-parent";
-    if (!topLevel)
-    {
-        categoryClass = "category-child closed";
-    }
-
-    <ul class=" @categoryClass">
-        @foreach (var category in categories)
-        {
-            var selected = category.IsActive ? "selected" : "";
-            var categoryHref = category.Url;
-            <li class="@selected">
-
-                @if (category.Categories.Count > 0)
-                {
-                    categoryHref = "";
-                }
-                <a style="" href="@categoryHref">
-                    @category.DisplayName
-                    @if (topLevel && category.Categories.Count > 0)
-                    {
-                        <span>&#709;</span>
-                    }
-                    @if (!topLevel && category.Categories.Count > 0)
-                    {
-                        <span>&#707;</span>
-                    }
-                </a>
-
-                @if (category.Categories.Count > 0)
-                {
-                    @DisplayCategories(category.Categories, false)
-                }
-            </li>
-        }
-    </ul>
-}
-
 <div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
+    <script type="application/json" data-items="true">
+        { "items" : @Html.Raw(JsonConvert.SerializeObject(Model.Categories)) }
+    </script>
     <header>
         <div>
             <nav>
@@ -65,7 +28,7 @@
 
                 @if (Model.Categories.Count > 0)
                 {
-                    @DisplayCategories(Model.Categories, true)
+                    <dropdown-menu :nodes="items"></dropdown-menu>
                 }
 
                 <ul>
@@ -73,19 +36,7 @@
                     {
                         var currencies = JsonConvert.SerializeObject(Model.Currencies);
                         var currentCurrency = JsonConvert.SerializeObject(Model.CurrentCurrency);
-                        <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id" inline-template>
-                            <li>
-                                <a v-on:click="toggleCurrenciesVisibility">
-                                    <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><span>&#709;</span>
-                                </a>
-                                <ul v-show="showCurrencies">
-                                    <li v-for="currency in currencies">
-                                        <a href="javascript:void(0)" v-on:click="setCurrency(currency.PriceGroupId)">
-                                            <span>{{currency.DisplayName}}</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                        <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id">
                         </currency-selector>
                     }
 
@@ -93,15 +44,7 @@
 
                     @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
                     {
-                        <basket :root-id="$el.id" inline-template>
-                            <li v-bind:class="basket && basket.orderLines && basket.orderLines.length > 0 ? 'active' : ''">
-                                <a href="javascript:void(0)">
-                                    <span>
-                                        <span class="">{{basketLoaded ? basket.NumberOfItemsInBasket : ''}}</span>
-                                        <span>&#128722;</span>
-                                    </span>
-                                </a>
-                            </li>
+                        <basket :root-id="$el.id">
                         </basket>
                     }
                 </ul>
@@ -112,92 +55,120 @@
             <input type="hidden" class="@route.Key" value="@route.Value" />
         }
 
-        <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" ref="search" inline-template>
-
-            <div v-show="showSearchBar">
-                <div>
-                    <button v-on:click="closeSearch"><span>&#215;</span></button>
-
-                    <div>
-
-                        <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" _lpchecked="1">
-                            <span>&#128269;</span>
-                            <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" placeholder="Search for products">
-                        </form>
-
-                        <form v-if="searchPageUrl === ''" v-on:submit.prevent _lpchecked="1">
-                            <span>&#128269;</span>
-                            <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" placeholder="Search for products">
-                        </form>
-
-                        <div>
-                            <ul v-show="searchResult.length !== 0 || suggestions.length !== 0">
-                                <li v-for="suggestion in suggestions" v-on:click="searchQuery = suggestion;search()">
-                                    <span>
-                                    </span>
-                                    <span>
-                                        <span>{{suggestion}}</span>
-                                    </span>
-                                </li>
-                                <li v-for="product in searchResult">
-                                    <a v-bind:href="product.Url">
-                                        <span>
-                                            <img v-bind:src="product.ThumbnailImageUrl" alt="">
-                                        </span>
-                                        <span>
-                                            <span>{{product.Name}}</span>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <a v-show="searchPageUrl !== ''" v-bind:href="searchPageHref()">Show all results</a>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+        <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :root-id="$el.id" ref="search">
         </search>
     </header>
 </div>
 
-<script>
-    (function () {
-        var categories = document.querySelectorAll('.category-parent > li');
+<script type="text/x-template" id="dropdown-menu-template">
+    <ul class="navbar-nav mr-auto category-parent">
+        <li v-for="node in nodes"
+            v-bind:key="node.DisplayName"
+            v-on:click.stop.prevent="nodeClicked(node)">
+            <a v-if="node.Categories.length > 0"
+               :href="node.Url"
+               :id="node.DisplayName">
+                {{node.DisplayName}}<i class="fa fa-chevron-down"></i>
+            </a>
+            <a v-else
+               v-on:click.stop
+               :href="node.Url">
+                {{node.DisplayName}}
+            </a>
+            <dropdown-submenu :parent-node="node"></dropdown-submenu>
+        </li>
+    </ul>
+</script>
 
-        for (var i = 0; i < categories.length; i++) {
-            categories[i].addEventListener('click', function () {
+<script type="text/x-template" id="dropdown-submenu-template">
+    <ul :aria-labelledby="parentNode.DisplayName">
+        <li v-for="node in parentNode.Categories"
+            v-bind:key="node.DisplayName"
+            v-on:click.stop.prevent="nodeClicked(node)">
+            <a v-if="node.Categories.length > 0"
+               :href="node.Url"
+               :id="node.DisplayName">
+                {{node.DisplayName}}<i class="fa fa-chevron-right"></i>
+            </a>
+            <a v-else
+               v-on:click.stop
+               :href="node.Url">
+                {{node.DisplayName}}
+            </a>
+            <dropdown-submenu :parent-node="node"></dropdown-submenu>
+        </li>
+    </ul>
+</script>
 
-                var children = this.children;
-                var otherChildren = document.querySelectorAll('.category-child');
-                for (var i = 0; i < children.length; i++) {
+<script type="text/x-template" id="currency-selector-template">
+    <li>
+        <a v-on:click="toggleCurrenciesVisibility">
+            <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><span>&#709;</span>
+        </a>
+        <ul v-show="showCurrencies">
+            <li v-for="currency in currencies">
+                <a href="javascript:void(0)" v-on:click="setCurrency(currency.PriceGroupId)">
+                    <span>{{currency.DisplayName}}</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+</script>
 
-                    if (children[i].classList.contains('closed')) {
+<script type="text/x-template" id="basket-template">
+    <li v-bind:class="basket && basket.orderLines && basket.orderLines.length > 0 ? 'active' : ''">
+        <a href="javascript:void(0)">
+            <span>
+                <span class="">{{basketLoaded ? basket.NumberOfItemsInBasket : ''}}</span>
+                <span>&#128722;</span>
+            </span>
+        </a>
+    </li>
+</script>
 
-                        for (var j = 0; j < otherChildren.length; j++) {
+<script type="text/x-template" id="search-template">
+    <div v-show="showSearchBar">
+        <div>
+            <button v-on:click="closeSearch"><span>&#215;</span></button>
 
-                            if (otherChildren[j].classList.contains('open')) {
-                                otherChildren[j].classList.remove("open");
-                                otherChildren[j].classList.add("closed");
-                            }
-                        }
+            <div>
 
-                        this.children[i].classList.remove("closed");
-                        this.children[i].classList.add("open");
-                    } else if (children[i].classList.contains('open')) {
+                <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" _lpchecked="1">
+                    <span>&#128269;</span>
+                    <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" placeholder="Search for products">
+                </form>
 
-                        var otherChildren = document.querySelectorAll('.category-child');
-                        for (var j = 0; j < otherChildren.length; j++) {
+                <form v-if="searchPageUrl === ''" v-on:submit.prevent _lpchecked="1">
+                    <span>&#128269;</span>
+                    <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" placeholder="Search for products">
+                </form>
 
-                            if (otherChildren[j].classList.contains('open')) {
-                                otherChildren[j].classList.remove("open");
-                                otherChildren[j].classList.add("closed");
-                            }
-                        }
-                    }
-                }
-            }, false);
-        }
-    });
+                <div>
+                    <ul v-show="searchResult.length !== 0 || suggestions.length !== 0">
+                        <li v-for="suggestion in suggestions" v-on:click="searchQuery = suggestion;search()">
+                            <span>
+                            </span>
+                            <span>
+                                <span>{{suggestion}}</span>
+                            </span>
+                        </li>
+                        <li v-for="product in searchResult">
+                            <a v-bind:href="product.Url">
+                                <span>
+                                    <img v-bind:src="product.ThumbnailImageUrl" alt="">
+                                </span>
+                                <span>
+                                    <span>{{product.Name}}</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <a v-show="searchPageUrl !== ''" v-bind:href="searchPageHref()">Show all results</a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </script>

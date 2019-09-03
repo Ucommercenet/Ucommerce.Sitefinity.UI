@@ -128,7 +128,7 @@ header {
 }
 
 .main-nav.main-nav--right.hide--m {
-    width: 15%;
+    width: auto;
 }
 
 .main-nav .toggle-cart a {
@@ -483,6 +483,42 @@ ul.search__suggest {
 
 .open {
     display: block;
+}
+
+ul.category-child .category-child.open {
+    top: 50%;
+    right: auto;
+    left: 100%;
+    margin-top: 0;
+    margin-left: 0.125rem;
+}
+
+.btn-navcategory {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+    .btn-navcategory:active,
+    .btn-navcategory::selection,
+    .btn-navcategory:focus,
+    .btn-navcategory:checked,
+    .btn-navcategory:visited {
+        border: none;
+        box-shadow: none;
+        outline: 0;
+    }
+
+.float-left {
+    float: left;
+}
+
+.position-absolute {
+    position: absolute;
+}
+
+.mr-30 {
+    margin-right: 30px!important;
 }
 
 /*

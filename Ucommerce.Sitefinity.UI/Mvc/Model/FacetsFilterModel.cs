@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Raven.Client.Linq;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Pages;
 using Ucommerce.Sitefinity.UI.Mvc.Controllers;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using Ucommerce.Sitefinity.UI.Pages;
 using Ucommerce.Sitefinity.UI.Search;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
@@ -33,14 +33,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         {
             var facetsResolver = new FacetResolver(this.queryStringBlackList);
             var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
-            var allFacets = SearchLibrary.FacetedQuery()
-                .WithFacets(facetsForQuerying)
-                .ToFacets()
-                .ToList();
+            IList<UCommerce.Search.Facets.Facet> allFacets;
 
             if (category != null)
             {
-                allFacets = SearchLibrary.GetFacetsFor(category, allFacets).ToList();
+                allFacets = SearchLibrary.GetFacetsFor(category, facetsForQuerying);
+            }
+            else
+            {
+                allFacets = SearchLibrary.FacetedQuery()
+                      .WithFacets(facetsForQuerying)
+                      .ToFacets()
+                      .ToList();
             }
 
             return this.MapToFacetsViewModel(allFacets);
@@ -69,6 +73,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             }).ToList();
         }
 
-        private IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog" };
+        private readonly IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog" };
     }
 }

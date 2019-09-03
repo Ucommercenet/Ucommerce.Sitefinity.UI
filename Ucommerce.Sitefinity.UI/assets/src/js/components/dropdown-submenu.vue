@@ -16,8 +16,12 @@
                 return this.parentNode.IsActive;
             }
         },
+        created: function () {
+            this.parentNode.IsActive = false;
+        },
         methods: {
             nodeClicked: function (node) {
+                
                 node.IsActive = !node.IsActive;
 
                 if (typeof this.selectedNode !== "undefined" && this.selectedNode !== node) {
