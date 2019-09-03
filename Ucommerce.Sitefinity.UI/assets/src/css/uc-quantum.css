@@ -128,7 +128,7 @@ header {
 }
 
 .main-nav.main-nav--right.hide--m {
-    width: 15%;
+    width: auto;
 }
 
 .main-nav .toggle-cart a {
