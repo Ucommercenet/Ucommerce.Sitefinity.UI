@@ -10,13 +10,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     {
         public string TemplateName { get; set; } = "FacetsFilter.Main";
 
-        [RelativeRoute("{categoryName?}/{page?}")]
-        public ActionResult Index(string categoryName, int? page)
+        [RelativeRoute("{categoryName?}")]
+        [RelativeRoute("{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        public ActionResult Index()
         {
             try
             {
                 var model = this.ResolveModel();
-                var viewModel = model.CreateViewModel(categoryName);
+                var viewModel = model.CreateViewModel();
 
                 return this.View(this.TemplateName, viewModel);
             }

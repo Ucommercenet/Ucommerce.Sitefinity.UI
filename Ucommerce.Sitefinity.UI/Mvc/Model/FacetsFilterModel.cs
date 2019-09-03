@@ -9,13 +9,14 @@ using Ucommerce.Sitefinity.UI.Pages;
 using Ucommerce.Sitefinity.UI.Search;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
+using UCommerce.Runtime;
 using UCommerce.Search;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public class FacetsFilterModel : IFacetsFilterModel
     {
-        public IList<FacetViewModel> CreateViewModel(string categoryName)
+        public IList<FacetViewModel> CreateViewModel()
         {
             var pageContext = SystemManager.CurrentHttpContext.GetPageContext();
             var categoryIds = pageContext.GetValue<ProductsController>(p => p.CategoryIds);
@@ -25,7 +26,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 return this.MapFacetsByManualSelection(categoryIds, productIds);
             }
 
-            var currentCategory = Category.FirstOrDefault(c => c.Name == categoryName);
+            var currentCategory = Category.FirstOrDefault(c => c.Name == SiteContext.Current.CatalogContext.CurrentCategory.Name);
             return this.GetAllFacets(currentCategory);
         }
 

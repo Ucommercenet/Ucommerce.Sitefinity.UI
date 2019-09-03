@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using Ucommerce.Sitefinity.UI.Api.Model;
 using Ucommerce.Sitefinity.UI.Constants;
+using Ucommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
@@ -54,7 +55,7 @@ namespace Ucommerce.Sitefinity.UI.Api
 
             foreach (var product in products)
             {
-                string categoryName = "products";
+                string catUrl =  CategoryModel.DefaultCategoryName;
 
                 if (product.CategoryIds != null && product.CategoryIds.Any())
                 {
@@ -64,7 +65,7 @@ namespace Ucommerce.Sitefinity.UI.Api
 
                     if (productCategory != null)
                     {
-                        categoryName = productCategory.Name;
+                        catUrl = CategoryModel.GetCategoryPath(productCategory);
                     }
                 }
 
@@ -79,9 +80,8 @@ namespace Ucommerce.Sitefinity.UI.Api
                         detailsPageUrl += "/";
                     }
 
-                    detailsPageUrl += categoryName + "/" + product.Id.ToString();
+                    detailsPageUrl += catUrl + "/" + product.Id.ToString();
                     detailsPageUrl = Pages.UrlResolver.GetAbsoluteUrl(detailsPageUrl);
-
                 }
 
                 if (string.IsNullOrWhiteSpace(detailsPageUrl))

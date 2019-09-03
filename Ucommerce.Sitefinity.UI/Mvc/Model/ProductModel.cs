@@ -167,20 +167,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 baseUrl = UrlResolver.GetPageNodeUrl(detailPageId);
             }
 
-            string categoryName;
+            string catUrl;
             var productCategory = category ?? product.GetCategories().FirstOrDefault();
             if (productCategory == null)
             {
-                categoryName = "general";
+                catUrl = CategoryModel.DefaultCategoryName;
             }
             else
             {
-                categoryName = productCategory.Name;
+                catUrl = CategoryModel.GetCategoryPath(productCategory);
             }
 
-            var rawtUrl = string.Format("{0}/{1}", categoryName, product.ProductId);
-            var sanitizedUrl = ControlUtilities.SanitizeUrl(rawtUrl);
-            string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", sanitizedUrl);
+            var rawtUrl = string.Format("{0}/{1}", catUrl, product.ProductId);
+            string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", rawtUrl);
 
             string url;
 

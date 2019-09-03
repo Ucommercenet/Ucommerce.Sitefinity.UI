@@ -90,7 +90,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 result.Add(new CategoryNavigationCategoryViewModel()
                 {
                     DisplayName = category.DisplayName(),
-                    Url = this.GetCategoryUrl(category.Name),
+                    Url = this.GetCategoryUrl(category),
                     Categories = this.MapCategories(category.Categories.Where(x => x.DisplayOnSite).ToList(), currentCategory),
                     IsActive = currentCategory != null && currentCategory.Guid == category.Guid,
                 });
@@ -117,7 +117,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return categoryNavigationCurrencyViewModels;
         }
 
-        private string GetCategoryUrl(string categoryName)
+        private string GetCategoryUrl(Category category)
         {
             var baseUrl = string.Empty;
             if (this.categoryPageId == Guid.Empty)
@@ -129,12 +129,13 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 baseUrl = UrlResolver.GetPageNodeUrl(this.categoryPageId);
             }
 
-            var relativeCategoryUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", categoryName);
+            var catUrl = GetCategoryPath(category);
+            string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", catUrl);
             string url;
 
             if (SystemManager.CurrentHttpContext.Request.Url != null)
             {
-                url = UrlPath.ResolveUrl(relativeCategoryUrl, true);
+                url = UrlPath.ResolveUrl(relativeUrl, true);
             }
             else
             {
@@ -144,11 +145,29 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return url;
         }
 
+        internal static string GetCategoryPath(Category category)
+        {
+            var catNames = new List<string>();
+            var cat = category;
+
+            while (cat != null)
+            {
+                catNames.Add(cat.Name);
+                cat = cat.ParentCategory;
+            }
+
+            catNames.Reverse();
+            var catUrl = String.Join("/", catNames.ToArray());
+
+            return catUrl;
+        }
+
         private Guid imageId;
         private bool hideMiniBasket;
         private bool allowChangingCurrency;
         private Guid categoryPageId;
         private Guid searchPageId;
         private Guid productDetailsPageId;
+        internal static string DefaultCategoryName = "Tops";
     }
 }

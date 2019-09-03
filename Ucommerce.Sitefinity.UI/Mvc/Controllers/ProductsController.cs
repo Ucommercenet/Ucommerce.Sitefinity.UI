@@ -25,6 +25,12 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public string DetailTemplateName { get; set; } = "Details";
 
+        [RelativeRoute("{categoryName?}")]
+        [RelativeRoute("{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
         public ActionResult Index()
         {
             ProductListViewModel viewModel;
@@ -48,7 +54,12 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             }
         }
 
-        [RelativeRoute("{categoryName}/{productId}")]
+        [RelativeRoute("{categoryName}/{productId:int}")]
+        [RelativeRoute("{parentCategory1?}/{categoryName}/{productId:int}")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/{categoryName}/{productId:int}")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/{productId:int}")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/{productId:int}")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/{productId:int}")]
         public ActionResult Details()
         {
             var productModel = this.ResolveModel();

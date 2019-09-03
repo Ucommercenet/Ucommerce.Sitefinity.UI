@@ -65,7 +65,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Filters
                 {
                     for (int i = urlSegments.Count - 1; i >= 0; i--)
                     {
-                        var cat = categories.FirstOrDefault(p => urlSegments.Contains(p.Name.ToString()));
+                        var cat = categories.FirstOrDefault(p => urlSegments[i] == p.Name);
 
                         if (cat != null)
                         {
