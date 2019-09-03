@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using Telerik.Sitefinity.Frontend.Mvc.Helpers;
-using Telerik.Sitefinity.Modules.GenericContent;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
-using Telerik.Sitefinity.Web.DataResolving;
 using UCommerce.Runtime;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Filters
