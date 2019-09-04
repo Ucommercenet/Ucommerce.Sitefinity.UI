@@ -1,15 +1,28 @@
 ﻿@media only screen and (max-width: 991px) {
 
-    .nav-item.dropdown.dropright a.float-left,
-    .nav-item.dropdown.dropright button.float-left {
-        float: none;
+    .nav-item.dropdown.dropright{
+        text-align: center;
     }
 
-    .nav-item.dropdown.dropright a.float-left{
-        margin: 0 !important;
+    .nav-item.dropdown.dropright a.float-left,
+    .nav-item.dropdown.dropright button.float-left {
+        float: none !important;
     }
+
+        .nav-item.dropdown.dropright button.float-left {
+            top: 0;
+            right: 0;
+        }
+
+        .nav-item.dropdown.dropright a.float-left {
+            margin: 0 !important;
+        }
 
     .nav-item.dropdown.dropright a {
         display: inline-block;
+    }
+
+    .navbar-nav li {
+        margin-left: 1.5rem !important;
     }
 }
