@@ -61,20 +61,25 @@
 </div>
 
 <script type="text/x-template" id="dropdown-menu-template">
-    <ul class="navbar-nav mr-auto category-parent">
+    <ul>
         <li v-for="node in nodes"
-            v-bind:key="node.DisplayName"
-            v-on:click.stop.prevent="nodeClicked(node)">
+            v-bind:key="node.DisplayName">
             <a v-if="node.Categories.length > 0"
                :href="node.Url"
                :id="node.DisplayName">
-                {{node.DisplayName}}<i class="fa fa-chevron-down"></i>
+                {{node.DisplayName}}
             </a>
+
             <a v-else
                v-on:click.stop
                :href="node.Url">
                 {{node.DisplayName}}
             </a>
+            <button v-if="node.Categories.length > 0"
+                    v-on:click.stop.prevent="nodeClicked(node)"
+                    style="width: 25px; height: auto;">
+                <span><strong>&#709;</strong></span>
+            </button>
             <dropdown-submenu :parent-node="node"></dropdown-submenu>
         </li>
     </ul>
@@ -83,18 +88,22 @@
 <script type="text/x-template" id="dropdown-submenu-template">
     <ul :aria-labelledby="parentNode.DisplayName">
         <li v-for="node in parentNode.Categories"
-            v-bind:key="node.DisplayName"
-            v-on:click.stop.prevent="nodeClicked(node)">
+            v-bind:key="node.DisplayName">
             <a v-if="node.Categories.length > 0"
                :href="node.Url"
                :id="node.DisplayName">
-                {{node.DisplayName}}<i class="fa fa-chevron-right"></i>
+                {{node.DisplayName}}
             </a>
             <a v-else
                v-on:click.stop
                :href="node.Url">
                 {{node.DisplayName}}
             </a>
+            <button v-if="node.Categories.length > 0"
+                    v-on:click.stop.prevent="nodeClicked(node)"
+                    style="width: 25px; height: auto;">
+                <span><strong>&#709;</strong></span>
+            </button>
             <dropdown-submenu :parent-node="node"></dropdown-submenu>
         </li>
     </ul>
@@ -102,9 +111,14 @@
 
 <script type="text/x-template" id="currency-selector-template">
     <li>
-        <a v-on:click="toggleCurrenciesVisibility">
-            <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span><span>&#709;</span>
-        </a>
+
+        <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span>
+
+        <button v-if="node.Categories.length > 0"
+                v-on:click="toggleCurrenciesVisibility"
+                style="width: 25px; height: auto;">
+            <span><strong>&#709;</strong></span>
+        </button>
         <ul v-show="showCurrencies">
             <li v-for="currency in currencies">
                 <a href="javascript:void(0)" v-on:click="setCurrency(currency.PriceGroupId)">
