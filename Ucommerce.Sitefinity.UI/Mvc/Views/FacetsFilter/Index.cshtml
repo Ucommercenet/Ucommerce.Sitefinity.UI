@@ -12,7 +12,7 @@
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
     }
 
-    <div id="@Html.UniqueId("facetFilter")">
+    <div data-component="facet-selector" id="@Html.UniqueId("facetFilter")">
         <script type="application/json" data-facets="true">
             { "facets" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
         </script>
