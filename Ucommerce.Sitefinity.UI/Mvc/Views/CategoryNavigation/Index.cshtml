@@ -69,9 +69,7 @@
                :id="node.DisplayName">
                 {{node.DisplayName}}
             </a>
-
             <a v-else
-               v-on:click.stop
                :href="node.Url">
                 {{node.DisplayName}}
             </a>
@@ -95,8 +93,8 @@
                 {{node.DisplayName}}
             </a>
             <a v-else
-               v-on:click.stop
-               :href="node.Url">
+               :href="node.Url"
+               v-on:click.stop>
                 {{node.DisplayName}}
             </a>
             <button v-if="node.Categories.length > 0"
@@ -104,18 +102,15 @@
                     style="width: 25px; height: auto;">
                 <span><strong>&#709;</strong></span>
             </button>
-            <dropdown-submenu :parent-node="node"></dropdown-submenu>
+            <dropdown-submenu v-if="node.Categories.length > 0" :parent-node="node"></dropdown-submenu>
         </li>
     </ul>
 </script>
 
 <script type="text/x-template" id="currency-selector-template">
     <li>
-
         <span style="display: inline-block;">{{currentCurrency.DisplayName}}</span>
-
-        <button v-if="node.Categories.length > 0"
-                v-on:click="toggleCurrenciesVisibility"
+        <button v-on:click="toggleCurrenciesVisibility"
                 style="width: 25px; height: auto;">
             <span><strong>&#709;</strong></span>
         </button>
