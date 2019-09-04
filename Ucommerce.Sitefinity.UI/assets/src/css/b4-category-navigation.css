@@ -1,0 +1,15 @@
+﻿@media only screen and (max-width: 991px) {
+
+    .nav-item.dropdown.dropright a.float-left,
+    .nav-item.dropdown.dropright button.float-left {
+        float: none;
+    }
+
+    .nav-item.dropdown.dropright a.float-left{
+        margin: 0 !important;
+    }
+
+    .nav-item.dropdown.dropright a {
+        display: inline-block;
+    }
+}

@@ -422,6 +422,7 @@
   <ItemGroup>
     <EmbeddedResource Include="assets\src\css\uc-quantum.css" />
     <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
+    <EmbeddedResource Include="assets\src\css\b4-category-navigation.css" />
     <Content Include="assets\src\index.js" />
     <Content Include="assets\src\js\functions\init.js" />
     <Content Include="assets\src\js\widgets\category-navigation.js" />
