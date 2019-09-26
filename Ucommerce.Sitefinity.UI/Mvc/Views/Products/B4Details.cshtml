@@ -83,6 +83,40 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="mt-3">
+                            @{
+                                var uniqueVariants = from v in Model.Variants.SelectMany(p => p.ProductProperties)
+                                                     where v.ProductDefinitionField.DisplayOnSite
+                                                     group v by v.ProductDefinitionField into g
+                                                     select g;
+
+                                if (uniqueVariants.Any())
+                                {
+                                    <fieldset class="options">
+                                        @foreach (var prop in uniqueVariants)
+                                        {
+                                            var controlName = string.Format("variation-{0}", prop.Key.Name.ToLower());
+                                            <div class="general">
+                                                <label for="@controlName">@prop.Key.GetDisplayName()</label>
+                                                <span class="wrap">
+                                                    <select name="@controlName" id="@controlName" class="variant">
+                                                        <option>Please select ...</option>
+                                                        @foreach (var value in prop.Select(p => p.Value).Distinct())
+                                                        {
+                                                            <option value="@value">@value</option>
+                                                        }
+                                                    </select>
+                                                </span>
+                                            </div>
+                                        }
+                                    </fieldset>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-sx-12 col-sm-6 col-md-6 col-lg-6">
 
                         @foreach (var route in Model.Routes)

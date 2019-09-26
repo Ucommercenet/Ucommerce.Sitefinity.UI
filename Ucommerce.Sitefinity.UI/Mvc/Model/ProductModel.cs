@@ -6,7 +6,6 @@ using System.Web;
 using Telerik.Sitefinity;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
-using Telerik.Sitefinity.Web.UI;
 using Ucommerce.Sitefinity.UI.Constants;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce.Sitefinity.UI.Pages;
@@ -132,6 +131,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 {
                     var variantViewModel = new ProductDetailViewModel
                     {
+                        ProductProperties = variant.ProductProperties,
                         Sku = variant.Sku,
                         Guid = variant.Guid,
                         VariantSku = variant.VariantSku,
