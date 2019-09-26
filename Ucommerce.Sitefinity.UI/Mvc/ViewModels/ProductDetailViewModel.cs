@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UCommerce.EntitiesV2;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
 {
@@ -54,5 +55,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public bool AllowOrdering { get; set; }
 
         public Dictionary<string, string> Routes { get; set; }
+
+        public ICollection<ProductProperty> ProductProperties { get; internal set; }
     }
 }
