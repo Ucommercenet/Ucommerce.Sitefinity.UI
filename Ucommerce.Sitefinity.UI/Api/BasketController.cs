@@ -67,7 +67,8 @@ namespace Ucommerce.Sitefinity.UI.Api
         [HttpPost]
         public IHttpActionResult Add(AddToBasketModel model)
         {
-            return Ok();
+            TransactionLibrary.AddToBasket(model.Quantity, model.Sku, model.VariantSku);
+            return Json(this.GetBasketModel());
         }
 
         private BasketModel GetBasketModel()
