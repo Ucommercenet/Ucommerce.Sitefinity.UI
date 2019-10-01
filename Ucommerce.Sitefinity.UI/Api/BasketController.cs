@@ -55,19 +55,12 @@ namespace Ucommerce.Sitefinity.UI.Api
             return Json(this.GetBasketModel());
         }
 
-        [Route("AddToBasket")]
-        [HttpPost]
-        public IHttpActionResult AddToBasket(AddToBasketModel model)
-        {
-            TransactionLibrary.AddToBasket(model.Quantity, model.Sku, model.VariantSku);
-            return Json(this.GetBasketModel());
-        }
-
         [Route(RouteConstants.ADD_TO_BASKET_ROUTE_VALUE)]
         [HttpPost]
         public IHttpActionResult Add(AddToBasketModel model)
         {
-            return Ok();
+            TransactionLibrary.AddToBasket(model.Quantity, model.Sku, model.VariantSku);
+            return Json(this.GetBasketModel());
         }
 
         private BasketModel GetBasketModel()

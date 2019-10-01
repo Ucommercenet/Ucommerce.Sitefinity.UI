@@ -1,8 +1,10 @@
-﻿using System.Web.Mvc;
-using Castle.MicroKernel.Registration;
+﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using System.Web.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
+using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces.Impl;
 
 namespace Ucommerce.Sitefinity.UI.DI
 {
@@ -43,6 +45,18 @@ namespace Ucommerce.Sitefinity.UI.DI
                  Component
                  .For<ICategoryModel>()
                  .ImplementedBy<CategoryModel>()
+                 .LifestylePerWebRequest());
+
+            container.Register(
+                 Component
+                 .For<IMiniBasketService>()
+                 .ImplementedBy<MiniBasketService>()
+                 .LifestylePerWebRequest());
+
+            container.Register(
+                 Component
+                 .For<IMiniBasketModel>()
+                 .ImplementedBy<MiniBasketModel>()
                  .LifestylePerWebRequest());
         }
     }

@@ -21,9 +21,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public string CategoryIds { get; set; }
 
-        public string ListTemplateName { get; set; } = "Index";
+        public string ListTemplateName { get; set; } = "B4Index";
 
-        public string DetailTemplateName { get; set; } = "Details";
+        public string DetailTemplateName { get; set; } = "B4Details";
 
         [RelativeRoute("{categoryName?}")]
         [RelativeRoute("{parentCategory1?}/{categoryName?}")]

@@ -10,6 +10,10 @@ function initProducts(rootElement) {
             addToBasket
         },
         props: {
+            variantSku: {
+                type: String,
+                default: null
+            },
             productGuid: '',
             variantGuid: '',
             price: 0,
