@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
 
@@ -23,24 +20,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            var miniBasketViewModel = new MiniBasketRenderingViewModel
-            {
-                IsEmpty = true,
-                RefreshUrl = Url.Action("Refresh")
-            };
+            var miniBasketModel = ResolveModel();
+            var miniBasketRenderingViewModel = miniBasketModel.CreateViewModel(Url.Action("Refresh"));
 
             if (!_transactionLibraryInternal.HasBasket())
             {
-                return View("Index", miniBasketViewModel);
+                return View("Index", miniBasketRenderingViewModel);
             }
 
-            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-
-            miniBasketViewModel.NumberOfItems = purchaseOrder.OrderLines.Sum(x => x.Quantity);
-            miniBasketViewModel.IsEmpty = miniBasketViewModel.NumberOfItems == 0;
-            miniBasketViewModel.Total = purchaseOrder.OrderTotal.HasValue ? new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency) : new Money(0, purchaseOrder.BillingCurrency);
-
-            return View("Index", miniBasketViewModel);
+            return View("Index", miniBasketRenderingViewModel);
         }
 
         [HttpGet]
@@ -52,6 +40,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         protected override void HandleUnknownAction(string actionName)
         {
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+        }
+
+        private IMiniBasketModel ResolveModel()
+        {
+            return UcommerceUIModule.Container.Resolve<IMiniBasketModel>();
         }
     }
 }

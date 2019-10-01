@@ -52,6 +52,12 @@ namespace Ucommerce.Sitefinity.UI.DI
                  .For<IMiniBasketService>()
                  .ImplementedBy<MiniBasketService>()
                  .LifestylePerWebRequest());
+
+            container.Register(
+                 Component
+                 .For<IMiniBasketModel>()
+                 .ImplementedBy<MiniBasketModel>()
+                 .LifestylePerWebRequest());
         }
     }
 }

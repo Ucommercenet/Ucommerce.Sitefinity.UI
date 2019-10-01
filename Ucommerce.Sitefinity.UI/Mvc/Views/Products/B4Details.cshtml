@@ -10,6 +10,7 @@
 {
     if (!SystemManager.IsDesignMode)
     {
+        @Html.Script(Url.WidgetContent("scripts/jsMiniBasket.js"), "bottom", false)
         @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
     }
@@ -90,7 +91,6 @@
                                                      where v.ProductDefinitionField.DisplayOnSite
                                                      group v by v.ProductDefinitionField into g
                                                      select g;
-
                                 if (uniqueVariants.Any())
                                 {
                                     <fieldset class="options">
@@ -100,11 +100,14 @@
                                             <div class="general">
                                                 <label for="@controlName">@prop.Key.GetDisplayName()</label>
                                                 <span class="wrap">
-                                                    <select name="@controlName" id="@controlName" class="variant">
+                                                    <select v-model="variantSku" name="@controlName" id="@controlName" class="variant">
+                                                        @{
+                                                            var products = prop.GroupBy(p => p.Value).Select(g => g.First()).ToList();
+                                                        }
                                                         <option>Please select ...</option>
-                                                        @foreach (var value in prop.Select(p => p.Value).Distinct())
+                                                        @foreach (var product in products)
                                                         {
-                                                            <option value="@value">@value</option>
+                                                            <option value="@product.Product.VariantSku">@product.Value</option>
                                                         }
                                                     </select>
                                                 </span>
@@ -124,7 +127,7 @@
                             <input type="hidden" class="@route.Key" value="@route.Value" />
                         }
 
-                        <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id">
+                        <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" :variant-sku="variantSku">
                         </add-to-basket>
                     </div>
                 </div>
@@ -166,7 +169,7 @@
             </span>
             <input title="Product Quantity" id="productQuantityInput" v-model="quantity" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" class="form-control" />
 
-            <input type="submit" title="Add to cart button" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addToBasket()" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
+            <input type="submit" title="Add to cart button" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addToBasket" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="btn btn-info mt-2" />
             <span class="text-success pl-2 pt-1 position-absolute" v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
         </div>
     </script>
