@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
@@ -16,12 +12,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
     public class CartModel : ICartModel
     {
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
+        private Guid nextStepId;
 
-        public CartModel()
+        public CartModel(Guid? nextStepId = null)
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-
+            this.nextStepId = nextStepId ?? Guid.Empty;
         }
+
         public CartRenderingViewModel CreateViewModel(string refreshUrl, string removeOrderLineUrl)
         {
             var basketVM = new CartRenderingViewModel();
@@ -48,7 +46,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 orderLineViewModel.ProductUrl = CatalogLibrary.GetNiceUrlForProduct(CatalogLibrary.GetProduct(orderLine.Sku));
                 orderLineViewModel.PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), basket.BillingCurrency).ToString();
                 orderLineViewModel.OrderLineId = orderLine.OrderLineId;
-
                 basketVM.OrderLines.Add(orderLineViewModel);
             }
 
@@ -56,6 +53,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             basketVM.DiscountTotal = new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.SubTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+            basketVM.NextStepUrl = GetNextStepAbsoluteUrl(nextStepId);
 
             basketVM.RefreshUrl = refreshUrl;
             basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
@@ -107,6 +105,13 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             updatedBasket.SubTotal = subTotal;
 
             return updatedBasket;
+        }
+
+        private string GetNextStepAbsoluteUrl(Guid nextStepId)
+        {
+            var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
         }
     }
 }

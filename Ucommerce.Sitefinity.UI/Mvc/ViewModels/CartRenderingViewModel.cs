@@ -26,7 +26,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public OrderAddress BillingAddress { get; set; }
         public string RefreshUrl { get; set; }
         public string RemoveOrderlineUrl { get; set; }
-
+        public string NextStepUrl { get; set; }
         public class OrderlineViewModel
         {
             public string Total { get; set; }

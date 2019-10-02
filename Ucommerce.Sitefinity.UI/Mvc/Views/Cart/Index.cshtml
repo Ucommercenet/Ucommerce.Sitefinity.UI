@@ -7,6 +7,7 @@
 
 @model Ucommerce.Sitefinity.UI.Mvc.ViewModels.CartRenderingViewModel
 
+
 @if (Model.OrderLines.Count == 0)
 {
     <div class="alert alert-info">
@@ -32,7 +33,6 @@ else
                 {
                     var line = Model.OrderLines[i];
                     <tr class="order-line" data-orderline="@line.OrderLineId">
-
                         @Html.HiddenFor(model => model.OrderLines[i].Sku)
                         @Html.HiddenFor(model => model.OrderLines[i].VariantSku)
                         @Html.HiddenFor(model => model.OrderLines[i].OrderLineId)
@@ -109,7 +109,16 @@ else
 
         <div class="control-group margin-top">
             <div class="controls">
-                <a href="/address"><button type="button" class="btn btn-success pull-right" name="review-product">Continue</button></a>
+                @{
+                    var showContinueButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showContinueButton = false;
+                    }
+
+                }
+                <a href="@Model.NextStepUrl"><button style="@(showContinueButton ? "display:block" : "display:none")" type="button" class="btn btn-success pull-right" name="review-product">Continue</button></a>
             </div>
         </div>
     </div>

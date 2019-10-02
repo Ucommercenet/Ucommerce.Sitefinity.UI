@@ -426,6 +426,8 @@
     <None Include="assets\src\js\components\dropdown-menu.vue" />
     <None Include="assets\src\js\components\dropdown-submenu.vue" />
     <None Include="assets\src\js\components\search.vue" />
+    <None Include="Mvc\Views\Cart\DesignerView.Simple.cshtml" />
+    <Content Include="Mvc\Views\Cart\DesignerView.Simple.json" />
     <None Include="Mvc\Views\Cart\Index.cshtml" />
     <None Include="Mvc\Views\CategoryNavigation\B4Index.cshtml" />
     <Content Include="Mvc\Views\MiniBasket\Index.cshtml" />

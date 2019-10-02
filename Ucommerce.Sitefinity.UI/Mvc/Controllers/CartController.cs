@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -10,6 +11,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
     public class CartController : Controller
     {
+        public Guid? NextStepId { get; set; }
+        public string TemplateName { get; set; } = "Index";
+
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private readonly IMiniBasketService _miniBasketService;
 
@@ -24,7 +28,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             var vm = model.CreateViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
-            return View("Index", vm);
+            return View(TemplateName, vm);
         }
 
         [HttpPost]
@@ -62,7 +66,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         private ICartModel ResolveModel()
         {
-            return UcommerceUIModule.Container.Resolve<ICartModel>();
+            var container = UcommerceUIModule.Container;
+            var model = container.Resolve<ICartModel>(
+                new
+                {
+                    nextStepId = this.NextStepId
+                });
+
+            return model;
         }
     }
 }
