@@ -6,7 +6,7 @@
     Layout = null;
     var showShippingAddress = Model.IsShippingAddressDifferent ? "display:block;" : "display:none;";
 }
-<
+
 @using (Html.BeginForm("Save", "Address", FormMethod.Post, new { @class = "js-address", data_submit_address = ".submit-address", data_save_address_url = @Model.SaveAddressUrl }))
 {
     <div class="flex-contain">
@@ -191,10 +191,26 @@
     <div class="control-group margin-top clearfix">
         <div class="controls">
             <div class="col-md-6 no-padding-col">
-                <a href="/cart" type="submit" class="btn btn-secondary btn-default btn-full-width pull-left">Back</a>
+                @{
+                    var showBackButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showBackButton = false;
+                    }
+                }
+                <a href="@Model.PreviousStepUrl" type="submit" class="btn btn-secondary btn-default btn-full-width pull-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
             </div>
             <div class="col-md-6 no-padding-col">
-                <input type="submit" class="btn btn-success btn-full-width pull-right submit-address" value="Continue to shipping options" />
+                @{
+                    var showContinueButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showContinueButton = false;
+                    }
+                }
+                <a href="@Model.NextStepUrl" type="submit" class="btn btn-success btn-full-width pull-right submit-address" style="@(showContinueButton ? "display:block" : "display:none")">Continue to shipping options</a>
             </div>
         </div>
     </div>

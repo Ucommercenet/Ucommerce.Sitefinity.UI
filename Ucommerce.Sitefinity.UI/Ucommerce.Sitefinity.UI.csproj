@@ -272,7 +272,9 @@
     <Compile Include="Mvc\Model\Interfaces\IProductModel.cs" />
     <Compile Include="Mvc\Model\MiniBasketModel.cs" />
     <Compile Include="Mvc\Model\ProductModel.cs" />
+    <Compile Include="Mvc\ViewModels\Address.cs" />
     <Compile Include="Mvc\ViewModels\AddressRenderingViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\AddressSave.cs" />
     <Compile Include="Mvc\ViewModels\AddressSaveViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCategoryViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCurrencyViewModel.cs" />
@@ -423,6 +425,8 @@
     <None Include="assets\src\js\components\dropdown-submenu.vue" />
     <None Include="assets\src\js\components\search.vue" />
     <EmbeddedResource Include="Mvc\Views\Address\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.json" />
     <None Include="Mvc\Views\CategoryNavigation\B4Index.cshtml" />
     <Content Include="Mvc\Views\MiniBasket\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />

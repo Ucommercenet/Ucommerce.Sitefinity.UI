@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
@@ -11,6 +12,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uAddressInformation_MVC", Title = "Address Information", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
     public class AddressController : Controller
     {
+        public Guid? NextStepId { get; set; }
+        public Guid? PreviousStepId { get; set; }
+        public string TemplteName { get; set; } = "Index";
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
         public AddressController()
@@ -23,7 +27,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             var viewModel = model.GetViewMode(Url.Action("Save"));
 
-            return View("Index", viewModel);
+            return View(TemplteName, viewModel);
         }
 
         [HttpPost]
@@ -53,7 +57,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 EditBillingInformation(addressRendering.BillingAddress);
                 EditShippingInformation(addressRendering.ShippingAddress);
             }
-
             else
             {
                 EditBillingInformation(addressRendering.BillingAddress);
@@ -66,10 +69,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
             return Json(new { ShippingUrl = "/shipping" });
-
         }
 
-        private void EditShippingInformation(AddressSaveViewModel.Address shippingAddress)
+        private void EditShippingInformation(AddressSave shippingAddress)
         {
             _transactionLibraryInternal.EditShipmentInformation(
                 UCommerce.Constants.DefaultShipmentAddressName,
@@ -88,7 +90,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 shippingAddress.CountryId);
         }
 
-        private void EditBillingInformation(AddressSaveViewModel.Address billingAddress)
+        private void EditBillingInformation(AddressSave billingAddress)
         {
             _transactionLibraryInternal.EditBillingInformation(
                billingAddress.FirstName,
@@ -114,10 +116,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         private IAddressModel ResolveModel()
         {
             var container = UcommerceUIModule.Container;
-            var model = container.Resolve<IAddressModel>();
+            var model = container.Resolve<IAddressModel>(
+                new
+                {
+                    nextStepId = this.NextStepId,
+                    previousStepId = this.PreviousStepId
+                });
 
             return model;
         }
-
     }
 }

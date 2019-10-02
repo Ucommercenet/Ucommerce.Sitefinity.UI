@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -10,13 +11,17 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public class AddressModel : IAddressModel
     {
+        private Guid nextStepId;
+        private Guid previousStepId;
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private readonly IQueryable<Country> _countries;
 
-        public AddressModel()
+        public AddressModel(Guid? nextStepId = null, Guid? previousStepId = null)
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             _countries = Country.All();
+            this.nextStepId = nextStepId ?? Guid.Empty;
+            this.previousStepId = previousStepId ?? Guid.Empty;
         }
 
         public AddressRenderingViewModel GetViewMode(string saveUrl)
@@ -56,9 +61,25 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             viewModel.AvailableCountries = _countries.ToList().Select(x => new SelectListItem() { Text = x.Name, Value = x.CountryId.ToString() }).ToList();
 
+            viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+            viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
             viewModel.SaveAddressUrl = saveUrl;
 
             return viewModel;
+        }
+
+        private string GetNextStepUrl(Guid nextStepId)
+        {
+            var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+        }
+
+        private string GetPreviousStepUrl(Guid previousStepId)
+        {
+            var previousStepUrl = Pages.UrlResolver.GetPageNodeUrl(previousStepId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(previousStepUrl);
         }
     }
 }
