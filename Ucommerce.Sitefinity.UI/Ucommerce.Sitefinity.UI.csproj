@@ -418,6 +418,8 @@
     <None Include="assets\src\js\components\search.vue" />
     <None Include="Mvc\Views\CategoryNavigation\B4Index.cshtml" />
     <Content Include="Mvc\Views\MiniBasket\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
+    <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />

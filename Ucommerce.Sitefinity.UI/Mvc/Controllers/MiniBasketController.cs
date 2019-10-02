@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using UCommerce.Infrastructure;
@@ -9,6 +10,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uMiniBasket_MVC", Title = "Mini Basket", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
     public class MiniBasketController : Controller
     {
+        public Guid? CartPageId { get; set; }
+        public string TemplateName { get; set; } = "Index";
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private readonly IMiniBasketService _miniBasketService;
 
@@ -25,10 +28,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!_transactionLibraryInternal.HasBasket())
             {
-                return View("Index", miniBasketRenderingViewModel);
+                return View(TemplateName, miniBasketRenderingViewModel);
             }
 
-            return View("Index", miniBasketRenderingViewModel);
+            return View(TemplateName, miniBasketRenderingViewModel);
         }
 
         [HttpGet]
@@ -39,12 +42,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         protected override void HandleUnknownAction(string actionName)
         {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+            this.ActionInvoker.InvokeAction(this.ControllerContext, TemplateName);
         }
 
         private IMiniBasketModel ResolveModel()
         {
-            return UcommerceUIModule.Container.Resolve<IMiniBasketModel>();
+            var container = UcommerceUIModule.Container;
+            var model = container.Resolve<IMiniBasketModel>(
+                new
+                {
+                    cartPageId = this.CartPageId
+                });
+
+            return model;
         }
     }
 }

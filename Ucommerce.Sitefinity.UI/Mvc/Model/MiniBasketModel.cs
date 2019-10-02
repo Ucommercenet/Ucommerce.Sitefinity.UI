@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
@@ -9,11 +10,13 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public class MiniBasketModel : IMiniBasketModel
     {
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
-        public MiniBasketModel()
+        private readonly TransactionLibraryInternal _transactionLibraryInternal;
+        private Guid cartPageId;
+        public MiniBasketModel(Guid? cartPageId = null)
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
+            this.cartPageId = cartPageId ?? Guid.Empty;
         }
 
         public MiniBasketRenderingViewModel CreateViewModel(string refreshUrl)
@@ -24,6 +27,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             viewModel.IsEmpty = IsBasketEmpty(viewModel);
             viewModel.Total = GetBasketTotal();
             viewModel.RefreshUrl = refreshUrl;
+            viewModel.CartPageUrl = GetCartPageAbsoluteUrl(cartPageId);
 
             return viewModel;
         }
@@ -38,6 +42,13 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             {
                 return 0;
             }
+        }
+
+        private string GetCartPageAbsoluteUrl(Guid cartPageId)
+        {
+            var cartPageUrl = Pages.UrlResolver.GetPageNodeUrl(cartPageId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(cartPageUrl);
         }
 
         private bool IsBasketEmpty(MiniBasketRenderingViewModel model)
