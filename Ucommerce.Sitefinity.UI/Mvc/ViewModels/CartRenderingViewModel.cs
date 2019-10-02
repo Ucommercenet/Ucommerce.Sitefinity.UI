@@ -9,6 +9,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         {
             OrderLines = new List<OrderlineViewModel>();
         }
+
         public IList<OrderlineViewModel> OrderLines { get; set; }
         public string OrderTotal { get; set; }
         public string SubTotal { get; set; }
@@ -27,19 +28,5 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public string RefreshUrl { get; set; }
         public string RemoveOrderlineUrl { get; set; }
         public string NextStepUrl { get; set; }
-        public class OrderlineViewModel
-        {
-            public string Total { get; set; }
-            public int Quantity { get; set; }
-            public int OrderLineId { get; set; }
-            public string Sku { get; set; }
-            public string VariantSku { get; set; }
-            public string ProductName { get; set; }
-            public string Tax { get; set; }
-            public decimal? Discount { get; set; }
-            public string ProductUrl { get; set; }
-            public string Price { get; set; }
-            public string PriceWithDiscount { get; set; }
-        }
     }
 }

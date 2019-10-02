@@ -4,7 +4,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces
 {
     interface ICartModel
     {
-        CartRenderingViewModel CreateViewModel(string refreshUrl, string removeOrderLineUrl);
-        CartUpdateBasketViewModel UpdateViewModel(CartUpdateBasket model);
+        CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl);
+        CartUpdateBasketViewModel Update(CartUpdateBasket model);
     }
 }

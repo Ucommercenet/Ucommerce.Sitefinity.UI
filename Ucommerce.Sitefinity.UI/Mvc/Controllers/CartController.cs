@@ -26,7 +26,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult Index()
         {
             var model = ResolveModel();
-            var vm = model.CreateViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
+            var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
             return View(TemplateName, vm);
         }
@@ -46,7 +46,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult UpdateBasket(CartUpdateBasket updateModel)
         {
             var model = ResolveModel();
-            var updatedVM = model.UpdateViewModel(updateModel);
+            var updatedVM = model.Update(updateModel);
 
             return Json(new
             {

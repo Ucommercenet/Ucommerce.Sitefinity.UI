@@ -20,7 +20,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.nextStepId = nextStepId ?? Guid.Empty;
         }
 
-        public CartRenderingViewModel CreateViewModel(string refreshUrl, string removeOrderLineUrl)
+        public CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl)
         {
             var basketVM = new CartRenderingViewModel();
 
@@ -33,19 +33,20 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             foreach (var orderLine in basket.OrderLines)
             {
-                var orderLineViewModel = new CartRenderingViewModel.OrderlineViewModel();
-
-                orderLineViewModel.Quantity = orderLine.Quantity;
-                orderLineViewModel.ProductName = orderLine.ProductName;
-                orderLineViewModel.Sku = orderLine.Sku;
-                orderLineViewModel.VariantSku = orderLine.VariantSku;
-                orderLineViewModel.Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString();
-                orderLineViewModel.Discount = orderLine.Discount;
-                orderLineViewModel.Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString();
-                orderLineViewModel.Price = new Money(orderLine.Price, basket.BillingCurrency).ToString();
-                orderLineViewModel.ProductUrl = CatalogLibrary.GetNiceUrlForProduct(CatalogLibrary.GetProduct(orderLine.Sku));
-                orderLineViewModel.PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), basket.BillingCurrency).ToString();
-                orderLineViewModel.OrderLineId = orderLine.OrderLineId;
+                var orderLineViewModel = new OrderlineViewModel
+                {
+                    Quantity = orderLine.Quantity,
+                    ProductName = orderLine.ProductName,
+                    Sku = orderLine.Sku,
+                    VariantSku = orderLine.VariantSku,
+                    Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString(),
+                    Discount = orderLine.Discount,
+                    Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString(),
+                    Price = new Money(orderLine.Price, basket.BillingCurrency).ToString(),
+                    ProductUrl = CatalogLibrary.GetNiceUrlForProduct(CatalogLibrary.GetProduct(orderLine.Sku)),
+                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), basket.BillingCurrency).ToString(),
+                    OrderLineId = orderLine.OrderLineId
+                };
                 basketVM.OrderLines.Add(orderLineViewModel);
             }
 
@@ -53,7 +54,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             basketVM.DiscountTotal = new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.SubTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            basketVM.NextStepUrl = GetNextStepAbsoluteUrl(nextStepId);
+            basketVM.NextStepUrl = GetNextStepUrl(nextStepId);
 
             basketVM.RefreshUrl = refreshUrl;
             basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
@@ -61,7 +62,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return basketVM;
         }
 
-        public CartUpdateBasketViewModel UpdateViewModel(CartUpdateBasket model)
+        public CartUpdateBasketViewModel Update(CartUpdateBasket model)
         {
             foreach (var updateOrderline in model.RefreshBasket)
             {
@@ -107,7 +108,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return updatedBasket;
         }
 
-        private string GetNextStepAbsoluteUrl(Guid nextStepId)
+        private string GetNextStepUrl(Guid nextStepId)
         {
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
 

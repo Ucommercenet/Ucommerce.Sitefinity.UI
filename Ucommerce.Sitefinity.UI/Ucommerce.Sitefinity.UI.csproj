@@ -279,13 +279,16 @@
     <Compile Include="Mvc\ViewModels\CategoryNavigationViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CartRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CartUpdateBasketViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\CartUpdateOrderline.cs" />
     <Compile Include="Mvc\ViewModels\FacetValue.cs" />
     <Compile Include="Mvc\ViewModels\FacetViewModel.cs" />
     <Compile Include="Mvc\ViewModels\MiniBasketRefreshViewModel.cs" />
     <Compile Include="Mvc\ViewModels\MiniBasketRenderingViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\OrderlineViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductDetailViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductListViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\UpdateOrderLine.cs" />
     <Compile Include="node_modules\node-gyp\lib\Find-VS2017.cs" />
     <Compile Include="Pages\HttpContextExtensions.cs" />
     <Compile Include="Pages\UrlResolver.cs" />
