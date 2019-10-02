@@ -8,5 +8,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public Money Total { get; set; }
         public bool IsEmpty { get; set; }
         public string RefreshUrl { get; set; }
+        public string CartPageUrl { get; set; }
     }
 }
