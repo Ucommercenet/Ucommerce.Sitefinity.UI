@@ -61,8 +61,25 @@ namespace Ucommerce.Sitefinity.UI.DI
 
             container.Register(
                  Component
+                 .For<ICartModel>()
+                 .ImplementedBy<CartModel>()
+                 .LifestylePerWebRequest());
+
+            container.Register(
+                 Component
                  .For<IAddressModel>()
                  .ImplementedBy<AddressModel>()
+                 .LifestylePerWebRequest());
+
+            container.Register(
+                 Component
+<<<<<<< HEAD
+                 .For<IAddressModel>()
+                 .ImplementedBy<AddressModel>()
+=======
+                 .For<ICartModel>()
+                 .ImplementedBy<CartModel>()
+>>>>>>> master
                  .LifestylePerWebRequest());
         }
     }

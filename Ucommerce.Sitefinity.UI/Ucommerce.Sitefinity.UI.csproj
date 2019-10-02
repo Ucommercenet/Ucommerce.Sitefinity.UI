@@ -99,6 +99,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -129,6 +130,7 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -252,6 +254,7 @@
     <Compile Include="DI\WindsorInstaller.cs" />
     <Compile Include="DI\Events\IWindsorContainerInitializedEvent.cs" />
     <Compile Include="DI\Events\WindsorContainerInitializedEvent.cs" />
+    <Compile Include="Mvc\Controllers\CartController.cs" />
     <Compile Include="Mvc\Controllers\AddressController.cs" />
     <Compile Include="Mvc\Controllers\CategoryNavigationController.cs" />
     <Compile Include="Mvc\Controllers\FacetsFilterController.cs" />
@@ -261,8 +264,10 @@
     <Compile Include="Mvc\Infrastructure\ControllerContainerResolver.cs" />
     <Compile Include="Mvc\Infrastructure\WindsorControllerFactory.cs" />
     <Compile Include="Mvc\Model\AddressModel.cs" />
+    <Compile Include="Mvc\Model\CartModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
     <Compile Include="Mvc\Model\FacetsFilterModel.cs" />
+    <Compile Include="Mvc\Model\Interfaces\ICartModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IAddressModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\ICategoryModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IFacetsFilterModel.cs" />
@@ -276,16 +281,22 @@
     <Compile Include="Mvc\ViewModels\AddressRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddressSave.cs" />
     <Compile Include="Mvc\ViewModels\AddressSaveViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\CartUpdateBasket.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCategoryViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCurrencyViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\CartRenderingViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\CartUpdateBasketViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\CartUpdateOrderline.cs" />
     <Compile Include="Mvc\ViewModels\FacetValue.cs" />
     <Compile Include="Mvc\ViewModels\FacetViewModel.cs" />
     <Compile Include="Mvc\ViewModels\MiniBasketRefreshViewModel.cs" />
     <Compile Include="Mvc\ViewModels\MiniBasketRenderingViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\OrderlineViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductDetailViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductListViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\UpdateOrderLine.cs" />
     <Compile Include="node_modules\node-gyp\lib\Find-VS2017.cs" />
     <Compile Include="Pages\HttpContextExtensions.cs" />
     <Compile Include="Pages\UrlResolver.cs" />
@@ -414,6 +425,8 @@
     <None Include="app.config" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\FacetsFilter\B4Index.cshtml" />
+    <Content Include="Mvc\scripts\jsMiniBasket.js" />
+    <Content Include="Mvc\scripts\jsUpdateBasket.js" />
     <Content Include="Mvc\Views\Products\B4Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
@@ -424,6 +437,9 @@
     <None Include="assets\src\js\components\dropdown-menu.vue" />
     <None Include="assets\src\js\components\dropdown-submenu.vue" />
     <None Include="assets\src\js\components\search.vue" />
+    <EmbeddedResource Include="Mvc\Views\Cart\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Cart\DesignerView.Simple.json" />
+    <EmbeddedResource Include="Mvc\Views\Cart\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.json" />
@@ -5165,7 +5181,8 @@
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\build\**\*.*" />
+    <EmbeddedResource Include="assets\build\js\main.js" />
+    <EmbeddedResource Include="assets\build\js\vendor.bundle.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\src\css\uc-quantum.css" />
