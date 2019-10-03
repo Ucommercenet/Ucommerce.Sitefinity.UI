@@ -1,0 +1,44 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@model Ucommerce.Sitefinity.UI.Mvc.ViewModels.ShippingPickerViewModel
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("CreateShipment", "ShippingPicker", FormMethod.Post))
+{
+    <legend>Shipping method</legend>
+    if (Model.AvailableShippingMethods.Count > 0)
+    {
+        foreach (var shippingMethod in Model.AvailableShippingMethods)
+        {
+            <label class="radio">
+                @if (shippingMethod.Selected)
+                {
+                    @Html.RadioButtonFor(x => x.SelectedShippingMethodId, shippingMethod.Value, new { @checked = "checked", @class = "js-shipping-picker" })
+                    @shippingMethod.Text
+                }
+                else
+                {
+                    @Html.RadioButtonFor(x => x.SelectedShippingMethodId, shippingMethod.Value, new { @class = "js-shipping-picker" })
+                    @shippingMethod.Text
+                }
+            </label>
+        }
+        <div class="control-group">
+            <div class="col-md-6 no-padding-col">
+                <a href="/address" type="submit" class="btn btn-secondary btn-default btn-full-width pull-left">Back</a>
+            </div>
+            <div class="col-md-6 no-padding-col">
+                <input type="submit" class="btn btn-success btn-full-width pull-right" name="review-product" value="Continue to payment options" />
+            </div>
+        </div>
+
+    }
+
+    else
+    {
+        <p class="alert">
+            WARNING: No shipping methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
+        </p>
+    }
+}
