@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
@@ -17,5 +13,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public IList<SelectListItem> AvailablePaymentMethods { get; set; }
         public int SelectedPaymentMethodId { get; set; }
         public string ShippingCountry { get; set; }
+        public string NextStepUrl { get; set; }
+        public string PreviousStepUrl { get; set; }
     }
 }
