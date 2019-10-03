@@ -60,7 +60,7 @@ else
                             @line.Tax
                         </td>
                         <td>
-                            @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control inline-block no-padding", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
+                            @line.Quantity
                         </td>
                         <td class="money item-total">
                             @line.Total
