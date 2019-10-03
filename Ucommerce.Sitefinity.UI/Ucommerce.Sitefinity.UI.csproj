@@ -276,8 +276,10 @@
     <Compile Include="Mvc\Model\Interfaces\IMiniBasketService.cs" />
     <Compile Include="Mvc\Model\Interfaces\Impl\MiniBasketService.cs" />
     <Compile Include="Mvc\Model\Interfaces\IProductModel.cs" />
+    <Compile Include="Mvc\Model\Interfaces\IShippingPickerModel.cs" />
     <Compile Include="Mvc\Model\MiniBasketModel.cs" />
     <Compile Include="Mvc\Model\ProductModel.cs" />
+    <Compile Include="Mvc\Model\ShippingPickerModel.cs" />
     <Compile Include="Mvc\ViewModels\Address.cs" />
     <Compile Include="Mvc\ViewModels\AddressRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddressSave.cs" />
@@ -452,6 +454,8 @@
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ShippingPicker\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ShippingPicker\DesignerView.Simple.json" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
