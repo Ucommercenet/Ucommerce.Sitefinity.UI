@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
@@ -35,42 +34,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
 
-            if (!addressRendering.IsShippingAddressDifferent)
-            {
-                this.ModelState.Remove("ShippingAddress.FirstName");
-                this.ModelState.Remove("ShippingAddress.LastName");
-                this.ModelState.Remove("ShippingAddress.EmailAddress");
-                this.ModelState.Remove("ShippingAddress.Line1");
-                this.ModelState.Remove("ShippingAddress.PostalCode");
-                this.ModelState.Remove("ShippingAddress.City");
-            }
-            if (!ModelState.IsValid)
-            {
-                var dictionary = ModelState.ToDictionary(kvp => kvp.Key,
-                 kvp => kvp.Value.Errors
-                                 .Select(e => e.ErrorMessage).ToArray())
-                                 .Where(m => m.Value.Any());
+            var modelState = new ModelStateDictionary();
 
-                return Json(new { modelStateErrors = dictionary });
-            }
-
-            if (addressRendering.IsShippingAddressDifferent)
-            {
-                model.EditBillingInformation(addressRendering.BillingAddress);
-                model.EditShippingInformation(addressRendering.ShippingAddress);
-            }
-            else
-            {
-                model.EditBillingInformation(addressRendering.BillingAddress);
-                model.EditShippingInformation(addressRendering.BillingAddress);
-            }
-
-            //if (Tracker.Current != null)
-            //    Tracker.Current.Session.CustomData["FirstName"] = addressRendering.BillingAddress.FirstName;
-
-            _transactionLibraryInternal.ExecuteBasketPipeline();
-
-            return Json(new { ShippingUrl = "/shipping" });
+            return model.Save(addressRendering, modelState);
         }
 
         protected override void HandleUnknownAction(string actionName)

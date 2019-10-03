@@ -68,7 +68,47 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return viewModel;
         }
 
-        public void EditShippingInformation(AddressSave shippingAddress)
+        public JsonResult Save(AddressSaveViewModel addressRendering, ModelStateDictionary modelState)
+        {
+            var result = new JsonResult();
+
+            if (!addressRendering.IsShippingAddressDifferent)
+            {
+                modelState.Remove("ShippingAddress.FirstName");
+                modelState.Remove("ShippingAddress.LastName");
+                modelState.Remove("ShippingAddress.EmailAddress");
+                modelState.Remove("ShippingAddress.Line1");
+                modelState.Remove("ShippingAddress.PostalCode");
+                modelState.Remove("ShippingAddress.City");
+            }
+            if (!modelState.IsValid)
+            {
+                var dictionary = modelState.ToDictionary(kvp => kvp.Key,
+                 kvp => kvp.Value.Errors
+                                 .Select(e => e.ErrorMessage).ToArray())
+                                 .Where(m => m.Value.Any());
+                result.Data = new { modelStateErrors = dictionary };
+                return result;
+            }
+
+            if (addressRendering.IsShippingAddressDifferent)
+            {
+                EditBillingInformation(addressRendering.BillingAddress);
+                EditShippingInformation(addressRendering.ShippingAddress);
+            }
+            else
+            {
+                EditBillingInformation(addressRendering.BillingAddress);
+                EditShippingInformation(addressRendering.BillingAddress);
+            }
+
+            _transactionLibraryInternal.ExecuteBasketPipeline();
+
+            result.Data = new { ShippingUrl = "/shipping" };
+            return result;
+        }
+
+        private void EditShippingInformation(AddressSave shippingAddress)
         {
             _transactionLibraryInternal.EditShipmentInformation(
                 UCommerce.Constants.DefaultShipmentAddressName,
@@ -87,7 +127,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 shippingAddress.CountryId);
         }
 
-        public void EditBillingInformation(AddressSave billingAddress)
+        private void EditBillingInformation(AddressSave billingAddress)
         {
             _transactionLibraryInternal.EditBillingInformation(
                billingAddress.FirstName,

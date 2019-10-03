@@ -1,11 +1,11 @@
-﻿using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+﻿using System.Web.Mvc;
+using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces
 {
     interface IAddressModel
     {
         AddressRenderingViewModel GetViewMode(string saveUrl);
-        void EditShippingInformation(AddressSave shippingAddress);
-        void EditBillingInformation(AddressSave billingAddress);
+        JsonResult Save(AddressSaveViewModel addressRendering, System.Web.Mvc.ModelStateDictionary modelState);
     }
 }
