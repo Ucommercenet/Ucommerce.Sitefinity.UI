@@ -5,6 +5,7 @@ using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.Infrastructure;
+using UCommerce.Runtime;
 using UCommerce.Transactions;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Model
@@ -33,12 +34,20 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 shipmentPickerViewModel.ShippingCountry = shippingCountry.Name;
                 var availableShippingMethods = _transactionLibraryInternal.GetShippingMethods(shippingCountry);
 
-                shipmentPickerViewModel.SelectedShippingMethodId = basket.Shipments.FirstOrDefault() != null
-                    ? basket.Shipments.FirstOrDefault().ShippingMethod.ShippingMethodId : -1;
+                if (basket.Shipments.Count > 0)
+                {
+                    shipmentPickerViewModel.SelectedShippingMethodId = basket.Shipments.FirstOrDefault()?.ShippingMethod.ShippingMethodId ?? 0;
+                }
+                else
+                {
+                    shipmentPickerViewModel.SelectedShippingMethodId = -1;
+                }
 
                 foreach (var availableShippingMethod in availableShippingMethods)
                 {
-                    var price = availableShippingMethod.GetPriceForCurrency(basket.BillingCurrency);
+                    var priceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
+
+                    var price = availableShippingMethod.GetPriceForPriceGroup(priceGroup);
                     var formattedprice = new Money((price == null ? 0 : price.Price), basket.BillingCurrency);
 
                     shipmentPickerViewModel.AvailableShippingMethods.Add(new SelectListItem()
