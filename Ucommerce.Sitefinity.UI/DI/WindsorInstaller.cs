@@ -70,17 +70,6 @@ namespace Ucommerce.Sitefinity.UI.DI
                  .For<IAddressModel>()
                  .ImplementedBy<AddressModel>()
                  .LifestylePerWebRequest());
-
-            container.Register(
-                 Component
-<<<<<<< HEAD
-                 .For<IAddressModel>()
-                 .ImplementedBy<AddressModel>()
-=======
-                 .For<ICartModel>()
-                 .ImplementedBy<CartModel>()
->>>>>>> master
-                 .LifestylePerWebRequest());
         }
     }
 }
