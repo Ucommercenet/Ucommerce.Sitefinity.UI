@@ -11,10 +11,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public class ShippingPickerModel : IShippingPickerModel
     {
+        private Guid nextStepId;
+        private Guid previousStepId;
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
-        public ShippingPickerModel()
+        public ShippingPickerModel(Guid? nextStepId = null, Guid? previousStepId = null)
         {
+            this.nextStepId = nextStepId ?? Guid.Empty;
+            this.previousStepId = previousStepId ?? Guid.Empty;
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
         }
 
@@ -45,7 +49,25 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                     });
                 }
             }
+
+            shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+            shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
+
             return shipmentPickerViewModel;
+        }
+
+        public string GetNextStepUrl(Guid nextStepId)
+        {
+            var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+        }
+
+        public string GetPreviousStepUrl(Guid previousStepId)
+        {
+            var previousStepUrl = Pages.UrlResolver.GetPageNodeUrl(previousStepId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(previousStepUrl);
         }
 
         public void CreateShipment(ShippingPickerViewModel createShipmentViewModel)

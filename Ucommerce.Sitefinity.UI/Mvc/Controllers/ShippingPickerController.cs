@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -10,6 +11,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
     public class ShippingPickerController : Controller
     {
+        public Guid? NextStepId { get; set; }
+        public Guid? PreviousStepId { get; set; }
+        public string TemplteName { get; set; } = "Index";
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
         public ShippingPickerController()
@@ -22,7 +26,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             var sippingPickerVM = model.GetViewModel();
 
-            return View("Index", sippingPickerVM);
+            return View(TemplteName, sippingPickerVM);
         }
 
         [HttpPost]
@@ -37,7 +41,12 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public IShippingPickerModel ResolveModel()
         {
             var container = UcommerceUIModule.Container;
-            var model = container.Resolve<IShippingPickerModel>();
+            var model = container.Resolve<IShippingPickerModel>(
+                new
+                {
+                    nextStepId = this.NextStepId,
+                    previousStepId = this.PreviousStepId
+                });
 
             return model;
         }

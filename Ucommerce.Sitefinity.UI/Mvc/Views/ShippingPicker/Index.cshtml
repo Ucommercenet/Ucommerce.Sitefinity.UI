@@ -26,10 +26,26 @@
         }
         <div class="control-group">
             <div class="col-md-6 no-padding-col">
-                <a href="/address" type="submit" class="btn btn-secondary btn-default btn-full-width pull-left">Back</a>
+                @{
+                    var showBackButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showBackButton = false;
+                    }
+                }
+                <a href="@Model.PreviousStepUrl" type="submit" class="btn btn-secondary btn-default btn-full-width pull-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
             </div>
             <div class="col-md-6 no-padding-col">
-                <input type="submit" class="btn btn-success btn-full-width pull-right" name="review-product" value="Continue to payment options" />
+                @{
+                    var showContinueButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showContinueButton = false;
+                    }
+                }
+                <a href="@Model.NextStepUrl" type="submit" class="btn btn-success btn-full-width pull-right" name="review-product" style="@(showContinueButton ? "display:block" : "display:none")">Continue to payment options</a>
             </div>
         </div>
 
