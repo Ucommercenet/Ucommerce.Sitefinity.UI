@@ -33,6 +33,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         [HttpPost]
         public ActionResult Save(AddressSaveViewModel addressRendering)
         {
+            var model = ResolveModel();
+
             if (!addressRendering.IsShippingAddressDifferent)
             {
                 this.ModelState.Remove("ShippingAddress.FirstName");
@@ -54,13 +56,13 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
             if (addressRendering.IsShippingAddressDifferent)
             {
-                EditBillingInformation(addressRendering.BillingAddress);
-                EditShippingInformation(addressRendering.ShippingAddress);
+                model.EditBillingInformation(addressRendering.BillingAddress);
+                model.EditShippingInformation(addressRendering.ShippingAddress);
             }
             else
             {
-                EditBillingInformation(addressRendering.BillingAddress);
-                EditShippingInformation(addressRendering.BillingAddress);
+                model.EditBillingInformation(addressRendering.BillingAddress);
+                model.EditShippingInformation(addressRendering.BillingAddress);
             }
 
             //if (Tracker.Current != null)
@@ -69,43 +71,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
             return Json(new { ShippingUrl = "/shipping" });
-        }
-
-        private void EditShippingInformation(AddressSave shippingAddress)
-        {
-            _transactionLibraryInternal.EditShipmentInformation(
-                UCommerce.Constants.DefaultShipmentAddressName,
-                shippingAddress.FirstName,
-                shippingAddress.LastName,
-                shippingAddress.EmailAddress,
-                shippingAddress.PhoneNumber,
-                shippingAddress.MobilePhoneNumber,
-                shippingAddress.CompanyName,
-                shippingAddress.Line1,
-                shippingAddress.Line2,
-                shippingAddress.PostalCode,
-                shippingAddress.City,
-                shippingAddress.State,
-                shippingAddress.Attention,
-                shippingAddress.CountryId);
-        }
-
-        private void EditBillingInformation(AddressSave billingAddress)
-        {
-            _transactionLibraryInternal.EditBillingInformation(
-               billingAddress.FirstName,
-               billingAddress.LastName,
-               billingAddress.EmailAddress,
-               billingAddress.PhoneNumber,
-               billingAddress.MobilePhoneNumber,
-               billingAddress.CompanyName,
-               billingAddress.Line1,
-               billingAddress.Line2,
-               billingAddress.PostalCode,
-               billingAddress.City,
-               billingAddress.State,
-               billingAddress.Attention,
-               billingAddress.CountryId);
         }
 
         protected override void HandleUnknownAction(string actionName)

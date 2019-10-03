@@ -68,6 +68,43 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return viewModel;
         }
 
+        public void EditShippingInformation(AddressSave shippingAddress)
+        {
+            _transactionLibraryInternal.EditShipmentInformation(
+                UCommerce.Constants.DefaultShipmentAddressName,
+                shippingAddress.FirstName,
+                shippingAddress.LastName,
+                shippingAddress.EmailAddress,
+                shippingAddress.PhoneNumber,
+                shippingAddress.MobilePhoneNumber,
+                shippingAddress.CompanyName,
+                shippingAddress.Line1,
+                shippingAddress.Line2,
+                shippingAddress.PostalCode,
+                shippingAddress.City,
+                shippingAddress.State,
+                shippingAddress.Attention,
+                shippingAddress.CountryId);
+        }
+
+        public void EditBillingInformation(AddressSave billingAddress)
+        {
+            _transactionLibraryInternal.EditBillingInformation(
+               billingAddress.FirstName,
+               billingAddress.LastName,
+               billingAddress.EmailAddress,
+               billingAddress.PhoneNumber,
+               billingAddress.MobilePhoneNumber,
+               billingAddress.CompanyName,
+               billingAddress.Line1,
+               billingAddress.Line2,
+               billingAddress.PostalCode,
+               billingAddress.City,
+               billingAddress.State,
+               billingAddress.Attention,
+               billingAddress.CountryId);
+        }
+
         private string GetNextStepUrl(Guid nextStepId)
         {
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
