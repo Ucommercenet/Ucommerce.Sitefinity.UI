@@ -254,6 +254,7 @@
     <Compile Include="DI\WindsorInstaller.cs" />
     <Compile Include="DI\Events\IWindsorContainerInitializedEvent.cs" />
     <Compile Include="DI\Events\WindsorContainerInitializedEvent.cs" />
+    <Compile Include="Mvc\Controllers\OrderOverviewController.cs" />
     <Compile Include="Mvc\Controllers\CartController.cs" />
     <Compile Include="Mvc\Controllers\AddressController.cs" />
     <Compile Include="Mvc\Controllers\CategoryNavigationController.cs" />
@@ -264,6 +265,8 @@
     <Compile Include="Mvc\Infrastructure\ControllerContainerResolver.cs" />
     <Compile Include="Mvc\Infrastructure\WindsorControllerFactory.cs" />
     <Compile Include="Mvc\Model\AddressModel.cs" />
+    <Compile Include="Mvc\Model\Interfaces\IOrderOverviewModel.cs" />
+    <Compile Include="Mvc\Model\OrderOverviewModel.cs" />
     <Compile Include="Mvc\Model\CartModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
     <Compile Include="Mvc\Model\FacetsFilterModel.cs" />
@@ -281,6 +284,7 @@
     <Compile Include="Mvc\ViewModels\AddressRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddressSave.cs" />
     <Compile Include="Mvc\ViewModels\AddressSaveViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\OrderOverviewViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CartUpdateBasket.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCategoryViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCurrencyViewModel.cs" />
@@ -448,6 +452,9 @@
     <Content Include="Mvc\Views\MiniBasket\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\OrderOverview\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\OrderOverview\DesignerView.Simple.json" />
+    <EmbeddedResource Include="Mvc\Views\OrderOverview\Index.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
