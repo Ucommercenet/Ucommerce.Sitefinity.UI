@@ -259,6 +259,7 @@
     <Compile Include="Mvc\Controllers\CategoryNavigationController.cs" />
     <Compile Include="Mvc\Controllers\FacetsFilterController.cs" />
     <Compile Include="Mvc\Controllers\MiniBasketController.cs" />
+    <Compile Include="Mvc\Controllers\PaymentPickerController.cs" />
     <Compile Include="Mvc\Controllers\ProductsController.cs" />
     <Compile Include="Mvc\Filters\ContextResolverAttribute.cs" />
     <Compile Include="Mvc\Infrastructure\ControllerContainerResolver.cs" />
@@ -293,6 +294,7 @@
     <Compile Include="Mvc\ViewModels\MiniBasketRefreshViewModel.cs" />
     <Compile Include="Mvc\ViewModels\MiniBasketRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\OrderlineViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\PaymentPickerViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductDetailViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductListViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductViewModel.cs" />
@@ -448,6 +450,9 @@
     <Content Include="Mvc\Views\MiniBasket\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\PaymentPicker\DesignerView.Simple.json" />
+    <EmbeddedResource Include="Mvc\Views\PaymentPicker\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\PaymentPicker\Index.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
