@@ -1,0 +1,61 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@model Ucommerce.Sitefinity.UI.Mvc.ViewModels.PaymentPickerViewModel
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("CreatePayment", "PaymentPicker", FormMethod.Post))
+{
+    <legend>Payment method</legend>
+    if (@Model.AvailablePaymentMethods.Count > 0)
+    {
+        foreach (var paymentMethod in @Model.AvailablePaymentMethods)
+        {
+            <label class="radio">
+                @if (paymentMethod.Selected)
+                {
+                    @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @checked = "checked", @class = "js-payment-picker" })
+                    <span>@paymentMethod.Text</span>
+                }
+                else
+                {
+                    @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @class = "js-payment-picker" })
+                    <span>@paymentMethod.Text</span>
+                }
+            </label>
+        }
+
+        <div class="col-md-6 no-padding-col">
+            @{
+                var showBackButton = true;
+
+                if (Model.PreviousStepUrl == "")
+                {
+                    showBackButton = false;
+                }
+
+            }
+            <a href="@Model.PreviousStepUrl" type="submit" style="@(showBackButton ? "display:block" : "display:none")" class="btn btn-secondary btn-default btn-full-width pull-left">Back</a>
+        </div>
+        <div class="col-md-6 no-padding-col">
+            @{
+                var showContinueButton = true;
+
+                if (Model.NextStepUrl == "")
+                {
+                    showContinueButton = false;
+                }
+
+            }
+            <a href="@Model.NextStepUrl" type="submit" style="@(showContinueButton ? "display:block" : "display:none")" class="btn btn-success btn-default btn-full-width pull-right">Continue to order preview</a>
+        </div>
+
+    }
+    else
+    {
+        <p class="alert">
+            WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
+        </p>
+    }
+}
