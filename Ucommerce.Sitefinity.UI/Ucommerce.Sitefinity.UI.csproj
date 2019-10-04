@@ -257,6 +257,7 @@
     <Compile Include="Mvc\Controllers\CartController.cs" />
     <Compile Include="Mvc\Controllers\AddressController.cs" />
     <Compile Include="Mvc\Controllers\CategoryNavigationController.cs" />
+    <Compile Include="Mvc\Controllers\ConfirmationEmailController.cs" />
     <Compile Include="Mvc\Controllers\FacetsFilterController.cs" />
     <Compile Include="Mvc\Controllers\MiniBasketController.cs" />
     <Compile Include="Mvc\Controllers\ProductsController.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Mvc\Model\AddressModel.cs" />
     <Compile Include="Mvc\Model\CartModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
+    <Compile Include="Mvc\Model\ConfirmationEmailModel.cs" />
     <Compile Include="Mvc\Model\FacetsFilterModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\ICartModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IAddressModel.cs" />
@@ -288,6 +290,8 @@
     <Compile Include="Mvc\ViewModels\CartRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CartUpdateBasketViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CartUpdateOrderline.cs" />
+    <Compile Include="Mvc\ViewModels\ConfirmationEmailOrderLine.cs" />
+    <Compile Include="Mvc\ViewModels\ConfirmationEmailViewModel.cs" />
     <Compile Include="Mvc\ViewModels\FacetValue.cs" />
     <Compile Include="Mvc\ViewModels\FacetViewModel.cs" />
     <Compile Include="Mvc\ViewModels\MiniBasketRefreshViewModel.cs" />
@@ -448,6 +452,7 @@
     <Content Include="Mvc\Views\MiniBasket\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\Index.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
