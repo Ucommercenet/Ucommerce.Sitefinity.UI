@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Ucommerce.Sitefinity.UI.Mvc.Controllers;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.EntitiesV2;
@@ -17,23 +16,23 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             _purchaseOrderRepository = ObjectFactory.Instance.Resolve<IRepository<PurchaseOrder>>();
         }
 
-        public ConfirmationEmailViewModel GetViewModel(ConfirmationEmailController controllerBase)
+        public ConfirmationEmailViewModel GetViewModel(string orderGuid)
         {
             var confirmationEmailViewModel = new ConfirmationEmailViewModel();
-            var orderGuid = System.Web.HttpContext.Current.Request.QueryString["orderGuid"];
 
             if (!string.IsNullOrEmpty(orderGuid))
             {
                 var purchaseOrder = _purchaseOrderRepository.SingleOrDefault(x => x.OrderGuid == new Guid(orderGuid));
-                confirmationEmailViewModel = MapPurchaseOrderToViewModel(purchaseOrder, confirmationEmailViewModel, controllerBase);
+                confirmationEmailViewModel = MapPurchaseOrderToViewModel(purchaseOrder, confirmationEmailViewModel);
             }
             return confirmationEmailViewModel;
         }
 
-        private ConfirmationEmailViewModel MapPurchaseOrderToViewModel(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel, ConfirmationEmailController controllerBase)
+        private ConfirmationEmailViewModel MapPurchaseOrderToViewModel(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
         {
             confirmationEmailViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
             confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Default") ?? new OrderAddress();
+
             foreach (var orderLine in purchaseOrder.OrderLines)
             {
                 var orderLineModel = new ConfirmationEmailOrderLine
@@ -48,7 +47,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                     Quantity = orderLine.Quantity,
                     Discount = orderLine.Discount
                 };
-
                 confirmationEmailViewModel.OrderLines.Add(orderLineModel);
             }
 
@@ -75,20 +73,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             {
                 confirmationEmailViewModel.PaymentName = payment.PaymentMethodName;
                 confirmationEmailViewModel.PaymentAmount = purchaseOrder.PaymentTotal.GetValueOrDefault();
-            }
-
-            controllerBase.ViewBag.RowSpan = 4;
-            if (purchaseOrder.DiscountTotal > 0)
-            {
-                controllerBase.ViewBag.RowSpan++;
-            }
-            if (purchaseOrder.ShippingTotal > 0)
-            {
-                controllerBase.ViewBag.RowSpan++;
-            }
-            if (purchaseOrder.PaymentTotal > 0)
-            {
-                controllerBase.ViewBag.RowSpan++;
             }
 
             return confirmationEmailViewModel;

@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.EntitiesV2;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -9,9 +10,25 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     {
         public ActionResult Index()
         {
-            var controller = new ConfirmationEmailController();
+            PurchaseOrder purchaseOrder = new PurchaseOrder();
+
+            var orderGuid = System.Web.HttpContext.Current.Request.QueryString["orderGuid"];
             var model = ResolveModel();
-            var confirmationEmailVM = model.GetViewModel(controller);
+            var confirmationEmailVM = model.GetViewModel(orderGuid);
+
+            ViewBag.RowSpan = 4;
+            if (purchaseOrder.DiscountTotal > 0)
+            {
+                ViewBag.RowSpan++;
+            }
+            if (purchaseOrder.ShippingTotal > 0)
+            {
+                ViewBag.RowSpan++;
+            }
+            if (purchaseOrder.PaymentTotal > 0)
+            {
+                ViewBag.RowSpan++;
+            }
 
             return View("Index", confirmationEmailVM);
         }
