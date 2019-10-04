@@ -88,6 +88,12 @@ namespace Ucommerce.Sitefinity.UI.DI
              .For<IOrderOverviewModel>()
              .ImplementedBy<OrderOverviewModel>()
              .LifestylePerWebRequest());
+
+            container.Register(
+                 Component
+                 .For<IConfirmationMessageModel>()
+                 .ImplementedBy<ConfirmationMessageModel>()
+                 .LifestylePerWebRequest());
         }
     }
 }
