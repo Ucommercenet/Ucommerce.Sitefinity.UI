@@ -82,6 +82,12 @@ namespace Ucommerce.Sitefinity.UI.DI
                  .For<IPaymentPickerModel>()
                  .ImplementedBy<PaymentPickerModel>()
                  .LifestylePerWebRequest());
+
+            container.Register(
+             Component
+             .For<IOrderOverviewModel>()
+             .ImplementedBy<OrderOverviewModel>()
+             .LifestylePerWebRequest());
         }
     }
 }
