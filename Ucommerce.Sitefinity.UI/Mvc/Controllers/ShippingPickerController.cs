@@ -14,12 +14,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
         public string TemplteName { get; set; } = "Index";
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
-
-        public ShippingPickerController()
-        {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-        }
 
         public ActionResult Index()
         {
@@ -33,9 +27,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult CreateShipment(ShippingPickerViewModel createShipmentViewModel)
         {
             var model = ResolveModel();
+            var viewModel = model.GetViewModel();
             model.CreateShipment(createShipmentViewModel);
 
-            return Redirect("/payment");
+            return Redirect(viewModel.NextStepUrl);
         }
 
         public IShippingPickerModel ResolveModel()

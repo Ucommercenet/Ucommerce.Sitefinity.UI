@@ -3,8 +3,6 @@ using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Infrastructure;
-using UCommerce.Transactions;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -14,12 +12,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
         public string TemplteName { get; set; } = "Index";
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
-
-        public AddressController()
-        {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-        }
 
         public ActionResult Index()
         {
@@ -33,10 +25,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult Save(AddressSaveViewModel addressRendering)
         {
             var model = ResolveModel();
-
+            var viewModel = model.GetViewMode(Url.Action("Save"));
             var modelState = new ModelStateDictionary();
-
-            return model.Save(addressRendering, modelState);
+            model.Save(addressRendering, modelState);
+            return Redirect(viewModel.NextStepUrl);
+            //return model.Save(addressRendering, modelState);
         }
 
         protected override void HandleUnknownAction(string actionName)

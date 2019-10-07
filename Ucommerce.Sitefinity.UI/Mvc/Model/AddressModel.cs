@@ -104,7 +104,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
-            result.Data = new { ShippingUrl = "/shipping" };
+            result.Data = new { ShippingUrl = GetNextStepUrl(nextStepId) };
             return result;
         }
 
