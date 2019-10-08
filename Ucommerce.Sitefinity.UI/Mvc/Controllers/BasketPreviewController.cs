@@ -25,7 +25,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
             var basketPreviewViewModel = new BasketPreviewViewModel();
 
-            basketPreviewViewModel = model.MapPurchaseOrderToViewModel(purchaseOrder, basketPreviewViewModel);
+            basketPreviewViewModel = model.MapPurchaseOrder(purchaseOrder, basketPreviewViewModel);
 
             ViewBag.RowSpan = 4;
             if (purchaseOrder.DiscountTotal > 0)

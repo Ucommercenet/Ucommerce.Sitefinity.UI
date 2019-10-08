@@ -17,7 +17,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>(); ;
         }
 
-        public BasketPreviewViewModel MapPurchaseOrderToViewModel(PurchaseOrder purchaseOrder, BasketPreviewViewModel basketPreviewViewModel)
+        public BasketPreviewViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, BasketPreviewViewModel basketPreviewViewModel)
         {
             basketPreviewViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
             basketPreviewViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) ?? new OrderAddress();
