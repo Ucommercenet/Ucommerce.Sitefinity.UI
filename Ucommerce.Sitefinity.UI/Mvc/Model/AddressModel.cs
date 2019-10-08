@@ -24,7 +24,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.previousStepId = previousStepId ?? Guid.Empty;
         }
 
-        public AddressRenderingViewModel GetViewMode(string saveUrl)
+        public AddressRenderingViewModel GetViewModel()
         {
             var viewModel = new AddressRenderingViewModel();
 
@@ -63,7 +63,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
             viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
             viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
-            viewModel.SaveAddressUrl = saveUrl;
 
             return viewModel;
         }

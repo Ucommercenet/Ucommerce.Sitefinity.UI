@@ -1,11 +1,15 @@
 ﻿@using System.Web.Mvc
 @using System.Web.Mvc.Html
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
+@using Telerik.Sitefinity.Modules.Pages;
+@using Telerik.Sitefinity.UI.MVC;
+@using Telerik.Sitefinity.Services;
 @model Ucommerce.Sitefinity.UI.Mvc.ViewModels.PaymentPickerViewModel
 @{
     Layout = null;
 }
 
-@using (Html.BeginForm("CreatePayment", "PaymentPicker", FormMethod.Post))
+@using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
 {
     <legend>Payment method</legend>
     if (@Model.AvailablePaymentMethods.Count > 0)
@@ -48,7 +52,7 @@
                 }
 
             }
-            <a href="@Model.NextStepUrl" type="submit" style="@(showContinueButton ? "display:block" : "display:none")" class="btn btn-success btn-default btn-full-width pull-right">Continue to order preview</a>
+            <input type="submit" class="btn btn-success btn-full-width pull-right submit-address" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
         </div>
 
     }

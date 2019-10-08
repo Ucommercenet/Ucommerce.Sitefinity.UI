@@ -2,30 +2,26 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
-    public class ShippingPickerController : Controller
+    [ControllerToolboxItem(Name = "uSpaCheckoutWidget_MVC", Title = "Spa Checkout Widget", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    public class SpaCheckoutController : Controller
     {
         public Guid? NextStepId { get; set; }
-        public Guid? PreviousStepId { get; set; }
         public string TemplteName { get; set; } = "Index";
 
         public ActionResult Index()
         {
-            var model = ResolveModel();
-            var sippingPickerVM = model.GetViewModel();
-
-            return View(TemplteName, sippingPickerVM);
+            return View(TemplteName);
         }
 
         [HttpPost]
-        public ActionResult CreateShipment()
+        public ActionResult Save(AddressSaveViewModel addressRendering)
         {
             var model = ResolveModel();
-            var viewModel = model.GetViewModel();
-            model.CreateShipment(viewModel);
+            var viewModel = model.GetViewModel(addressRendering);
 
             if (viewModel.NextStepUrl?.Length == 0)
             {
@@ -37,14 +33,13 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             }
         }
 
-        public IShippingPickerModel ResolveModel()
+        public ISpaCheckoutModel ResolveModel()
         {
             var container = UcommerceUIModule.Container;
-            var model = container.Resolve<IShippingPickerModel>(
+            var model = container.Resolve<ISpaCheckoutModel>(
                 new
                 {
                     nextStepId = this.NextStepId,
-                    previousStepId = this.PreviousStepId
                 });
 
             return model;
