@@ -11,9 +11,9 @@
 @using (Html.BeginFormSitefinity("CreateShipment", "ShippingPicker", FormMethod.Post))
 {
     <legend>Shipping method</legend>
-    if (Model.AvailableShippingMethods.Count > 0)
+    if (@Model.AvailableShippingMethods.Count > 0)
     {
-        foreach (var shippingMethod in Model.AvailableShippingMethods)
+        foreach (var shippingMethod in @Model.AvailableShippingMethods)
         {
             <label class="radio">
                 @if (shippingMethod.Selected)
@@ -49,10 +49,9 @@
                         showContinueButton = false;
                     }
                 }
-                <a href="@Model.NextStepUrl" type="submit" class="btn btn-success btn-full-width pull-right" name="review-product" style="@(showContinueButton ? "display:block" : "display:none")">Continue to payment options</a>
+                <input type="submit" class="btn btn-success btn-full-width pull-right submit-address" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
             </div>
         </div>
-
     }
 
     else

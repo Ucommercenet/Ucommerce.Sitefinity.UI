@@ -14,7 +14,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.nextStepId = nextStepId ?? Guid.Empty;
         }
 
-        public SpaCheckoutViewModel GetViewModel(AddressSaveViewModel addressRendering)
+        public SpaCheckoutViewModel GetViewModel(AddressSaveViewModel addressRendering, ShippingPickerViewModel createShipmentViewModel, PaymentPickerViewModel createPaymentViewModel)
         {
             var spaCkeckoutViewModel = new SpaCheckoutViewModel();
 
@@ -23,8 +23,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             var paymentCont = new PaymentPickerController();
 
             addressCont.Save(addressRendering);
-            shipCont.CreateShipment();
-            paymentCont.CreatePayment();
+            shipCont.CreateShipment(createShipmentViewModel);
+            paymentCont.CreatePayment(createPaymentViewModel);
 
             spaCkeckoutViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 

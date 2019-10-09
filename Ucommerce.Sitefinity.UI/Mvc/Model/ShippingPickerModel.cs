@@ -26,7 +26,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         public ShippingPickerViewModel GetViewModel()
         {
             var shipmentPickerViewModel = new ShippingPickerViewModel();
-            var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
             if (_transactionLibraryInternal.HasBasket())
             {
                 var allCountries = UCommerce.Api.TransactionLibrary.GetCountries();

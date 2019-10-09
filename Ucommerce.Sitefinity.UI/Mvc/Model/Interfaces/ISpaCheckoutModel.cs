@@ -4,6 +4,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces
 {
     public interface ISpaCheckoutModel
     {
-        SpaCheckoutViewModel GetViewModel(AddressSaveViewModel addressRendering);
+        SpaCheckoutViewModel GetViewModel(AddressSaveViewModel addressRendering, ShippingPickerViewModel createShipmentViewModel, PaymentPickerViewModel createPaymentViewModel);
     }
 }
