@@ -25,12 +25,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult Save(AddressSaveViewModel addressRendering)
         {
             var model = ResolveModel();
-
             var viewModel = model.GetViewModel();
             var modelState = new ModelStateDictionary();
+
+            model.Save(addressRendering, modelState);
+
             if (viewModel.NextStepUrl?.Length == 0)
             {
-                return model.Save(addressRendering, modelState);
+                return new EmptyResult();
             }
             else
             {

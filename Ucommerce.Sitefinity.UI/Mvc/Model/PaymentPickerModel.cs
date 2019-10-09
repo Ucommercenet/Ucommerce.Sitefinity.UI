@@ -27,7 +27,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         {
             var paymentPickerViewModel = new PaymentPickerViewModel();
 
-            var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
             var shippingCountry = UCommerce.Api.TransactionLibrary.GetCountries().SingleOrDefault(x => x.Name == "Germany");
 
             paymentPickerViewModel.ShippingCountry = shippingCountry.Name;
@@ -54,6 +54,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
                 paymentPickerViewModel.AvailablePaymentMethods.Add(option);
             }
+            _transactionLibraryInternal.ExecuteBasketPipeline();
 
             paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
             paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);

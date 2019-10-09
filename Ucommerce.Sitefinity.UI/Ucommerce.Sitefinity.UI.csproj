@@ -5203,10 +5203,6 @@
     <None Include="node_modules\yargs\locales\zh_TW.json" />
     <None Include="node_modules\yargs\package.json" />
     <None Include="node_modules\yargs\README.md" />
-    <None Include="obj\Debug\build.force" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="obj\Debug\project.razor.json" />
-    <None Include="obj\Debug\Ucommerce.Sitefinity.UI.csproj.CoreCompileInputs.cache" />
     <None Include="package-lock.json" />
     <None Include="package.json" />
     <None Include="packages.config" />
@@ -5222,9 +5218,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\src\js\mixins\" />
-    <Folder Include="bin\Debug\" />
-    <Folder Include="bin\Release\" />
-    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\build\js\main.js" />
@@ -17644,7 +17637,6 @@
     <Content Include="node_modules\yargs\lib\validation.js" />
     <Content Include="node_modules\yargs\lib\yerror.js" />
     <Content Include="node_modules\yargs\yargs.js" />
-    <Content Include="obj\Debug\Ucommerce.Sitefinity.UI.csproj.FileListAbsolute.txt" />
     <Content Include="UCommerce\Apps\Adyen\bin\UCommerce.Transactions.Payments.Adyen.dll" />
     <Content Include="UCommerce\Apps\Authorizedotnet\bin\UCommerce.Transactions.Payments.Authorizedotnet.dll" />
     <Content Include="UCommerce\Apps\Braintree\bin\Braintree-2.22.0.dll" />

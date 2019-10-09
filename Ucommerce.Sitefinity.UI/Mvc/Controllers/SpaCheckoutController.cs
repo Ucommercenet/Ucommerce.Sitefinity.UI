@@ -18,10 +18,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(AddressSaveViewModel addressRendering)
+        public ActionResult Save(AddressSaveViewModel addressRendering, ShippingPickerViewModel createShipmentViewModel, PaymentPickerViewModel createPaymentViewModel)
         {
             var model = ResolveModel();
-            var viewModel = model.GetViewModel(addressRendering);
+            var viewModel = model.GetViewModel(addressRendering, createShipmentViewModel, createPaymentViewModel);
 
             if (viewModel.NextStepUrl?.Length == 0)
             {

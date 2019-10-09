@@ -23,12 +23,12 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             if (!string.IsNullOrEmpty(orderGuid))
             {
                 var purchaseOrder = _purchaseOrderRepository.SingleOrDefault(x => x.OrderGuid == new Guid(orderGuid));
-                confirmationEmailViewModel = MapPurchaseOrderToViewModel(purchaseOrder, confirmationEmailViewModel);
+                confirmationEmailViewModel = MapPurchaseOrder(purchaseOrder, confirmationEmailViewModel);
             }
             return confirmationEmailViewModel;
         }
 
-        private ConfirmationEmailViewModel MapPurchaseOrderToViewModel(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
+        private ConfirmationEmailViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
         {
             confirmationEmailViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
             confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Default") ?? new OrderAddress();

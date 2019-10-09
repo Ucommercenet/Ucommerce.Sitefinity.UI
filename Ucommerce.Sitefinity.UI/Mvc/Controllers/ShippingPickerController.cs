@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -21,11 +22,12 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateShipment()
+        public ActionResult CreateShipment(ShippingPickerViewModel createShipmentViewModel)
         {
             var model = ResolveModel();
             var viewModel = model.GetViewModel();
-            model.CreateShipment(viewModel);
+
+            model.CreateShipment(createShipmentViewModel);
 
             if (viewModel.NextStepUrl?.Length == 0)
             {
