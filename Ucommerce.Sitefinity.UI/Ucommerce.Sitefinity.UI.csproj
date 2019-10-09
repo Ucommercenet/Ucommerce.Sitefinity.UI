@@ -254,6 +254,7 @@
     <Compile Include="DI\WindsorInstaller.cs" />
     <Compile Include="DI\Events\IWindsorContainerInitializedEvent.cs" />
     <Compile Include="DI\Events\WindsorContainerInitializedEvent.cs" />
+    <Compile Include="Mvc\Controllers\BasketPreviewController.cs" />
     <Compile Include="Mvc\Controllers\OrderOverviewController.cs" />
     <Compile Include="Mvc\Controllers\CartController.cs" />
     <Compile Include="Mvc\Controllers\AddressController.cs" />
@@ -269,6 +270,8 @@
     <Compile Include="Mvc\Infrastructure\ControllerContainerResolver.cs" />
     <Compile Include="Mvc\Infrastructure\WindsorControllerFactory.cs" />
     <Compile Include="Mvc\Model\AddressModel.cs" />
+    <Compile Include="Mvc\Model\BasketPreviewModel.cs" />
+    <Compile Include="Mvc\Model\Interfaces\IBasketPreviewModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IOrderOverviewModel.cs" />
     <Compile Include="Mvc\Model\OrderOverviewModel.cs" />
     <Compile Include="Mvc\Model\CartModel.cs" />
@@ -295,6 +298,7 @@
     <Compile Include="Mvc\ViewModels\AddressRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddressSave.cs" />
     <Compile Include="Mvc\ViewModels\AddressSaveViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\BasketPreviewViewModel.cs" />
     <Compile Include="Mvc\ViewModels\OrderOverviewViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CartUpdateBasket.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCategoryViewModel.cs" />
@@ -312,6 +316,7 @@
     <Compile Include="Mvc\ViewModels\MiniBasketRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\OrderlineViewModel.cs" />
     <Compile Include="Mvc\ViewModels\PaymentPickerViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\PreviewOrderLine.cs" />
     <Compile Include="Mvc\ViewModels\ProductDetailViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductListViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductViewModel.cs" />
@@ -465,6 +470,7 @@
     <EmbeddedResource Include="Mvc\Views\Address\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.json" />
+    <None Include="Mvc\Views\BasketPreview\Index.cshtml" />
     <None Include="Mvc\Views\CategoryNavigation\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
@@ -472,6 +478,14 @@
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\DesignerView.Simple.json" />
+    <None Include="Mvc\Views\ConfirmationEmail\Index.cshtml" />
+    <None Include="Mvc\Views\ConfirmationMessage\Index.cshtml" />
+    <None Include="Mvc\Views\OrderOverview\DesignerView.Simple.cshtml" />
+    <None Include="Mvc\Views\OrderOverview\DesignerView.Simple.json" />
+    <None Include="Mvc\Views\OrderOverview\Index.cshtml" />
+    <None Include="Mvc\Views\PaymentPicker\DesignerView.Simple.cshtml" />
+    <None Include="Mvc\Views\PaymentPicker\DesignerView.Simple.json" />
+    <None Include="Mvc\Views\PaymentPicker\Index.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />

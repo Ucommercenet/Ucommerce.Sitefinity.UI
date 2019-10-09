@@ -58,6 +58,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                     });
                 }
             }
+            _transactionLibraryInternal.ExecuteBasketPipeline();
 
             shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
             shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);

@@ -25,10 +25,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult CreatePayment(PaymentPickerViewModel createPaymentViewModel)
         {
             var model = ResolveModel();
-
+            var viewModel = model.GetViewModel();
             model.CreatePayment(createPaymentViewModel);
 
-            return Redirect("/preview");
+            return Redirect(viewModel.NextStepUrl);
         }
 
         protected override void HandleUnknownAction(string actionName)
