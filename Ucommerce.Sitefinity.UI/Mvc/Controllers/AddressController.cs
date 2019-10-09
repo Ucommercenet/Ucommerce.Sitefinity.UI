@@ -16,7 +16,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult Index()
         {
             var model = ResolveModel();
-            var viewModel = model.GetViewMode(Url.Action("Save"));
+            var viewModel = model.GetViewModel();
 
             return View(TemplteName, viewModel);
         }
@@ -25,12 +25,17 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult Save(AddressSaveViewModel addressRendering)
         {
             var model = ResolveModel();
-            var viewModel = model.GetViewMode(Url.Action("Save"));
+
+            var viewModel = model.GetViewModel();
             var modelState = new ModelStateDictionary();
-
-            model.Save(addressRendering, modelState);
-
-            return Redirect(viewModel.NextStepUrl);
+            if (viewModel.NextStepUrl?.Length == 0)
+            {
+                return model.Save(addressRendering, modelState);
+            }
+            else
+            {
+                return Redirect(viewModel.NextStepUrl);
+            }
         }
 
         protected override void HandleUnknownAction(string actionName)

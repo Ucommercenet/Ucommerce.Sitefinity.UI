@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -22,13 +21,20 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreatePayment(PaymentPickerViewModel createPaymentViewModel)
+        public ActionResult CreatePayment()
         {
             var model = ResolveModel();
             var viewModel = model.GetViewModel();
-            model.CreatePayment(createPaymentViewModel);
+            model.CreatePayment(viewModel);
 
-            return Redirect(viewModel.NextStepUrl);
+            if (viewModel.NextStepUrl?.Length == 0)
+            {
+                return new EmptyResult();
+            }
+            else
+            {
+                return Redirect(viewModel.NextStepUrl);
+            }
         }
 
         protected override void HandleUnknownAction(string actionName)
