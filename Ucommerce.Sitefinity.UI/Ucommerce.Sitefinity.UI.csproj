@@ -255,7 +255,6 @@
     <Compile Include="DI\Events\IWindsorContainerInitializedEvent.cs" />
     <Compile Include="DI\Events\WindsorContainerInitializedEvent.cs" />
     <Compile Include="Mvc\Controllers\BasketPreviewController.cs" />
-    <Compile Include="Mvc\Controllers\OrderOverviewController.cs" />
     <Compile Include="Mvc\Controllers\CartController.cs" />
     <Compile Include="Mvc\Controllers\AddressController.cs" />
     <Compile Include="Mvc\Controllers\CategoryNavigationController.cs" />
@@ -480,9 +479,6 @@
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\DesignerView.Simple.json" />
     <None Include="Mvc\Views\ConfirmationEmail\Index.cshtml" />
     <None Include="Mvc\Views\ConfirmationMessage\Index.cshtml" />
-    <None Include="Mvc\Views\OrderOverview\DesignerView.Simple.cshtml" />
-    <None Include="Mvc\Views\OrderOverview\DesignerView.Simple.json" />
-    <None Include="Mvc\Views\OrderOverview\Index.cshtml" />
     <None Include="Mvc\Views\PaymentPicker\DesignerView.Simple.cshtml" />
     <None Include="Mvc\Views\PaymentPicker\DesignerView.Simple.json" />
     <Content Include="Mvc\Views\PaymentPicker\Index.cshtml" />
