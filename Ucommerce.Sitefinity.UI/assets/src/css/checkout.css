@@ -49,7 +49,8 @@ td {
     padding: 15px 10px;
 }
 
-.multistep-btn-a input[type="submit"] {
+.multistep-btn-a input[type="submit"],
+.multistep-btn-a .btn-complete {
     width: 50% !important;
     font-size: 18px !important;
     padding: 15px 10px !important;
@@ -122,3 +123,25 @@ tr {
 .radio-btn-ml {
     margin-left: 44px !important;
 }
+
+.address-line {
+    font-size: 16px;
+}
+
+    .address-line:first-child {
+        font-size: 18px;
+    }
+
+    .address-line:nth-child(2) {
+        padding-top: 20px;
+    }
+
+abbr {
+    margin-right: 10px !important;
+    text-decoration: none !important;
+    border-bottom: none !important;
+}
+
+    abbr:hover {
+        cursor: default;
+    }
