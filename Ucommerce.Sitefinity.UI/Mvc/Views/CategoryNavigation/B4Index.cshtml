@@ -40,12 +40,12 @@
                             }
 
                             <li class="nav-item ml-4 mr-4" v-on:click="toggleSearchBar()"><a class="nav-link" href="javascript:void(0)"><span>&#128269;</span></a></li>
-
-                            @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
-                            {
-                                <basket :root-id="$el.id">
-                                </basket>
-                            }
+                            @{ Html.RenderAction("Index", "MiniBasket");}
+                            @*@if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
+                                {
+                                    <basket :root-id="$el.id">
+                                    </basket>
+                                }*@
                         </ul>
                     </div>
                 </nav>
