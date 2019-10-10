@@ -266,7 +266,6 @@
     <Compile Include="Mvc\Controllers\PaymentPickerController.cs" />
     <Compile Include="Mvc\Controllers\ProductsController.cs" />
     <Compile Include="Mvc\Controllers\ShippingPickerController.cs" />
-    <Compile Include="Mvc\Controllers\SpaCheckoutController.cs" />
     <Compile Include="Mvc\Filters\ContextResolverAttribute.cs" />
     <Compile Include="Mvc\Infrastructure\ControllerContainerResolver.cs" />
     <Compile Include="Mvc\Infrastructure\WindsorControllerFactory.cs" />
@@ -274,7 +273,6 @@
     <Compile Include="Mvc\Model\BasketPreviewModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IBasketPreviewModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IOrderOverviewModel.cs" />
-    <Compile Include="Mvc\Model\Interfaces\ISpaCheckoutModel.cs" />
     <Compile Include="Mvc\Model\OrderOverviewModel.cs" />
     <Compile Include="Mvc\Model\CartModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
@@ -296,7 +294,6 @@
     <Compile Include="Mvc\Model\PaymentPickerModel.cs" />
     <Compile Include="Mvc\Model\ProductModel.cs" />
     <Compile Include="Mvc\Model\ShippingPickerModel.cs" />
-    <Compile Include="Mvc\Model\SpaCheckoutModel.cs" />
     <Compile Include="Mvc\ViewModels\Address.cs" />
     <Compile Include="Mvc\ViewModels\AddressRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddressSave.cs" />
@@ -324,7 +321,6 @@
     <Compile Include="Mvc\ViewModels\ProductListViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ShippingPickerViewModel.cs" />
-    <Compile Include="Mvc\ViewModels\SpaCheckoutViewModel.cs" />
     <Compile Include="Mvc\ViewModels\UpdateOrderLine.cs" />
     <Compile Include="node_modules\node-gyp\lib\Find-VS2017.cs" />
     <Compile Include="Pages\HttpContextExtensions.cs" />
@@ -490,9 +486,6 @@
     <None Include="Mvc\Views\PaymentPicker\DesignerView.Simple.cshtml" />
     <None Include="Mvc\Views\PaymentPicker\DesignerView.Simple.json" />
     <Content Include="Mvc\Views\PaymentPicker\Index.cshtml" />
-    <Content Include="Mvc\Views\SpaCheckout\Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\SpaCheckout\DesignerView.Simple.json" />
-    <EmbeddedResource Include="Mvc\Views\SpaCheckout\DesignerView.Simple.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />

@@ -100,12 +100,6 @@ namespace Ucommerce.Sitefinity.UI.DI
                  .For<IBasketPreviewModel>()
                  .ImplementedBy<BasketPreviewModel>()
                  .LifestylePerWebRequest());
-
-            container.Register(
-                 Component
-                 .For<ISpaCheckoutModel>()
-                 .ImplementedBy<SpaCheckoutModel>()
-                 .LifestylePerWebRequest());
         }
     }
 }
