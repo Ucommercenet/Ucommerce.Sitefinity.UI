@@ -133,11 +133,29 @@
             </tbody>
         </table>
         <div class="control-group row multistep-btn-a">
-            <div class="col-md-6 padding-0">
-                <a href="/payment" type="submit" class="btn btn-next btn-transparent pull-left">Back</a>
+            <div class="col-md-6 padding-0"> @{
+                var showBackButton = true;
+
+                if (Model.PreviousStepUrl == "")
+                {
+                    showBackButton = false;
+                }
+
+            }
+            <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")" type="submit" class="btn btn-next btn-transparent pull-left">Back</a>
+        
             </div>
             <div class="col-md-6 padding-0">
-                <button name="send-order" type="submit" class="btn btn-next btn-complete btn-success pull-right">Complete Order <i class="icon-arrow-right icon-white"></i></button>
+                @{
+                var showContinueButton = true;
+
+                if (Model.NextStepUrl == "")
+                {
+                    showContinueButton = false;
+                }
+
+            }
+            <input name="send-order" type="submit" style="@(showContinueButton ? "display:block" : "display:none")" class="btn btn-next btn-complete btn-success pull-right" value="Complete Order"/>
             </div>
         </div>
     }

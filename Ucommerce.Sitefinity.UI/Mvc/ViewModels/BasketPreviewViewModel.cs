@@ -25,5 +25,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public decimal DiscountAmount { get; set; }
         public OrderAddress ShipmentAddress { get; set; }
         public OrderAddress BillingAddress { get; set; }
+        public string NextStepUrl { get; set; }
+        public string PreviousStepUrl { get; set; }
     }
 }
