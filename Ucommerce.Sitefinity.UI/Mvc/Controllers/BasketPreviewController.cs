@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
@@ -12,6 +13,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
     public class BasketPreviewController : Controller
     {
+        public Guid? NextStepId { get; set; }
+        public Guid? PreviousStepId { get; set; }
+        public string TemplteName { get; set; } = "Index";
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
         public BasketPreviewController()
@@ -41,7 +45,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 ViewBag.RowSpan++;
             }
 
-            return View(basketPreviewViewModel);
+            return View(TemplteName, basketPreviewViewModel);
         }
 
         [HttpPost]
@@ -66,7 +70,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         private IBasketPreviewModel ResolveModel()
         {
             var container = UcommerceUIModule.Container;
-            var model = container.Resolve<IBasketPreviewModel>();
+            var model = container.Resolve<IBasketPreviewModel>(new
+            {
+                nextStepId = this.NextStepId,
+                previousStepId = this.PreviousStepId
+            });
 
             return model;
         }
