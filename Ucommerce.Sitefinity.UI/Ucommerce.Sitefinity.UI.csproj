@@ -471,6 +471,8 @@
     <EmbeddedResource Include="Mvc\Views\Address\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.json" />
+    <None Include="Mvc\Views\BasketPreview\DesignerView.Simple.cshtml" />
+    <None Include="Mvc\Views\BasketPreview\DesignerView.Simple.json" />
     <None Include="Mvc\Views\BasketPreview\Index.cshtml" />
     <None Include="Mvc\Views\CategoryNavigation\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\Index.cshtml" />

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
@@ -10,11 +11,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public class BasketPreviewModel : IBasketPreviewModel
     {
+        private Guid nextStepId;
+        private Guid previousStepId;
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
-        public BasketPreviewModel()
+        public BasketPreviewModel(Guid? nextStepId = null, Guid? previousStepId = null)
         {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>(); ;
+            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
+            this.nextStepId = nextStepId ?? Guid.Empty;
+            this.previousStepId = previousStepId ?? Guid.Empty;
         }
 
         public BasketPreviewViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, BasketPreviewViewModel basketPreviewViewModel)
@@ -48,7 +53,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             basketPreviewViewModel.ShippingTotal = new Money(purchaseOrder.ShippingTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
             basketPreviewViewModel.PaymentTotal = new Money(purchaseOrder.PaymentTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
 
-
             var shipment = purchaseOrder.Shipments.FirstOrDefault();
             if (shipment != null)
             {
@@ -62,9 +66,24 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 basketPreviewViewModel.PaymentName = payment.PaymentMethodName;
                 basketPreviewViewModel.PaymentAmount = purchaseOrder.PaymentTotal.GetValueOrDefault();
             }
+            basketPreviewViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+            basketPreviewViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-            
             return basketPreviewViewModel;
+        }
+
+        private string GetNextStepUrl(Guid nextStepId)
+        {
+            var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+        }
+
+        private string GetPreviousStepUrl(Guid previousStepId)
+        {
+            var previousStepUrl = Pages.UrlResolver.GetPageNodeUrl(previousStepId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(previousStepUrl);
         }
     }
 }
