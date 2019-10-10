@@ -271,8 +271,6 @@
     <Compile Include="Mvc\Model\AddressModel.cs" />
     <Compile Include="Mvc\Model\BasketPreviewModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IBasketPreviewModel.cs" />
-    <Compile Include="Mvc\Model\Interfaces\IOrderOverviewModel.cs" />
-    <Compile Include="Mvc\Model\OrderOverviewModel.cs" />
     <Compile Include="Mvc\Model\CartModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
     <Compile Include="Mvc\Model\ConfirmationEmailModel.cs" />
