@@ -84,12 +84,6 @@ namespace Ucommerce.Sitefinity.UI.DI
                  .LifestylePerWebRequest());
 
             container.Register(
-             Component
-             .For<IOrderOverviewModel>()
-             .ImplementedBy<OrderOverviewModel>()
-             .LifestylePerWebRequest());
-
-            container.Register(
                  Component
                  .For<IConfirmationMessageModel>()
                  .ImplementedBy<ConfirmationMessageModel>()
