@@ -38,7 +38,8 @@
                         showBackButton = false;
                     }
                 }
-                <a href="@Model.PreviousStepUrl" type="submit" class="btn btn-secondary btn-default btn-full-width pull-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
+                <a href="@Model.PreviousStepUrl" class="btn btn-success btn-full-width pull-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
+
             </div>
             <div class="col-md-6 no-padding-col">
                 @{
@@ -49,7 +50,7 @@
                         showContinueButton = false;
                     }
                 }
-                <input type="submit" class="btn btn-success btn-full-width pull-right submit-address" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
+                <input type="submit" class="btn btn-success btn-full-width pull-right" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
             </div>
         </div>
     }
