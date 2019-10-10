@@ -447,6 +447,7 @@
     <None Include="app.config" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\FacetsFilter\B4Index.cshtml" />
+    <Content Include="assets\src\css\checkout.css" />
     <Content Include="Mvc\scripts\jsAddress.js" />
     <Content Include="Mvc\scripts\jsMiniBasket.js" />
     <Content Include="Mvc\scripts\jsShippingPicker.js" />
