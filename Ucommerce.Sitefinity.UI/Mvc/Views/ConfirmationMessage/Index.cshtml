@@ -3,16 +3,18 @@
     Layout = null;
 }
 
-    <div class="alert alert-info">
-        @if (string.IsNullOrEmpty(Model.Headline))
-        {
-            Model.Headline = "Thank you for your order";
-        }
-        <h1>@Model.Headline</h1>
-        <br />
-        @if (string.IsNullOrEmpty(Model.Message))
-        {
-            Model.Message = "An order confirmation email has been sent to your email address";
-        }
-        <p>@Model.Message</p>
-    </div>
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/checkout.css"), "head")
+
+<div class="alert alert-info section-margin">
+    @if (string.IsNullOrEmpty(Model.Headline))
+    {
+        Model.Headline = "Thank you for your order";
+    }
+    <h1>@Model.Headline</h1>
+    <br />
+    @if (string.IsNullOrEmpty(Model.Message))
+    {
+        Model.Message = "An order confirmation email has been sent to your email address";
+    }
+    <p>@Model.Message</p>
+</div>

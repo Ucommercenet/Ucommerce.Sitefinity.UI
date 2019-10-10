@@ -8,56 +8,61 @@
 @{
     Layout = null;
 }
-@using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
-{
-    <legend>Payment method</legend>
-    if (@Model.AvailablePaymentMethods.Count > 0)
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/checkout.css"), "head")
+
+<div class="section-margin">
+    @using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
     {
-        foreach (var paymentMethod in @Model.AvailablePaymentMethods)
+        <legend><h3>Payment method</h3></legend>
+        if (@Model.AvailablePaymentMethods.Count > 0)
         {
-            <label class="radio">
-                @if (paymentMethod.Selected)
-                {
-                    @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @checked = "checked", @class = "js-payment-picker" })
-                    @paymentMethod.Text
-                }
-                else
-                {
-                    @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @class = "js-payment-picker" })
-                    @paymentMethod.Text
-                }
-            </label>
+            foreach (var paymentMethod in @Model.AvailablePaymentMethods)
+            {
+                <div class="radio-btn-ml">
+                    <label class="radio">
+                        @if (paymentMethod.Selected)
+                        {
+                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @checked = "checked", @class = "js-payment-picker" })
+                            @paymentMethod.Text
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @class = "js-payment-picker" })
+                            @paymentMethod.Text
+                        }
+                    </label>
+                </div>
+            }
+            <div class="row control-group multistep-btn-a section-margin">
+                <div class="col-md-6 padding-0">
+                    @{
+                        var showBackButton = true;
+
+                        if (Model.NextStepUrl == "")
+                        {
+                            showBackButton = false;
+                        }
+                    }
+                    <a href="@Model.PreviousStepUrl" class="btn btn-next btn-transparent pull-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
+                </div>
+                <div class="col-md-6 padding-0">
+                    @{
+                        var showContinueButton = true;
+
+                        if (Model.NextStepUrl == "")
+                        {
+                            showContinueButton = false;
+                        }
+                    }
+                    <input type="submit" class="btn btn-success pull-right submit-address" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
+                </div>
+            </div>
         }
-        <div class="control-group">
-            <div class="col-md-6 no-padding-col">
-                @{
-                    var showBackButton = true;
-
-                    if (Model.NextStepUrl == "")
-                    {
-                        showBackButton = false;
-                    }
-                }
-                <a href="@Model.PreviousStepUrl" class="btn btn-success btn-full-width pull-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
-
-            </div>
-            <div class="col-md-6 no-padding-col">
-                @{
-                    var showContinueButton = true;
-
-                    if (Model.NextStepUrl == "")
-                    {
-                        showContinueButton = false;
-                    }
-                }
-                <input type="submit" class="btn btn-success btn-full-width pull-right" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
-            </div>
-        </div>
+        else
+        {
+            <p class="alert">
+                WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
+            </p>
+        }
     }
-    else
-    {
-        <p class="alert">
-            WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
-        </p>
-    }
-}
+</div>
