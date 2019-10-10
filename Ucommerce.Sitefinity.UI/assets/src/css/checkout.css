@@ -1,0 +1,86 @@
+﻿.cart-table {
+    margin: 30px 0;
+}
+
+    .cart-table table thead tr th {
+        color: #aaa !important;
+    }
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    border: none;
+}
+
+.update-basket {
+    margin: 10px 0;
+}
+
+
+.update-basket,
+.line-remove,
+.btn-next {
+    border: none;
+    background: #00b4c9;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase !important;
+    font-family: "Open Sans";
+    box-shadow: 0 2px 4px #ccc;
+    transition: all .3s ease-out;
+    text-transform: none;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+    .update-basket:hover,
+    .line-remove:hover,
+    .btn-next:hover {
+        background: #0097a9;
+    }
+
+.btn-next {
+    width: 25%;
+    font-size: 18px;
+    padding: 10px 5px;
+}
+
+.update-basket > .btn-text,
+.line-remove > .btn-text {
+    margin: 0 10px;
+    color: white;
+}
+
+.update-basket > .fa-sync-alt,
+.line-remove > .fa-times {
+    color: white !important;
+}
+
+.qty {
+    padding-left: 10px;
+}
+
+.a-heading {
+    color: black;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+    .a-heading:hover {
+        color: #00b4c9;
+        text-decoration: underline;
+    }
+
+.order-total {
+    font-weight: 600;
+}
+
+.order-line:last-child {
+    padding-bottom: 20px;
+}
+
+tr {
+    background: white !important;
+}
