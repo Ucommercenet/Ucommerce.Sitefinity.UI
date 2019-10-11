@@ -8,18 +8,16 @@
 @{
     Layout = null;
 }
-@Html.StyleSheet(Url.WidgetContent("assets/src/css/checkout.css"), "head")
 
-<div class="section-margin">
     @using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
     {
-        <legend><h3>Payment method</h3></legend>
+        <h3>Payment method</h3>
         if (@Model.AvailablePaymentMethods.Count > 0)
         {
             foreach (var paymentMethod in @Model.AvailablePaymentMethods)
             {
-                <div class="radio-btn-ml">
-                    <label class="radio">
+                <div>
+                    <label>
                         @if (paymentMethod.Selected)
                         {
                             @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @checked = "checked", @class = "js-payment-picker" })
@@ -33,8 +31,8 @@
                     </label>
                 </div>
             }
-            <div class="row control-group multistep-btn-a section-margin">
-                <div class="col-md-6 padding-0">
+            <div>
+                <div>
                     @{
                         var showBackButton = true;
 
@@ -43,9 +41,9 @@
                             showBackButton = false;
                         }
                     }
-                    <a href="@Model.PreviousStepUrl" class="btn btn-next btn-transparent pull-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
+                    <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
                 </div>
-                <div class="col-md-6 padding-0">
+                <div>
                     @{
                         var showContinueButton = true;
 
@@ -54,15 +52,14 @@
                             showContinueButton = false;
                         }
                     }
-                    <input type="submit" class="btn btn-success pull-right submit-address" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
+                    <input type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
                 </div>
             </div>
         }
         else
         {
-            <p class="alert">
+            <p>
                 WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
             </p>
         }
     }
-</div>

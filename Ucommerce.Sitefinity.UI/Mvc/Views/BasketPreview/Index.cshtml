@@ -9,57 +9,54 @@
     Layout = null;
 }
 
-@Html.StyleSheet(Url.WidgetContent("assets/src/css/checkout.css"), "head")
-
-<div class="section-margin">
     @using (Html.BeginFormSitefinity("RequestPayment", "BasketPreview", FormMethod.Post))
     {
-        <div class="row well overflow-hidden">
-            <div class="col-md-6">
-                <legend><h3>Billing address</h3></legend>
+        <div>
+            <div>
+                <h3>Billing address</h3>
                 <br />
                 <address>
-                    <span class="address-line"><strong>@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</strong></span><br>
-                    <span class="address-line">@Model.BillingAddress.Line1<br></span>
-                    <span class="address-line">@Model.BillingAddress.PostalCode @Model.BillingAddress.City</span><br>
-                    <span class="address-line">@Model.BillingAddress.Country.Name</span>
+                    <span><strong>@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</strong></span><br>
+                    <span>@Model.BillingAddress.Line1<br></span>
+                    <span>@Model.BillingAddress.PostalCode @Model.BillingAddress.City</span><br>
+                    <span>@Model.BillingAddress.Country.Name</span>
                     @if (!String.IsNullOrWhiteSpace(@Model.BillingAddress.Attention))
                     {
-                        <span class="address-line"><text>att. </text> @Model.BillingAddress.Attention</span>
+                        <span><text>att. </text> @Model.BillingAddress.Attention</span>
                     }<br>
-                    <span class="address-line"><abbr title="Phone">P:</abbr>@Model.BillingAddress.PhoneNumber</span><br>
-                    <span class="address-line"><abbr title="Mobile">M:</abbr>@Model.BillingAddress.MobilePhoneNumber </span><br>
-                    <span class="address-line"><abbr title="Email">E:</abbr><a href="mailto:@Model.BillingAddress.EmailAddress">@Model.BillingAddress.EmailAddress</a></span>
+                    <span><abbr title="Phone">P:</abbr>@Model.BillingAddress.PhoneNumber</span><br>
+                    <span><abbr title="Mobile">M:</abbr>@Model.BillingAddress.MobilePhoneNumber </span><br>
+                    <span><abbr title="Email">E:</abbr><a href="mailto:@Model.BillingAddress.EmailAddress">@Model.BillingAddress.EmailAddress</a></span>
                 </address>
             </div>
-            <div class="col-md-6">
-                <legend><h3>Shipping address</h3></legend>
+            <div>
+                <h3>Shipping address</h3>
                 <br />
                 <address>
-                    <span class="address-line"><strong>@Model.ShipmentAddress.FirstName @Model.ShipmentAddress.LastName</strong></span><br>
-                    <span class="address-line">@Model.ShipmentAddress.CompanyName</span>
+                    <span><strong>@Model.ShipmentAddress.FirstName @Model.ShipmentAddress.LastName</strong></span><br>
+                    <span >@Model.ShipmentAddress.CompanyName</span>
                     @if (!String.IsNullOrWhiteSpace(@Model.ShipmentAddress.Attention))
                     {
-                        <span class="address-line"><text>att. </text> @Model.ShipmentAddress.Attention </span>
+                        <span><text>att. </text> @Model.ShipmentAddress.Attention </span>
                     }<br />
-                    <span class="address-line">@Model.ShipmentAddress.Line1</span><br>
-                    <span class="address-line">@Model.ShipmentAddress.PostalCode @Model.ShipmentAddress.City</span><br>
-                    <span class="address-line">@Model.ShipmentAddress.Country.Name</span><br>
-                    <span class="address-line"><abbr title="Phone">P:</abbr>@Model.ShipmentAddress.PhoneNumber</span><br>
-                    <span class="address-line"><abbr title="Mobile">M:</abbr>@Model.ShipmentAddress.MobilePhoneNumber</span><br>
-                    <span class="address-line"><abbr title="Email">E:</abbr><a href="mailto:@Model.ShipmentAddress.EmailAddress">@Model.ShipmentAddress.EmailAddress</a></span>
+                    <span>@Model.ShipmentAddress.Line1</span><br>
+                    <span>@Model.ShipmentAddress.PostalCode @Model.ShipmentAddress.City</span><br>
+                    <span>@Model.ShipmentAddress.Country.Name</span><br>
+                    <span><abbr title="Phone">P:</abbr>@Model.ShipmentAddress.PhoneNumber</span><br>
+                    <span><abbr title="Mobile">M:</abbr>@Model.ShipmentAddress.MobilePhoneNumber</span><br>
+                    <span><abbr title="Email">E:</abbr><a href="mailto:@Model.ShipmentAddress.EmailAddress">@Model.ShipmentAddress.EmailAddress</a></span>
                 </address>
             </div>
         </div>
-        <table class="table table-striped table-responsive">
+        <table>
             <thead>
                 <tr>
-                    <th class="span2">Item no. </th>
-                    <th class="span6">Description</th>
-                    <th class="span2 money">Price</th>
-                    <th class="span2 money">VAT</th>
-                    <th class="span2 number">Quantity</th>
-                    <th class="span2 money">Total</th>
+                    <th>Item no. </th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>VAT</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,10 +65,10 @@
                     <tr>
                         <td>@lineItem.Sku</td>
                         <td>@lineItem.ProductName</td>
-                        <td class="money">
+                        <td>
                             @if (lineItem.Discount.HasValue && lineItem.Discount > 0)
                             {
-                                <span style="text-decoration: line-through">
+                                <span>
                                     @lineItem.Price
                                 </span>
                                 @lineItem.PriceWithDiscount
@@ -81,21 +78,21 @@
                                 @lineItem.Price
                             }
                         </td>
-                        <td class="money">@lineItem.Tax</td>
-                        <td class="number">@lineItem.Quantity</td>
-                        <td class="money">@lineItem.Total</td>
+                        <td>@lineItem.Tax</td>
+                        <td>@lineItem.Quantity</td>
+                        <td>@lineItem.Total</td>
                     </tr>
                 }
                 <tr>
-                    <td rowspan="@ViewBag.RowSpan" colspan="2" class="white-background"></td>
+                    <td rowspan="@ViewBag.RowSpan" colspan="2"></td>
                     <td colspan="3">Sub total: </td>
-                    <td class="money">
+                    <td>
                         @Model.SubTotal
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3">VAT: </td>
-                    <td class="money">
+                    <td>
                         @Model.TaxTotal
                     </td>
                 </tr>
@@ -103,7 +100,7 @@
                 {
                     <tr>
                         <td colspan="3">Order discounts: </td>
-                        <td class="money">-@Model.DiscountTotal</td>
+                        <td>-@Model.DiscountTotal</td>
                     </tr>
                 }
                 @if (@Model.ShipmentAmount != 0)
@@ -113,7 +110,7 @@
                             Shipping
                             <text> (via @Model.ShipmentName)</text>
                         </td>
-                        <td class="money">@Model.ShippingTotal</td>
+                        <td>@Model.ShippingTotal</td>
                     </tr>
                 }
                 @if (@Model.PaymentAmount != 0)
@@ -123,17 +120,17 @@
                             Payment
                             <text> (@Model.PaymentName)</text>
                         </td>
-                        <td class="money">@Model.PaymentTotal</td>
+                        <td>@Model.PaymentTotal</td>
                     </tr>
                 }
                 <tr>
                     <td colspan="3">Order total: </td>
-                    <td class="money">@Model.OrderTotal</td>
+                    <td>@Model.OrderTotal</td>
                 </tr>
             </tbody>
         </table>
-        <div class="control-group row multistep-btn-a">
-            <div class="col-md-6 padding-0"> @{
+        <div>
+            <div> @{
                 var showBackButton = true;
 
                 if (Model.PreviousStepUrl == "")
@@ -142,10 +139,10 @@
                 }
 
             }
-            <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")" type="submit" class="btn btn-next btn-transparent pull-left">Back</a>
+            <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")" type="submit">Back</a>
         
             </div>
-            <div class="col-md-6 padding-0">
+            <div>
                 @{
                 var showContinueButton = true;
 
@@ -155,8 +152,7 @@
                 }
 
             }
-            <input name="send-order" type="submit" style="@(showContinueButton ? "display:block" : "display:none")" class="btn btn-next btn-complete btn-success pull-right" value="Complete Order"/>
+            <input name="send-order" type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Complete Order"/>
             </div>
         </div>
     }
-</div>
