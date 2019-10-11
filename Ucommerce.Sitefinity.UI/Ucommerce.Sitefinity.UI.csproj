@@ -452,7 +452,7 @@
     <Content Include="Mvc\scripts\jsMiniBasket.js" />
     <Content Include="Mvc\scripts\jsShippingPicker.js" />
     <Content Include="Mvc\scripts\jsUpdateBasket.js" />
-    <Content Include="Mvc\Views\Products\B4Details.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Products\B4Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
