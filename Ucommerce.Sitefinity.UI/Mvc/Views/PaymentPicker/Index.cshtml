@@ -20,12 +20,12 @@
                     <label>
                         @if (paymentMethod.Selected)
                         {
-                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @checked = "checked", @class = "js-payment-picker" })
+                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
                             @paymentMethod.Text
                         }
                         else
                         {
-                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { @class = "js-payment-picker" })
+                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
                             @paymentMethod.Text
                         }
                     </label>
