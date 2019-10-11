@@ -29,8 +29,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
             if (_transactionLibraryInternal.HasBasket())
             {
-                var allCountries = UCommerce.Api.TransactionLibrary.GetCountries();
-                var shippingCountry = UCommerce.Api.TransactionLibrary.GetCountries().SingleOrDefault(x => x.Name == "Denmark");
+                var shippingCountry = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName).Country;
                 shipmentPickerViewModel.ShippingCountry = shippingCountry.Name;
                 var availableShippingMethods = _transactionLibraryInternal.GetShippingMethods(shippingCountry);
 
