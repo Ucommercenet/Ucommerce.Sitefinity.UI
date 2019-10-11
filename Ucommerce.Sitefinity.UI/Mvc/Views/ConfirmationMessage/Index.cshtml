@@ -6,9 +6,7 @@
     Layout = null;
 }
 
-@Html.StyleSheet(Url.WidgetContent("assets/src/css/checkout.css"), "head")
-
-<div class="alert alert-info section-margin">
+<div>
     @if (string.IsNullOrEmpty(Model.Headline))
     {
         Model.Headline = "Thank you for your order";
