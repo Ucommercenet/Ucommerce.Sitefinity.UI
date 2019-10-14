@@ -11,6 +11,7 @@
     {
         @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+        @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
     }
 
     <div class="mb-4 container" data-component="facet-selector" id="@Html.UniqueId("facetFilter")">

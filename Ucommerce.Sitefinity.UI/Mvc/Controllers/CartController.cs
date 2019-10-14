@@ -38,6 +38,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
             return Json(new
             {
+                MiniBasketRefresh = _miniBasketService.Refresh(),
                 orderlineId
             });
         }
@@ -55,7 +56,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 updatedVM.DiscountTotal,
                 updatedVM.TaxTotal,
                 updatedVM.SubTotal,
-                updatedVM.Orderlines
+                updatedVM.OrderLines
             });
         }
 

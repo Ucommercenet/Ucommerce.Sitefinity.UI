@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Web.Hosting;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using Castle.Windsor;
 using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity.Abstractions;
@@ -41,6 +43,11 @@ namespace Ucommerce.Sitefinity.UI.App_Start
             {
                 Container = UcommerceUIModule.Container
             });
+
+            //Use the following to register the BundleConfig
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
+            BundleTable.EnableOptimizations = true;
         }
     }
 }
