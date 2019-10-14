@@ -21,18 +21,18 @@
     var jsShippingPicker = {};
 
     jsShippingPicker.init = function () {
-        config.$rootSelector.find(classSelector).each(function () {
+        config.$rootSelector.find(classSelector).each(function() {
             config.$triggerEventSelector.on("init-completed", { $element: $(this) }, initCompleted());
         });
         config.$rootSelector.find(classSelector).on("change", (function () {
-            var shippingMethodId = $(this).val();
-            tiggerShippingMethodChanged(shippingMethodId);
-        }));
+			    var shippingMethodId = $(this).val();
+			    tiggerShippingMethodChanged(shippingMethodId);
+            }));
     };
 
     //Make a global event init complete, when all components have been loaded
     jsShippingPicker.initCompleted = function () {
-
+       
     };
 
     /** END OF PUBLIC API **/

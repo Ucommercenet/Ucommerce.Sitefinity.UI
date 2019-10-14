@@ -42,6 +42,8 @@
                             this.addToBasketMessage = addToBasketSuccessMessage;
                             this.showAddToBasketMessage = true;
 
+                            $({}).trigger("basket-changed", data.MiniBasketRefresh);
+
                             setTimeout(() =>
                                 this.showAddToBasketMessage = false,
                                 5000);

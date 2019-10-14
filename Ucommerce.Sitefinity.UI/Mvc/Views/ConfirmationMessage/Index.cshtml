@@ -6,6 +6,8 @@
     Layout = null;
 }
 
+@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+
 <div>
     @if (string.IsNullOrEmpty(Model.Headline))
     {

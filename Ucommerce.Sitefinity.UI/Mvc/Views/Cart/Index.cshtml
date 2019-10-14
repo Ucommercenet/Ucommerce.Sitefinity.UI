@@ -9,6 +9,7 @@
 
 
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/checkout.css"), "head")
+@Html.Script("~/bundles/ucommerce-js", "bottom")
 
 @if (Model.OrderLines.Count == 0)
 {
@@ -63,7 +64,7 @@ else
                         </td>
                         <td>
                             @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control inline-block no-padding", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
-                            <button name="update-basket" data-remove-orderline-url="@Model.RemoveOrderlineUrl" data-refresh-url="@Model.RefreshUrl" data-cart-container=".cart-container" data-item-total=".item-total" data-line-remove=".line-remove" data-order-subtotal=".order-subtotal" data-order-tax=".order-tax" data-order-discounts=".order-discounts" data-order-total=".order-total" data-basket="@Model" type="submit">
+                            <button name="update-basket" class="js-update-basket" data-remove-orderline-url="@Model.RemoveOrderlineUrl" data-refresh-url="@Model.RefreshUrl" data-cart-container=".cart-container" data-item-total=".item-total" data-line-remove=".line-remove" data-order-subtotal=".order-subtotal" data-order-tax=".order-tax" data-order-discounts=".order-discounts" data-order-total=".order-total" data-basket="@Model" type="submit">
                                 <span>&#10227;</span> <span>Update</span>
                             </button>
                         </td>
@@ -76,8 +77,7 @@ else
                     </tr>
                 }
                 <tr>
-                    <td rowspan="4" colspan="3">
-                    </td>
+                    <td rowspan="4" colspan="3"></td>
                     <td colspan="1">Sub total:</td>
                     <td>
                         @Model.SubTotal

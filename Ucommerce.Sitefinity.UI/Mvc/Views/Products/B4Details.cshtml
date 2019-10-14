@@ -10,9 +10,9 @@
 {
     if (!SystemManager.IsDesignMode)
     {
-        @Html.Script(Url.WidgetContent("scripts/jsMiniBasket.js"), "bottom", false)
         @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+        @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
     }
 
     <div class="container-fluid" data-component="products" id="@Html.UniqueId("product-details")" v-cloak>

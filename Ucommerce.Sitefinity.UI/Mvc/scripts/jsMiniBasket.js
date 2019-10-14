@@ -32,7 +32,7 @@
     var jsMiniBasket = {};
 
     jsMiniBasket.init = function () {
-        config.$rootSelector.find(classSelector).each(function () {
+        config.$rootSelector.find(classSelector).each(function() {
             config.$triggerEventSelector.on("basket-changed", { $element: $(this) }, basketChanged);
         });
     };

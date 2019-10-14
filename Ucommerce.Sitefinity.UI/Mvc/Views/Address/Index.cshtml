@@ -11,9 +11,12 @@
     var showShippingAddress = Model.IsShippingAddressDifferent ? "display:block;" : "display:none;";
 }
 
+@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+
 @using (Html.BeginFormSitefinity("Save", "Address", FormMethod.Post, new { @class = "js-address", data_submit_address = ".submit-address", data_save_address_url = @Model.SaveAddressUrl }))
 {
-        <div>
+    <div>
+        <div class="js-address-billing">
             <h3>Billing address</h3>
             <div>
                 <div>
@@ -29,7 +32,7 @@
             <div>
                 <div>
                     <label>E-mail</label>
-                    @Html.TextBoxFor(x => x.BillingAddress.EmailAddress, new { @class = "form-control required email margin-bottom" })                    
+                    @Html.TextBoxFor(x => x.BillingAddress.EmailAddress, new { @class = "form-control required email margin-bottom" })
                 </div>
                 <div>
                     <label>Attention</label>
@@ -84,8 +87,9 @@
                 </div>
             </div>
         </div>
+    </div>
 
-    @*<div class="js-address-shipping" style="@showShippingAddress">
+    <div class="js-address-shipping" style="@showShippingAddress">
                 <legend>Shipping address</legend>
 
                 <div class="row">
@@ -167,38 +171,37 @@
                     </div>
                 </div>
             </div>
-        </div>*@
- 
+
+    <div>
+        <label for="toggleShippingView">
+            Use a different address for shipping
+            @Html.CheckBoxFor(x => x.IsShippingAddressDifferent, new { @class = "js-address-checkbox" })
+        </label>
+    </div>
+
+
+    <div>
         <div>
-            <label for="toggleShippingView">
-                Use a different address for shipping
-                @Html.CheckBoxFor(x => x.IsShippingAddressDifferent, new { @class = "js-address-checkbox" })
-            </label>
-        </div>
+            @{
+                var showBackButton = true;
 
-   
+                if (Model.NextStepUrl == "")
+                {
+                    showBackButton = false;
+                }
+            }
+            <a href="@Model.PreviousStepUrl" type="submit" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
+        </div>
         <div>
-            <div>
-                @{
-                    var showBackButton = true;
+            @{
+                var showContinueButton = true;
 
-                    if (Model.NextStepUrl == "")
-                    {
-                        showBackButton = false;
-                    }
+                if (Model.NextStepUrl == "")
+                {
+                    showContinueButton = false;
                 }
-                <a href="@Model.PreviousStepUrl" type="submit" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
-            </div>
-            <div>
-                @{
-                    var showContinueButton = true;
-
-                    if (Model.NextStepUrl == "")
-                    {
-                        showContinueButton = false;
-                    }
-                }
-                <input type="submit" style="@(showBackButton ? "display:block" : "display:none")" value="Continue to next step" />
-            </div>
+            }
+            <input type="submit" style="@(showBackButton ? "display:block" : "display:none")" value="Continue to next step" />
         </div>
+    </div>
 }
