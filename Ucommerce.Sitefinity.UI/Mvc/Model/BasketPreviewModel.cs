@@ -77,7 +77,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         {
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
             var pageUrl = Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
-            pageUrl += "?=orderGuid" + orderGuid.ToString();
+            pageUrl += "?orderGuid=" + orderGuid.ToString();
             return pageUrl;
         }
 
