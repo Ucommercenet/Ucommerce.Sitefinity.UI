@@ -32,9 +32,10 @@
                         if ($('[data-orderline]').length == 0) {
                             $('body').load(location.href);
                         }
+
+                        config.$triggerEventSelector.trigger("basket-changed", data.MiniBasketRefresh);
                     }
                 });
-                config.$triggerEventSelector.trigger("basket-changed", data.MiniBasketRefresh);
 
             });
         });

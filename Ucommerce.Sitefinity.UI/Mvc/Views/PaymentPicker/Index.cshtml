@@ -9,57 +9,59 @@
     Layout = null;
 }
 
-    @using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
+@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+
+@using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
+{
+    <h3>Payment method</h3>
+    if (@Model.AvailablePaymentMethods.Count > 0)
     {
-        <h3>Payment method</h3>
-        if (@Model.AvailablePaymentMethods.Count > 0)
+        foreach (var paymentMethod in @Model.AvailablePaymentMethods)
         {
-            foreach (var paymentMethod in @Model.AvailablePaymentMethods)
-            {
-                <div>
-                    <label>
-                        @if (paymentMethod.Selected)
-                        {
-                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
-                            @paymentMethod.Text
-                        }
-                        else
-                        {
-                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
-                            @paymentMethod.Text
-                        }
-                    </label>
-                </div>
-            }
             <div>
-                <div>
-                    @{
-                        var showBackButton = true;
-
-                        if (Model.NextStepUrl == "")
-                        {
-                            showBackButton = false;
-                        }
+                <label>
+                    @if (paymentMethod.Selected)
+                    {
+                        @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
+                        @paymentMethod.Text
                     }
-                    <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
-                </div>
-                <div>
-                    @{
-                        var showContinueButton = true;
-
-                        if (Model.NextStepUrl == "")
-                        {
-                            showContinueButton = false;
-                        }
+                    else
+                    {
+                        @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
+                        @paymentMethod.Text
                     }
-                    <input type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
-                </div>
+                </label>
             </div>
         }
-        else
-        {
-            <p>
-                WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
-            </p>
-        }
+        <div>
+            <div>
+                @{
+                    var showBackButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showBackButton = false;
+                    }
+                }
+                <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
+            </div>
+            <div>
+                @{
+                    var showContinueButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showContinueButton = false;
+                    }
+                }
+                <input type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
+            </div>
+        </div>
     }
+    else
+    {
+        <p>
+            WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
+        </p>
+    }
+}

@@ -13,6 +13,7 @@
 {
     @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 }
 
 <div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
@@ -41,6 +42,7 @@
                     }
 
                     <li v-on:click="toggleSearchBar()"><a href="javascript:void(0)"><span>&#128269;</span></a></li>
+
                 </ul>
             </nav>
         </div>

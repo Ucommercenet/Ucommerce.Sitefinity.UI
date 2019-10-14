@@ -92,7 +92,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 orderLineViewModel.Price = new Money(orderLine.Price, basket.BillingCurrency).ToString();
                 orderLineViewModel.PriceWithDiscount = new Money(orderLine.Price - orderLine.Discount, basket.BillingCurrency).ToString();
 
-                updatedBasket.Orderlines.Add(orderLineViewModel);
+                updatedBasket.OrderLines.Add(orderLineViewModel);
             }
 
             string orderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();

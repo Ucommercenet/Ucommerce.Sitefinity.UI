@@ -11,6 +11,7 @@
     {
         @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
+        @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
     }
 
     <div data-component="products" id="@Html.UniqueId("products")" v-cloak>
@@ -64,11 +65,11 @@
                 @if (Model.AllowOrdering)
                 {
                     <span>In stock</span>
-                }
-                else
-                {
-                    <span>Out of stock</span>
-                }
+                                    }
+                                    else
+                                    {
+                                        <span>Out of stock</span>
+                                                        }
             </div>
 
 

@@ -43,6 +43,7 @@
                             this.showAddToBasketMessage = true;
 
 
+
 							var isEmpty = !(response.data.NumberOfItemsInBasket > 0);
                             var miniBasketRefresh = { NumberOfItems: response.data.NumberOfItemsInBasket, Total: response.data.PaymentTotal, IsEmpty: isEmpty };
 
@@ -70,9 +71,7 @@
                                 }
                             });
 
-                            window.Vue.$emit('basketChange')
-
-                            setTimeout(() =>
+							setTimeout(() =>
                                 this.showAddToBasketMessage = false,
                                 5000);
                         }, function (error) {

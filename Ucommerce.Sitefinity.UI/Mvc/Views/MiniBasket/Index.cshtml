@@ -4,8 +4,10 @@
     var emptyClass = Model.IsEmpty ? null : "display:none;";
     var notEmptyClass = !Model.IsEmpty ? null : "display:none;";
 }
-<div data-refresh-url="@Model.RefreshUrl" data-mini-basket-empty-selector=".js-mini-basket-empty" data-mini-basket-not-empty-selector=".js-mini-basket-not-empty" data-mini-basket-number-of-items-selector=".js-mini-basket-number-of-items" data-mini-basket-total-selector=".js-mini-basket-total">
-    <div style="@emptyClass" class=" @emptyClass">
+@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+
+<div class="js-mini-basket" data-refresh-url="@Model.RefreshUrl" data-mini-basket-empty-selector=".js-mini-basket-empty" data-mini-basket-not-empty-selector=".js-mini-basket-not-empty" data-mini-basket-number-of-items-selector=".js-mini-basket-number-of-items" data-mini-basket-total-selector=".js-mini-basket-total">
+    <div style="@emptyClass" class="js-mini-basket-empty @emptyClass">
         <div>
             <ul>
                 <li>
@@ -15,17 +17,16 @@
         </div>
     </div>
 
-    <div style="@notEmptyClass" class="@notEmptyClass">
+    <div style="@notEmptyClass" class="js-mini-basket-not-empty @notEmptyClass">
         <div>
             <ul>
                 <li>
                     <div>
                         <a href="@Model.CartPageUrl">
-                            <span>&#128722;</span><span>@Model.NumberOfItems</span> item(s): <span>@Model.Total</span>
+                            <span>&#128722;</span><span class="js-mini-basket-number-of-items">@Model.NumberOfItems</span> item(s): <span class="js-mini-basket-total">@Model.Total</span>
                         </a>
                     </div>
                 </li>
             </ul>
         </div>
     </div>
-</div>

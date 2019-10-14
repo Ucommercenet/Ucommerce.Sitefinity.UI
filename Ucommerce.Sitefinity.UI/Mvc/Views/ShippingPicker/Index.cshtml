@@ -9,10 +9,11 @@
     Layout = null;
 }
 
+@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 
 @using (Html.BeginFormSitefinity("CreateShipment", "ShippingPicker", FormMethod.Post))
 {
-   <h3>Shipping method</h3>
+    <h3>Shipping method</h3>
     if (@Model.AvailableShippingMethods.Count > 0)
     {
         foreach (var shippingMethod in @Model.AvailableShippingMethods)
