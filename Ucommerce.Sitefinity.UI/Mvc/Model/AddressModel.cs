@@ -67,28 +67,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return viewModel;
         }
 
-        public JsonResult Save(AddressSaveViewModel addressRendering, ModelStateDictionary modelState)
+        public JsonResult Save(AddressSaveViewModel addressRendering)
         {
             var result = new JsonResult();
-
-            if (!addressRendering.IsShippingAddressDifferent)
-            {
-                modelState.Remove("ShippingAddress.FirstName");
-                modelState.Remove("ShippingAddress.LastName");
-                modelState.Remove("ShippingAddress.EmailAddress");
-                modelState.Remove("ShippingAddress.Line1");
-                modelState.Remove("ShippingAddress.PostalCode");
-                modelState.Remove("ShippingAddress.City");
-            }
-            if (!modelState.IsValid)
-            {
-                var dictionary = modelState.ToDictionary(kvp => kvp.Key,
-                 kvp => kvp.Value.Errors
-                                 .Select(e => e.ErrorMessage).ToArray())
-                                 .Where(m => m.Value.Any());
-                result.Data = new { modelStateErrors = dictionary };
-                return result;
-            }
 
             if (addressRendering.IsShippingAddressDifferent)
             {
@@ -142,6 +123,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                billingAddress.State,
                billingAddress.Attention,
                billingAddress.CountryId);
+        }
+
+        public virtual void Validate(AddressSaveViewModel addressRendering, ModelStateDictionary modelState)
+        {
+            if (!addressRendering.IsShippingAddressDifferent)
+            {
+                modelState.Remove("ShippingAddress.FirstName");
+                modelState.Remove("ShippingAddress.LastName");
+                modelState.Remove("ShippingAddress.EmailAddress");
+                modelState.Remove("ShippingAddress.Line1");
+                modelState.Remove("ShippingAddress.PostalCode");
+                modelState.Remove("ShippingAddress.City");
+            }
         }
 
         private string GetNextStepUrl(Guid nextStepId)
