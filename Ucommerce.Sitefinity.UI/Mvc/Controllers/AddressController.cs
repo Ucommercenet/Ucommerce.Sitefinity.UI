@@ -26,18 +26,29 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             var viewModel = model.GetViewModel();
-            var modelState = new ModelStateDictionary();
 
-            model.Save(addressRendering, modelState);
-
-            if (viewModel.NextStepUrl?.Length == 0)
+            if (!addressRendering.IsShippingAddressDifferent)
             {
-                return new EmptyResult();
+                ModelState.Remove("ShippingAddress.FirstName");
+                ModelState.Remove("ShippingAddress.LastName");
+                ModelState.Remove("ShippingAddress.EmailAddress");
+                ModelState.Remove("ShippingAddress.Line1");
+                ModelState.Remove("ShippingAddress.PostalCode");
+                ModelState.Remove("ShippingAddress.City");
             }
-            else
+            if (ModelState.IsValid)
             {
-                return Redirect(viewModel.NextStepUrl);
+                model.Save(addressRendering);
+                if (viewModel.NextStepUrl?.Length == 0)
+                {
+                    return View(TemplteName, viewModel);
+                }
+                else
+                {
+                    return Redirect(viewModel.NextStepUrl);
+                }
             }
+            return View(TemplteName, viewModel);
         }
 
         protected override void HandleUnknownAction(string actionName)

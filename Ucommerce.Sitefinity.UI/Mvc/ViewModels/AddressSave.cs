@@ -14,8 +14,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string EmailAddress { get; set; }
 
-        [PhoneAttribute(ErrorMessage = "Invalid Phone Number")]
+        [Phone(ErrorMessage = "Invalid Phone Number")]
         public string PhoneNumber { get; set; }
+
+        [Phone(ErrorMessage = "Invalid Phone Number")]
         public string MobilePhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Address line 1 is required")]

@@ -6,6 +6,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces
     public interface IAddressModel
     {
         AddressRenderingViewModel GetViewModel();
-        JsonResult Save(AddressSaveViewModel addressRendering, System.Web.Mvc.ModelStateDictionary modelState);
+        JsonResult Save(AddressSaveViewModel addressRendering);
     }
 }
