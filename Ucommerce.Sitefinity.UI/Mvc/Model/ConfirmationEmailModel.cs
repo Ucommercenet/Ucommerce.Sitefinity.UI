@@ -20,7 +20,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         {
             var confirmationEmailViewModel = new ConfirmationEmailViewModel();
 
-            if (!string.IsNullOrEmpty(orderGuid))
+            if (!string.IsNullOrWhiteSpace(orderGuid))
             {
                 var purchaseOrder = _purchaseOrderRepository.SingleOrDefault(x => x.OrderGuid == new Guid(orderGuid));
                 confirmationEmailViewModel = MapPurchaseOrder(purchaseOrder, confirmationEmailViewModel);
@@ -31,8 +31,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         private ConfirmationEmailViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
         {
             confirmationEmailViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
-            confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Default") ?? new OrderAddress();
-
+            confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Shipment") ?? new OrderAddress();
+            
             foreach (var orderLine in purchaseOrder.OrderLines)
             {
                 var orderLineModel = new ConfirmationEmailOrderLine
