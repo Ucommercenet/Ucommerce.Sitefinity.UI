@@ -102,83 +102,89 @@
         </div>
     </div>
 
-    <div class="js-address-shipping" style="@showShippingAddress">
-                <h3>Shipping address</h3>
+   <div class="container">
+       <div class="row">
+           <div class="col-md-12">
+               <div class="js-address-shipping" style="@showShippingAddress">
+                   <h3>Shipping address</h3>
 
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>First name</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.FirstName, new { @class = "col-md-12 form-control required margin-bottom", required = "true" })
-                        <label class="error-custom ShippingAddressFirstName"></label>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Last name</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.LastName, new { @class = "col-md-12 form-control required margin-bottom" })
-                        <label class="error-custom ShippingAddressLastName"></label>
+                   <div class="row">
+                       <div class="col-md-6 form-group">
+                           <label>First name</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.FirstName, new { @class = "col-md-12 form-control required margin-bottom", required = "true" })
+                           <label class="error-custom ShippingAddressFirstName"></label>
+                       </div>
+                       <div class="col-md-6 form-group">
+                           <label>Last name</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.LastName, new { @class = "col-md-12 form-control required margin-bottom" })
+                           <label class="error-custom ShippingAddressLastName"></label>
 
-                    </div>
-                </div>
+                       </div>
+                   </div>
 
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>E-mail</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.EmailAddress, new { @class = "col-md-12 form-control required email margin-bottom" })
-                        <label class="error-custom ShippingAddressEmailAddress"></label>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Attention</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.Attention, new { @class = "col-md-12 form-control margin-bottom" })
+                   <div class="row">
+                       <div class="col-md-6 form-group">
+                           <label>E-mail</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.EmailAddress, new { @class = "col-md-12 form-control required email margin-bottom" })
+                           <label class="error-custom ShippingAddressEmailAddress"></label>
+                       </div>
+                       <div class="col-md-6 form-group">
+                           <label>Attention</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.Attention, new { @class = "col-md-12 form-control margin-bottom" })
 
-                    </div>
-                </div>
+                       </div>
+                   </div>
 
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>Mobile phone</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.MobilePhoneNumber, new { @class = "col-md-12 form-control margin-bottom" })
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Phone</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.PhoneNumber, new { @class = "col-md-12 form-control margin-bottom" })
+                   <div class="row">
+                       <div class="col-md-6 form-group">
+                           <label>Mobile phone</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.MobilePhoneNumber, new { @class = "col-md-12 form-control margin-bottom" })
+                       </div>
+                       <div class="col-md-6 form-group">
+                           <label>Phone</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.PhoneNumber, new { @class = "col-md-12 form-control margin-bottom" })
 
-                    </div>
-                </div>
+                       </div>
+                   </div>
 
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>Street</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.Line1, new { @class = "col-md-12 form-control required margin-bottom" })
-                        <label class="error-custom ShippingAddressLine1"></label>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Street 2</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.Line2, new { @class = "col-md-12 form-control margin-bottom" })
-                    </div>
-                </div>
+                   <div class="row">
+                       <div class="col-md-6 form-group">
+                           <label>Street</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.Line1, new { @class = "col-md-12 form-control required margin-bottom" })
+                           <label class="error-custom ShippingAddressLine1"></label>
+                       </div>
+                       <div class="col-md-6 form-group">
+                           <label>Street 2</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.Line2, new { @class = "col-md-12 form-control margin-bottom" })
+                       </div>
+                   </div>
 
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>Postal code</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.PostalCode, new { @class = "col-md-12 form-control required margin-bottom" })
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>City</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.City, new { @class = "col-md-12 form-control margin-bottom" })
-                        <label class="error-custom ShippingAddressCity"></label>
-                    </div>
-                </div>
+                   <div class="row">
+                       <div class="col-md-6 form-group">
+                           <label>Postal code</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.PostalCode, new { @class = "col-md-12 form-control required margin-bottom" })
+                       </div>
+                       <div class="col-md-6 form-group">
+                           <label>City</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.City, new { @class = "col-md-12 form-control margin-bottom" })
+                           <label class="error-custom ShippingAddressCity"></label>
+                       </div>
+                   </div>
 
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>Country</label>
-                        @Html.DropDownList("ShippingAddress.CountryId", Model.AvailableCountries, new { @class = "countryDropdownCheckout margin-bottom form-control" })
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Company</label>
-                        @Html.TextBoxFor(x => x.ShippingAddress.CompanyName, new { @class = "col-md-12 form-control margin-bottom" })
-                    </div>
-                </div>
-            </div>
+                   <div class="row">
+                       <div class="col-md-6 form-group">
+                           <label>Country</label>
+                           @Html.DropDownList("ShippingAddress.CountryId", Model.AvailableCountries, new { @class = "countryDropdownCheckout margin-bottom form-control" })
+                       </div>
+                       <div class="col-md-6 form-group">
+                           <label>Company</label>
+                           @Html.TextBoxFor(x => x.ShippingAddress.CompanyName, new { @class = "col-md-12 form-control margin-bottom" })
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
 
     <div class="container">
         <div class="row my-2">
