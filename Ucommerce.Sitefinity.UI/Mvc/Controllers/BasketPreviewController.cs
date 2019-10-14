@@ -16,6 +16,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
         public string TemplteName { get; set; } = "Index";
+
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
         public BasketPreviewController()
@@ -27,9 +28,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-            var basketPreviewViewModel = new BasketPreviewViewModel();
 
-            basketPreviewViewModel = model.MapPurchaseOrder(purchaseOrder, basketPreviewViewModel);
+            var basketPreviewViewModel = model.GetViewModelr(purchaseOrder);
 
             ViewBag.RowSpan = 4;
             if (purchaseOrder.DiscountTotal > 0)

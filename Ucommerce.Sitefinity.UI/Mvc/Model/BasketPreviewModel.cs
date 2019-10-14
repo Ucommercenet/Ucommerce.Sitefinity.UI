@@ -22,8 +22,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.previousStepId = previousStepId ?? Guid.Empty;
         }
 
-        public BasketPreviewViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, BasketPreviewViewModel basketPreviewViewModel)
+        public BasketPreviewViewModel GetViewModelr(PurchaseOrder purchaseOrder)
         {
+            var basketPreviewViewModel = new BasketPreviewViewModel();
             basketPreviewViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
             basketPreviewViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) ?? new OrderAddress();
 
@@ -66,17 +67,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 basketPreviewViewModel.PaymentName = payment.PaymentMethodName;
                 basketPreviewViewModel.PaymentAmount = purchaseOrder.PaymentTotal.GetValueOrDefault();
             }
-            basketPreviewViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+            basketPreviewViewModel.NextStepUrl = GetNextStepUrl(nextStepId, purchaseOrder.OrderGuid);
             basketPreviewViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
             return basketPreviewViewModel;
         }
 
-        private string GetNextStepUrl(Guid nextStepId)
+        private string GetNextStepUrl(Guid nextStepId, Guid orderGuid)
         {
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
-
-            return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+            var pageUrl = Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+            pageUrl += "?orderGuid=" + orderGuid.ToString();
+            return pageUrl;
         }
 
         private string GetPreviousStepUrl(Guid previousStepId)
