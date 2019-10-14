@@ -12,6 +12,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     public class CartController : Controller
     {
         public Guid? NextStepId { get; set; }
+        public Guid? ProductDetailsPageId { get; set; }
         public string TemplateName { get; set; } = "Index";
 
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
@@ -71,7 +72,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var model = container.Resolve<ICartModel>(
                 new
                 {
-                    nextStepId = this.NextStepId
+                    nextStepId = this.NextStepId,
+                    productDetailsPageId = this.ProductDetailsPageId
                 });
 
             return model;

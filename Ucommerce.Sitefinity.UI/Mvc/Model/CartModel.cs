@@ -11,13 +11,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public class CartModel : ICartModel
     {
+        private Guid productDetailsPageId;
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private Guid nextStepId;
 
-        public CartModel(Guid? nextStepId = null)
+        public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null)
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             this.nextStepId = nextStepId ?? Guid.Empty;
+            this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
         }
 
         public CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl)
