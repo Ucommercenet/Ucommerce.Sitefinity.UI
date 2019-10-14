@@ -1,10 +1,17 @@
 ﻿@model Ucommerce.Sitefinity.UI.Mvc.ViewModels.ConfirmationEmailViewModel
 
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers
+@using Telerik.Sitefinity.Services;
+
 @{
     Layout = null;
 }
 
-@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+}
 
 <h1>Thank you for the order @Model.CustomerName</h1>
 <div>

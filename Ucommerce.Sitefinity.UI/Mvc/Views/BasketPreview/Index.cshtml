@@ -9,153 +9,157 @@
     Layout = null;
 }
 
-@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 
-@using (Html.BeginFormSitefinity("RequestPayment", "BasketPreview", FormMethod.Post))
+@if (!SystemManager.IsDesignMode)
 {
-    <div>
-        <div>
-            <h3>Billing address</h3>
-            <br />
-            <address>
-                <span><strong>@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</strong></span><br>
-                <span>@Model.BillingAddress.Line1<br></span>
-                <span>@Model.BillingAddress.PostalCode @Model.BillingAddress.City</span><br>
-                <span>@Model.BillingAddress.Country.Name</span>
-                @if (!String.IsNullOrWhiteSpace(@Model.BillingAddress.Attention))
-                {
-                    <span><text>att. </text> @Model.BillingAddress.Attention</span>
-                }<br>
-                <span><abbr title="Phone">P:</abbr>@Model.BillingAddress.PhoneNumber</span><br>
-                <span><abbr title="Mobile">M:</abbr>@Model.BillingAddress.MobilePhoneNumber </span><br>
-                <span><abbr title="Email">E:</abbr><a href="mailto:@Model.BillingAddress.EmailAddress">@Model.BillingAddress.EmailAddress</a></span>
-            </address>
-        </div>
-        <div>
-            <h3>Shipping address</h3>
-            <br />
-            <address>
-                <span><strong>@Model.ShipmentAddress.FirstName @Model.ShipmentAddress.LastName</strong></span><br>
-                <span>@Model.ShipmentAddress.CompanyName</span>
-                @if (!String.IsNullOrWhiteSpace(@Model.ShipmentAddress.Attention))
-                {
-                    <span><text>att. </text> @Model.ShipmentAddress.Attention </span>
-                }<br />
-                <span>@Model.ShipmentAddress.Line1</span><br>
-                <span>@Model.ShipmentAddress.PostalCode @Model.ShipmentAddress.City</span><br>
-                <span>@Model.ShipmentAddress.Country.Name</span><br>
-                <span><abbr title="Phone">P:</abbr>@Model.ShipmentAddress.PhoneNumber</span><br>
-                <span><abbr title="Mobile">M:</abbr>@Model.ShipmentAddress.MobilePhoneNumber</span><br>
-                <span><abbr title="Email">E:</abbr><a href="mailto:@Model.ShipmentAddress.EmailAddress">@Model.ShipmentAddress.EmailAddress</a></span>
-            </address>
-        </div>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Item no. </th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>VAT</th>
-                <th>Quantity</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var lineItem in @Model.OrderLines)
-            {
-                <tr>
-                    <td>@lineItem.Sku</td>
-                    <td>@lineItem.ProductName</td>
-                    <td>
-                        @if (lineItem.Discount.HasValue && lineItem.Discount > 0)
-                        {
-                            <span>
-                                @lineItem.Price
-                            </span>
-                            @lineItem.PriceWithDiscount
-                        }
-                        else
-                        {
-                            @lineItem.Price
-                        }
-                    </td>
-                    <td>@lineItem.Tax</td>
-                    <td>@lineItem.Quantity</td>
-                    <td>@lineItem.Total</td>
-                </tr>
-            }
-            <tr>
-                <td rowspan="@ViewBag.RowSpan" colspan="2"></td>
-                <td colspan="3">Sub total: </td>
-                <td>
-                    @Model.SubTotal
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">VAT: </td>
-                <td>
-                    @Model.TaxTotal
-                </td>
-            </tr>
-            @if (@Model.DiscountAmount != 0)
-            {
-                <tr>
-                    <td colspan="3">Order discounts: </td>
-                    <td>-@Model.DiscountTotal</td>
-                </tr>
-            }
-            @if (@Model.ShipmentAmount != 0)
-            {
-                <tr>
-                    <td colspan="3">
-                        Shipping
-                        <text> (via @Model.ShipmentName)</text>
-                    </td>
-                    <td>@Model.ShippingTotal</td>
-                </tr>
-            }
-            @if (@Model.PaymentAmount != 0)
-            {
-                <tr>
-                    <td colspan="3">
-                        Payment
-                        <text> (@Model.PaymentName)</text>
-                    </td>
-                    <td>@Model.PaymentTotal</td>
-                </tr>
-            }
-            <tr>
-                <td colspan="3">Order total: </td>
-                <td>@Model.OrderTotal</td>
-            </tr>
-        </tbody>
-    </table>
-    <div>
-        <div>
-            @{
-                var showBackButton = true;
-
-                if (Model.PreviousStepUrl == "")
-                {
-                    showBackButton = false;
-                }
-
-            }
-            <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")" type="submit">Back</a>
-
-        </div>
-        <div>
-            @{
-                var showContinueButton = true;
-
-                if (Model.NextStepUrl == "")
-                {
-                    showContinueButton = false;
-                }
-
-            }
-            <input name="send-order" type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Complete Order" />
-        </div>
-    </div>
+    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 }
+
+    @using (Html.BeginFormSitefinity("RequestPayment", "BasketPreview", FormMethod.Post))
+    {
+        <div>
+            <div>
+                <h3>Billing address</h3>
+                <br />
+                <address>
+                    <span><strong>@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</strong></span><br>
+                    <span>@Model.BillingAddress.Line1<br></span>
+                    <span>@Model.BillingAddress.PostalCode @Model.BillingAddress.City</span><br>
+                    <span>@Model.BillingAddress.Country.Name</span>
+                    @if (!String.IsNullOrWhiteSpace(@Model.BillingAddress.Attention))
+                    {
+                        <span><text>att. </text> @Model.BillingAddress.Attention</span>
+                    }<br>
+                    <span><abbr title="Phone">P:</abbr>@Model.BillingAddress.PhoneNumber</span><br>
+                    <span><abbr title="Mobile">M:</abbr>@Model.BillingAddress.MobilePhoneNumber </span><br>
+                    <span><abbr title="Email">E:</abbr><a href="mailto:@Model.BillingAddress.EmailAddress">@Model.BillingAddress.EmailAddress</a></span>
+                </address>
+            </div>
+            <div>
+                <h3>Shipping address</h3>
+                <br />
+                <address>
+                    <span><strong>@Model.ShipmentAddress.FirstName @Model.ShipmentAddress.LastName</strong></span><br>
+                    <span>@Model.ShipmentAddress.CompanyName</span>
+                    @if (!String.IsNullOrWhiteSpace(@Model.ShipmentAddress.Attention))
+                    {
+                        <span><text>att. </text> @Model.ShipmentAddress.Attention </span>
+                    }<br />
+                    <span>@Model.ShipmentAddress.Line1</span><br>
+                    <span>@Model.ShipmentAddress.PostalCode @Model.ShipmentAddress.City</span><br>
+                    <span>@Model.ShipmentAddress.Country.Name</span><br>
+                    <span><abbr title="Phone">P:</abbr>@Model.ShipmentAddress.PhoneNumber</span><br>
+                    <span><abbr title="Mobile">M:</abbr>@Model.ShipmentAddress.MobilePhoneNumber</span><br>
+                    <span><abbr title="Email">E:</abbr><a href="mailto:@Model.ShipmentAddress.EmailAddress">@Model.ShipmentAddress.EmailAddress</a></span>
+                </address>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item no. </th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>VAT</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lineItem in @Model.OrderLines)
+                {
+                    <tr>
+                        <td>@lineItem.Sku</td>
+                        <td>@lineItem.ProductName</td>
+                        <td>
+                            @if (lineItem.Discount.HasValue && lineItem.Discount > 0)
+                            {
+                                <span>
+                                    @lineItem.Price
+                                </span>
+                                @lineItem.PriceWithDiscount
+                            }
+                            else
+                            {
+                                @lineItem.Price
+                            }
+                        </td>
+                        <td>@lineItem.Tax</td>
+                        <td>@lineItem.Quantity</td>
+                        <td>@lineItem.Total</td>
+                    </tr>
+                }
+                <tr>
+                    <td rowspan="@ViewBag.RowSpan" colspan="2"></td>
+                    <td colspan="3">Sub total: </td>
+                    <td>
+                        @Model.SubTotal
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">VAT: </td>
+                    <td>
+                        @Model.TaxTotal
+                    </td>
+                </tr>
+                @if (@Model.DiscountAmount != 0)
+                {
+                    <tr>
+                        <td colspan="3">Order discounts: </td>
+                        <td>-@Model.DiscountTotal</td>
+                    </tr>
+                }
+                @if (@Model.ShipmentAmount != 0)
+                {
+                    <tr>
+                        <td colspan="3">
+                            Shipping
+                            <text> (via @Model.ShipmentName)</text>
+                        </td>
+                        <td>@Model.ShippingTotal</td>
+                    </tr>
+                }
+                @if (@Model.PaymentAmount != 0)
+                {
+                    <tr>
+                        <td colspan="3">
+                            Payment
+                            <text> (@Model.PaymentName)</text>
+                        </td>
+                        <td>@Model.PaymentTotal</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="3">Order total: </td>
+                    <td>@Model.OrderTotal</td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <div>
+                @{
+                    var showBackButton = true;
+
+                    if (Model.PreviousStepUrl == "")
+                    {
+                        showBackButton = false;
+                    }
+
+                }
+                <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")" type="submit">Back</a>
+
+            </div>
+            <div>
+                @{
+                    var showContinueButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showContinueButton = false;
+                    }
+
+                }
+                <input name="send-order" type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Complete Order" />
+            </div>
+        </div>
+    }

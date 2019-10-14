@@ -11,7 +11,10 @@
     var showShippingAddress = Model.IsShippingAddressDifferent ? "display:block;" : "display:none;";
 }
 
-@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+@if (!SystemManager.IsDesignMode)
+{
+	@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+}
 
 @using (Html.BeginFormSitefinity("Save", "Address", FormMethod.Post, new { @class = "js-address", data_submit_address = ".submit-address", data_save_address_url = @Model.SaveAddressUrl }))
 {

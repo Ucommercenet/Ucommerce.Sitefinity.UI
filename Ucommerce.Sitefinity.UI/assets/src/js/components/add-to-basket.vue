@@ -42,9 +42,36 @@
                             this.addToBasketMessage = addToBasketSuccessMessage;
                             this.showAddToBasketMessage = true;
 
-                            $({}).trigger("basket-changed", data.MiniBasketRefresh);
 
-                            setTimeout(() =>
+
+							var isEmpty = !(response.data.NumberOfItemsInBasket > 0);
+                            var miniBasketRefresh = { NumberOfItems: response.data.NumberOfItemsInBasket, Total: response.data.PaymentTotal, IsEmpty: isEmpty };
+
+							$(document).find('.js-mini-basket').each(function () {
+
+                                var $miniBasket = $(this);
+
+                                var emptySelector = $miniBasket.data("mini-basket-empty-selector");
+                                var notEmptySelector = $miniBasket.data("mini-basket-not-empty-selector");
+                                var numberOfItemsSelector = $miniBasket.data("mini-basket-number-of-items-selector");
+                                var totalSelector = $miniBasket.data("mini-basket-total-selector");
+
+                                if (miniBasketRefresh) {
+                                    if (miniBasketRefresh.IsEmpty) {
+                                        $miniBasket.find(notEmptySelector).hide();
+                                        $miniBasket.find(emptySelector).show();
+
+                                    } else {
+                                        $miniBasket.find(numberOfItemsSelector).text(miniBasketRefresh.NumberOfItems);
+                                        $miniBasket.find(totalSelector).text(miniBasketRefresh.Total);
+
+                                        $miniBasket.find(notEmptySelector).show();
+                                        $miniBasket.find(emptySelector).hide();
+                                    }
+                                }
+                            });
+
+							setTimeout(() =>
                                 this.showAddToBasketMessage = false,
                                 5000);
                         }, function (error) {

@@ -41,12 +41,6 @@
                             }
 
                             <li class="nav-item ml-4 mr-4" v-on:click="toggleSearchBar()"><a class="nav-link" href="javascript:void(0)"><span>&#128269;</span></a></li>
-
-                            @if (!Model.HideMiniBasket && !SystemManager.IsDesignMode)
-                            {
-                                <basket :root-id="$el.id">
-                                </basket>
-                            }
                         </ul>
                     </div>
                 </nav>
@@ -137,17 +131,6 @@
                 </a>
             </li>
         </ul>
-    </li>
-</script>
-
-<script type="text/x-template" id="basket-template">
-    <li class="nav-item ml-4 mr-4" v-bind:class="basket && basket.orderLines && basket.orderLines.length > 0 ? 'active' : ''">
-        <a class="nav-link" href="javascript:void(0)">
-            <span>
-                <span class="">{{basketLoaded ? basket.NumberOfItemsInBasket : ''}}</span>
-                <span>&#128722;</span>
-            </span>
-        </a>
     </li>
 </script>
 
