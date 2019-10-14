@@ -26,16 +26,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             var viewModel = model.GetViewModel();
+            model.Validate(addressRendering, ModelState);
 
-            if (!addressRendering.IsShippingAddressDifferent)
-            {
-                ModelState.Remove("ShippingAddress.FirstName");
-                ModelState.Remove("ShippingAddress.LastName");
-                ModelState.Remove("ShippingAddress.EmailAddress");
-                ModelState.Remove("ShippingAddress.Line1");
-                ModelState.Remove("ShippingAddress.PostalCode");
-                ModelState.Remove("ShippingAddress.City");
-            }
             if (ModelState.IsValid)
             {
                 model.Save(addressRendering);

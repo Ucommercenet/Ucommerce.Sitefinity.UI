@@ -125,6 +125,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                billingAddress.CountryId);
         }
 
+        public virtual void Validate(AddressSaveViewModel addressRendering, ModelStateDictionary modelState)
+        {
+            if (!addressRendering.IsShippingAddressDifferent)
+            {
+                modelState.Remove("ShippingAddress.FirstName");
+                modelState.Remove("ShippingAddress.LastName");
+                modelState.Remove("ShippingAddress.EmailAddress");
+                modelState.Remove("ShippingAddress.Line1");
+                modelState.Remove("ShippingAddress.PostalCode");
+                modelState.Remove("ShippingAddress.City");
+            }
+        }
+
         private string GetNextStepUrl(Guid nextStepId)
         {
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);

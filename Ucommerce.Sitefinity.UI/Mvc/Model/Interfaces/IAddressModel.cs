@@ -7,5 +7,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces
     {
         AddressRenderingViewModel GetViewModel();
         JsonResult Save(AddressSaveViewModel addressRendering);
+        void Validate(AddressSaveViewModel addressRendering, ModelStateDictionary modelState);
     }
 }
