@@ -1,10 +1,16 @@
-﻿@model Ucommerce.Sitefinity.UI.Mvc.ViewModels.MiniBasketRenderingViewModel
+﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
+@using Telerik.Sitefinity.Services;
+@model Ucommerce.Sitefinity.UI.Mvc.ViewModels.MiniBasketRenderingViewModel
 @{
     Layout = null;
     var emptyClass = Model.IsEmpty ? null : "display:none;";
     var notEmptyClass = !Model.IsEmpty ? null : "display:none;";
 }
-@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+}
 
 <div class="js-mini-basket" data-refresh-url="@Model.RefreshUrl" data-mini-basket-empty-selector=".js-mini-basket-empty" data-mini-basket-not-empty-selector=".js-mini-basket-not-empty" data-mini-basket-number-of-items-selector=".js-mini-basket-number-of-items" data-mini-basket-total-selector=".js-mini-basket-total">
     <div style="@emptyClass" class="js-mini-basket-empty @emptyClass">

@@ -9,7 +9,10 @@
     Layout = null;
 }
 
-@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+}
 
 @using (Html.BeginFormSitefinity("CreateShipment", "ShippingPicker", FormMethod.Post))
 {

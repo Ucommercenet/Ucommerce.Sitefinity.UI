@@ -9,59 +9,63 @@
     Layout = null;
 }
 
-@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 
-@using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
+@if (!SystemManager.IsDesignMode)
 {
-    <h3>Payment method</h3>
-    if (@Model.AvailablePaymentMethods.Count > 0)
+    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+}
+
+    @using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
     {
-        foreach (var paymentMethod in @Model.AvailablePaymentMethods)
+        <h3>Payment method</h3>
+        if (@Model.AvailablePaymentMethods.Count > 0)
         {
+            foreach (var paymentMethod in @Model.AvailablePaymentMethods)
+            {
+                <div>
+                    <label>
+                        @if (paymentMethod.Selected)
+                        {
+                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
+                            @paymentMethod.Text
+                        }
+                        else
+                        {
+                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
+                            @paymentMethod.Text
+                        }
+                    </label>
+                </div>
+            }
             <div>
-                <label>
-                    @if (paymentMethod.Selected)
-                    {
-                        @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
-                        @paymentMethod.Text
+                <div>
+                    @{
+                        var showBackButton = true;
+
+                        if (Model.NextStepUrl == "")
+                        {
+                            showBackButton = false;
+                        }
                     }
-                    else
-                    {
-                        @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
-                        @paymentMethod.Text
+                    <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
+                </div>
+                <div>
+                    @{
+                        var showContinueButton = true;
+
+                        if (Model.NextStepUrl == "")
+                        {
+                            showContinueButton = false;
+                        }
                     }
-                </label>
+                    <input type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
+                </div>
             </div>
         }
-        <div>
-            <div>
-                @{
-                    var showBackButton = true;
-
-                    if (Model.NextStepUrl == "")
-                    {
-                        showBackButton = false;
-                    }
-                }
-                <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
-            </div>
-            <div>
-                @{
-                    var showContinueButton = true;
-
-                    if (Model.NextStepUrl == "")
-                    {
-                        showContinueButton = false;
-                    }
-                }
-                <input type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
-            </div>
-        </div>
+        else
+        {
+            <p>
+                WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
+            </p>
+        }
     }
-    else
-    {
-        <p>
-            WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
-        </p>
-    }
-}
