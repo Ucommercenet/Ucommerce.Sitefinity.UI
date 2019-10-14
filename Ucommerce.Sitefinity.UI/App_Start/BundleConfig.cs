@@ -12,9 +12,6 @@ namespace Ucommerce.Sitefinity.UI.App_Start
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            //bundles.Add(new ScriptBundle("~/bundles/require").Include(
-            //            "~/Frontend-Assembly/Ucommerce.Sitefinity.UI/Mvc/Scripts/require-2.3.2.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/ucommerce-js")
                 .Include("~/Frontend-Assembly/Ucommerce.Sitefinity.UI/Mvc/Scripts/require-2.3.2.js")
                 .Include("~/Frontend-Assembly/Ucommerce.Sitefinity.UI/Mvc/Scripts/jsAddress.js")
@@ -27,12 +24,6 @@ namespace Ucommerce.Sitefinity.UI.App_Start
                 .Include("~/Frontend-Assembly/Ucommerce.Sitefinity.UI/Mvc/Scripts/jsVariantPicker.js")
                 .Include("~/Frontend-Assembly/Ucommerce.Sitefinity.UI/Mvc/Scripts/jsVoucher.js")
                 .Include("~/Frontend-Assembly/Ucommerce.Sitefinity.UI/Mvc/Scripts/jsInit.js"));
-
-            //bundles.Add(new StyleBundle("~/Content/css").Include(
-            //          "~/Content/bootstrap.min.css",
-            //          "~/Css/font-awesome.min.css",
-            //          "~/Css/uCommerce.demostore.css"
-            //          ));
         }
     }
 }
