@@ -26,18 +26,21 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             var viewModel = model.GetViewModel();
-            var modelState = new ModelStateDictionary();
+            model.Validate(addressRendering, ModelState);
 
-            model.Save(addressRendering, modelState);
-
-            if (viewModel.NextStepUrl?.Length == 0)
+            if (ModelState.IsValid)
             {
-                return new EmptyResult();
+                model.Save(addressRendering);
+                if (viewModel.NextStepUrl?.Length == 0)
+                {
+                    return View(TemplteName, viewModel);
+                }
+                else
+                {
+                    return Redirect(viewModel.NextStepUrl);
+                }
             }
-            else
-            {
-                return Redirect(viewModel.NextStepUrl);
-            }
+            return View(TemplteName, viewModel);
         }
 
         protected override void HandleUnknownAction(string actionName)
