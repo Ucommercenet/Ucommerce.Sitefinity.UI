@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -15,6 +16,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            if (SystemManager.IsDesignMode)
+            {
+                return new EmptyResult();
+            }
+
             var model = ResolveModel();
             var sippingPickerVM = model.GetViewModel();
 

@@ -26,6 +26,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            if (SystemManager.IsDesignMode)
+            {
+                return new EmptyResult();
+            }
+
             var model = ResolveModel();
             var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
 
