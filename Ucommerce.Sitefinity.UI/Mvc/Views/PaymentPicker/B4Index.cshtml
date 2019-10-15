@@ -16,66 +16,67 @@
 }
 
 
-    @using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
-    {
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Payment method</h3>
-                <hr />
-            </div>
+@using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Payment method</h3>
+            <hr />
         </div>
-        if (@Model.AvailablePaymentMethods.Count > 0)
+    </div>
+    if (@Model.AvailablePaymentMethods.Count > 0)
+    {
+        foreach (var paymentMethod in @Model.AvailablePaymentMethods)
         {
             <div class="row">
                 <div class="col-md-12">
-                    @foreach (var paymentMethod in @Model.AvailablePaymentMethods)
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            @if (paymentMethod.Selected)
+                            {
+                                @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
+                                @paymentMethod.Text
+                            }
+                            else
+                            {
+                                @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
+                                @paymentMethod.Text
+                            }
+                        </label>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row my-4">
+            <div class="col-md-6">
+                @{
+                    var showBackButton = true;
+
+                    if (Model.NextStepUrl == "")
                     {
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                @if (paymentMethod.Selected)
-                                {
-                                    @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
-                                    @paymentMethod.Text
-                                }
-                                else
-                                {
-                                    @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
-                                    @paymentMethod.Text
-                                }
-                            </label>
-                        </div>
+                        showBackButton = false;
                     }
-                </div>
+                }
+                <a href="@Model.PreviousStepUrl" class="btn btn-light float-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
             </div>
-            <div class="row my-4">
-                <div class="col-md-6">
-                    @{
-                        var showBackButton = true;
+            <div class="col-md-6">
+                @{
+                    var showContinueButton = true;
 
-                        if (Model.NextStepUrl == "")
-                        {
-                            showBackButton = false;
-                        }
+                    if (Model.NextStepUrl == "")
+                    {
+                        showContinueButton = false;
                     }
-                    <a href="@Model.PreviousStepUrl" class="btn btn-light float-left" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
-                </div>
-                <div class="col-md-6">
-                    @{
-                        var showContinueButton = true;
-
-                        if (Model.NextStepUrl == "")
-                        {
-                            showContinueButton = false;
-                        }
-                    }
-                    <input type="submit" class="btn btn-info float-right" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
-                </div>
+                }
+                <input type="submit" class="btn btn-info float-right" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
             </div>
-        }
-        else
-        {
-            <p class="alert alert-danger">
-                WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
-            </p>
-        }
+        </div>
     }
+    else
+    {
+        <p class="alert alert-danger">
+            WARNING: No shipping methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
+        </p>
+    }
+}

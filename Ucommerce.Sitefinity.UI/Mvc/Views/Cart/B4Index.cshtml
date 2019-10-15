@@ -7,6 +7,8 @@
 
 @model Ucommerce.Sitefinity.UI.Mvc.ViewModels.CartRenderingViewModel
 
+
+
 @Html.StyleSheet(Url.WidgetContent("~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
@@ -22,29 +24,29 @@
 }
 else
 {
-    <div class="table-responsive table-responsive-sm">
+    <div class="table-responsive table-responsive-sm my-5">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>VAT</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th></th>
+                    <th class="span3">Description</th>
+                    <th class="span1 money">Price</th>
+                    <th class="span1 money">VAT</th>
+                    <th class="span1">Quantity</th>
+                    <th class="span1 money">Total</th>
+                    <th class="span05"></th>
                 </tr>
             </thead>
             <tbody>
                 @for (var i = 0; i < Model.OrderLines.Count; i++)
                 {
                     var line = Model.OrderLines[i];
-                    <tr data-orderline="@line.OrderLineId">
+                    <tr class="order-line" data-orderline="@line.OrderLineId">
                         @Html.HiddenFor(model => model.OrderLines[i].Sku)
                         @Html.HiddenFor(model => model.OrderLines[i].VariantSku)
                         @Html.HiddenFor(model => model.OrderLines[i].OrderLineId)
 
                         <td><a class="text-info" href="@line.ProductUrl">@line.ProductName</a></td>
-                        <td>
+                        <td class="money">
                             @if (@line.Discount.HasValue && @line.Discount > 0)
                             {
                                 <span data-price>
@@ -62,49 +64,48 @@ else
 
                             }
                         </td>
-                        <td data-tax>
+                        <td class="money" data-tax>
                             @line.Tax
                         </td>
                         <td>
-                            @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control inline-block no-padding", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
+                            @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control d-inline-block p-0", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
                             <button name="update-basket" class="btn btn-info btn-sm d-inline-block mt-2 js-update-basket" data-remove-orderline-url="@Model.RemoveOrderlineUrl" data-refresh-url="@Model.RefreshUrl" data-cart-container=".cart-container" data-item-total=".item-total" data-line-remove=".line-remove" data-order-subtotal=".order-subtotal" data-order-tax=".order-tax" data-order-discounts=".order-discounts" data-order-total=".order-total" data-basket="@Model" type="submit">
                                 <span class="h6 mr-2 text-white">&#10227;</span> <span>Update</span>
                             </button>
                         </td>
-                        <td>
+                        <td class="money item-total">
                             @line.Total
                         </td>
                         <td>
-                            <button type="button" data-line-id="@line.OrderLineId" name="RemoveOrderlineId" class="line-remove btn btn-info btn-sm"><span class="h6 mr-2 text-white">&#10005;</span><span class="btn-text">Remove</span></button>
+                            <button type="button" data-line-id="@line.OrderLineId" name="RemoveOrderlineId" class="line-remove btn btn-info btn-sm"><span class="h6 mr-2 text-white">&#10005;</span><span>Remove</span></button>
                         </td>
                     </tr>
                 }
                 <tr>
-                    <td rowspan="4" colspan="3" class="white-background">
-                    </td>
+                    <td rowspan="4" colspan="3" ></td>
                     <td colspan="1">Sub total:</td>
-                    <td class="order-subtotal">
+                    <td class="money order-subtotal">
                         @Model.SubTotal
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="1">VAT:</td>
-                    <td class="order-tax">
+                    <td class="money order-tax">
                         @Model.TaxTotal
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="1">Discounts:</td>
-                    <td class="order-discounts">
+                    <td class="money order-discounts">
                         @Model.DiscountTotal
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="1"><strong>Order total:</strong></td>
-                    <td class="order-total">
+                    <td class="money order-total">
                         @Model.OrderTotal
                     </td>
                     <td>&nbsp;</td>
@@ -113,8 +114,7 @@ else
         </table>
 
 
-        <div class="control-group margin-top">
-            <div class="controls">
+        <div class="mt-4">
                 @{
                     var showContinueButton = true;
 
@@ -124,8 +124,7 @@ else
                     }
 
                 }
-                <a href="@Model.NextStepUrl" style="@(showContinueButton ? "display:block" : "display:none")" class="btn btn-info d-inline-block float-right" name="review-product">Continue</a>
-            </div>
+                <a href="@Model.NextStepUrl" class="btn btn-info float-right" style="@(showContinueButton ? "display:block" : "display:none")" name="review-product">Continue</a>      
         </div>
     </div>
 }

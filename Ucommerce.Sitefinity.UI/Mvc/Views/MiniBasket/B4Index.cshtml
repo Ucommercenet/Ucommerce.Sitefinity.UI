@@ -1,6 +1,7 @@
 ﻿@using System.Web.Mvc
 @using System.Web.Mvc.Html
 @using Telerik.Sitefinity.Frontend.Mvc.Helpers;
+@using Telerik.Sitefinity.Services
 @model Ucommerce.Sitefinity.UI.Mvc.ViewModels.MiniBasketRenderingViewModel
 @{
     Layout = null;
@@ -15,8 +16,7 @@
     @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 }
 
-
-<div class="js-mini-basket d-sm-none d-md-block" data-refresh-url="@Model.RefreshUrl" data-mini-basket-empty-selector=".js-mini-basket-empty" data-mini-basket-not-empty-selector=".js-mini-basket-not-empty" data-mini-basket-number-of-items-selector=".js-mini-basket-number-of-items" data-mini-basket-total-selector=".js-mini-basket-total">
+<div class="js-mini-basket  d-sm-none d-md-block" data-refresh-url="@Model.RefreshUrl" data-mini-basket-empty-selector=".js-mini-basket-empty" data-mini-basket-not-empty-selector=".js-mini-basket-not-empty" data-mini-basket-number-of-items-selector=".js-mini-basket-number-of-items" data-mini-basket-total-selector=".js-mini-basket-total">
     <div style="@emptyClass" class="js-mini-basket-empty @emptyClass">
         <div class="float-right float-sm-none navbar-collapse">
             <ul class="nav navbar-nav">
@@ -41,4 +41,3 @@
         </div>
     </div>
 </div>
-

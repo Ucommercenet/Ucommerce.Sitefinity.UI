@@ -24,13 +24,12 @@
             <hr />
         </div>
     </div>
-
     if (@Model.AvailableShippingMethods.Count > 0)
     {
-        <div class="row">
-            <div class="col-md-12">
-                @foreach (var shippingMethod in @Model.AvailableShippingMethods)
-                {
+        foreach (var shippingMethod in @Model.AvailableShippingMethods)
+        {
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-check">
                         <label class="form-check-label">
                             @if (shippingMethod.Selected)
@@ -45,9 +44,9 @@
                             }
                         </label>
                     </div>
-                }
+                </div>
             </div>
-        </div>
+        }
         <div class="row my-4">
             <div class="col-md-6">
                 @{
@@ -69,7 +68,7 @@
                         showContinueButton = false;
                     }
                 }
-                <input type="submit" class="btn btn-info float-right" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
+                <input type="submit" class="btn btn-info float-right submit-address" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
             </div>
         </div>
     }
