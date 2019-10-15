@@ -19,10 +19,6 @@
         <h3>Billing address</h3>
         <br />
         <address>
-            @* 			@Html.Sitecore().Field("My Field Name");
-                @Html.Sitecore().Field("My Field Name", Model.Item) //Datasource item (may be context item)
-
-            *@
             <span><strong>@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</strong></span><br>
             <span>@Model.BillingAddress.Line1<br></span>
             <span>@Model.BillingAddress.PostalCode @Model.BillingAddress.City</span><br>

@@ -28,5 +28,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
         public string RefreshUrl { get; set; }
         public string RemoveOrderlineUrl { get; set; }
         public string NextStepUrl { get; set; }
+        public string ProductDetailsPageUrl { get; set; }
     }
 }

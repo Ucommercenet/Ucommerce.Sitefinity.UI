@@ -71,7 +71,38 @@
                                         <span>Out of stock</span>
                                                         }
             </div>
-
+            <div>
+                @{
+                    var uniqueVariants = from v in Model.Variants.SelectMany(p => p.ProductProperties)
+                                         where v.ProductDefinitionField.DisplayOnSite
+                                         group v by v.ProductDefinitionField into g
+                                         select g;
+                    if (uniqueVariants.Any())
+                    {
+                        <fieldset>
+                            @foreach (var prop in uniqueVariants)
+                            {
+                                var controlName = string.Format("variation-{0}", prop.Key.Name.ToLower());
+                                <div>
+                                    <label for="@controlName">@prop.Key.GetDisplayName()</label>
+                                    <span>
+                                        <select v-model="variantSku" name="@controlName" id="@controlName">
+                                            @{
+                                                var products = prop.GroupBy(p => p.Value).Select(g => g.First()).ToList();
+                                            }
+                                            <option>Please select ...</option>
+                                            @foreach (var product in products)
+                                            {
+                                                <option value="@product.Product.VariantSku">@product.Value</option>
+                                            }
+                                        </select>
+                                    </span>
+                                </div>
+                            }
+                        </fieldset>
+                    }
+                }
+            </div>
 
             @*Beggining of Add to cart section*@
             <div>
@@ -81,7 +112,7 @@
                     <input type="hidden" class="@route.Key" value="@route.Value" />
                 }
 
-                <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id">
+                <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" :variant-sku="variantSku">
                 </add-to-basket>
             </div>
 
