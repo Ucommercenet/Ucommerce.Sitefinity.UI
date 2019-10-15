@@ -11,7 +11,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     public class MiniBasketController : Controller
     {
         public Guid? CartPageId { get; set; }
-        public string TemplateName { get; set; } = "Index";
+        public string TemplateName { get; set; }
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private readonly IMiniBasketService _miniBasketService;
 
@@ -42,7 +42,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         protected override void HandleUnknownAction(string actionName)
         {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, TemplateName);
+            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
         private IMiniBasketModel ResolveModel()
