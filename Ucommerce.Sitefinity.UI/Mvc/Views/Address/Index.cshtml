@@ -27,11 +27,13 @@
                     <label>First name</label>
                     @Html.TextBoxFor(x => x.BillingAddress.FirstName, new { @class = "form-control required margin-bottom" })
                     @Html.ValidationMessageFor(x => x.BillingAddress.FirstName, "", new { @class = "text-danger" })
+                    <label class="error-custom BillingAddressFirstName"></label>
                 </div>
                 <div>
                     <label>Last name</label>
                     @Html.TextBoxFor(x => x.BillingAddress.LastName, new { @class = "form-control required margin-bottom" })
                     @Html.ValidationMessageFor(x => x.BillingAddress.LastName, "", new { @class = "text-danger" })
+                    <label class="error-custom BillingAddressLastName"></label>
                 </div>
             </div>
 
@@ -40,6 +42,7 @@
                     <label>E-mail</label>
                     @Html.TextBoxFor(x => x.BillingAddress.EmailAddress, new { @class = "form-control required email margin-bottom" })
                     @Html.ValidationMessageFor(x => x.BillingAddress.EmailAddress, "", new { @class = "text-danger" })
+                    <label class="error-custom BillingAddressEmailAddress"></label>
                 </div>
                 <div>
                     <label>Attention</label>
@@ -65,6 +68,7 @@
                     <label>Street</label>
                     @Html.TextBoxFor(x => x.BillingAddress.Line1, new { @class = "form-control required margin-bottom" })
                     @Html.ValidationMessageFor(x => x.BillingAddress.Line1, "", new { @class = "text-danger" })
+                    <label class="error-custom BillingAddressLine1"></label>
                 </div>
                 <div>
                     <label>Street 2</label>
@@ -77,12 +81,14 @@
                     <label>Postal code</label>
                     @Html.TextBoxFor(x => x.BillingAddress.PostalCode, new { @class = "form-control required margin-bottom" })
                     @Html.ValidationMessageFor(x => x.BillingAddress.PostalCode, "", new { @class = "text-danger" })
+                    <label class="error-custom BillingAddressPostalCode"></label>
                 </div>
 
                 <div>
                     <label>City</label>
                     @Html.TextBoxFor(x => x.BillingAddress.City, new { @class = "form-control required margin-bottom" })
                     @Html.ValidationMessageFor(x => x.BillingAddress.City, "", new { @class = "text-danger" })
+                    <label class="error-custom BillingAddressCity"></label>
                 </div>
             </div>
 
@@ -107,7 +113,7 @@
         <div class="row">
             <div class="col-md-6 no-vertical-margin control-group form-group">
                 <label>First name</label>
-                @Html.TextBoxFor(x => x.ShippingAddress.FirstName, new { @class = "col-md-12 form-control required margin-bottom", required = "true" })
+                @Html.TextBoxFor(x => x.ShippingAddress.FirstName, new { @class = "col-md-12 form-control required margin-bottom"})
                 <label class="error-custom ShippingAddressFirstName"></label>
             </div>
             <div class="col-md-6 no-vertical-margin control-group form-group">
