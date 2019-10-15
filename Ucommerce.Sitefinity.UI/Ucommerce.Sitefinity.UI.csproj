@@ -509,6 +509,14 @@
     <EmbeddedResource Include="Mvc\Scripts\popper.js" />
     <EmbeddedResource Include="Mvc\Scripts\initBootstrap.js" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Address\B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\BasketPreview\B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Cart\B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\MiniBasket\B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\PaymentPicker\B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ShippingPicker\B4Index.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
