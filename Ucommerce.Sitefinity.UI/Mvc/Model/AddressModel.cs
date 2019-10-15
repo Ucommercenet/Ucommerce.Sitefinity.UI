@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Telerik.Sitefinity.Abstractions;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.EntitiesV2;
@@ -18,7 +19,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
         public AddressModel(Guid? nextStepId = null, Guid? previousStepId = null)
         {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
+            _transactionLibraryInternal = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             _countries = Country.All();
             this.nextStepId = nextStepId ?? Guid.Empty;
             this.previousStepId = previousStepId ?? Guid.Empty;
@@ -90,21 +91,28 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 
         private void EditShippingInformation(AddressSave shippingAddress)
         {
-            _transactionLibraryInternal.EditShipmentInformation(
-                UCommerce.Constants.DefaultShipmentAddressName,
-                shippingAddress.FirstName,
-                shippingAddress.LastName,
-                shippingAddress.EmailAddress,
-                shippingAddress.PhoneNumber,
-                shippingAddress.MobilePhoneNumber,
-                shippingAddress.CompanyName,
-                shippingAddress.Line1,
-                shippingAddress.Line2,
-                shippingAddress.PostalCode,
-                shippingAddress.City,
-                shippingAddress.State,
-                shippingAddress.Attention,
-                shippingAddress.CountryId);
+            try
+            {
+                _transactionLibraryInternal.EditShipmentInformation(
+                    UCommerce.Constants.DefaultShipmentAddressName,
+                    shippingAddress.FirstName,
+                    shippingAddress.LastName,
+                    shippingAddress.EmailAddress,
+                    shippingAddress.PhoneNumber,
+                    shippingAddress.MobilePhoneNumber,
+                    shippingAddress.CompanyName,
+                    shippingAddress.Line1,
+                    shippingAddress.Line2,
+                    shippingAddress.PostalCode,
+                    shippingAddress.City,
+                    shippingAddress.State,
+                    shippingAddress.Attention,
+                    shippingAddress.CountryId);
+            }
+            catch (System.Configuration.ConfigurationErrorsException ex)
+            {
+                Log.Write(ex);
+            }
         }
 
         private void EditBillingInformation(AddressSave billingAddress)
