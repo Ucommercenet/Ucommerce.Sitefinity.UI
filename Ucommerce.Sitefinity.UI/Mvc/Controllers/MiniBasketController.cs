@@ -13,7 +13,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     public class MiniBasketController : Controller, IPersonalizable
     {
         public Guid? CartPageId { get; set; }
-        public string TemplateName { get; set; }
+        public string TemplateName { get; set; } = "Index";
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private readonly IMiniBasketService _miniBasketService;
 

@@ -7,9 +7,6 @@
 
 @model Ucommerce.Sitefinity.UI.Mvc.ViewModels.CartRenderingViewModel
 
-
-@Html.StyleSheet(Url.WidgetContent("assets/src/css/checkout.css"), "head")
-
 @if (!SystemManager.IsDesignMode)
 {
     @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
