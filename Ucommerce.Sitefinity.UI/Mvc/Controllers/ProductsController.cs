@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Personalization;
+using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uProducts_MVC", Title = "Products", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
-    public class ProductsController : Controller
+    public class ProductsController : Controller, IPersonalizable
     {
         public int ItemsPerPage { get; set; } = 10;
 
@@ -36,6 +38,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             ProductListViewModel viewModel;
             try
             {
+                if (SystemManager.IsDesignMode)
+                {
+                    return new EmptyResult();
+                }
+
                 var productModel = this.ResolveModel();
                 viewModel = productModel.CreateListViewModel();
 
