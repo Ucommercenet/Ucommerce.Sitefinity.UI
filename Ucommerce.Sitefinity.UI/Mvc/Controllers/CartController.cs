@@ -43,11 +43,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult RemoveOrderline(int orderlineId)
         {
             _transactionLibraryInternal.UpdateLineItemByOrderLineId(orderlineId, 0);
+            _transactionLibraryInternal.ExecuteBasketPipeline();
+            var model = ResolveModel();
+            var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
             return Json(new
             {
                 MiniBasketRefresh = _miniBasketService.Refresh(),
-                orderlineId
+                orderlineId,
+                vm.OrderTotal,
+                vm.DiscountTotal,
+                vm.TaxTotal,
+                vm.SubTotal,
+                vm.OrderLines
             });
         }
 

@@ -13,6 +13,7 @@
 
         $(removeButtonSelector).each(function (index, element) {
             $(this).click(function () {
+                var $updateBasket = $(this);
                 var removeOrderlineUrl = config.$rootSelector.find(classSelector).data('remove-orderline-url');
                 var orderlineId = $(this).data('line-id');
 
@@ -31,6 +32,20 @@
                         });
                         if ($('[data-orderline]').length == 0) {
                             $('body').load(location.href);
+                        }
+                        else {
+
+                            config.$rootSelector.find(classSelector).each(function () {
+                                var $updateBasket = $(this);
+                                var orderSubtotal = $updateBasket.data('order-subtotal');
+                                $(orderSubtotal).text(data.SubTotal);
+                                var taxTotal = $updateBasket.data('order-tax');
+                                $(taxTotal).text(data.TaxTotal);
+                                var discountTotal = $updateBasket.data('order-discounts');
+                                $(discountTotal).text(data.DiscountTotal);
+                                var orderTotal = $updateBasket.data('order-total');
+                                $(orderTotal).text(data.OrderTotal);
+                            });
                         }
 
                         config.$triggerEventSelector.trigger("basket-changed", data.MiniBasketRefresh);
@@ -85,6 +100,7 @@
                     if ($('[data-orderline]').length == 0) {
                         $('body').load(location.href);
                     }
+
 
                     var orderSubtotal = $updateBasket.data('order-subtotal');
                     $(orderSubtotal).text(data.SubTotal);
