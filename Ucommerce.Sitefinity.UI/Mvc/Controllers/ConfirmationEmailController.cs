@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.EntitiesV2;
@@ -9,7 +10,7 @@ using UCommerce.EntitiesV2;
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uConfirmationEmail_MVC", Title = "Confirmation Email", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
-    public class ConfirmationEmailController : Controller
+    public class ConfirmationEmailController : Controller, IPersonalizable
     {
         public ActionResult Index()
         {

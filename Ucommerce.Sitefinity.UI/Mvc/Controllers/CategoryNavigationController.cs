@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Personalization;
+using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -8,7 +10,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uCategoryNavigation_MVC", Title = "Category Navigation", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
 
-    public class CategoryNavigationController : Controller
+    public class CategoryNavigationController : Controller, IPersonalizable
     {
         public Guid? ImageId { get; set; }
 
@@ -26,6 +28,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            if (SystemManager.IsDesignMode)
+            {
+                return new EmptyResult();
+            }
+
             CategoryNavigationViewModel categoryNavigationViewModel = null;
 
             try

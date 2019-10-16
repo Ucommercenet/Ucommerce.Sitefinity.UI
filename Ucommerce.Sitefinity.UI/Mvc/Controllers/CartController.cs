@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Personalization;
+using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Infrastructure;
@@ -9,7 +11,7 @@ using UCommerce.Transactions;
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
-    public class CartController : Controller
+    public class CartController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
         public Guid? ProductDetailsPageId { get; set; }
@@ -26,6 +28,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            if (SystemManager.IsDesignMode)
+            {
+                return new EmptyResult();
+            }
+
             var model = ResolveModel();
             var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 

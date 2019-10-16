@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -8,7 +9,7 @@ using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
-    public class ShippingPickerController : Controller
+    public class ShippingPickerController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }

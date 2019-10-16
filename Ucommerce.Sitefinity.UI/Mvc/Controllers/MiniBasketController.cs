@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Personalization;
+using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
@@ -8,7 +10,7 @@ using UCommerce.Transactions;
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uMiniBasket_MVC", Title = "Mini Basket", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
-    public class MiniBasketController : Controller
+    public class MiniBasketController : Controller, IPersonalizable
     {
         public Guid? CartPageId { get; set; }
         public string TemplateName { get; set; }
@@ -23,6 +25,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            if (SystemManager.IsDesignMode)
+            {
+                return new EmptyResult();
+            }
+
             var miniBasketModel = ResolveModel();
             var miniBasketRenderingViewModel = miniBasketModel.CreateViewModel(Url.Action("Refresh"));
 

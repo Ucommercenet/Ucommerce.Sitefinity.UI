@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
+using Telerik.Sitefinity.Personalization;
+using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uPaymentPicker_MVC", Title = "Payment Picker", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
-    public class PaymentPickerController : Controller
+    public class PaymentPickerController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
@@ -15,6 +17,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            if (SystemManager.IsDesignMode)
+            {
+                return new EmptyResult();
+            }
+
             var model = ResolveModel();
             var paymentPickerVM = model.GetViewModel();
 
