@@ -700,6 +700,11 @@ a.sflnkToggleCart .sflnkToggleCartLbl {
     min-height: 130px;
 }
 
+.sfproductDetailsWrp .sfproductTitle {
+    min-height: initial;
+    margin-bottom: 16px !important;
+}
+
 .sfproductDescription {
     font-size: 14px;
     line-height: 1.428571429;
