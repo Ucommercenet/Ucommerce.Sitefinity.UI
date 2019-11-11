@@ -499,6 +499,11 @@ ul.category-child .category-child.open {
     box-shadow: none;
 }
 
+    .sfAddToCartBtn:active,
+    .sfAddToCartBtn::selection,
+    .sfAddToCartBtn:focus,
+    .sfAddToCartBtn:checked,
+    .sfAddToCartBtn:visited,
     .btn-navcategory:active,
     .btn-navcategory::selection,
     .btn-navcategory:focus,
@@ -727,14 +732,6 @@ a.sflnkToggleCart .sflnkToggleCartLbl {
     color: #23527c;
 }
 
-a.sfRatingClosingText {
-    font-size: 14px;
-    line-height: 1.428571429;
-}
-
-    a.sfRatingClosingText:hover {
-        text-decoration: underline;
-    }
 
 div.sfproductPrice {
     font-size: 14px;
@@ -762,6 +759,27 @@ div.sfproductPrice {
 label[for="productQuantityInput"] {
     margin-top: 12px;
 }
+
+.sfAddToCartBtn {
+    background: #00b4c9;
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 2px;
+}
+
+    .sfAddToCartBtn:hover {
+        background:#00a8c9 ;
+    }
+
+a.sfRatingClosingText {
+    font-size: 14px;
+    line-height: 1.428571429;
+}
+
+    a.sfRatingClosingText:hover {
+        color: #23527c;
+    }
 
 @media screen and (max-width: 1200px) {
     .sfproductsList li.sfproductListItem {
