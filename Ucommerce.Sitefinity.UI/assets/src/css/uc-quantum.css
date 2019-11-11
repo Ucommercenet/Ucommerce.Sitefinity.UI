@@ -705,6 +705,12 @@ a.sflnkToggleCart .sflnkToggleCartLbl {
     margin-bottom: 16px !important;
 }
 
+.sfproductDetailsWrp .sfRegPrice {
+    background: transparent!important;
+    color: black!important;
+    padding: 0!important;
+}
+
 .sfproductDescription {
     font-size: 14px;
     line-height: 1.428571429;
