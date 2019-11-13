@@ -822,7 +822,7 @@ a.sfRatingClosingText {
 
     .btn-navcategory {
         float: right;
-        padding-right: 20px;
+        padding-right: 0px;
     }
 
     .category-child.open {
