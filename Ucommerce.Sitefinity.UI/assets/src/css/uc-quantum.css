@@ -898,6 +898,15 @@ a.sfRatingClosingText {
     .logo img {
         height: auto;
     }
+
+    .main-nav > ul > li:hover,
+    .main-nav > ul > li:active,
+    .main-nav > ul > li:focus,
+    .main-nav > ul > li:checked,
+    .main-nav > ul > li:visited {
+        background: none !important;
+    }
+
 }
 
 @media screen and (max-width: 480px) {
@@ -926,7 +935,7 @@ a.sfRatingClosingText {
 
 @media screen and (max-width: 414px) {
     .top-inner.top-inner--center {
-        padding-left: 20%;
+        padding: 0 24px;
     }
 }
 
