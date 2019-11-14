@@ -459,7 +459,6 @@
     <None Include="app.config" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\FacetsFilter\B4Index.cshtml" />
-    <EmbeddedResource Include="assets\src\css\checkout.css" />
     <EmbeddedResource Include="Mvc\Scripts\jquery.validate.min.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsAddress.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsAddToBasketButton.js" />
