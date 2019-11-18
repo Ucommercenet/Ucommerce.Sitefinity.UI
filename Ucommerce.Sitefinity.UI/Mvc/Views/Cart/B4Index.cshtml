@@ -7,8 +7,6 @@
 
 @model Ucommerce.Sitefinity.UI.Mvc.ViewModels.CartRenderingViewModel
 
-
-
 @Html.StyleSheet(Url.WidgetContent("~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
@@ -24,107 +22,130 @@
 }
 else
 {
-    <div class="table-responsive table-responsive-sm my-5">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th class="span3">Description</th>
-                    <th class="span1 money">Price</th>
-                    <th class="span1 money">VAT</th>
-                    <th class="span1">Quantity</th>
-                    <th class="span1 money">Total</th>
-                    <th class="span05"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (var i = 0; i < Model.OrderLines.Count; i++)
-                {
-                    var line = Model.OrderLines[i];
-                    <tr class="order-line" data-orderline="@line.OrderLineId">
-                        @Html.HiddenFor(model => model.OrderLines[i].Sku)
-                        @Html.HiddenFor(model => model.OrderLines[i].VariantSku)
-                        @Html.HiddenFor(model => model.OrderLines[i].OrderLineId)
+    <div class="container-fluid my-5">
+        <div class="row border-bottom py-2 d-none d-md-flex">
+            <div class="col-md-4">
+                <span class="span3 font-weight-bold">Description</span>
+            </div>
+            <div class="col-md-1">
+                <span class="span1 money font-weight-bold">Price</span>
+            </div>
+            <div class="col-md-1">
+                <span class="span1 money font-weight-bold">VAT</span>
+            </div>
+            <div class="col-md-1">
+                <span class="span1 font-weight-bold">Quantity</span>
+            </div>
+            <div class="col-md-1">
+                <span class="span1 money font-weight-bold">Total</span>
+            </div>
+            <div class="col-md-2">
+                <span class="span05">
 
-                        <td><a class="text-info" href="@line.ProductUrl">@line.ProductName</a></td>
-                        <td class="money">
-                            @if (@line.Discount.HasValue && @line.Discount > 0)
-                            {
-                                <span data-price>
-                                    @line.Price
-                                </span>
-                                <span data-price-with-discount>
-                                    @line.PriceWithDiscount
-                                </span>
-                            }
-                            else
-                            {
-                                <span data-price>
-                                    @line.Price
-                                </span>
+                </span>
+            </div>
+            <div class="col-md-2">
+                <span>
 
-                            }
-                        </td>
-                        <td class="money" data-tax>
-                            @line.Tax
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control d-inline-block p-0", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
-                            <button name="update-basket" class="btn btn-info btn-sm d-inline-block mt-2 js-update-basket" data-remove-orderline-url="@Model.RemoveOrderlineUrl" data-refresh-url="@Model.RefreshUrl" data-cart-container=".cart-container" data-item-total=".item-total" data-line-remove=".line-remove" data-order-subtotal=".order-subtotal" data-order-tax=".order-tax" data-order-discounts=".order-discounts" data-order-total=".order-total" data-basket="@Model" type="button">
-                                <span class="h6 mr-2 text-white">&#10227;</span> <span>Update</span>
-                            </button>
-                        </td>
-                        <td class="money item-total">
-                            @line.Total
-                        </td>
-                        <td>
-                            <button type="button" data-line-id="@line.OrderLineId" name="RemoveOrderlineId" class="line-remove btn btn-info btn-sm"><span class="h6 mr-2 text-white">&#10005;</span><span>Remove</span></button>
-                        </td>
-                    </tr>
-                }
-                <tr>
-                    <td rowspan="4" colspan="3" ></td>
-                    <td colspan="1">Sub total:</td>
-                    <td class="money order-subtotal">
-                        @Model.SubTotal
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="1">VAT:</td>
-                    <td class="money order-tax">
-                        @Model.TaxTotal
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="1">Discounts:</td>
-                    <td class="money order-discounts">
-                        @Model.DiscountTotal
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="1"><strong>Order total:</strong></td>
-                    <td class="money order-total">
-                        @Model.OrderTotal
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-            </tbody>
-        </table>
+                </span>
+            </div>
+        </div>
+        @for (var i = 0; i < Model.OrderLines.Count; i++)
+        {
+            var line = Model.OrderLines[i];
+            <div class="row border-bottom order-line py-3" data-orderline="@line.OrderLineId">
+                @Html.HiddenFor(model => model.OrderLines[i].Sku)
+                @Html.HiddenFor(model => model.OrderLines[i].VariantSku)
+                @Html.HiddenFor(model => model.OrderLines[i].OrderLineId)
+                <div class="col-md-4 mb-2 mb-md-0">
+                    <span class="font-weight-bold d-md-none">Description: </span> <a class="text-info d-block d-md-inline-block" href="@line.ProductUrl">@line.ProductName</a>
+                </div>
 
-
-        <div class="mt-4">
-                @{
-                    var showContinueButton = true;
-
-                    if (Model.NextStepUrl == "")
+                <div class="col-md-1 money mb-2 mb-md-0">
+                    <span class="font-weight-bold d-md-none">Price: </span>
+                    @if (@line.Discount.HasValue && @line.Discount > 0)
                     {
-                        showContinueButton = false;
+                        <span data-price>
+                            @line.Price
+                        </span>
+                        <span data-price-with-discount>
+                            @line.PriceWithDiscount
+                        </span>
                     }
+                    else
+                    {
+                        <span data-price>
+                            @line.Price
+                        </span>
 
+                    }
+                </div>
+
+                <div class="col-md-1 money mb-2 mb-md-0" data-tax>
+                    <span class="font-weight-bold d-md-none">VAT</span>
+                    @line.Tax
+                </div>
+                <div class="col-md-1 mb-2 mb-md-0">
+                    <span class="font-weight-bold d-md-none">Quantity: </span>
+                    @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control d-inline-block p-0 pl-1", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
+                </div>
+                <div class="col-md-1 money item-total mb-1 mb-md-0">
+                    <span class="font-weight-bold d-md-none">Total: </span>
+                    @line.Total
+                </div>
+                <div class="col-md-2 mb-3 mb-md-0">
+                    <button name="update-basket" class="btn btn-info btn d-inline-block float-right js-update-basket" data-remove-orderline-url="@Model.RemoveOrderlineUrl" data-refresh-url="@Model.RefreshUrl" data-cart-container=".cart-container" data-item-total=".item-total" data-line-remove=".line-remove" data-order-subtotal=".order-subtotal" data-order-tax=".order-tax" data-order-discounts=".order-discounts" data-order-total=".order-total" data-basket="@Model" type="button">
+                        <span class="h6 mr-2 text-white">&#10227;</span> <span>Update</span>
+                    </button>
+                </div>
+                <div class="col-md-2 mb-2 mb-md-0">
+                    <button type="button" data-line-id="@line.OrderLineId" name="RemoveOrderlineId" class="line-remove btn float-right btn-info btn"><span class="h6 mr-2 text-white">&#10005;</span><span>Remove</span></button>
+                </div>
+            </div>
+        }
+        <div class="row border-bottom py-2 text-right">
+            <div class="offset-md-8 col-md-2">
+                <span class="font-weight-bold">Sub total:</span>
+            </div>
+            <div class="col-md-2 money order-subtotal">
+                @Model.SubTotal
+            </div>
+        </div>
+        <div class="row border-bottom py-2 text-right">
+            <div class="offset-md-8 col-md-2">
+                <span class="font-weight-bold">VAT:</span>
+            </div>
+            <div class="col-md-2 money order-tax">
+                @Model.TaxTotal
+            </div>
+        </div>
+        <div class="row border-bottom py-2 text-right">
+            <div class="offset-md-8 col-md-2">
+                <span class="font-weight-bold">Discounts:</span>
+            </div>
+            <div class="col-md-2 money order-discounts">
+                @Model.DiscountTotal
+            </div>
+        </div>
+        <div class="row border-bottom py-2 text-right">
+            <div class="offset-md-8 col-md-2">
+                <span class="font-weight-bold">Order total:</span>
+            </div>
+            <div class="col-md-2 money order-total">
+                @Model.OrderTotal
+            </div>
+        </div>
+        <div class="mt-4">
+            @{
+                var showContinueButton = true;
+
+                if (Model.NextStepUrl == "")
+                {
+                    showContinueButton = false;
                 }
-                <a href="@Model.NextStepUrl" class="btn btn-info float-right" style="@(showContinueButton ? "display:block" : "display:none")" name="review-product">Continue</a>      
+
+            }
+            <a href="@Model.NextStepUrl" class="btn btn-info btn-lg float-md-right" style="@(showContinueButton ? "display:block" : "display:none")" name="review-product">Continue</a>
         </div>
     </div>
 }
