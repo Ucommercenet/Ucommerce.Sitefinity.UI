@@ -7,8 +7,6 @@
 
 @model Ucommerce.Sitefinity.UI.Mvc.ViewModels.CartRenderingViewModel
 
-
-
 @Html.StyleSheet(Url.WidgetContent("~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
@@ -24,8 +22,8 @@
 }
 else
 {
-    <div class="container my-5">
-        <div class="row border-bottom py-2">
+    <div class="container-fluid my-5">
+        <div class="row border-bottom py-2 d-none d-md-flex">
             <div class="col-md-4">
                 <span class="span3 font-weight-bold">Description</span>
             </div>
@@ -59,11 +57,12 @@ else
                 @Html.HiddenFor(model => model.OrderLines[i].Sku)
                 @Html.HiddenFor(model => model.OrderLines[i].VariantSku)
                 @Html.HiddenFor(model => model.OrderLines[i].OrderLineId)
-                <div class="col-md-4">
-                    <a class="text-info" href="@line.ProductUrl">@line.ProductName</a>
+                <div class="col-md-4 mb-2 mb-md-0">
+                    <span class="font-weight-bold d-md-none">Description: </span> <a class="text-info d-block d-md-inline-block" href="@line.ProductUrl">@line.ProductName</a>
                 </div>
 
-                <div class="col-md-1 money">
+                <div class="col-md-1 money mb-2 mb-md-0">
+                    <span class="font-weight-bold d-md-none">Price: </span>
                     @if (@line.Discount.HasValue && @line.Discount > 0)
                     {
                         <span data-price>
@@ -82,54 +81,57 @@ else
                     }
                 </div>
 
-                <div class="col-md-1 money" data-tax>
+                <div class="col-md-1 money mb-2 mb-md-0" data-tax>
+                    <span class="font-weight-bold d-md-none">VAT</span>
                     @line.Tax
                 </div>
-                <div class="col-md-1">
-                    @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control d-inline-block p-0", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
+                <div class="col-md-1 mb-2 mb-md-0">
+                    <span class="font-weight-bold d-md-none">Quantity: </span>
+                    @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control d-inline-block p-0 pl-1", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
                 </div>
-                <div class="col-md-1 money item-total">
+                <div class="col-md-1 money item-total mb-1 mb-md-0">
+                    <span class="font-weight-bold d-md-none">Total: </span>
                     @line.Total
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 mb-3 mb-md-0">
                     <button name="update-basket" class="btn btn-info btn d-inline-block float-right js-update-basket" data-remove-orderline-url="@Model.RemoveOrderlineUrl" data-refresh-url="@Model.RefreshUrl" data-cart-container=".cart-container" data-item-total=".item-total" data-line-remove=".line-remove" data-order-subtotal=".order-subtotal" data-order-tax=".order-tax" data-order-discounts=".order-discounts" data-order-total=".order-total" data-basket="@Model" type="button">
                         <span class="h6 mr-2 text-white">&#10227;</span> <span>Update</span>
                     </button>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2 mb-2 mb-md-0">
                     <button type="button" data-line-id="@line.OrderLineId" name="RemoveOrderlineId" class="line-remove btn float-right btn-info btn"><span class="h6 mr-2 text-white">&#10005;</span><span>Remove</span></button>
                 </div>
             </div>
         }
         <div class="row border-bottom py-2">
-            <div class="offset-9 col-md-2">
+            <div class="offset-8 col-md-2">
                 <span>Sub total:</span>
             </div>
-            <div class="col-md-1 money order-subtotal">
+            <div class="col-md-2 money order-subtotal">
                 @Model.SubTotal
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="offset-9 col-md-2">
+            <div class="offset-8 col-md-2">
                 <span>VAT:</span>
             </div>
-            <div class="col-md-1 money order-tax">
+            <div class="col-md-2 money order-tax">
                 @Model.TaxTotal
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="offset-9 col-md-2">
+            <div class="offset-8 col-md-2">
                 <span>Discounts:</span>
             </div>
-            <div class="col-md-1 money order-discounts">
+            <div class="col-md-2 money order-discounts">
                 @Model.DiscountTotal
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="offset-9 col-md-2">
+            <div class="offset-8 col-md-2">
                 <span>Order total:</span>
             </div>
-            <div class="col-md-1 money order-total">
+            <div class="col-md-2 money order-total">
                 @Model.OrderTotal
             </div>
         </div>
