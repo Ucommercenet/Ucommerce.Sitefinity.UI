@@ -52,13 +52,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-                        <a href="#" onclick="return false;" class="text-info">Write a review</a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-                        <span class="p-1 bg-info text-white">@Model.Price</span>
+                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12 mt-3">
+                        <span class="p-1">@Model.Price</span>
                     </div>
                 </div>
                 <div class="row">
@@ -85,7 +80,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="mt-3">
+                        <div class="mt-3 w-75">
                             @{
                                 var uniqueVariants = from v in Model.Variants.SelectMany(p => p.ProductProperties)
                                                      where v.ProductDefinitionField.DisplayOnSite
@@ -100,7 +95,7 @@
                                             <div class="general">
                                                 <label for="@controlName">@prop.Key.GetDisplayName()</label>
                                                 <span class="wrap">
-                                                    <select v-model="variantSku" name="@controlName" id="@controlName" class="variant">
+                                                    <select v-model="variantSku" name="@controlName" id="@controlName" class="variant float-right">
                                                         @{
                                                             var products = prop.GroupBy(p => p.Value).Select(g => g.First()).ToList();
                                                         }
@@ -129,25 +124,6 @@
 
                         <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" :variant-sku="variantSku">
                         </add-to-basket>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="mt-3"> <a class="text-info font-weight-bold text-capitalize" href="#" onclick="return false;">add to wish list</a></div>
-                        <div class="text-danger" style="display: none; ">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
-                        <span></span>
-                        <div id="commentsWidget" class="mt-3">
-                            <div class="">
-                                <div class=""></div>
-                                <a href="#" onclick="return false;" class="text-info">Write a review</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
