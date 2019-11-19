@@ -516,7 +516,8 @@
     <EmbeddedResource Include="Mvc\Views\MiniBasket\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\B4Index.cshtml" />
-	<EmbeddedResource Include="Mvc\Views\Layouts\Email.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Layouts\Email.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Layouts\B4Default.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
@@ -5253,7 +5254,7 @@
     <EmbeddedResource Include="assets\src\css\uc-quantum.css" />
     <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
     <EmbeddedResource Include="assets\src\css\b4-category-navigation.css" />
-	<EmbeddedResource Include="assets\src\images\icons\icon-fb.png" />
+    <EmbeddedResource Include="assets\src\images\icons\icon-fb.png" />
     <EmbeddedResource Include="assets\src\images\icons\icon-git.png" />
     <EmbeddedResource Include="assets\src\images\icons\icon-in.png" />
     <EmbeddedResource Include="assets\src\images\icons\icon-rss.png" />

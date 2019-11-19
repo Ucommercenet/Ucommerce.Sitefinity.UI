@@ -37,12 +37,28 @@
         }
 
     div[data-component="category-navigation"] .navbar-nav > li a {
-        margin-left: 1.5rem !important;
         margin-right: 1.5rem !important;
         padding-left: 0.5rem !important;
     }
 
-    div[data-component="category-navigation"] .navbar-nav > li {
+        div[data-component="category-navigation"] .navbar-nav > li a:hover,
+        div[data-component="category-navigation"] .navbar-nav > li:hover,
+        div[data-component="category-navigation"] .navbar-nav > li a:focus,
+        div[data-component="category-navigation"] .navbar-nav > li:focus,
+        div[data-component="category-navigation"] .navbar-nav > li a:visited,
+        div[data-component="category-navigation"] .navbar-nav > li:visited,
+        div[data-component="category-navigation"] .navbar-nav > li a:active,
+        div[data-component="category-navigation"] .navbar-nav > li:active,
+        div[data-component="category-navigation"] .navbar-nav > li a:target
+        div[data-component="category-navigation"] .navbar-nav > li:target,
+        div[data-component="category-navigation"] .navbar-nav > li a:checked
+        div[data-component="category-navigation"] .navbar-nav > li:checked {
+            background: none;
+            background-color: none;
+            outline: none;
+        }
+
+    div[data-component="category-navigation"] .navbar-nav:first-child > li {
         border-bottom: 1px solid #ccc;
     }
 
