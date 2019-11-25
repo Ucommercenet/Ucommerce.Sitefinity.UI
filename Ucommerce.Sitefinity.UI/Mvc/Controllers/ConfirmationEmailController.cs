@@ -20,7 +20,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
             if(SystemManager.IsDesignMode)
             {
-                return this.BlankOrder();
+                return this.PartialView("_DesignMode");
             }
             else if (string.IsNullOrWhiteSpace(orderGuid))
             {

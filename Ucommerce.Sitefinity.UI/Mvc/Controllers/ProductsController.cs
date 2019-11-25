@@ -40,7 +40,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             {
                 if (SystemManager.IsDesignMode)
                 {
-                    return new EmptyResult();
+                    return this.PartialView("_DesignMode");
                 }
 
                 var productModel = this.ResolveModel();

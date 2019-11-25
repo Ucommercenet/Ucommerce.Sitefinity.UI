@@ -13,7 +13,7 @@
 
 @if (!SystemManager.IsDesignMode)
 {
-	@Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 }
 
 @using (Html.BeginFormSitefinity("Save", "Address", FormMethod.Post, new { @class = "js-address", data_submit_address = ".submit-address", data_save_address_url = @Model.SaveAddressUrl }))
@@ -113,7 +113,7 @@
         <div class="row">
             <div class="col-md-6 no-vertical-margin control-group form-group">
                 <label>First name</label>
-                @Html.TextBoxFor(x => x.ShippingAddress.FirstName, new { @class = "col-md-12 form-control required margin-bottom"})
+                @Html.TextBoxFor(x => x.ShippingAddress.FirstName, new { @class = "col-md-12 form-control required margin-bottom" })
                 <label class="error-custom ShippingAddressFirstName"></label>
             </div>
             <div class="col-md-6 no-vertical-margin control-group form-group">

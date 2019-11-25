@@ -521,6 +521,8 @@
     <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\FacetsFilter\DesignerView.Simple.cshtml" />
+    <Content Include="Mvc\Views\Shared\readme.txt" />
+    <EmbeddedResource Include="Mvc\Views\Shared\_DesignMode.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
