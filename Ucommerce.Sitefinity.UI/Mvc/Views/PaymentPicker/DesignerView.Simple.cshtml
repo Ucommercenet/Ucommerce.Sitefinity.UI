@@ -4,9 +4,26 @@
                   sf-provider="properties.ProviderName.PropertyValue"
                   sf-selected-item-id="properties.NextStepId.PropertyValue"
                   sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers
 
 <label for="image-field" class="m-top-sm">Previous Page</label>
 <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
                   sf-provider="properties.ProviderName.PropertyValue"
                   sf-selected-item-id="properties.PreviousStepId.PropertyValue"
                   sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+
+
+<div class="form-group">
+    <label for="paymentTemplateName">@Html.Resource("Template")</label>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <select id="paymentTemplateName" ng-model="properties.TemplateName.PropertyValue" class="form-control">
+                @foreach (var viewName in Html.GetViewNames("PaymentPicker", @"(?<viewName>[\w\s]*)$"))
+                {
+                    <option value="@viewName"> @viewName.SplitCamelCase()</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>

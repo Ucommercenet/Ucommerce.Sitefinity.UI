@@ -17,7 +17,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     {
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
-        public string TemplteName { get; set; } = "Index";
+        public string TemplateName { get; set; } = "Index";
 
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
@@ -52,7 +52,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 ViewBag.RowSpan++;
             }
 
-            return View(TemplteName, basketPreviewViewModel);
+            return View(TemplateName, basketPreviewViewModel);
         }
 
         [HttpPost]

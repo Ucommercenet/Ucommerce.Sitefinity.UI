@@ -1,14 +1,31 @@
-﻿
-    <form name="cartProperties">
-        <label for="image-field" class="m-top-sm">Next Step Page</label>
-        <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
-                          sf-provider="properties.ProviderName.PropertyValue"
-                          sf-selected-item-id="properties.NextStepId.PropertyValue"
-                          sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers
 
-        <label for="image-field" class="m-top-sm">Product Details Page</label>
-        <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
-                          sf-provider="properties.ProviderName.PropertyValue"
-                          sf-selected-item-id="properties.ProductDetailsPageId.PropertyValue"
-                          sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
-    </form>
+<form name="cartProperties">
+    <label for="image-field" class="m-top-sm">Next Step Page</label>
+    <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
+                      sf-provider="properties.ProviderName.PropertyValue"
+                      sf-selected-item-id="properties.NextStepId.PropertyValue"
+                      sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+
+    <label for="image-field" class="m-top-sm">Product Details Page</label>
+    <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
+                      sf-provider="properties.ProviderName.PropertyValue"
+                      sf-selected-item-id="properties.ProductDetailsPageId.PropertyValue"
+                      sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+</form>
+
+
+<div class="form-group">
+    <label for="cartTemplateName">@Html.Resource("Template")</label>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <select id="cartTemplateName" ng-model="properties.TemplateName.PropertyValue" class="form-control">
+                @foreach (var viewName in Html.GetViewNames("Cart", @"(?<viewName>[\w\s]*)$"))
+                {
+                    <option value="@viewName"> @viewName.SplitCamelCase()</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>

@@ -13,7 +13,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     {
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
-        public string TemplteName { get; set; } = "Index";
+        public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
         {
@@ -25,7 +25,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             var paymentPickerVM = model.GetViewModel();
 
-            return View(TemplteName, paymentPickerVM);
+            return View(TemplateName, paymentPickerVM);
         }
 
         [HttpPost]

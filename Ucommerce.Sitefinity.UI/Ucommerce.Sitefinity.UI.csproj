@@ -467,10 +467,10 @@
     <EmbeddedResource Include="Mvc\Scripts\jsQuantityPicker.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsShippingPicker.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsUpdateBasket.js" />
-    <EmbeddedResource Include="Mvc\Views\Products\B4Details.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Products\B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Products\Details.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Products\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Products\Detail.B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Products\List.B4Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Products\Detail.Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Products\List.Index.cshtml" />
     <None Include="assets\src\js\components\add-to-basket.vue" />
     <None Include="assets\src\js\components\currency-selector.vue" />
     <None Include="assets\src\js\components\dropdown-menu.vue" />
@@ -518,6 +518,9 @@
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Layouts\Email.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Layouts\B4Default.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\FacetsFilter\DesignerView.Simple.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />

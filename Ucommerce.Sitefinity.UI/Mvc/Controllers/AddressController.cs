@@ -13,7 +13,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     {
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
-        public string TemplteName { get; set; } = "Index";
+        public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
         {
@@ -25,7 +25,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             var viewModel = model.GetViewModel();
 
-            return View(TemplteName, viewModel);
+            return View(TemplateName, viewModel);
         }
 
         [HttpPost]
@@ -40,14 +40,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 model.Save(addressRendering);
                 if (viewModel.NextStepUrl?.Length == 0)
                 {
-                    return View(TemplteName, viewModel);
+                    return View(TemplateName, viewModel);
                 }
                 else
                 {
                     return Redirect(viewModel.NextStepUrl);
                 }
             }
-            return View(TemplteName, viewModel);
+            return View(TemplateName, viewModel);
         }
 
         protected override void HandleUnknownAction(string actionName)

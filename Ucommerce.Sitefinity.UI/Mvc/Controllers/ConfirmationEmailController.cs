@@ -12,6 +12,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uConfirmationEmail_MVC", Title = "Confirmation Email", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
     public class ConfirmationEmailController : Controller, IPersonalizable
     {
+        public string TemplateName { get; set; } = "Index";
+
         public ActionResult Index()
         {
             var orderGuid = System.Web.HttpContext.Current.Request.QueryString["orderGuid"];
@@ -44,7 +46,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 ViewBag.RowSpan++;
             }
 
-            return View("Index", confirmationEmailVM);
+            return View(this.TemplateName, confirmationEmailVM);
         }
 
         public ActionResult BlankOrder()

@@ -23,7 +23,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             var confirmationMessageVM = model.GetViewModel(Headline, Message);
 
-            return View(TemplateName, confirmationMessageVM);
+            return View(this.TemplateName, confirmationMessageVM);
         }
 
         public IConfirmationMessageModel ResolveModel()
