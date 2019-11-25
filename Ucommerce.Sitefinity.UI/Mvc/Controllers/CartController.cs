@@ -10,7 +10,7 @@ using UCommerce.Transactions;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnCart sfMvcIcn")]
     public class CartController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }

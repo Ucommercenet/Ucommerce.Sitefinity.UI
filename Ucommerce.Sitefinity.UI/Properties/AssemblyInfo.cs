@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Web;
+using System.Web.UI;
 using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers.Attributes;
 using Ucommerce.Sitefinity.UI.App_Start;
 
@@ -40,3 +41,5 @@ using Ucommerce.Sitefinity.UI.App_Start;
 [assembly: ControllerContainer]
 [assembly: ResourcePackage]
 [assembly: PreApplicationStartMethod(typeof(Startup), "OnApplicationStart")]
+
+[assembly: WebResource("Ucommerce.Sitefinity.UI.assets.dist.css.ucommerce-backend.css", "text/css")]

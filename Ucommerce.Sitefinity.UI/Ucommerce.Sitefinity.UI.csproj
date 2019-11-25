@@ -279,6 +279,8 @@
     <Compile Include="Mvc\Controllers\ShippingPickerController.cs" />
     <Compile Include="Mvc\Filters\ContextResolverAttribute.cs" />
     <Compile Include="Mvc\Infrastructure\ControllerContainerResolver.cs" />
+    <Compile Include="Mvc\Infrastructure\UcommerceMvcPageEditorRouteHandler.cs" />
+    <Compile Include="Mvc\Infrastructure\UcommerceMvcTemplateEditorRouteHandler.cs" />
     <Compile Include="Mvc\Infrastructure\WindsorControllerFactory.cs" />
     <Compile Include="Mvc\Model\AddressModel.cs" />
     <Compile Include="Mvc\Model\BasketPreviewModel.cs" />
@@ -521,6 +523,18 @@
     <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\FacetsFilter\DesignerView.Simple.cshtml" />
+    <EmbeddedResource Include="assets\dist\css\ucommerce-backend.css" />
+    <EmbeddedResource Include="assets\src\images\icons\address-information.png" />
+    <EmbeddedResource Include="assets\src\images\icons\basket-preview.png" />
+    <EmbeddedResource Include="assets\src\images\icons\cart.png" />
+    <EmbeddedResource Include="assets\src\images\icons\category-navigation.png" />
+    <EmbeddedResource Include="assets\src\images\icons\confirmation-email.png" />
+    <EmbeddedResource Include="assets\src\images\icons\confirmation-message.png" />
+    <EmbeddedResource Include="assets\src\images\icons\facets-filter.png" />
+    <EmbeddedResource Include="assets\src\images\icons\mini-basket.png" />
+    <EmbeddedResource Include="assets\src\images\icons\payment-picker.png" />
+    <EmbeddedResource Include="assets\src\images\icons\products.png" />
+    <EmbeddedResource Include="assets\src\images\icons\shipping-picker.png" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
     <EmbeddedResource Include="Mvc\Views\Shared\_DesignMode.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
