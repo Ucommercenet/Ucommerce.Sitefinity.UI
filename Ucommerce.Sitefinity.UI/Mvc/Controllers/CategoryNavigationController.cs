@@ -14,6 +14,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
     {
         public Guid? ImageId { get; set; }
 
+        public string ProviderName { get; set; }
+
         public bool HideMiniBasket { get; set; }
 
         public bool AllowChangingCurrency { get; set; } = true;

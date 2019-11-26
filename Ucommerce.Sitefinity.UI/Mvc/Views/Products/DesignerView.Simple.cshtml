@@ -8,28 +8,34 @@
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/ucommerce.tree.css"), "head", false)
 
     <form name="productsProperties">
+        
         <div class="form-group">
             <label for="text">Manually select products</label>
 
             <div class="row">
                 <div class="col-xs-11">
                     <input name="IsManualSelectionMode" type="checkbox" ng-model="properties.IsManualSelectionMode.PropertyValue"
-                           ng-true-value="'True'" ng-false-value="'False'" ng-checked="properties.IsManualSelectionMode.PropertyValue === 'True'" />
+                           ng-checked="properties.IsManualSelectionMode.PropertyValue === 'True'"
+                           ng-true-value="'True'" ng-false-value="'False'" />
                 </div>
             </div>
         </div>
 
         <div ng-show="properties.IsManualSelectionMode.PropertyValue === 'True'">
             <h3 class="tree__heading">Select products</h3>
-            <div ng-controller="siteFinityContentTreeController" data-property-name="ProductIds">
-                <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="product" load-on-compile="true" content-picker-type="products" icon-folder="uCommerce" selected-node-style="none" form-name="ProductIds" pre-selected-values="">
+            <div>
+                <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="product" load-on-compile="true" 
+                                        content-picker-type="products" icon-folder="uCommerce" selected-node-style="none"
+                                        form-name="ProductIds" pre-selected-values="{{properties.ProductIds.PropertyValue}}">
                 </ucommerce-multi-picker>
             </div>
 
             <h3 class="tree__heading">Select Categories you want to show products for</h3>
 
-            <div ng-controller="siteFinityContentTreeController" data-property-name="CategoryIds">
-                <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="productCategory" load-on-compile="true" content-picker-type="products" icon-folder="uCommerce" selected-node-style="none" form-name="CategoryIds" pre-selected-values="">
+            <div>
+                <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="productCategory"
+                                        load-on-compile="true" content-picker-type="products" icon-folder="uCommerce"
+                                        selected-node-style="none" form-name="CategoryIds" pre-selected-values="{{properties.CategoryIds.PropertyValue}}">
                 </ucommerce-multi-picker>
             </div>
         </div>

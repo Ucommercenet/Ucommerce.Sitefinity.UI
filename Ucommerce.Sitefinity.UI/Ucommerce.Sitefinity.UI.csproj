@@ -535,6 +535,7 @@
     <EmbeddedResource Include="assets\src\images\icons\payment-picker.png" />
     <EmbeddedResource Include="assets\src\images\icons\products.png" />
     <EmbeddedResource Include="assets\src\images\icons\shipping-picker.png" />
+    <EmbeddedResource Include="Mvc\Scripts\Products\designerview-simple.js" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
     <EmbeddedResource Include="Mvc\Views\Shared\_DesignMode.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
