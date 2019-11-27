@@ -119,15 +119,18 @@ namespace Ucommerce.Sitefinity.UI.Pages
         {
             var contextDictionary = new Dictionary<string, string>();
             var smp = SiteMapBase.GetCurrentProvider();
-            var nodeId = ((PageSiteNode)smp.CurrentNode).PageId;
+            var pageDataId = ((PageSiteNode)smp.CurrentNode).PageId;
 
-            var mgr =PageManager.GetManager();
+            var mgr = PageManager.GetManager();
             var pageData = mgr.GetPageDataList()
-                .Where(pd => pd.NavigationNodeId == nodeId && pd.Status == ContentLifecycleStatus.Live && pd.Visible == true)
+                .Where(pd => pd.Id == pageDataId && pd.Status == ContentLifecycleStatus.Live && pd.Visible == true)
                 .FirstOrDefault();
 
-            pageData.LoadToContextDictionary<ProductsController>(x => x.CategoryIds, contextDictionary);
-            pageData.LoadToContextDictionary<ProductsController>(x => x.ProductIds, contextDictionary);
+            if (pageData != null)
+            {
+                pageData.LoadToContextDictionary<ProductsController>(x => x.CategoryIds, contextDictionary);
+                pageData.LoadToContextDictionary<ProductsController>(x => x.ProductIds, contextDictionary);
+            }
 
             return contextDictionary;
         }
