@@ -16,20 +16,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            var model = ResolveModel();
             var orderGuid = System.Web.HttpContext.Current.Request.QueryString["orderGuid"];
+            string message;
 
-            if(SystemManager.IsDesignMode)
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            parameters.Add("orderGuid", orderGuid);
+
+            if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_DesignMode");
-            }
-            else if (string.IsNullOrWhiteSpace(orderGuid))
-            {
-                Log.Write(new Exception("Can't resolve orderGuid! Confirmation Email can't be sent."));
-                return this.BlankOrder();
+                return this.PartialView("_Warning", message);
             }
 
             PurchaseOrder purchaseOrder = new PurchaseOrder();
-            var model = ResolveModel();
             var confirmationEmailVM = model.GetViewModel(orderGuid);
 
             ViewBag.RowSpan = 4;
@@ -49,14 +48,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             return View(this.TemplateName, confirmationEmailVM);
         }
 
-        public ActionResult BlankOrder()
-        {
-            return new EmptyResult();
-        }
-
         protected override void HandleUnknownAction(string actionName)
         {
-            base.ActionInvoker.InvokeAction(this.ControllerContext, "BlankOrder");
+            base.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
         public ConfirmationEmailModel ResolveModel()

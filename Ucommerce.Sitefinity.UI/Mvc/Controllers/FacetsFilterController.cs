@@ -22,12 +22,16 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             try
             {
-                if (SystemManager.IsDesignMode)
+                var model = this.ResolveModel();
+                string message;
+
+                var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+                if (!model.CanProcessRequest(parameters, out message))
                 {
-                    return this.PartialView("_DesignMode");
+                    return this.PartialView("_Warning", message);
                 }
 
-                var model = this.ResolveModel();
                 var viewModel = model.CreateViewModel();
 
                 return this.View(this.TemplateName, viewModel);

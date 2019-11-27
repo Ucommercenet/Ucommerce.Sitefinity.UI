@@ -16,7 +16,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public class FacetsFilterModel : IFacetsFilterModel
     {
-        public IList<FacetViewModel> CreateViewModel()
+        public virtual IList<FacetViewModel> CreateViewModel()
         {
             var pageContext = SystemManager.CurrentHttpContext.GetProductsContext();
             var categoryIds = pageContext.GetValue<ProductsController>(p => p.CategoryIds);
@@ -34,6 +34,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             }
 
             return this.GetAllFacets(currentCategory);
+        }
+
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            message = null;
+            return true;
         }
 
         private IList<FacetViewModel> GetAllFacets(Category category)

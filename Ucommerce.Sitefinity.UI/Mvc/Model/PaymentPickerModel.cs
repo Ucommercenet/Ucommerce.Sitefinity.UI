@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
@@ -23,7 +24,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.previousStepId = previousStepId ?? Guid.Empty;
         }
 
-        public PaymentPickerViewModel GetViewModel()
+        public virtual PaymentPickerViewModel GetViewModel()
         {
             var paymentPickerViewModel = new PaymentPickerViewModel();
 
@@ -62,7 +63,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return paymentPickerViewModel;
         }
 
-        public void CreatePayment(PaymentPickerViewModel createPaymentViewModel)
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            message = null;
+            return true;
+        }
+
+        public virtual void CreatePayment(PaymentPickerViewModel createPaymentViewModel)
         {
             _transactionLibraryInternal.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
             _transactionLibraryInternal.ExecuteBasketPipeline();

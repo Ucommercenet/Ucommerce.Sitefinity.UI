@@ -25,12 +25,16 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
+            var miniBasketModel = ResolveModel();
+            string message;
+
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!miniBasketModel.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_DesignMode");
+                return this.PartialView("_Warning", message);
             }
 
-            var miniBasketModel = ResolveModel();
             var miniBasketRenderingViewModel = miniBasketModel.CreateViewModel(Url.Action("Refresh"));
 
             if (!_transactionLibraryInternal.HasBasket())

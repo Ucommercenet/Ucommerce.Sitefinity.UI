@@ -17,12 +17,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
+            var model = ResolveModel();
+            string message;
+
+            if (!model.CanProcessRequest(new System.Collections.Generic.Dictionary<string, object>(), out message))
             {
-                return this.PartialView("_DesignMode");
+                return this.PartialView("_Warning", message);
             }
 
-            var model = ResolveModel();
             var viewModel = model.GetViewModel();
 
             return View(TemplateName, viewModel);
@@ -33,7 +35,16 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             var viewModel = model.GetViewModel();
-            model.Validate(addressRendering, ModelState);
+            string message;
+
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            parameters.Add("addressRendering", addressRendering);
+            parameters.Add("modelState", ModelState);
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
 
             if (ModelState.IsValid)
             {
@@ -47,7 +58,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                     return Redirect(viewModel.NextStepUrl);
                 }
             }
-            return View(TemplateName, viewModel);
+            else
+            {
+                return View(TemplateName, viewModel);
+            }
         }
 
         protected override void HandleUnknownAction(string actionName)

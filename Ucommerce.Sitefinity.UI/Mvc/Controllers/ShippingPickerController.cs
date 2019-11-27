@@ -17,12 +17,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
-            {
-                return this.PartialView("_DesignMode");
-            }
-
             var model = ResolveModel();
+            string message;
+
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
             var sippingPickerVM = model.GetViewModel();
 
             return View(TemplateName, sippingPickerVM);
@@ -32,6 +35,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult CreateShipment(ShippingPickerViewModel createShipmentViewModel)
         {
             var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
             var viewModel = model.GetViewModel();
 
             model.CreateShipment(createShipmentViewModel);

@@ -19,35 +19,30 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public Guid? PreviousStepId { get; set; }
         public string TemplateName { get; set; } = "Index";
 
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
-
-        public BasketPreviewController()
-        {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-        }
-
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
-            {
-                return this.PartialView("_DesignMode");
-            }
-
             var model = ResolveModel();
-            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
 
-            var basketPreviewViewModel = model.GetViewModelr(purchaseOrder);
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
+            var basketPreviewViewModel = model.GetViewModel();
+            
             ViewBag.RowSpan = 4;
-            if (purchaseOrder.DiscountTotal > 0)
+            if (Convert.ToInt32(basketPreviewViewModel.DiscountTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (purchaseOrder.ShippingTotal > 0)
+            if (Convert.ToInt32(basketPreviewViewModel.ShippingTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (purchaseOrder.PaymentTotal > 0)
+            if (Convert.ToInt32(basketPreviewViewModel.PaymentTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
@@ -58,14 +53,17 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         [HttpPost]
         public ActionResult RequestPayment()
         {
-            var payment = _transactionLibraryInternal.GetBasket().PurchaseOrder.Payments.First();
-            if (payment.PaymentMethod.PaymentMethodServiceName == null)
+            var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
             {
-                return Redirect("/confirmation");
+                return this.PartialView("_Warning", message);
             }
 
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string paymentUrl = _transactionLibraryInternal.GetPaymentPageUrl(payment);
+            var paymentUrl = model.GetPaymentUrl();
+
             return Redirect(paymentUrl);
         }
 

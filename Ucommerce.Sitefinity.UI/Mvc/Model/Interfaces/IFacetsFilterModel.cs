@@ -5,6 +5,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public interface IFacetsFilterModel
     {
+        bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
         IList<FacetViewModel> CreateViewModel();
     }
 }

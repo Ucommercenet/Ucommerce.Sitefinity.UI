@@ -15,12 +15,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
+            var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_DesignMode");
+                return this.PartialView("_Warning", message);
             }
 
-            var model = ResolveModel();
             var confirmationMessageVM = model.GetViewModel(Headline, Message);
 
             return View(this.TemplateName, confirmationMessageVM);

@@ -17,12 +17,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
+            var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_DesignMode");
+                return this.PartialView("_Warning", message);
             }
 
-            var model = ResolveModel();
             var paymentPickerVM = model.GetViewModel();
 
             return View(TemplateName, paymentPickerVM);
@@ -32,6 +35,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult CreatePayment(PaymentPickerViewModel createPaymentViewModel)
         {
             var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
             var viewModel = model.GetViewModel();
 
             model.CreatePayment(createPaymentViewModel);

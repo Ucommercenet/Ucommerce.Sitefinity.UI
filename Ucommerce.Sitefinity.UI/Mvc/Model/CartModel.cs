@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Telerik.Sitefinity.Services;
@@ -27,7 +28,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
         }
 
-        public CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl)
+        public virtual CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl)
         {
             var basketVM = new CartRenderingViewModel();
 
@@ -69,44 +70,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return basketVM;
         }
 
-        public string GetProductUrl(Product product, Guid detailPageId)
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
-            if (detailPageId == Guid.Empty)
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
             {
-                return CatalogLibrary.GetNiceUrlForProduct(product);
+                message = "The widget is in Page Edit mode.";
+                return false;
             }
 
-            var baseUrl = Ucommerce.Sitefinity.UI.Pages.UrlResolver.GetPageNodeUrl(detailPageId);
-            
-            string catUrl;
-            var productCategory = product.GetCategories().FirstOrDefault();
-            if (productCategory == null)
-            {
-                catUrl = CategoryModel.DefaultCategoryName;
-            }
-            else
-            {
-                catUrl = CategoryModel.GetCategoryPath(productCategory);
-            }
-
-            var rawtUrl = string.Format("{0}/{1}", catUrl, product.ProductId);
-            string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", rawtUrl);
-
-            string url;
-
-            if (SystemManager.CurrentHttpContext.Request.Url != null)
-            {
-                url = UrlPath.ResolveUrl(relativeUrl, true);
-            }
-            else
-            {
-                url = Ucommerce.Sitefinity.UI.Pages.UrlResolver.GetAbsoluteUrl(relativeUrl);
-            }
-
-            return url;
+            message = null;
+            return true;
         }
 
-        public CartUpdateBasketViewModel Update(CartUpdateBasket model)
+        public virtual CartUpdateBasketViewModel Update(CartUpdateBasket model)
         {
             foreach (var updateOrderline in model.RefreshBasket)
             {
@@ -157,6 +133,43 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
 
             return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+        }
+
+        private string GetProductUrl(Product product, Guid detailPageId)
+        {
+            if (detailPageId == Guid.Empty)
+            {
+                return CatalogLibrary.GetNiceUrlForProduct(product);
+            }
+
+            var baseUrl = Ucommerce.Sitefinity.UI.Pages.UrlResolver.GetPageNodeUrl(detailPageId);
+
+            string catUrl;
+            var productCategory = product.GetCategories().FirstOrDefault();
+            if (productCategory == null)
+            {
+                catUrl = CategoryModel.DefaultCategoryName;
+            }
+            else
+            {
+                catUrl = CategoryModel.GetCategoryPath(productCategory);
+            }
+
+            var rawtUrl = string.Format("{0}/{1}", catUrl, product.ProductId);
+            string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", rawtUrl);
+
+            string url;
+
+            if (SystemManager.CurrentHttpContext.Request.Url != null)
+            {
+                url = UrlPath.ResolveUrl(relativeUrl, true);
+            }
+            else
+            {
+                url = Ucommerce.Sitefinity.UI.Pages.UrlResolver.GetAbsoluteUrl(relativeUrl);
+            }
+
+            return url;
         }
     }
 }

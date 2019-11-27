@@ -38,12 +38,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             ProductListViewModel viewModel;
             try
             {
-                if (SystemManager.IsDesignMode)
+                var productModel = this.ResolveModel();
+                string message;
+                var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+                if (!productModel.CanProcessRequest(parameters, out message))
                 {
-                    return this.PartialView("_DesignMode");
+                    return this.PartialView("_Warning", message);
                 }
 
-                var productModel = this.ResolveModel();
                 viewModel = productModel.CreateListViewModel();
                 var templateName = listTemplateNamePrefix + this.ListTemplateName;
 
@@ -71,6 +74,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult Details()
         {
             var productModel = this.ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!productModel.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
             var viewModel = productModel.CreateDetailsViewModel();
             var templateName = this.detailTemplateNamePrefix + this.DetailTemplateName;
 

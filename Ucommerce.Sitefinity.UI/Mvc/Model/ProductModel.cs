@@ -32,7 +32,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.categoryIds = categoryIds;
         }
 
-        public ProductListViewModel CreateListViewModel()
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            message = null;
+            return true;
+        }
+
+        public virtual ProductListViewModel CreateListViewModel()
         {
             var viewModel = new ProductListViewModel();
             viewModel.CurrentPage = this.GetRequestedPage();
@@ -57,7 +69,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return viewModel;
         }
 
-        public ProductDetailViewModel CreateDetailsViewModel()
+        public virtual ProductDetailViewModel CreateDetailsViewModel()
         {
             ProductDetailViewModel productDetailViewModel = null;
 
@@ -155,7 +167,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return productDetailViewModel;
         }
 
-        public string GetProductUrl(Category category, Product product, bool openInSamePage, Guid detailPageId)
+        public virtual string GetProductUrl(Category category, Product product, bool openInSamePage, Guid detailPageId)
         {
             var baseUrl = string.Empty;
             if (openInSamePage)
@@ -195,7 +207,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return url;
         }
 
-        protected virtual IQueryable<Product> FilterByFacets(Category category, List<Product> productsInCategory)
+        private IQueryable<Product> FilterByFacets(Category category, List<Product> productsInCategory)
         {
             var facetsResolver = new FacetResolver(this.queryStringBlackList);
             var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();

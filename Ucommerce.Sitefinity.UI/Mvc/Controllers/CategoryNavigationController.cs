@@ -30,16 +30,20 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
-            {
-                return this.PartialView("_DesignMode");
-            }
-
             CategoryNavigationViewModel categoryNavigationViewModel = null;
 
             try
             {
                 var model = this.ResolveModel();
+                string message;
+
+                var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+                if (!model.CanProcessRequest(parameters, out message))
+                {
+                    return this.PartialView("_Warning", message);
+                }
+
                 categoryNavigationViewModel = model.CreateViewModel();
 
                 return this.View(this.TemplateName, categoryNavigationViewModel);

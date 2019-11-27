@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -10,16 +11,16 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     public class MiniBasketModel : IMiniBasketModel
     {
-
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private Guid cartPageId;
+
         public MiniBasketModel(Guid? cartPageId = null)
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             this.cartPageId = cartPageId ?? Guid.Empty;
         }
 
-        public MiniBasketRenderingViewModel CreateViewModel(string refreshUrl)
+        public virtual MiniBasketRenderingViewModel CreateViewModel(string refreshUrl)
         {
             var viewModel = new MiniBasketRenderingViewModel();
 
@@ -30,6 +31,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             viewModel.CartPageUrl = GetCartPageAbsoluteUrl(cartPageId);
 
             return viewModel;
+        }
+
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            message = null;
+            return true;
         }
 
         private int GetNumberOfItemsInBasket()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
@@ -25,7 +26,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.previousStepId = previousStepId ?? Guid.Empty;
         }
 
-        public AddressRenderingViewModel GetViewModel()
+        public virtual AddressRenderingViewModel GetViewModel()
         {
             var viewModel = new AddressRenderingViewModel();
 
@@ -68,7 +69,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return viewModel;
         }
 
-        public JsonResult Save(AddressSaveViewModel addressRendering)
+        public virtual JsonResult Save(AddressSaveViewModel addressRendering)
         {
             var result = new JsonResult();
 
@@ -133,17 +134,32 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                billingAddress.CountryId);
         }
 
-        public virtual void Validate(AddressSaveViewModel addressRendering, ModelStateDictionary modelState)
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
-            if (!addressRendering.IsShippingAddressDifferent)
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
             {
-                modelState.Remove("ShippingAddress.FirstName");
-                modelState.Remove("ShippingAddress.LastName");
-                modelState.Remove("ShippingAddress.EmailAddress");
-                modelState.Remove("ShippingAddress.Line1");
-                modelState.Remove("ShippingAddress.PostalCode");
-                modelState.Remove("ShippingAddress.City");
+                message = "The widget is in Page Edit mode.";
+                return false;
             }
+
+            if (parameters.ContainsKey("addressRendering") && parameters.ContainsKey("modelState"))
+            {
+                var addressRendering = parameters["addressRendering"] as AddressSaveViewModel;
+                var modelState = parameters["modelState"] as ModelStateDictionary;
+
+                if (!addressRendering.IsShippingAddressDifferent)
+                {
+                    modelState.Remove("ShippingAddress.FirstName");
+                    modelState.Remove("ShippingAddress.LastName");
+                    modelState.Remove("ShippingAddress.EmailAddress");
+                    modelState.Remove("ShippingAddress.Line1");
+                    modelState.Remove("ShippingAddress.PostalCode");
+                    modelState.Remove("ShippingAddress.City");
+                }
+            }
+
+            message = null;
+            return true;
         }
 
         private string GetNextStepUrl(Guid nextStepId)

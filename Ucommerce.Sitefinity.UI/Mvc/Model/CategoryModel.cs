@@ -28,7 +28,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
         }
 
-        public CategoryNavigationViewModel CreateViewModel()
+        public virtual CategoryNavigationViewModel CreateViewModel()
         {
             var categoryNavigationViewModel = new CategoryNavigationViewModel();
             var rootCategories = CatalogLibrary.GetRootCategories().Where(x => x.DisplayOnSite).ToList();
@@ -51,6 +51,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             categoryNavigationViewModel.Routes.Add(RouteConstants.GET_BASKET_ROUTE_NAME, RouteConstants.GET_BASKET_ROUTE_VALUE);
 
             return categoryNavigationViewModel;
+        }
+
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            message = null;
+            return true;
         }
 
         protected virtual void MapConfigurationFields(CategoryNavigationViewModel categoryNavigationViewModel)
@@ -99,7 +111,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return result;
         }
 
-        private IList<CategoryNavigationCurrencyViewModel> MapCurrencies(ICollection<PriceGroup> currentCatalogAllowedPriceGroups, PriceGroup currentPriceGroup)
+        protected virtual IList<CategoryNavigationCurrencyViewModel> MapCurrencies(ICollection<PriceGroup> currentCatalogAllowedPriceGroups, PriceGroup currentPriceGroup)
         {
             var categoryNavigationCurrencyViewModels = new List<CategoryNavigationCurrencyViewModel>();
 
