@@ -461,7 +461,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\FacetsFilter\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Scripts\jquery.validate.min.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsAddress.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsAddToBasketButton.js" />
@@ -470,8 +469,6 @@
     <EmbeddedResource Include="Mvc\Scripts\jsQuantityPicker.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsShippingPicker.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsUpdateBasket.js" />
-    <EmbeddedResource Include="Mvc\Views\Products\Detail.B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Products\List.B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\List.Index.cshtml" />
     <None Include="assets\src\js\components\add-to-basket.vue" />
@@ -488,7 +485,6 @@
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />
@@ -511,16 +507,7 @@
     <EmbeddedResource Include="Mvc\Scripts\popper.js" />
     <EmbeddedResource Include="Mvc\Scripts\initBootstrap.js" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Address\B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\BasketPreview\B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Cart\B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\MiniBasket\B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\PaymentPicker\B4Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\ShippingPicker\B4Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Layouts\Email.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Layouts\B4Default.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\FacetsFilter\DesignerView.Simple.cshtml" />
@@ -538,7 +525,6 @@
     <EmbeddedResource Include="assets\src\images\icons\shipping-picker.png" />
     <EmbeddedResource Include="Mvc\Scripts\Products\designerview-simple.js" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
-    <EmbeddedResource Include="Mvc\Views\Shared\_DesignMode.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
@@ -5255,6 +5241,20 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Address\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\BasketPreview\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Cart\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\CategoryNavigation\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\ConfirmationEmail\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\ConfirmationMessage\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\FacetsFilter\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Layouts\default.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\MiniBasket\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\PaymentPicker\Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Products\Detail.Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Products\List.Index.cshtml" />
+    <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" />
     <None Include="Ucommerce.Sitefinity.UI.nuspec" />
     <None Include="UCommerce\Apps\Debug\Clear-cache-in-scratchindexer.example" />
     <None Include="UCommerce\Apps\Debug\Dump-Basket-To-Log-In-Basket-Pipeline.config.example" />
@@ -17693,6 +17693,7 @@
     <Content Include="node_modules\yargs\lib\validation.js" />
     <Content Include="node_modules\yargs\lib\yerror.js" />
     <Content Include="node_modules\yargs\yargs.js" />
+    <Content Include="ResourcePackages\Bootstrap4\MVC\Views\Shared\readme.txt" />
     <Content Include="UCommerce\Apps\Adyen\bin\UCommerce.Transactions.Payments.Adyen.dll" />
     <Content Include="UCommerce\Apps\Authorizedotnet\bin\UCommerce.Transactions.Payments.Authorizedotnet.dll" />
     <Content Include="UCommerce\Apps\Braintree\bin\Braintree-2.22.0.dll" />
