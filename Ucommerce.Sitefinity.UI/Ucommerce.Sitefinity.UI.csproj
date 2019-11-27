@@ -390,7 +390,7 @@
     <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\factory.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\multi-picker.controller.js" />
+    <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\UCmulti-picker.controller.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\tree.controller.js" />
@@ -538,7 +538,6 @@
     <EmbeddedResource Include="assets\src\images\icons\shipping-picker.png" />
     <EmbeddedResource Include="Mvc\Scripts\Products\designerview-simple.js" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
-    <EmbeddedResource Include="Mvc\Views\Shared\_DesignMode.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />

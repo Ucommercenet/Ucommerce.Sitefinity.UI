@@ -19,7 +19,7 @@
     "/ucommerce/scripts/app/Controllers/content-tree.controller.js",
     "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/catalog-search.controller.js",
     "/ucommerce/scripts/app/Controllers/content-picker.controller.js",
-    "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/multi-picker.controller.js",
+    "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/UCmulti-picker.controller.js",
     "/ucommerce/scripts/app/Directives/ucommerce-catalog-search/ucommerce.catalog.search.directive.js",
     "/ucommerce/scripts/app/Directives/ucommerce-preselected-values-list/preselectedValuesList.js",
     "/ucommerce/scripts/app/Directives/ucommerce-tree/ucommerce.tree.directive.js",

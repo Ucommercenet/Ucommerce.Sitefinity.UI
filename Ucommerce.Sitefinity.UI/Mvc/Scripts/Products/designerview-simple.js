@@ -12,6 +12,8 @@
 
                     $scope.$broadcast('setPreselectedValuesFromList', $scope.properties.CategoryIds.PropertyValue, 'productCategory');
 
+                    $scope.$broadcast('setPreselectedValuesFromList', $scope.properties.FallbackCategoryIds.PropertyValue, 'productCategory');
+
                     $scope.$on('preSelectedValuesChanged',
                         function (event, data, itemsType) {
                             if (data && data[0]) {
@@ -20,6 +22,7 @@
                                 }
                                 else if (itemsType === 'productCategory') {
                                     $scope.properties.CategoryIds.PropertyValue = data.map(function (e) { return e.id }).join(',');
+                                    $scope.properties.FallbackCategoryIds.PropertyValue = data.map(function (e) { return e.id }).join(',');
                                 }
                             }
                             else {
@@ -28,6 +31,7 @@
                                 }
                                 else if (itemsType === 'productCategory') {
                                     $scope.properties.CategoryIds.PropertyValue = '';
+                                    $scope.properties.FallbackCategoryIds.PropertyValue = '';
                                 }
                             }
                         });

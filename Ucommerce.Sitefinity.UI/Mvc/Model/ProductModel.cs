@@ -22,14 +22,17 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
     internal class ProductModel : IProductModel
     {
-        public ProductModel(int itemsPerPage, bool openInSamePage, bool isManualSelectionMode, Guid? detailsPageId = null, string productIds = null, string categoryIds = null)
+        public ProductModel(int itemsPerPage, bool openInSamePage, bool isManualSelectionMode, bool enableCategoryFallback, 
+            Guid? detailsPageId = null, string productIds = null, string categoryIds = null, string fallbackCategoryIds = null)
         {
             this.itemsPerPage = itemsPerPage;
             this.openInSamePage = openInSamePage;
             this.isManualSelectionMode = isManualSelectionMode;
+            this.enableCategoryFallback = enableCategoryFallback;
             this.detailsPageId = detailsPageId.HasValue ? detailsPageId.Value : Guid.Empty;
             this.productIds = productIds;
             this.categoryIds = categoryIds;
+            this.fallbackCategoryIds = fallbackCategoryIds;
         }
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
@@ -50,6 +53,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             viewModel.CurrentPage = this.GetRequestedPage();
 
             var currentCategory = SiteContext.Current.CatalogContext.CurrentCategory;
+
             var queryResult = this.GetProductsQuery(currentCategory);
 
             var itemsToSkip = (viewModel.CurrentPage > 1) ? this.itemsPerPage * (viewModel.CurrentPage - 1) : 0;
@@ -237,19 +241,30 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         {
             if (this.isManualSelectionMode)
             {
-                return this.ApplyManualSelection();
+                var productIds = this.productIds?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
+                var categoryIds = this.categoryIds?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
+
+                return this.ApplyManualSelection(productIds, categoryIds);
             }
             else
             {
-                return this.ApplyAutoSelection(category);
+                if (category == null && this.enableCategoryFallback == true)
+                {
+                    var categoryIds = this.fallbackCategoryIds?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
+
+                    return this.ApplyManualSelection(new List<int>(), categoryIds);
+                }
+                else
+                {
+                    return this.ApplyAutoSelection(category);
+                }
+
             }
         }
 
-        private IQueryable<Product> ApplyManualSelection()
+        private IQueryable<Product> ApplyManualSelection(List<int> productIds, List<int> categoryIds)
         {
             var productsQuery = SearchLibrary.FacetedQuery();
-            var productIds = this.productIds?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
-            var categoryIds = this.categoryIds?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
 
             var products = new List<Product>();
             products.AddRange(this.GetProductsFromSelectedCategoryIds(categoryIds));
@@ -400,5 +415,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
         private bool isManualSelectionMode;
         private string productIds;
         private string categoryIds;
+        private bool enableCategoryFallback;
+        private string fallbackCategoryIds;
     }
 }
