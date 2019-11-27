@@ -45,8 +45,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
                 var productModel = this.ResolveModel();
                 viewModel = productModel.CreateListViewModel();
+                var templateName = listTemplateNamePrefix + this.ListTemplateName;
 
-                return this.View(this.ListTemplateName, viewModel);
+                return this.View(templateName, viewModel);
             }
             catch (Exception ex)
             {
@@ -71,8 +72,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             var productModel = this.ResolveModel();
             var viewModel = productModel.CreateDetailsViewModel();
+            var templateName = this.detailTemplateNamePrefix + this.DetailTemplateName;
 
-            return this.View(this.DetailTemplateName, viewModel);
+            return this.View(templateName, viewModel);
         }
 
         protected override void HandleUnknownAction(string actionName)
@@ -96,5 +98,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
+
+        private string listTemplateNamePrefix = "List.";
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }
