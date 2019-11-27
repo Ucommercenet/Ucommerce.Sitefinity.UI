@@ -9,7 +9,7 @@
     Layout = null;
 }
 
-@Html.StyleSheet(Url.WidgetContent("~/ResourcePackages/Bootstrap4/assets/dist/css/main.min.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/main.min.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -165,7 +165,7 @@
                 </div>
             </div>
         }
-        @if (@Model.PaymentAmount != 0 )
+        @if (@Model.PaymentAmount != 0)
         {
             <div class="row border-bottom py-2">
                 <div class="offset-md-8 col-md-2">
