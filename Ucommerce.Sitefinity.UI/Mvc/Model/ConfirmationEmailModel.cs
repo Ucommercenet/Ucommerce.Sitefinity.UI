@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Telerik.Sitefinity.Abstractions;
+using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.EntitiesV2;
@@ -9,7 +10,7 @@ using UCommerce.Infrastructure;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
-    public class ConfirmationEmailModel
+    public class ConfirmationEmailModel: IConfirmationEmailModel
     {
         private readonly IRepository<PurchaseOrder> _purchaseOrderRepository;
 
@@ -53,7 +54,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        protected virtual ConfirmationEmailViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
+        private ConfirmationEmailViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
         {
             confirmationEmailViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
             confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Shipment") ?? new OrderAddress();

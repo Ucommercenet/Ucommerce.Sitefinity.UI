@@ -5,6 +5,7 @@ using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
+using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using UCommerce.EntitiesV2;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
@@ -28,19 +29,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                 return this.PartialView("_Warning", message);
             }
 
-            PurchaseOrder purchaseOrder = new PurchaseOrder();
             var confirmationEmailVM = model.GetViewModel(orderGuid);
 
             ViewBag.RowSpan = 4;
-            if (purchaseOrder.DiscountTotal > 0)
+            if (Convert.ToInt32(confirmationEmailVM.DiscountTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (purchaseOrder.ShippingTotal > 0)
+            if (Convert.ToInt32(confirmationEmailVM.ShippingTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (purchaseOrder.PaymentTotal > 0)
+            if (Convert.ToInt32(confirmationEmailVM.PaymentTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
@@ -53,9 +53,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             base.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        public ConfirmationEmailModel ResolveModel()
+        public IConfirmationEmailModel ResolveModel()
         {
-            var model = new ConfirmationEmailModel();
+            var container = UcommerceUIModule.Container;
+            var model = container.Resolve<IConfirmationEmailModel>();
 
             return model;
         }

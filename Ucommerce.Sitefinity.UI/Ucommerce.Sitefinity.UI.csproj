@@ -293,6 +293,7 @@
     <Compile Include="Mvc\Model\Interfaces\ICartModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IAddressModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\ICategoryModel.cs" />
+    <Compile Include="Mvc\Model\Interfaces\IConfirmationEmailModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IConfirmationMessageModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IFacetsFilterModel.cs" />
     <Compile Include="Mvc\Model\Interfaces\IMiniBasketModel.cs" />
