@@ -34,15 +34,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var basketPreviewViewModel = model.GetViewModel();
             
             ViewBag.RowSpan = 4;
-            if (Convert.ToInt32(basketPreviewViewModel.DiscountTotal) > 0)
+            if (basketPreviewViewModel.DiscountAmount > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (Convert.ToInt32(basketPreviewViewModel.ShippingTotal) > 0)
+            if (basketPreviewViewModel.ShipmentAmount > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (Convert.ToInt32(basketPreviewViewModel.PaymentTotal) > 0)
+            if (basketPreviewViewModel.PaymentAmount > 0)
             {
                 ViewBag.RowSpan++;
             }
