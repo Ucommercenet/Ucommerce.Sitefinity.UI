@@ -84,8 +84,8 @@
             if (selectedNode.id == node.id && intersectNodeTypes(selectedNode.nodeType, node.nodeType)) {
                 $scope.selectedNodes.splice(n, 1);
                 $scope.updatePreselectedValues();
-                $scope.$broadcast('preSelectedValuesChanged', $scope.selectedNodes);
-                $scope.$emit('preSelectedValuesChanged', $scope.selectedNodes);
+                $scope.$broadcast('preSelectedValuesChanged', $scope.selectedNodes, $scope.hasCheckboxFor);
+                $scope.$emit('preSelectedValuesChanged', $scope.selectedNodes, $scope.hasCheckboxFor);
 
                 return;
             }
@@ -98,26 +98,28 @@
             icon: node.icon
         });
 
-        $scope.$broadcast('preSelectedValuesChanged', $scope.selectedNodes);
-        $scope.$emit('preSelectedValuesChanged', $scope.selectedNodes);
+        $scope.$broadcast('preSelectedValuesChanged', $scope.selectedNodes, $scope.hasCheckboxFor);
+        $scope.$emit('preSelectedValuesChanged', $scope.selectedNodes, $scope.hasCheckboxFor);
         $scope.updatePreselectedValues();
     });
 
     $scope.$on('setPreselectedValuesFromList',
-        function (event, data) {
-            uCommerceContentService.getNodes($scope.hasCheckboxFor, data).then(function (response) {
-                var data = response.data;
-                data.forEach(function (element, index) {
-                    $scope.selectedNodes.push({
-                        id: element.id,
-                        name: element.name,
-                        nodeType: element.nodeType,
-                        icon: element.icon
+        function (event, data, checkboxFor) {
+            if ($scope.hasCheckboxFor === checkboxFor) {
+                uCommerceContentService.getNodes($scope.hasCheckboxFor, data).then(function (response) {
+                    var data = response.data;
+                    data.forEach(function (element, index) {
+                        $scope.selectedNodes.push({
+                            id: element.id,
+                            name: element.name,
+                            nodeType: element.nodeType,
+                            icon: element.icon
+                        });
                     });
-                });
 
-                $scope.updatePreselectedValues();
-            });
+                    $scope.updatePreselectedValues();
+                });
+            }
         });
 
     $scope.loadPreselectedNodes = function () {
@@ -155,45 +157,6 @@
             return $scope.iconFolderOverwrite + icon;
         }
         if (icon) {
-            if (UCommerceClientMgr.Shell == 'Sitecore') {
-                if ($scope.iconFolder == 'uCommerce') {
-                    var object = {
-                        'background-image': 'url("' + UCommerceClientMgr.BaseUCommerceUrl + 'shell/content/images/ui/' + icon + '")'
-                    };
-                    return object;
-                } else {
-                    return {
-                        'background-image': 'url("' + icon + '")'
-                    };
-                }
-            }
-            if (UCommerceClientMgr.Shell == 'Umbraco7') {
-                var lowerCaseIcon = icon.toLowerCase();
-                if ($scope.iconFolder == 'uCommerce') {
-                    return {
-                        'background-image': 'url("/umbraco/ucommerce/images/ui/' + icon + '")',
-                        'background-repeat': 'no-repeat',
-                    };
-                }
-                if ((lowerCaseIcon.indexOf('.png') != -1) ||
-                    (lowerCaseIcon.indexOf('.gif') != -1) ||
-                    (lowerCaseIcon.indexOf('.jpg') != -1)) {
-                    return {
-                        'background-image': 'url("/umbraco/images/umbraco/' + icon + '")',
-                        'background-repeat': 'no-repeat',
-                        'padding-left': '16px'
-                    };
-                }
-            }
-            if (UCommerceClientMgr.Shell == 'Umbraco') {
-                if ($scope.iconFolder == 'uCommerce') {
-                    return {
-                        'background-image': 'url("/umbraco/uCommerce/images/ui/' + icon + '")',
-                        'background-repeat': 'no-repeat',
-                        'padding-left': '16px'
-                    };
-                }
-            }
             if (UCommerceClientMgr.Shell == 'Sitefinity') {
                 if ($scope.iconFolder == 'uCommerce') {
                     var object = {

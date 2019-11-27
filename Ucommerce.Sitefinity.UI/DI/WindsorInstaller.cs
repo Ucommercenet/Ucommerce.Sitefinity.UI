@@ -91,6 +91,12 @@ namespace Ucommerce.Sitefinity.UI.DI
 
             container.Register(
                  Component
+                 .For<IConfirmationEmailModel>()
+                 .ImplementedBy<ConfirmationEmailModel>()
+                 .LifestylePerWebRequest());
+
+            container.Register(
+                 Component
                  .For<IBasketPreviewModel>()
                  .ImplementedBy<BasketPreviewModel>()
                  .LifestylePerWebRequest());

@@ -1,0 +1,16 @@
+﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers
+
+<div class="form-group">
+    <label for="confirmationTemplateName">@Html.Resource("Template")</label>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <select id="confirmationTemplateName" ng-model="properties.TemplateName.PropertyValue" class="form-control">
+                @foreach (var viewName in Html.GetViewNames("ConfirmationEmail", @"(?<viewName>[\w\s]*)$"))
+                {
+                    <option value="@viewName"> @viewName.SplitCamelCase()</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>

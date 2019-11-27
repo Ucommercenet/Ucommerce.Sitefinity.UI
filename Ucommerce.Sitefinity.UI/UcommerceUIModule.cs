@@ -8,12 +8,14 @@ using Telerik.Sitefinity;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Configuration;
 using Telerik.Sitefinity.Data;
+using Telerik.Sitefinity.Data.Events;
 using Telerik.Sitefinity.Data.Metadata;
 using Telerik.Sitefinity.Metadata.Model;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.Modules.Pages;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Pages.Model;
+using Telerik.Sitefinity.Publishing;
 using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Filters;
 using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
@@ -184,14 +186,11 @@ namespace Ucommerce.Sitefinity.UI
         {
             Bootstrapper.Bootstrapped -= this.Bootstrapper_Bootstrapped;
             Bootstrapper.Bootstrapped += this.Bootstrapper_Bootstrapped;
-            PageManager.Executing -= new EventHandler<ExecutingEventArgs>(HttpContextExtensions.PageManager_Executing);
-            PageManager.Executing += new EventHandler<ExecutingEventArgs>(HttpContextExtensions.PageManager_Executing);
         }
 
         private void UnsubscribeFromEvents()
         {
             Bootstrapper.Bootstrapped -= this.Bootstrapper_Bootstrapped;
-            PageManager.Executing -= HttpContextExtensions.PageManager_Executing;
         }
 
         private void Bootstrapper_Bootstrapped(object sender, EventArgs e)

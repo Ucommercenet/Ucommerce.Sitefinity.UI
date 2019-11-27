@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
@@ -23,7 +24,30 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
         }
 
-        public ShippingPickerViewModel GetViewModel()
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
+            var address = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
+
+            if (address == null)
+            {
+                message = "Address must be specified";
+                return false;
+            }
+            else
+            {
+                message = null;
+                return true;
+            }
+        }
+
+        public virtual ShippingPickerViewModel GetViewModel()
         {
             var shipmentPickerViewModel = new ShippingPickerViewModel();
             var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
@@ -65,24 +89,24 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return shipmentPickerViewModel;
         }
 
-        public string GetNextStepUrl(Guid nextStepId)
+        public virtual void CreateShipment(ShippingPickerViewModel createShipmentViewModel)
+        {
+            _transactionLibraryInternal.CreateShipment(createShipmentViewModel.SelectedShippingMethodId, UCommerce.Constants.DefaultShipmentAddressName, true);
+            _transactionLibraryInternal.ExecuteBasketPipeline();
+        }
+
+        private string GetNextStepUrl(Guid nextStepId)
         {
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
 
             return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
         }
 
-        public string GetPreviousStepUrl(Guid previousStepId)
+        private string GetPreviousStepUrl(Guid previousStepId)
         {
             var previousStepUrl = Pages.UrlResolver.GetPageNodeUrl(previousStepId);
 
             return Pages.UrlResolver.GetAbsoluteUrl(previousStepUrl);
-        }
-
-        public void CreateShipment(ShippingPickerViewModel createShipmentViewModel)
-        {
-            _transactionLibraryInternal.CreateShipment(createShipmentViewModel.SelectedShippingMethodId, UCommerce.Constants.DefaultShipmentAddressName, true);
-            _transactionLibraryInternal.ExecuteBasketPipeline();
         }
     }
 }

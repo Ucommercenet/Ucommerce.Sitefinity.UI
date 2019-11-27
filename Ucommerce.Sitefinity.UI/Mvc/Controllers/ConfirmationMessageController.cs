@@ -6,7 +6,7 @@ using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uConfirmationMessage_MVC", Title = "Confirmation Message", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uConfirmationMessage_MVC", Title = "Confirmation Message", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnConfirmationMessage sfMvcIcn")]
     public class ConfirmationMessageController : Controller, IPersonalizable
     {
         public string Headline { get; set; }
@@ -15,15 +15,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
+            var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
             {
-                return new EmptyResult();
+                return this.PartialView("_Warning", message);
             }
 
-            var model = ResolveModel();
             var confirmationMessageVM = model.GetViewModel(Headline, Message);
 
-            return View(TemplateName, confirmationMessageVM);
+            return View(this.TemplateName, confirmationMessageVM);
         }
 
         public IConfirmationMessageModel ResolveModel()

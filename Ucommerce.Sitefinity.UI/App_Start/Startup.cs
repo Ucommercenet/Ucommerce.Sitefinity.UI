@@ -3,12 +3,17 @@ using System.ComponentModel;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Optimization;
+using System.Web.UI.HtmlControls;
 using Castle.Windsor;
 using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
+using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Routing;
+using Telerik.Sitefinity.Modules.Pages;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Services;
+using Telerik.Sitefinity.Web;
+using Telerik.Sitefinity.Web.Events;
 using Ucommerce.Sitefinity.UI.DI.Events;
 using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
 
@@ -48,6 +53,9 @@ namespace Ucommerce.Sitefinity.UI.App_Start
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
             BundleTable.EnableOptimizations = true;
+
+            ObjectFactory.Container.RegisterType<PageEditorRouteHandler, UcommerceMvcPageEditorRouteHandler>();
+            ObjectFactory.Container.RegisterType<TemplateEditorRouteHandler, UcommerceMvcTemplateEditorRouteHandler>();
         }
     }
 }

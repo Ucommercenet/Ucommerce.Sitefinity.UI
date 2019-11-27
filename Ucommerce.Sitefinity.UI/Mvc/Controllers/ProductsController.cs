@@ -8,7 +8,7 @@ using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uProducts_MVC", Title = "Products", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uProducts_MVC", Title = "Products", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnProducts sfMvcIcn")]
     public class ProductsController : Controller, IPersonalizable
     {
         public int ItemsPerPage { get; set; } = 10;
@@ -23,9 +23,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public string CategoryIds { get; set; }
 
-        public string ListTemplateName { get; set; } = "B4Index";
+        public string ListTemplateName { get; set; } = "Index";
 
-        public string DetailTemplateName { get; set; } = "B4Details";
+        public string DetailTemplateName { get; set; } = "Index";
 
         [RelativeRoute("{categoryName?}")]
         [RelativeRoute("{parentCategory1?}/{categoryName?}")]
@@ -38,15 +38,19 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             ProductListViewModel viewModel;
             try
             {
-                if (SystemManager.IsDesignMode)
+                var productModel = this.ResolveModel();
+                string message;
+                var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+                if (!productModel.CanProcessRequest(parameters, out message))
                 {
-                    return new EmptyResult();
+                    return this.PartialView("_Warning", message);
                 }
 
-                var productModel = this.ResolveModel();
                 viewModel = productModel.CreateListViewModel();
+                var templateName = listTemplateNamePrefix + this.ListTemplateName;
 
-                return this.View(this.ListTemplateName, viewModel);
+                return this.View(templateName, viewModel);
             }
             catch (Exception ex)
             {
@@ -70,9 +74,18 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult Details()
         {
             var productModel = this.ResolveModel();
-            var viewModel = productModel.CreateDetailsViewModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            return this.View(this.DetailTemplateName, viewModel);
+            if (!productModel.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
+            var viewModel = productModel.CreateDetailsViewModel();
+            var templateName = this.detailTemplateNamePrefix + this.DetailTemplateName;
+
+            return this.View(templateName, viewModel);
         }
 
         protected override void HandleUnknownAction(string actionName)
@@ -96,5 +109,8 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
+
+        private string listTemplateNamePrefix = "List.";
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }

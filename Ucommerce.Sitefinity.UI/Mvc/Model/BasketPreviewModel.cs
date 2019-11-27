@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
@@ -22,8 +24,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             this.previousStepId = previousStepId ?? Guid.Empty;
         }
 
-        public BasketPreviewViewModel GetViewModelr(PurchaseOrder purchaseOrder)
+        public virtual BasketPreviewViewModel GetViewModel()
         {
+            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
             var basketPreviewViewModel = new BasketPreviewViewModel();
             basketPreviewViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
             basketPreviewViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) ?? new OrderAddress();
@@ -71,6 +74,45 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             basketPreviewViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
             return basketPreviewViewModel;
+        }
+
+        public virtual string GetPaymentUrl()
+        {
+            var payment = _transactionLibraryInternal.GetBasket().PurchaseOrder.Payments.First();
+            if (payment.PaymentMethod.PaymentMethodServiceName == null)
+            {
+                return "/confirmation";
+            }
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string paymentUrl = _transactionLibraryInternal.GetPaymentPageUrl(payment);
+            return paymentUrl;
+        }
+
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+
+            if (purchaseOrder.BillingAddress == null)
+            {
+                message = "The Billing Address must be specified.";
+                return false;
+            }
+
+            if (purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) == null)
+            {
+                message = "The Billing Address must be specified.";
+                return false;
+            }
+
+            message = null;
+            return true;
         }
 
         private string GetNextStepUrl(Guid nextStepId, Guid orderGuid)

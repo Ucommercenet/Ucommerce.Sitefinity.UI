@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Telerik.Sitefinity.Abstractions;
+using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.EntitiesV2;
@@ -7,16 +10,16 @@ using UCommerce.Infrastructure;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Model
 {
-    public class ConfirmationEmailModel
+    public class ConfirmationEmailModel: IConfirmationEmailModel
     {
         private readonly IRepository<PurchaseOrder> _purchaseOrderRepository;
 
         public ConfirmationEmailModel()
         {
-            _purchaseOrderRepository = ObjectFactory.Instance.Resolve<IRepository<PurchaseOrder>>();
+            _purchaseOrderRepository = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IRepository<PurchaseOrder>>();
         }
 
-        public ConfirmationEmailViewModel GetViewModel(string orderGuid)
+        public virtual ConfirmationEmailViewModel GetViewModel(string orderGuid)
         {
             var confirmationEmailViewModel = new ConfirmationEmailViewModel();
 
@@ -26,6 +29,29 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 confirmationEmailViewModel = MapPurchaseOrder(purchaseOrder, confirmationEmailViewModel);
             }
             return confirmationEmailViewModel;
+        }
+
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            if (parameters.ContainsKey("orderGuid"))
+            {
+                var orderGuid = parameters["orderGuid"] as string;
+                if (string.IsNullOrWhiteSpace(orderGuid))
+                {
+                    message = "Can't resolve orderGuid! Confirmation Email can't be sent.";
+                    Log.Write(new Exception(message));
+                    return false;
+                }
+            }
+
+            message = null;
+            return true;
         }
 
         private ConfirmationEmailViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)

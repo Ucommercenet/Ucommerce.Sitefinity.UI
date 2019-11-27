@@ -10,7 +10,7 @@ using UCommerce.Transactions;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnCart sfMvcIcn")]
     public class CartController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
@@ -28,12 +28,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
+            var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
             {
-                return new EmptyResult();
+                return this.PartialView("_Warning", message);
             }
 
-            var model = ResolveModel();
             var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
             return View(TemplateName, vm);
@@ -42,9 +45,17 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         [HttpPost]
         public ActionResult RemoveOrderline(int orderlineId)
         {
+            var model = ResolveModel();
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            string message;
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
             _transactionLibraryInternal.UpdateLineItemByOrderLineId(orderlineId, 0);
             _transactionLibraryInternal.ExecuteBasketPipeline();
-            var model = ResolveModel();
             var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
             return Json(new
@@ -63,6 +74,14 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult UpdateBasket(CartUpdateBasket updateModel)
         {
             var model = ResolveModel();
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            string message;
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
             var updatedVM = model.Update(updateModel);
 
             return Json(new

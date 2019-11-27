@@ -10,6 +10,7 @@
   ],
   "scripts": [
     "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/UCommerceClientMgr.js",
+    "/Frontend-Assembly/Ucommerce.Sitefinity.UI/Mvc/Scripts/Products/designerview-simple.js",
     "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/tree.controller.js",
     "/ucommerce/scripts/app/Resources/content.resource.js",
     "/ucommerce/scripts/app/Services/content-picker.service.js",

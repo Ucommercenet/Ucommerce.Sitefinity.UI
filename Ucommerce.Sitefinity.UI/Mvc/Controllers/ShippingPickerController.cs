@@ -8,30 +8,41 @@ using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnShippingPicker sfMvcIcn")]
     public class ShippingPickerController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
-        public string TemplteName { get; set; } = "Index";
+        public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
-            {
-                return new EmptyResult();
-            }
-
             var model = ResolveModel();
+            string message;
+
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
             var sippingPickerVM = model.GetViewModel();
 
-            return View(TemplteName, sippingPickerVM);
+            return View(TemplateName, sippingPickerVM);
         }
 
         [HttpPost]
         public ActionResult CreateShipment(ShippingPickerViewModel createShipmentViewModel)
         {
             var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
             var viewModel = model.GetViewModel();
 
             model.CreateShipment(createShipmentViewModel);

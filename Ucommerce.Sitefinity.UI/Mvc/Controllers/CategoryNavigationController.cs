@@ -8,11 +8,13 @@ using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uCategoryNavigation_MVC", Title = "Category Navigation", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uCategoryNavigation_MVC", Title = "Category Navigation", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnCategoryNavigation sfMvcIcn")]
 
     public class CategoryNavigationController : Controller, IPersonalizable
     {
         public Guid? ImageId { get; set; }
+
+        public string ProviderName { get; set; }
 
         public bool HideMiniBasket { get; set; }
 
@@ -28,16 +30,20 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
-            {
-                return new EmptyResult();
-            }
-
             CategoryNavigationViewModel categoryNavigationViewModel = null;
 
             try
             {
                 var model = this.ResolveModel();
+                string message;
+
+                var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+                if (!model.CanProcessRequest(parameters, out message))
+                {
+                    return this.PartialView("_Warning", message);
+                }
+
                 categoryNavigationViewModel = model.CreateViewModel();
 
                 return this.View(this.TemplateName, categoryNavigationViewModel);

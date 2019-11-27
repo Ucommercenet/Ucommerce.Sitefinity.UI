@@ -7,7 +7,7 @@ using Ucommerce.Sitefinity.UI.Mvc.Model;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uFacetsFilter_MVC", Title = "Facets Filter", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uFacetsFilter_MVC", Title = "Facets Filter", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnFacetsFilter sfMvcIcn")]
     public class FacetsFilterController : Controller, IPersonalizable
     {
         public string TemplateName { get; set; } = "B4Index";
@@ -22,12 +22,16 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
         {
             try
             {
-                if (SystemManager.IsDesignMode)
+                var model = this.ResolveModel();
+                string message;
+
+                var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+                if (!model.CanProcessRequest(parameters, out message))
                 {
-                    return new EmptyResult();
+                    return this.PartialView("_Warning", message);
                 }
 
-                var model = this.ResolveModel();
                 var viewModel = model.CreateViewModel();
 
                 return this.View(this.TemplateName, viewModel);

@@ -1,6 +1,22 @@
-﻿
+﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers
+
 <label for="image-field" class="m-top-sm">Cart Page</label>
 <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
                   sf-provider="properties.ProviderName.PropertyValue"
                   sf-selected-item-id="properties.CartPageId.PropertyValue"
                   sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+
+<div class="form-group">
+    <label for="basketTemplateName">@Html.Resource("Template")</label>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <select id="basketTemplateName" ng-model="properties.TemplateName.PropertyValue" class="form-control">
+                @foreach (var viewName in Html.GetViewNames("MiniBasket", @"(?<viewName>[\w\s]*)$"))
+                {
+                    <option value="@viewName"> @viewName.SplitCamelCase()</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>

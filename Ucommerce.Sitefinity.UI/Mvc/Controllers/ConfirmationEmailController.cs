@@ -5,61 +5,58 @@ using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
 using Ucommerce.Sitefinity.UI.Mvc.Model;
+using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using UCommerce.EntitiesV2;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uConfirmationEmail_MVC", Title = "Confirmation Email", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uConfirmationEmail_MVC", Title = "Confirmation Email", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnConfirmationEmail sfMvcIcn")]
     public class ConfirmationEmailController : Controller, IPersonalizable
     {
+        public string TemplateName { get; set; } = "Index";
+
         public ActionResult Index()
         {
-            var orderGuid = System.Web.HttpContext.Current.Request.QueryString["orderGuid"];
-
-            if(SystemManager.IsDesignMode)
-            {
-                return this.BlankOrder();
-            }
-            else if (string.IsNullOrWhiteSpace(orderGuid))
-            {
-                Log.Write(new Exception("Can't resolve orderGuid! Confirmation Email can't be sent."));
-                return this.BlankOrder();
-            }
-
-            PurchaseOrder purchaseOrder = new PurchaseOrder();
             var model = ResolveModel();
+            var orderGuid = System.Web.HttpContext.Current.Request.QueryString["orderGuid"];
+            string message;
+
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            parameters.Add("orderGuid", orderGuid);
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
             var confirmationEmailVM = model.GetViewModel(orderGuid);
 
             ViewBag.RowSpan = 4;
-            if (purchaseOrder.DiscountTotal > 0)
+            if (Convert.ToInt32(confirmationEmailVM.DiscountTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (purchaseOrder.ShippingTotal > 0)
+            if (Convert.ToInt32(confirmationEmailVM.ShippingTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (purchaseOrder.PaymentTotal > 0)
+            if (Convert.ToInt32(confirmationEmailVM.PaymentTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
 
-            return View("Index", confirmationEmailVM);
-        }
-
-        public ActionResult BlankOrder()
-        {
-            return new EmptyResult();
+            return View(this.TemplateName, confirmationEmailVM);
         }
 
         protected override void HandleUnknownAction(string actionName)
         {
-            base.ActionInvoker.InvokeAction(this.ControllerContext, "BlankOrder");
+            base.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        public ConfirmationEmailModel ResolveModel()
+        public IConfirmationEmailModel ResolveModel()
         {
-            var model = new ConfirmationEmailModel();
+            var container = UcommerceUIModule.Container;
+            var model = container.Resolve<IConfirmationEmailModel>();
 
             return model;
         }

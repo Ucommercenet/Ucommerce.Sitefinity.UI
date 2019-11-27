@@ -1,51 +1,66 @@
 ﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
 
-    <form name="navigationProperties">
+<form name="navigationProperties">
 
-        <label for="image-field" class="m-top-sm">Logo</label>
-        <sf-image-field class="sf-Media--info modal-settings"
-                        sf-model="properties.ImageId.PropertyValue"
-                        sf-provider="properties.ImageProviderName.PropertyValue"
-                        sf-media-settings="@SettingsHelpers.GetMediaSettings(" Image")"></sf-image-field>
+    <label for="image-field" class="m-top-sm">Logo</label>
+    <sf-image-field class="sf-Media--info modal-settings"
+                    sf-model="properties.ImageId.PropertyValue"
+                    sf-provider="properties.ImageProviderName.PropertyValue"
+                    sf-media-settings="@SettingsHelpers.GetMediaSettings("Image")"></sf-image-field>
 
-        <div class="form-group">
-            <label for="text">Hide Mini Basket</label>
+    <div class="form-group">
+        <label for="text">Hide Mini Basket</label>
 
-            <div class="row">
-                <div class="col-xs-11">
-                    <input name="HideMiniBasket" type="checkbox" ng-model="properties.HideMiniBasket.PropertyValue"
-                           ng-true-value="'True'" ng-false-value="'False'" ng-checked="properties.HideMiniBasket.PropertyValue === 'True'" />
-                </div>
+        <div class="row">
+            <div class="col-xs-11">
+                <input name="HideMiniBasket" type="checkbox" ng-model="properties.HideMiniBasket.PropertyValue"
+                       ng-true-value="'True'" ng-false-value="'False'" ng-checked="properties.HideMiniBasket.PropertyValue === 'True'" />
             </div>
         </div>
-        <div class="form-group">
-            <label for="text">Allow changing currency</label>
+    </div>
+    <div class="form-group">
+        <label for="text">Allow changing currency</label>
 
-            <div class="row">
-                <div class="col-xs-11">
-                    <input name="HideMiniBasket" type="checkbox" ng-model="properties.AllowChangingCurrency.PropertyValue"
-                           ng-true-value="'True'" ng-false-value="'False'" ng-checked="properties.AllowChangingCurrency.PropertyValue === 'True'" />
-                </div>
+        <div class="row">
+            <div class="col-xs-11">
+                <input name="HideMiniBasket" type="checkbox" ng-model="properties.AllowChangingCurrency.PropertyValue"
+                       ng-true-value="'True'" ng-false-value="'False'" ng-checked="properties.AllowChangingCurrency.PropertyValue === 'True'" />
             </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="m-top-sm">Product listing page</label>
-            <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
-                              sf-provider="properties.ProviderName.PropertyValue"
-                              sf-selected-item-id="properties.CategoryPageId.PropertyValue"
-                              sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+    <div class="form-group">
+        <label class="m-top-sm">Product listing page</label>
+        <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
+                          sf-provider="properties.ProviderName.PropertyValue"
+                          sf-selected-item-id="properties.CategoryPageId.PropertyValue"
+                          sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+    </div>
+
+    <label for="image-field" class="m-top-sm">Search Page</label>
+    <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
+                      sf-provider="properties.ProviderName.PropertyValue"
+                      sf-selected-item-id="properties.SearchPageId.PropertyValue"
+                      sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+
+    <label for="image-field" class="m-top-sm">Product Details Page</label>
+    <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
+                      sf-provider="properties.ProviderName.PropertyValue"
+                      sf-selected-item-id="properties.ProductDetailsPageId.PropertyValue"
+                      sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+</form>
+
+<div class="form-group">
+    <label for="categoryTemplateName">@Html.Resource("Template")</label>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <select id="categoryTemplateName" ng-model="properties.TemplateName.PropertyValue" class="form-control">
+                @foreach (var viewName in Html.GetViewNames("CategoryNavigation", @"(?<viewName>[\w\s]*)$"))
+                {
+                    <option value="@viewName"> @viewName.SplitCamelCase()</option>
+                }
+            </select>
         </div>
-
-        <label for="image-field" class="m-top-sm">Search Page</label>
-        <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
-                          sf-provider="properties.ProviderName.PropertyValue"
-                          sf-selected-item-id="properties.SearchPageId.PropertyValue"
-                          sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
-
-        <label for="image-field" class="m-top-sm">Product Details Page</label>
-        <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
-                          sf-provider="properties.ProviderName.PropertyValue"
-                          sf-selected-item-id="properties.ProductDetailsPageId.PropertyValue"
-                          sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
-    </form>
+    </div>
+</div>

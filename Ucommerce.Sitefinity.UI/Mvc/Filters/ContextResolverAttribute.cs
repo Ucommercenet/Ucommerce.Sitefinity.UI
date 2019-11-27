@@ -11,26 +11,38 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            List<string> urlSegments = null;
-
-            if (SystemManager.CurrentHttpContext.Request.Url != null)
+            if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] == null || (bool)SystemManager.CurrentHttpContext.Items[contextInitializedKey] == false)
             {
-                urlSegments = SystemManager.CurrentHttpContext.Request.Url.Segments.Select(i => i.Replace("/", string.Empty)).ToList();
-            }
-            else
-            {
-                var currentNode = SiteMapBase.GetActualCurrentNode();
+                List<string> urlSegments = null;
 
-                if (currentNode != null)
+                if (SystemManager.CurrentHttpContext.Request.Url != null)
                 {
-                    urlSegments = currentNode.Url.Split('/').ToList();
+                    urlSegments = SystemManager.CurrentHttpContext.Request.Url.Segments.Select(i => i.Replace("/", string.Empty)).ToList();
                 }
-            }
+                else
+                {
+                    var currentNode = SiteMapBase.GetActualCurrentNode();
 
-            if (urlSegments != null)
-            {
-                this.ResolveCurrentProduct(urlSegments);
-                this.ResolveCurrentCategory(urlSegments);
+                    if (currentNode != null)
+                    {
+                        urlSegments = currentNode.Url.Split('/').ToList();
+                    }
+                }
+
+                if (urlSegments != null)
+                {
+                    this.ResolveCurrentProduct(urlSegments);
+                    this.ResolveCurrentCategory(urlSegments);
+                }
+
+                if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] == null)
+                {
+                    SystemManager.CurrentHttpContext.Items.Add(contextInitializedKey, true); 
+                }
+                else
+                {
+                    SystemManager.CurrentHttpContext.Items[contextInitializedKey] = true;
+                }
             }
         }
 
@@ -76,5 +88,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Filters
                 }
             }
         }
+
+        private const string contextInitializedKey = "UcommerceContextInitialized";
     }
 }

@@ -12,60 +12,58 @@ using UCommerce.Transactions;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnBasketPreview sfMvcIcn")]
     public class BasketPreviewController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
-        public string TemplteName { get; set; } = "Index";
-
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
-
-        public BasketPreviewController()
-        {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-        }
+        public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
-            {
-                return new EmptyResult();
-            }
-
             var model = ResolveModel();
-            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
 
-            var basketPreviewViewModel = model.GetViewModelr(purchaseOrder);
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
+            var basketPreviewViewModel = model.GetViewModel();
+            
             ViewBag.RowSpan = 4;
-            if (purchaseOrder.DiscountTotal > 0)
+            if (Convert.ToInt32(basketPreviewViewModel.DiscountTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (purchaseOrder.ShippingTotal > 0)
+            if (Convert.ToInt32(basketPreviewViewModel.ShippingTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (purchaseOrder.PaymentTotal > 0)
+            if (Convert.ToInt32(basketPreviewViewModel.PaymentTotal) > 0)
             {
                 ViewBag.RowSpan++;
             }
 
-            return View(TemplteName, basketPreviewViewModel);
+            return View(TemplateName, basketPreviewViewModel);
         }
 
         [HttpPost]
         public ActionResult RequestPayment()
         {
-            var payment = _transactionLibraryInternal.GetBasket().PurchaseOrder.Payments.First();
-            if (payment.PaymentMethod.PaymentMethodServiceName == null)
+            var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
             {
-                return Redirect("/confirmation");
+                return this.PartialView("_Warning", message);
             }
 
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string paymentUrl = _transactionLibraryInternal.GetPaymentPageUrl(payment);
+            var paymentUrl = model.GetPaymentUrl();
+
             return Redirect(paymentUrl);
         }
 

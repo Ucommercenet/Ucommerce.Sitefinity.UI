@@ -8,30 +8,41 @@ using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uPaymentPicker_MVC", Title = "Payment Picker", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uPaymentPicker_MVC", Title = "Payment Picker", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnPaymentPicker sfMvcIcn")]
     public class PaymentPickerController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
-        public string TemplteName { get; set; } = "Index";
+        public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
         {
-            if (SystemManager.IsDesignMode)
+            var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
             {
-                return new EmptyResult();
+                return this.PartialView("_Warning", message);
             }
 
-            var model = ResolveModel();
             var paymentPickerVM = model.GetViewModel();
 
-            return View(TemplteName, paymentPickerVM);
+            return View(TemplateName, paymentPickerVM);
         }
 
         [HttpPost]
         public ActionResult CreatePayment(PaymentPickerViewModel createPaymentViewModel)
         {
             var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
             var viewModel = model.GetViewModel();
 
             model.CreatePayment(createPaymentViewModel);
