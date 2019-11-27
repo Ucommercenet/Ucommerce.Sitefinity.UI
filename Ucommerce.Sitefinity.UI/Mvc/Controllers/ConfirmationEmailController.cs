@@ -32,15 +32,15 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             var confirmationEmailVM = model.GetViewModel(orderGuid);
 
             ViewBag.RowSpan = 4;
-            if (Convert.ToInt32(confirmationEmailVM.DiscountTotal) > 0)
+            if (confirmationEmailVM.DiscountAmount > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (Convert.ToInt32(confirmationEmailVM.ShippingTotal) > 0)
+            if (confirmationEmailVM.ShipmentAmount > 0)
             {
                 ViewBag.RowSpan++;
             }
-            if (Convert.ToInt32(confirmationEmailVM.PaymentTotal) > 0)
+            if (confirmationEmailVM.PaymentAmount > 0)
             {
                 ViewBag.RowSpan++;
             }
