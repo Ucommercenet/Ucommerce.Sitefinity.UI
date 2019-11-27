@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
+using Telerik.Sitefinity.Data.Events;
+using Telerik.Sitefinity.GenericContent.Model;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.Modules.Pages;
 using Telerik.Sitefinity.Pages.Model;
@@ -18,31 +20,6 @@ namespace Ucommerce.Sitefinity.UI.Pages
 {
     internal static class HttpContextExtensions
     {
-        public static Dictionary<string, string> GetPageContext(this HttpContextBase httpContext)
-        {
-            var pageContext = new Dictionary<string, string>();
-            var provider = SiteMapBase.GetCurrentProvider();
-            var node = provider.CurrentNode as PageSiteNode;
-
-            if (node != null)
-            {
-                var pageContextField = node.GetCustomFieldValue(PAGE_CONTEXT_FIELD_NAME) as string;
-                if (pageContextField != null)
-                {
-                    try
-                    {
-                        pageContext = JsonConvert.DeserializeObject<Dictionary<string, string>>(pageContextField);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Write($"Cannot deserialize the value of \"{PAGE_CONTEXT_FIELD_NAME}\" page custom field. The following exception was thrown: {Environment.NewLine} {ex}", ConfigurationPolicy.ErrorLog);
-                    }
-                }
-            }
-
-            return pageContext;
-        }
-
         public static string GetValue<T>(this Dictionary<string, string> context, Expression<Func<T, object>> expression)
             where T : Controller, new()
         {
@@ -71,8 +48,38 @@ namespace Ucommerce.Sitefinity.UI.Pages
             return isSuccess;
         }
 
-        internal static void PageManager_Executing(object sender, ExecutingEventArgs e)
+        private static void LoadToContextDictionary<T>(this PageData pageData, Expression<Func<T, object>> expression, Dictionary<string, string> contextDictionary)
+            where T : Controller, new()
         {
+            if (contextDictionary == null)
+                throw new ArgumentNullException(nameof(contextDictionary));
+
+            var controllerName = typeof(T).FullName;
+            var propertyName = GetMemberName(expression.Body);
+
+            var propertyValue = GetPropertyValueInternal(pageData, controllerName, propertyName);
+
+            if (!string.IsNullOrEmpty(propertyValue))
+            {
+                if (contextDictionary.ContainsKey(propertyName))
+                    contextDictionary[propertyName] = propertyValue;
+                else
+                    contextDictionary.Add(propertyName, propertyValue);
+            }
+        }
+
+        private static string GetPropertyValue<T>(this PageData pageData, Expression<Func<T, object>> expression)
+            where T : Controller, new()
+        {
+            var controllerName = typeof(T).FullName;
+            var propertyName = GetMemberName(expression.Body);
+
+            return GetPropertyValueInternal(pageData, controllerName, propertyName);
+        }
+
+        internal static void PublishinManager_Executing(object sender, ExecutingEventArgs e)
+        {
+
             if (e.CommandName == "CommitTransaction" || e.CommandName == "FlushTransaction")
             {
                 try
@@ -108,33 +115,21 @@ namespace Ucommerce.Sitefinity.UI.Pages
             }
         }
 
-        private static void LoadToContextDictionary<T>(this PageData pageData, Expression<Func<T, object>> expression, Dictionary<string, string> contextDictionary)
-            where T : Controller, new()
+        public static Dictionary<string, string> GetProductsContext(this HttpContextBase httpContext)
         {
-            if (contextDictionary == null)
-                throw new ArgumentNullException(nameof(contextDictionary));
+            var contextDictionary = new Dictionary<string, string>();
+            var smp = SiteMapBase.GetCurrentProvider();
+            var nodeId = ((PageSiteNode)smp.CurrentNode).PageId;
 
-            var controllerName = typeof(T).FullName;
-            var propertyName = GetMemberName(expression.Body);
+            var mgr =PageManager.GetManager();
+            var pageData = mgr.GetPageDataList()
+                .Where(pd => pd.NavigationNodeId == nodeId && pd.Status == ContentLifecycleStatus.Live && pd.Visible == true)
+                .FirstOrDefault();
 
-            var propertyValue = GetPropertyValueInternal(pageData, controllerName, propertyName);
+            pageData.LoadToContextDictionary<ProductsController>(x => x.CategoryIds, contextDictionary);
+            pageData.LoadToContextDictionary<ProductsController>(x => x.ProductIds, contextDictionary);
 
-            if (!string.IsNullOrEmpty(propertyValue))
-            {
-                if (contextDictionary.ContainsKey(propertyName))
-                    contextDictionary[propertyName] = propertyValue;
-                else
-                    contextDictionary.Add(propertyName, propertyValue);
-            }
-        }
-
-        private static string GetPropertyValue<T>(this PageData pageData, Expression<Func<T, object>> expression)
-            where T : Controller, new()
-        {
-            var controllerName = typeof(T).FullName;
-            var propertyName = GetMemberName(expression.Body);
-
-            return GetPropertyValueInternal(pageData, controllerName, propertyName);
+            return contextDictionary;
         }
 
         private static string GetPropertyValueInternal(PageData pageData, string controllerName, string propertyName)

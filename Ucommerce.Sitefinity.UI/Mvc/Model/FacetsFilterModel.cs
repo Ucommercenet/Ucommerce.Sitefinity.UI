@@ -18,7 +18,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
     {
         public IList<FacetViewModel> CreateViewModel()
         {
-            var pageContext = SystemManager.CurrentHttpContext.GetPageContext();
+            var pageContext = SystemManager.CurrentHttpContext.GetProductsContext();
             var categoryIds = pageContext.GetValue<ProductsController>(p => p.CategoryIds);
             var productIds = pageContext.GetValue<ProductsController>(p => p.ProductIds);
             if (!string.IsNullOrEmpty(categoryIds) || !string.IsNullOrEmpty(productIds))
