@@ -390,7 +390,7 @@
     <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\factory.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\multi-picker.controller.js" />
+    <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\UCmulti-picker.controller.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\dist\javascript\WidgetDesigner\tree.controller.js" />

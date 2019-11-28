@@ -23,6 +23,10 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public string CategoryIds { get; set; }
 
+        public bool EnableCategoryFallback { get; set; }
+
+        public string FallbackCategoryIds { get; set; }
+
         public string ListTemplateName { get; set; } = "Index";
 
         public string DetailTemplateName { get; set; } = "Index";
@@ -102,9 +106,11 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
                     itemsPerPage = this.ItemsPerPage,
                     openInSamePage = this.OpenInSamePage,
                     isManualSelectionMode = this.IsManualSelectionMode,
+                    enableCategoryFallback = this.EnableCategoryFallback,
                     detailsPageId = this.DetailsPageId,
                     productIds = this.ProductIds,
-                    categoryIds = this.CategoryIds
+                    categoryIds = this.CategoryIds,
+                    fallbackCategoryIds = this.FallbackCategoryIds
                 });
 
             return model;

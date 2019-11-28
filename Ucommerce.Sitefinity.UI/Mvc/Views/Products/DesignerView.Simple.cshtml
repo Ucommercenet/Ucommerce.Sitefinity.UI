@@ -8,7 +8,7 @@
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/ucommerce.tree.css"), "head", false)
 
     <form name="productsProperties">
-        
+
         <div class="form-group">
             <label for="text">Manually select products</label>
 
@@ -24,7 +24,7 @@
         <div ng-show="properties.IsManualSelectionMode.PropertyValue === 'True'">
             <h3 class="tree__heading">Select products</h3>
             <div>
-                <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="product" load-on-compile="true" 
+                <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="product" load-on-compile="true"
                                         content-picker-type="products" icon-folder="uCommerce" selected-node-style="none"
                                         form-name="ProductIds" pre-selected-values="{{properties.ProductIds.PropertyValue}}">
                 </ucommerce-multi-picker>
@@ -40,61 +40,84 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div>
-                <label for="prop-ItemsPerPage">ItemsPerPage</label>
-                <input id="prop-ItemsPerPage" type="text" class="form-control ng-pristine ng-untouched ng-valid ng-scope" ng-model="properties.ItemsPerPage.PropertyValue">
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label>Single product settings</label>
-            <div class="radio">
-                <label for="samePage">
-                    <input id="samePage" type="radio" ng-model="properties.OpenInSamePage.PropertyValue" value="True" />
-                    Show in same page
-                </label>
-            </div>
-            <div class="radio">
-                <label for="existingPage">
-                    <input id="existingPage" type="radio" ng-model="properties.OpenInSamePage.PropertyValue" value="False" />
-                    Show in existing page
-                </label>
-                <div class="label-content">
-                    <sf-list-selector sf-page-selector
-                                      sf-selected-item-id="properties.DetailsPageId.PropertyValue"
-                                      ng-hide="properties.OpenInSamePage.PropertyValue == 'True'"></sf-list-selector>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="productListTemplateName">List Template</label>
+        <div ng-show="properties.IsManualSelectionMode.PropertyValue === 'False'">
+            <h3 class="tree__heading">Fallback category where such is not resolved by URL</h3>
 
             <div class="row">
-                <div class="col-xs-6">
-                    <select id="productListTemplateName" ng-model="properties.ListTemplateName.PropertyValue" class="form-control">
-                        @foreach (var viewName in Html.GetViewNames("Products", @"List\.(?<viewName>[\w\s]*)$"))
-                        {
-                            <option value="@viewName"> @viewName.SplitCamelCase()</option>
-                        }
-                    </select>
+                <div class="col-xs-11">
+                    <input name="enableCategoryFallback" type="checkbox" ng-model="properties.EnableCategoryFallback.PropertyValue"
+                           ng-checked="properties.EnableCategoryFallback.PropertyValue === 'True'"
+                           ng-true-value="'True'" ng-false-value="'False'" />
+                </div>
+            </div>
+
+
+            <div ng-show="properties.EnableCategoryFallback.PropertyValue === 'True'">
+                <div>
+                    <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="productCategory"
+                                            load-on-compile="true" content-picker-type="products" icon-folder="uCommerce"
+                                            selected-node-style="none" form-name="CategoryIds" pre-selected-values="{{properties.FallbackCategoryIds.PropertyValue}}">
+                    </ucommerce-multi-picker>
                 </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="productDetailTemplateName">Detail Template</label>
-
-            <div class="row">
-                <div class="col-xs-6">
-                    <select id="productDetailTemplateName" ng-model="properties.DetailTemplateName.PropertyValue" class="form-control">
-                        @foreach (var viewName in Html.GetViewNames("Products", @"Detail\.(?<viewName>[\w\s]*)$"))
-                        {
-                            <option value="@viewName"> @viewName.SplitCamelCase()</option>
-                        }
-                    </select>
+            <div class="form-group">
+                <div>
+                    <label for="prop-ItemsPerPage">ItemsPerPage</label>
+                    <input id="prop-ItemsPerPage" type="text" class="form-control ng-pristine ng-untouched ng-valid ng-scope" ng-model="properties.ItemsPerPage.PropertyValue">
                 </div>
             </div>
-        </div>
-    </form>
+
+            <div class="form-group">
+                <label>Single product settings</label>
+                <div class="radio">
+                    <label for="samePage">
+                        <input id="samePage" type="radio" ng-model="properties.OpenInSamePage.PropertyValue" value="True" />
+                        Show in same page
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="existingPage">
+                        <input id="existingPage" type="radio" ng-model="properties.OpenInSamePage.PropertyValue" value="False" />
+                        Show in existing page
+                    </label>
+                    <div class="label-content">
+                        <sf-list-selector sf-page-selector
+                                          sf-selected-item-id="properties.DetailsPageId.PropertyValue"
+                                          ng-hide="properties.OpenInSamePage.PropertyValue == 'True'"></sf-list-selector>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="productListTemplateName">List Template</label>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        <select id="productListTemplateName" ng-model="properties.ListTemplateName.PropertyValue" class="form-control">
+                            @foreach (var viewName in Html.GetViewNames("Products", @"List\.(?<viewName>[\w\s]*)$"))
+                            {
+                                <option value="@viewName"> @viewName.SplitCamelCase()</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="productDetailTemplateName">Detail Template</label>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        <select id="productDetailTemplateName" ng-model="properties.DetailTemplateName.PropertyValue" class="form-control">
+                            @foreach (var viewName in Html.GetViewNames("Products", @"Detail\.(?<viewName>[\w\s]*)$"))
+                            {
+                                <option value="@viewName"> @viewName.SplitCamelCase()</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+</form>

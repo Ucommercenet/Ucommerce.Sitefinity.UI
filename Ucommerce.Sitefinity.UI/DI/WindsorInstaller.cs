@@ -24,7 +24,7 @@ namespace Ucommerce.Sitefinity.UI.DI
                     FromThisAssembly().
                     BasedOn<IController>().
                     If(c => c.Name.EndsWith("Controller")).
-                    LifestylePerWebRequest());
+                    LifestyleTransient());
         }
 
         private void InstallServices(IWindsorContainer container)
@@ -33,73 +33,73 @@ namespace Ucommerce.Sitefinity.UI.DI
                  Component
                  .For<IFacetsFilterModel>()
                  .ImplementedBy<FacetsFilterModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<IProductModel>()
                  .ImplementedBy<ProductModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<ICategoryModel>()
                  .ImplementedBy<CategoryModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<IMiniBasketService>()
                  .ImplementedBy<MiniBasketService>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<IMiniBasketModel>()
                  .ImplementedBy<MiniBasketModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<ICartModel>()
                  .ImplementedBy<CartModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<IAddressModel>()
                  .ImplementedBy<AddressModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                 Component
                 .For<IShippingPickerModel>()
                 .ImplementedBy<ShippingPickerModel>()
-                .LifestylePerWebRequest());
+                .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<IPaymentPickerModel>()
                  .ImplementedBy<PaymentPickerModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<IConfirmationMessageModel>()
                  .ImplementedBy<ConfirmationMessageModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<IConfirmationEmailModel>()
                  .ImplementedBy<ConfirmationEmailModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
 
             container.Register(
                  Component
                  .For<IBasketPreviewModel>()
                  .ImplementedBy<BasketPreviewModel>()
-                 .LifestylePerWebRequest());
+                 .LifestyleTransient());
         }
     }
 }
