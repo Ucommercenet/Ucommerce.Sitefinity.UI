@@ -135,4 +135,10 @@
 	<data name="UniqueNameCustomValidator.ErrorMessage" xml:space="preserve">
     <value>Namnet är upptaget</value>
   </data>
+	<data name="ShippingMethodProperties.Text" xml:space="preserve">
+    <value>Egenskaper för Fraktmetod</value>
+  </data>
+	<data name="ShippingMethodMedia.Text" xml:space="preserve">
+    <value>Fraktmetod Media</value>
+  </data>
 </root>

@@ -129,4 +129,7 @@
   <data name="Security_Save_Header" xml:space="preserve">
     <value>User saved</value>
   </data>
+  <data name="UserAccess.Text" xml:space="preserve">
+    <value>Brugeradgang</value>
+  </data>
 </root>

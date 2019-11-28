@@ -135,4 +135,10 @@
 	<data name="PriceHeader.HeaderText" xml:space="preserve">
     <value>Pris</value>
   </data>
+	<data name="PaymentMethodPricingFee.Text" xml:space="preserve">
+    <value>Betalningsmetodavgifter</value>
+  </data>
+	<data name="PaymentMethodPricing.Text" xml:space="preserve">
+    <value>Betalningsmetod Prissättning</value>
+  </data>
 </root>

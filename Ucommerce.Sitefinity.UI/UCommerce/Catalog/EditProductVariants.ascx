@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditProductVariants.ascx.cs" Inherits="UCommerce.Web.UI.Catalog.EditProductVariants" %>
 <%@ Import Namespace="UCommerce.EntitiesV2" %>
 <%@ Register tagPrefix="commerce" tagName="ValidationSummary" src="../Controls/ValidationSummaryDisplay.ascx" %>
-
+<%@ Register TagPrefix="presentation" Assembly="UCommerce.Presentation" namespace="UCommerce.Presentation.Web.Controls" %>
 <commerce:ValidationSummary runat="server" />
 <script type="text/javascript">
     function confirm_delete_variant()
@@ -12,7 +12,7 @@
 
 <div class="propertyPane variantsPropertyPane">
     <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourcekey="variants"></asp:Localize></h2>
-    <table>
+    <table class="variantTable">
         <tr>
             <td>
                 <commerce:BulkEditGridView EnableViewState="True" BulkEdit="true" DataSource="<%# Variants %>" runat="server" ID="VariantsGridView" ShowHeader="true" DataKeyNames="ProductId" AutoGenerateColumns="false" GridLines="None" CssClass="variantContainer" UseAccessibleHeader="True" AllowPaging="True" PageSize="100" OnPageIndexChanging="VariantsGrid_OnPageIndexChanging">
@@ -21,9 +21,9 @@
                         <EditItemTemplate>
                             <asp:PlaceHolder runat="server" Visible="<%# ((Product)Container.DataItem).ProductId > 0 %>">
 								<div class="variantOptions" style="width:75px; display:inline-block;">
-									<a href="#" onclick="UCommerceClientMgr.openModal('<%# GetVariantPriceEditorUrl((Product)Container.DataItem) %>', 'Edit Prices', 500,320); return false;"><img src="../images/ui/price.png" alt="Edit prices" /></a>
-									<a href="#" onclick="UCommerceClientMgr.openModal('<%# GetVariantDescriptionEditorUrl((Product)Container.DataItem)%>', 'Edit Description', 650, 540); return false;"><img src="../images/ui/note_edit.png" alt="Edit description" /></a>
-									<asp:ImageButton runat="server" ImageUrl="../images/ui/cross.png" CommandArgument="<%# ((Product)Container.DataItem).ProductId %>" CommandName="Delete" AlternateText="Delete" OnClientClick="return confirm_delete_variant();" Visible="<%# CanDeleteProduct()%>" />
+									<a class="variantOption variantPrices" href="#" onclick="UCommerceClientMgr.openModal('<%# GetVariantPriceEditorUrl((Product)Container.DataItem) %>', 'Edit Prices', 500,320); return false;"><img src="../images/ui/price.png" alt="Edit prices" /></a>
+									<a class="variantOption variantDescriptions" href="#" onclick="UCommerceClientMgr.openModal('<%# GetVariantDescriptionEditorUrl((Product)Container.DataItem)%>', 'Edit Description', 650, 540); return false;"><img src="../images/ui/note_edit.png" alt="Edit description" /></a>
+									<presentation:LabeledImageButton runat="server" ID="DeleteImageButton" ImageUrl="../images/ui/cross.png" CommandArgument="<%# ((Product)Container.DataItem).ProductId %>" CommandName="Delete" AlternateText="Delete" OnClientClick="return confirm_delete_variant();" Visible="<%# CanDeleteProduct()%>" />
 								</div>
                             </asp:PlaceHolder>
                         </EditItemTemplate>

@@ -132,4 +132,7 @@
   <data name="InheritedDefinitions.Text" xml:space="preserve">
     <value>Medfödda Definitioner</value>
   </data>
+  <data name="DefinitionProperties.Text" xml:space="preserve">
+    <value>Definition egenskaper</value>
+  </data>
 </root>

@@ -662,4 +662,7 @@
   <data name="menu_catalogs_root" xml:space="preserve">
     <value>Kataloge</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
 </root>

@@ -3,7 +3,7 @@
 
 <commerce:ValidationSummary runat="server" />
 <div class="propertyPane leftAligned">
-
+    <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="OrderNumberSerieProperties" /></h2>
     <commerce:PropertyPanel runat="server" meta:resourceKey="PrefixProperty">
         <asp:TextBox runat="server" ID="PrefixTextBox" Text="<%# SanitizeOutput(View.OrderNumberSerie.Prefix) %>" />
     </commerce:PropertyPanel>

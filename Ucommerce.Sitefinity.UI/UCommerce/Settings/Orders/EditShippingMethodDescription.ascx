@@ -4,6 +4,7 @@
 <commerce:ValidationSummary runat="server" />
 <div style="text-align: left;">
     <div class="propertyPane leftAligned">
+         <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="ShippingMethodDescriptions" /></h2>
         <div class="propertyItem">
             <div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="DisplayName" /></div>
             <div class="propertyItemContent">

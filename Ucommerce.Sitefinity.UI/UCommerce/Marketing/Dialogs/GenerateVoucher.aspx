@@ -1,5 +1,7 @@
 <%@ page language="C#" autoeventwireup="true" masterpagefile="../../masterpages/Dialog.master" codebehind="GenerateVoucher.aspx.cs" inherits="UCommerce.Web.UI.Marketing.Dialogs.GenerateVoucher" %>
 <%@ Import Namespace="UCommerce.Web.UI.Marketing.Dialogs" %>
+<%@ Register TagPrefix="presentation" Assembly="UCommerce.Presentation" namespace="UCommerce.Presentation.Web.Controls" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
         $(document).ready(function () {
@@ -268,7 +270,7 @@
 						<itemtemplate>
 							<tr>
 								<td style="text-align:right; width:20px;">
-									<asp:ImageButton id="DeleteTargetButton" runat="server" 
+									<presentation:LabeledImageButton CssClass="delete-image-button" id="DeleteTargetButton" runat="server" 
 										commandargument="<%# ((VoucherPlaceHolder)Container.DataItem).Code %>" 
 										imageurl="../../Images/ui/cross.png" 
 										oncommand="DeleteVoucherCode_Command" />

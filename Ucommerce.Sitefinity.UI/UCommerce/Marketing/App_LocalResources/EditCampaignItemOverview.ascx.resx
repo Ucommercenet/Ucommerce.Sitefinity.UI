@@ -150,4 +150,10 @@
   <data name="AnyTargetAppliesText" xml:space="preserve">
     <value>Customer must satisfy any target</value>
   </data>
+  <data name="CampaignItemHeader.Text" xml:space="preserve">
+    <value>Campaign item properties</value>
+  </data>
+  <data name="CampaignItemSetupHeader.Text" xml:space="preserve">
+    <value>Campaign item setup</value>
+  </data>
 </root>

@@ -1,9 +1,6 @@
 <%@ page language="C#" autoeventwireup="true" codebehind="CreateProductRelation.aspx.cs"
 	inherits="UCommerce.Web.UI.Catalog.Dialogs.CreateProductRelation" masterpagefile="../../MasterPages/Dialog.Master" %>
 
-<%@ import namespace="UCommerce.Web.UI.Catalog.Dialogs" %>
-<%@ register tagprefix="uc" tagname="CatalogItemSelector" src="CatalogItemSelector.ascx" %>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:content id="Content2" contentplaceholderid="HeaderLabel" runat="server"><asp:Localize ID="Localize5" runat="server" meta:resourceKey="Header" /></asp:content>
@@ -29,7 +26,7 @@
 			<div class="dialog-content__property">
 				<div class="propertyItemHeader" ><asp:Localize id="Localize6" runat="server" meta:resourcekey="TwoWayRelation" /></div>
 				<div class="propertyItemContent" >
-					<asp:CheckBox id="TwoWayRelationshipCheckBox" runat="server" />
+					<asp:CheckBox id="TwoWayRelationshipCheckBox" class="ucommerce-toggle-check-box" runat="server" />
 				</div>
 			</div> 
 		

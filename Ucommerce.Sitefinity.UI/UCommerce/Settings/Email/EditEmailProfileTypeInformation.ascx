@@ -3,6 +3,7 @@
 
 <commerce:ValidationSummary runat="server" />
 <div class="propertyPane">
+	 <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="EmailProfileTypeInformationProperties" /></h2>
 	<div class="propertyItem">
 		<div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="FromName" /></div>
 		<div class="propertyItemContent">

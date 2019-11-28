@@ -3,6 +3,7 @@
 
 <commerce:validationsummary runat="server" />
 <div class="propertyPane">
+    <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="EmailContentProperties" /></h2>
     <div class="propertyItem email-subject">
         <div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="Subject" /></div>
         <div class="propertyItemContent">

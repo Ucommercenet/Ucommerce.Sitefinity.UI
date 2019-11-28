@@ -129,4 +129,7 @@
 	<data name="UniqueNameCustomValidator.ErrorMessage" xml:space="preserve">
 		<value>Namnet är upptaget.</value>
 	</data>
+	<data name="ShippingMethodDescriptions.Text" xml:space="preserve">
+    <value>Flerspråkiga Egenskaper</value>
+  </data>
 </root>

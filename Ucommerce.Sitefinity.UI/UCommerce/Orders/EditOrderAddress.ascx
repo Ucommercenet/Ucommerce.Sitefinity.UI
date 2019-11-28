@@ -23,7 +23,7 @@
     <div>
         <asp:TextBox runat="server" CssClass="hintText smallWidthInput" data-placeholder="<%$ Resources:CompanyName %>" ID="CompanyName" Text='<%#OrderAddress.CompanyName %>' />
         
-        <span style="margin-left: 10px;">
+        <span style="margin-left: 10px; padding-top: 5px; display: inline-block;">
             <asp:LinkButton runat="server" ID="CancelEditLink" CssClass="hintTextCancelLink" OnClick="ToggleEditable" Text="<%$ Resources:Cancel %>" CausesValidation="false" />
         </span>
     </div>

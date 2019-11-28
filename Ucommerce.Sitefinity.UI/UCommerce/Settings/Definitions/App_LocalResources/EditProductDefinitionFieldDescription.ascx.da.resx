@@ -123,4 +123,7 @@
   <data name="DisplayName.Text" xml:space="preserve">
     <value>Vist navn</value>
   </data>
+  <data name="ProductDefinitionFieldDescription.Text" xml:space="preserve">
+    <value>Flersprogede Egenskaber</value>
+  </data>
 </root>

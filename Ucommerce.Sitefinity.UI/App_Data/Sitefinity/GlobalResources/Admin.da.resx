@@ -631,7 +631,7 @@
     <value>Navnet '{0}' er allerede brugt på denne definition, eller en forælder.</value>
   </data>
   <data name="export" xml:space="preserve">
-    <value>Eksport</value>
+    <value>Eksporter produkter</value>
   </data>
   <data name="menu_productcatalog_dashboard" xml:space="preserve">
     <value>Dashboard</value>
@@ -656,5 +656,8 @@
   </data>
   <data name="menu_catalogs_root" xml:space="preserve">
     <value>Kataloger</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Slet</value>
   </data>
 </root>

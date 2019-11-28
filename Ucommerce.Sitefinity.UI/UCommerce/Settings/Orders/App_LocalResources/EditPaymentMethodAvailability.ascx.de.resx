@@ -123,4 +123,7 @@
 	<data name="ProductCatalogGroups.Text" xml:space="preserve">
     <value>Produktkataloggruppe</value>
   </data>
+	<data name="PaymentMethodAccess.Text" xml:space="preserve">
+    <value>Zugang zur Zahlungsmethode</value>
+  </data>
 </root>

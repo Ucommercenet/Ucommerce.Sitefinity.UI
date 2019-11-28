@@ -4,6 +4,7 @@
 
 <commerce:ValidationSummary ID="ValidationSummary1" runat="server" />
 <div class="propertyPane leftAligned">
+    <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="EnumProperties" /></h2>
     <div>
         <div class="propertyItem">
             <div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="Value" /></div>

@@ -132,4 +132,7 @@
 	<data name="PriceHeader.HeaderText" xml:space="preserve">
     <value>Preis</value>
   </data>
+	<data name="ShippingMethodPricing.Text" xml:space="preserve">
+    <value>Versandart Preise</value>
+  </data>
 </root>

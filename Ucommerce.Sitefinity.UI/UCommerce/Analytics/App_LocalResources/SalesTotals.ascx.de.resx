@@ -144,4 +144,7 @@
   <data name="VATTotal.Text" xml:space="preserve">
     <value>USt</value>
   </data>
+  <data name="SalesTotalsHeader.Text" xml:space="preserve">
+    <value>Berichtsfilterung</value>
+  </data>
 </root>

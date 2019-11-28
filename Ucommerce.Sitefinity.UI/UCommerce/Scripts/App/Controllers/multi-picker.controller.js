@@ -167,7 +167,8 @@
 					};
 				}
 			}
-			if (UCommerceClientMgr.Shell == 'Umbraco7') {
+			if (UCommerceClientMgr.Shell == 'Umbraco7' ||
+				UCommerceClientMgr.Shell == 'Umbraco8') {
 				var lowerCaseIcon = icon.toLowerCase();
 				if ($scope.iconFolder == 'uCommerce') {
 					return {

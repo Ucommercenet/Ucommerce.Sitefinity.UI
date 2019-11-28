@@ -1,7 +1,5 @@
 ﻿<%@ Language="C#" MasterPageFile="../../masterpages/Dialog.master" AutoEventWireup="true" CodeBehind="SelectFreeGiftProduct.aspx.cs" Inherits="UCommerce.Web.UI.UCommerce.Catalog.Dialogs.SelectFreeGiftProduct" %>
 
-<%@ import namespace="UCommerce.Web.UI.Catalog.Dialogs" %>
-<%@ register tagprefix="uc" tagname="catalogItemselector" src="CatalogItemSelector.ascx" %>
 <asp:content id="Content1" contentplaceholderid="head" runat="server">
 </asp:content>
 <asp:content id="Content2" contentplaceholderid="HeaderLabel" runat="server">

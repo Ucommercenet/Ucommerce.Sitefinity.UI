@@ -129,4 +129,7 @@
   <data name="UniqueNameCustomValidator.ErrorMessage" xml:space="preserve">
     <value>Navn er allerede i brug.</value>
   </data>
+  <data name="ShippingMethodDescriptions.Text" xml:space="preserve">
+    <value>Flersprogede egenskaber</value>
+  </data>
 </root>

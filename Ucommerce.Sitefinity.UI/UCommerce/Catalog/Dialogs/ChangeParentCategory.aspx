@@ -21,10 +21,10 @@
    	</div>
 	<div class="propertyPane contentPaneTwo">
 	    <div id="newCategorySelector" class="TreeViewWrapper large row-hover overFlowScroll">
-	        <asp:TreeView ID="CategorySelector" runat="server" OnSelectedNodeChanged="SelectorTreeView_OnSelectedNodeChanged"/>		        
+	        <asp:TreeView ID="CategorySelector" runat="server" ExpandImageUrl="../../images/expand.png" CollapseImageUrl="../../images/collapse.png"/>		        
 	    </div>
 	</div>
-	<div class="propertyPane dialog-actions">
+	<div class="propertyPane dialog-actions"> 
 		<div class="footerOkCancel">
 			<asp:Button id="SaveButton" CssClass="dialog-saveButton" runat="server" meta:resourcekey="SaveButton" onclick="SaveButton_Clicked" />
 			

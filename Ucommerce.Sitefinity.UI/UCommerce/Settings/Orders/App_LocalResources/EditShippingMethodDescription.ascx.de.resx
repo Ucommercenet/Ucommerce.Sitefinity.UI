@@ -129,4 +129,7 @@
   <data name="UniqueNameCustomValidator.ErrorMessage" xml:space="preserve">
     <value>Dieser name existiert bereits.</value>
   </data>
+  <data name="ShippingMethodDescriptions.Text" xml:space="preserve">
+    <value>Mehrsprachige Eigenschaften</value>
+  </data>
 </root>

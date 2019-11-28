@@ -120,4 +120,7 @@
   <data name="EditUserGroupRoles.Text" xml:space="preserve">
     <value>Edit Roles for Group</value>
   </data>
+  <data name="UserGroupAccess.Text" xml:space="preserve">
+    <value>User Group Access</value>
+  </data>
 </root>

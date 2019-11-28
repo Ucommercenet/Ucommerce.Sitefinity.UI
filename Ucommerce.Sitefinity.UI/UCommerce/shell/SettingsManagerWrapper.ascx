@@ -1,4 +1,9 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="SettingsManagerWrapper.ascx.cs" inherits="UCommerce.Web.Shell.Sitefinity.SettingsManagerWrapper" %>
+<%@ Register Assembly="Telerik.Sitefinity" Namespace="Telerik.Sitefinity.Web.UI" TagPrefix="sf" %>
+
+<sf:ResourceLinks ID="ResourceLinks" runat="server">
+    <sf:ResourceFile JavaScriptLibrary="JQuery"></sf:ResourceFile>
+</sf:ResourceLinks>
 
 <script type="application/javascript">
 

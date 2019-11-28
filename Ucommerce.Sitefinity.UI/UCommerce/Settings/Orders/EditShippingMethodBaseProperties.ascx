@@ -4,7 +4,7 @@
 
 <commerce:ValidationSummary  runat="server" />
 <div class="propertyPane leftAligned">
-
+    <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="ShippingMethodProperties" /></h2>
     <div class="propertyItem">
 	    <div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="PaymentMethod" /></div>
         <div class="propertyItemContent">
@@ -22,6 +22,7 @@
 </div>
 
 <div class="propertyPane leftAligned">
+    <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="ShippingMethodMedia" /></h2>
     <div class="propertyItem">
 	    <div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="Image" /></div>
         <div class="propertyItemContent">

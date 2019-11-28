@@ -1,7 +1,5 @@
 <%@ page language="C#" autoeventwireup="true" codebehind="AddProduct.aspx.cs"
 	inherits="UCommerce.Web.UI.Orders.AddProduct" MasterPageFile="../MasterPages/Dialog.Master" %>
-<%@ import namespace="UCommerce.Web.UI.Catalog.Dialogs" %>
-<%@ register tagprefix="uc" tagname="CatalogItemSelector" src="../Catalog/Dialogs/CatalogItemSelector.ascx" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

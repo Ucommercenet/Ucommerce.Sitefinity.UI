@@ -135,4 +135,7 @@
   <data name="InheritedDefinitions.Text" xml:space="preserve">
     <value>Nedarvede definitioner</value>
   </data>
+  <data name="ProductDefinitionProperties.Text" xml:space="preserve">
+    <value>Egenskaber for Produktdefinition</value>
+  </data>
 </root>

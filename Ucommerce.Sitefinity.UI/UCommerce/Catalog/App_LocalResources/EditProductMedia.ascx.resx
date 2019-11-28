@@ -126,4 +126,7 @@
   <data name="ProductMedia.Text" xml:space="preserve">
     <value>Product Media</value>
   </data>
+  <data name="ProductCustomMedia.Text" xml:space="preserve">
+    <value>Custom Media</value>
+  </data>
 </root>

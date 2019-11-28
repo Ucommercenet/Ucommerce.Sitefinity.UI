@@ -150,4 +150,7 @@
   <data name="FacetedSearchLicenseValidator.ErrorMessage" xml:space="preserve">
     <value>Faceted search not availble with current license.</value>
   </data>
+  <data name="ProductDefinitionFieldProperties.Text" xml:space="preserve">
+    <value>Product Definition Field Properties</value>
+  </data>
 </root>

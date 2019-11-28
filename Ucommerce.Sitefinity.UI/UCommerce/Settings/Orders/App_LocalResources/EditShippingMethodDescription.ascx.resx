@@ -126,4 +126,7 @@
   <data name="DisplayName.Text" xml:space="preserve">
     <value>Display Name</value>
   </data>
+  <data name="ShippingMethodDescriptions.Text" xml:space="preserve">
+    <value>Multilingual Properties</value>
+  </data>
 </root>

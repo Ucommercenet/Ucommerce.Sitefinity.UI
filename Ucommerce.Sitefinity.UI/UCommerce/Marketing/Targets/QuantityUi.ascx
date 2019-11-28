@@ -1,4 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="QuantityUi.ascx.cs" Inherits="UCommerce.Web.UI.Umbraco.UCommerce.Marketing.Targets.QuantityUi" %>
+<%@ Register TagPrefix="presentation" Assembly="UCommerce.Presentation" namespace="UCommerce.Presentation.Web.Controls" %>
 <table cellpadding="0" cellspacing="0" style="width:100%;">
 	<tr>
 		<td>
@@ -18,9 +19,9 @@
 			</asp:placeholder>
 		</td>
 		<td style="width:50px; text-align:right; vertical-align:top;">
-			<asp:imagebutton id="EditButton" runat="server" imageurl="../../Images/pencil.png" meta:resourcekey="Edit" onclick="EditButton_Click" />
-			<asp:imagebutton id="SaveButton" runat="server" imageurl="../../Images/save.gif" meta:resourcekey="Save" visible="false" onclick="SaveButton_Click" ValidationGroup="MinOrderAmountGroup" />
-			<asp:imagebutton id="DeleteButton" runat="server" imageurl="../../Images/ui/cross.png" meta:resourcekey="Delete" onclick="DeleteButton_Click" /><br />
+			<presentation:LabeledImageButton CssClass="edit-image-button" id="EditButton" runat="server" imageurl="../../Images/pencil.png" meta:resourcekey="Edit" onclick="EditButton_Click" />
+			<presentation:JavascriptEnabledImageButton CssClass="save-image-button" id="SaveButton" runat="server" imageurl="../../Images/save.gif" meta:resourcekey="Save" visible="false" onclick="SaveButton_Click" ValidationGroup="MinOrderAmountGroup" />
+			<presentation:JavascriptEnabledImageButton CssClass="delete-image-button" id="DeleteButton" runat="server" imageurl="../../Images/ui/cross.png" meta:resourcekey="Delete" onclick="DeleteButton_Click" /><br />
 		</td>
 	</tr>
 </table>

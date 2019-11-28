@@ -5,6 +5,8 @@
         </div>
         <div class="section ui-tabs-panel">
             <div class="propertyPane">
+                <h2 class="umbraco eight only">Sort</h2>
+                <p class="umbraco eight only">Drag the different items up or down below to set how they should be arranged.</p>
                 <asp:Repeater runat="server" ID="SortingRepeater" DataSource="<%# DataSource %>">
                     <HeaderTemplate>
                         <table id="sortable" cellspacing="0" class="dataList">
@@ -37,7 +39,7 @@
                 </asp:Repeater>
                 <div class="propertyPaneFooter"></div>
                 <asp:TextBox runat="server" CssClass="newSortOrder" ID="NewSortOrder" />
-                <div style="margin: 10px; margin-left: -2px;">
+                <div class="sorter save button wrapper">
                     <asp:Button runat="server" CssClass="mediumButton save-button-label" ID="SaveButton" OnClientClick="setSortOrder();" OnClick="SaveButton_Click" meta:resourcekey="SaveButton" />
                 </div>
             </div>

@@ -4,6 +4,7 @@
 
 <commerce:ValidationSummary ID="ValidationSummary1" runat="server" />
 <div class="propertyPane leftAligned" >
+     <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="EmailTypeProperties" /></h2>
     <div>
 
         <div class="propertyItem">

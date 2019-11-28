@@ -126,4 +126,7 @@
   <data name="EditUserRoles.Text" xml:space="preserve">
     <value>Edit Roles for User</value>
   </data>
+  <data name="UserAccess.Text" xml:space="preserve">
+    <value>User Access</value>
+  </data>
 </root>

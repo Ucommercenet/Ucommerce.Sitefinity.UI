@@ -138,4 +138,10 @@
   <data name="VatRate.Text" xml:space="preserve">
     <value>USt-Satz</value>
   </data>
+  <data name="PriceGroupProperties.Text" xml:space="preserve">
+    <value>Preisgruppeneigenschaften</value>
+  </data>
+  <data name="PriceGroupPricing.Text" xml:space="preserve">
+    <value>Preise für Preisgruppen</value>
+  </data>
 </root>

@@ -7,7 +7,8 @@
     <div class="content-picker-search-results" ng-hide="nrOfResults == 0 || nrOfResults == -1 || showSpinner">
         <div ng-repeat="searchResult in result" data-ng-click="searchResultClick(searchResult)" data-ng-class="treeNodeLinkClasses(searchResult)" class="content-picker-search-result">
             <input type="checkbox" ng-click="checkboxClicked(searchResult)" ng-show="showCheckBoxForNode(searchResult)" ng-checked="isSelectedCheckbox(searchResult)" id="{{searchResult.nodeType}}_{{searchResult.id}}" name="selected_tree_values" value="{{searchResult.nodeType}}_{{searchResult.id}}" class="content-picker-search-result-checkbox" />
-            <img ng-src="{{baseCommerceImagesUrl}}{{searchResult.icon}}" ng-hide="searchResult.icon == null || showSpinner" class="content-picker-search-result-icon" />
+            <i ng-hide="searchResult.icon == null || searchResult.icon.indexOf('.') > -1 || showSpinner" class="{{searchResult.icon}}"></i>
+            <img ng-src="{{baseCommerceImagesUrl}}{{searchResult.icon}}" ng-hide="searchResult.icon == null || searchResult.icon.indexOf('.') == -1 || showSpinner" class="content-picker-search-result-icon" />
             <span class="content-picker-search-result-text">{{searchResult.name}}</span>
         </div>
     </div>

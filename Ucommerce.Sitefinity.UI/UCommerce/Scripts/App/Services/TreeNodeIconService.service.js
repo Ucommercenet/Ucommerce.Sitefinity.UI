@@ -47,7 +47,8 @@
             }
           }
         }
-        if (nodeIconRequest.shell == 'Umbraco7') {
+        if (nodeIconRequest.shell == 'Umbraco7' ||
+            nodeIconRequest.shell == 'Umbraco8') {
           var lowerCaseIcon = nodeIconRequest.icon.toLowerCase()
           if (nodeIconRequest.iconFolder == 'uCommerce') {
             return {

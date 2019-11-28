@@ -3,6 +3,7 @@
 
 <commerce:ValidationSummary runat="server" />
 <div class="propertyPane leftAligned" >
+    <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="PaymentMethodAccess" /></h2>
     <div>
         <div class="propertyItem">
             <div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="ProductCatalogGroups" /></div>

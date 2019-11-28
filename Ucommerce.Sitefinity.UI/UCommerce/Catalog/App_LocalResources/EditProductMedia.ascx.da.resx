@@ -123,4 +123,7 @@
   <data name="ThumbnailImage.Text" xml:space="preserve">
     <value>Miniaturebillede</value>
   </data>
+  <data name="ProductCustomMedia.Text" xml:space="preserve">
+    <value>Brugerdefinerede Medier</value>
+  </data>
 </root>

@@ -5,6 +5,7 @@
 <commerce:ValidationSummary runat="server" />
 
 <div class="propertyPane">
+	<h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="DataTypeDefinition" /></h2>
     <div class="propertyItem">
 		<div class="propertyItemHeader">Definition</div>
 		<div class="propertyItemContent">

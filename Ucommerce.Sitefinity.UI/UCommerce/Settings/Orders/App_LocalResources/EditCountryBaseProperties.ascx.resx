@@ -129,4 +129,7 @@
   <data name="NativeNameProperty.Text" xml:space="preserve">
     <value>Native Name</value>
   </data>
+  <data name="CountryProperties.Text" xml:space="preserve">
+    <value>Country Properties</value>
+  </data>
 </root>

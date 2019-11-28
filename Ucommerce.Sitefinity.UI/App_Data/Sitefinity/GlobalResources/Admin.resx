@@ -631,7 +631,7 @@
     <value>Export Products</value>
   </data>
   <data name="export" xml:space="preserve">
-    <value>Export</value>
+    <value>Export Products</value>
   </data>
   <data name="menu_productcatalog_dashboard" xml:space="preserve">
     <value>Dashboard</value>
@@ -656,5 +656,8 @@
   </data>
   <data name="menu_catalogs_root" xml:space="preserve">
     <value>Catalogs</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
 </root>

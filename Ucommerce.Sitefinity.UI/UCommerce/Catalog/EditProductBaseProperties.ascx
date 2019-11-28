@@ -23,13 +23,13 @@
     <div class="propertyItem">
         <div class="propertyItemHeader"><asp:Localize ID="Localize7" runat="server" meta:resourceKey="DisplayOnSite" /></div>
         <div class="propertyItemContent">
-            <asp:CheckBox runat="server" ID="DisplayOnWebSiteCheckBox" Checked="<%# View.Product.DisplayOnSite %>" />
+            <asp:CheckBox runat="server" ID="DisplayOnWebSiteCheckBox" class="ucommerce-toggle-check-box" Checked="<%# View.Product.DisplayOnSite %>" />
         </div>
     </div>
     <div class="propertyItem">
         <div class="propertyItemHeader"><asp:Localize ID="Localize8" runat="server" meta:resourceKey="AllowOrdering" /></div>
         <div class="propertyItemContent">
-             <asp:CheckBox runat="server" ID="AllowOrderingCheckBox" Checked="<%# View.Product.AllowOrdering %>" />
+             <asp:CheckBox runat="server" ID="AllowOrderingCheckBox" class="ucommerce-toggle-check-box" Checked="<%# View.Product.AllowOrdering %>" />
         </div>
     </div>
     <div class="propertyPaneFooter"></div>

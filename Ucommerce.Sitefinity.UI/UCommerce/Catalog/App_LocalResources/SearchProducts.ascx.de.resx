@@ -165,4 +165,7 @@
 	<data name="VariantSkuNumber.Text" xml:space="preserve">
 		<value>Varianten-SKU</value>
 	</data>
+	<data name="ProductSearch.Text" xml:space="preserve">
+    <value>Produkt Suche</value>
+  </data>
 </root>

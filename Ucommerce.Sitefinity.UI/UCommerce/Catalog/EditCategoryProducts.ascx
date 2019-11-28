@@ -1,6 +1,6 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditCategoryProducts.ascx.cs" Inherits="UCommerce.Web.UI.Catalog.EditCategoryProducts" %>
 
-<div class="propertyPane leftAligned">
+<div class="propertyPane leftAligned" data-role="productsInCategory">
     <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourcekey="ProductsInCategory"></asp:Localize></h2>
     <asp:Repeater runat="server" ID="ProductRepeater" EnableViewState="false">
         <HeaderTemplate>
@@ -46,7 +46,12 @@
                     "sSearch": "Start typing to search for products"
                 },
 			    // disable initial sort
-			    "aaSorting": []
+                "aaSorting": [],
+                "fnInitComplete": function(oSettings, json) {
+                    $('#productTable_filter > label > input[type=text]').attr('placeholder', 'Type to search...');
+                    $('#productTable_filter > label').append('<i class="icon icon-search"></i>');
+                    $('div[data-role="productsInCategory"]').parent().parent().addClass('position-relative');
+                }
 			}
 		);
     });

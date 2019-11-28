@@ -9,12 +9,17 @@
             {
                 "bPaginate": false,
                 // disable initial sort
-                "aaSorting": []
+                "aaSorting": [],
+                "fnInitComplete": function (oSettings, json) {
+                    $('#productTable_filter > label > input[type=text]').attr('placeholder', 'Type to search...');
+                    $('#productTable_filter > label').append('<i class="icon icon-search"></i>');
+                }
             }
         );
     });		
 </script>
 <div class="propertyPane">
+	 <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="ProductSearch" /></h2>
     <commerce:propertypanel runat="server" meta:resourcekey="SkuNumber">
 		<asp:TextBox runat="server" ID="ProductSkuNumber" CssClass="mediumWidth" />        
 	</commerce:propertypanel>
