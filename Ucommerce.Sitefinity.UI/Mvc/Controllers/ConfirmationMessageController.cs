@@ -2,10 +2,13 @@
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
+    /// <summary>
+    /// The controller class for the Confirmation Message MVC widget.
+    /// </summary>
     [ControllerToolboxItem(Name = "uConfirmationMessage_MVC", Title = "Confirmation Message", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnConfirmationMessage sfMvcIcn")]
     public class ConfirmationMessageController : Controller, IPersonalizable
     {

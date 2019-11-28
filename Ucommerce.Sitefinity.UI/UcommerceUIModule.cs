@@ -17,12 +17,14 @@ using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Publishing;
 using Telerik.Sitefinity.Services;
-using UCommerce.Sitefinity.UI.Mvc.Filters;
-using UCommerce.Sitefinity.UI.Mvc.Infrastructure;
+using UCommerce.Sitefinity.UI.Mvc;
 using UCommerce.Sitefinity.UI.Pages;
 
 namespace UCommerce.Sitefinity.UI
 {
+    /// <summary>
+    /// The UCommerce module class.  
+    /// </summary>
     public class UCommerceUIModule : ModuleBase
     {
         public override Guid LandingPageId

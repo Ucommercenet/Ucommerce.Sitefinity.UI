@@ -5,7 +5,7 @@ using System.Web;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using Telerik.Sitefinity.Web.DataResolving;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.Api;
@@ -15,6 +15,9 @@ using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The Model class of the Cart MVC widget.
+    /// </summary>
     public class CartModel : ICartModel
     {
         private Guid productDetailsPageId;

@@ -3,11 +3,14 @@ using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
+    /// <summary>
+    /// The controller class for the Payment Picker MVC widget.
+    /// </summary>
     [ControllerToolboxItem(Name = "uPaymentPicker_MVC", Title = "Payment Picker", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnPaymentPicker sfMvcIcn")]
     public class PaymentPickerController : Controller, IPersonalizable
     {

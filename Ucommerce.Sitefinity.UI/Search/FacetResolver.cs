@@ -6,6 +6,9 @@ using UCommerce.Search.Facets;
 
 namespace UCommerce.Sitefinity.UI.Search
 {
+    /// <summary>
+    /// Class that contains functionality for <see cref="Facet"/> retrieval.
+    /// </summary>
     internal class FacetResolver
     {
         public FacetResolver(IList<string> queryStringBlackList)

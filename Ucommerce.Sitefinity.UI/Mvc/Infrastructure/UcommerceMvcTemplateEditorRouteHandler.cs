@@ -9,8 +9,11 @@ using System.Web.UI.HtmlControls;
 using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Routing;
 using Telerik.Sitefinity.Services;
 
-namespace UCommerce.Sitefinity.UI.Mvc.Infrastructure
+namespace UCommerce.Sitefinity.UI.Mvc
 {
+    /// <summary>
+    /// Extended version of the TemplateEditorRouteHandler that injects logic handling MVC layout files. It is used to register the custom icons associated with the UCommerce widgets.
+    /// </summary>
     public class UCommerceMvcTemplateEditorRouteHandler: MvcTemplateEditorRouteHandler
     {
         protected override void ApplyLayoutsAndControls(Page page, RequestContext requestContext)

@@ -1,8 +1,11 @@
 ﻿namespace UCommerce.Sitefinity.UI.Api.Model
 {
-    public class AddToBasketModel
+    /// <summary>
+    /// DTO class used for adding item to basket.
+    /// </summary>
+    public class AddToBasketDTO
     {
-        public AddToBasketModel()
+        public AddToBasketDTO()
         {
         }
 

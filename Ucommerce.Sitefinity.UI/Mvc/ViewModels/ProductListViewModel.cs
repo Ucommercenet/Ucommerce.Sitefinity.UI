@@ -2,6 +2,9 @@
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used for visualizing the information assocaited with list of products.
+    /// </summary>
     public class ProductListViewModel
     {
         public ProductListViewModel()
@@ -11,7 +14,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 
         public string CssClass { get; set; }
 
-        public IList<ProductViewModel> Products { get; set; }
+        public IList<ProductDTO> Products { get; set; }
 
         public int? TotalPagesCount { get; set; }
 

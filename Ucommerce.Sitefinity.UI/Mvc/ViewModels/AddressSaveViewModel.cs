@@ -1,5 +1,8 @@
 ﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class vizualized after saving the information related to the addresses associated with an order.
+    /// </summary>
     public class AddressSaveViewModel
     {
         public AddressSaveViewModel()

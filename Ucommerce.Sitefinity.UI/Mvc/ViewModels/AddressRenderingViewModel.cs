@@ -3,6 +3,9 @@ using System.Web.Mvc;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used to list the information related to the addresses associated with an order.
+    /// </summary>
     public class AddressRenderingViewModel
     {
         public AddressRenderingViewModel()

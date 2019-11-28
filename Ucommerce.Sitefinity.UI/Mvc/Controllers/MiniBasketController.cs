@@ -3,24 +3,25 @@ using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
+    /// <summary>
+    /// The controller class for the Mini Basket MVC widget.
+    /// </summary>
     [ControllerToolboxItem(Name = "uMiniBasket_MVC", Title = "Mini Basket", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnMiniBasket sfMvcIcn")]
     public class MiniBasketController : Controller, IPersonalizable
     {
         public Guid? CartPageId { get; set; }
         public string TemplateName { get; set; } = "Index";
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
-        private readonly IMiniBasketService _miniBasketService;
 
-        public MiniBasketController(IMiniBasketService miniBasketService)
+        public MiniBasketController()
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-            _miniBasketService = miniBasketService;
         }
 
         public ActionResult Index()
@@ -48,7 +49,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         [HttpGet]
         public ActionResult Refresh()
         {
-            return Json(_miniBasketService.Refresh(), JsonRequestBehavior.AllowGet);
+            var miniBasketModel = ResolveModel();
+            return Json(miniBasketModel.Refresh(), JsonRequestBehavior.AllowGet);
         }
 
         protected override void HandleUnknownAction(string actionName)

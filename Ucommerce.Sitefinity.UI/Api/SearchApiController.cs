@@ -14,6 +14,9 @@ using Product = UCommerce.Documents.Product;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
+    /// <summary>
+    /// API Controller exposing endpoints related to search.
+    /// </summary>
     public class SearchApiController : ApiController
     {
         private readonly IRepository<UCommerce.EntitiesV2.Product> productRepository;
@@ -25,7 +28,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
         [Route(RouteConstants.SEARCH_ROUTE_VALUE)]
         [HttpPost]
-        public IHttpActionResult FullText(FullTextModel model)
+        public IHttpActionResult FullText(FullTextDTO model)
         {
             var searchResult = UCommerce.Api.SearchLibrary.GetProductsByName(model.SearchQuery);
 
@@ -34,16 +37,16 @@ namespace UCommerce.Sitefinity.UI.Api
 
         [Route(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE)]
         [HttpPost]
-        public IHttpActionResult Suggestions(FullTextModel model)
+        public IHttpActionResult Suggestions(FullTextDTO model)
         {
             var searchResult = UCommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
 
             return Ok(searchResult);
         }
 
-        private IList<FullTextSearchResultModel> ConvertToFullTextSearchResultModel(IList<Product> products, Guid? productDetailsPageId)
+        private IList<FullTextSearchResultDTO> ConvertToFullTextSearchResultModel(IList<Product> products, Guid? productDetailsPageId)
         {
-            var fullTextSearchResultModels = new List<FullTextSearchResultModel>();
+            var fullTextSearchResultModels = new List<FullTextSearchResultDTO>();
 
             var currency = UCommerce.Runtime.SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency;
             var productsPrices = UCommerce.Api.CatalogLibrary.CalculatePrice(products.Select(x => x.Guid).ToList()).Items;
@@ -90,7 +93,7 @@ namespace UCommerce.Sitefinity.UI.Api
                     detailsPageUrl = CatalogLibrary.GetNiceUrlForProduct(entityProduct);
                 }
 
-                var fullTestSearchResultModel = new FullTextSearchResultModel()
+                var fullTestSearchResultModel = new FullTextSearchResultDTO()
                 {
                     ThumbnailImageUrl = product.ThumbnailImageUrl,
                     Name = product.Name,

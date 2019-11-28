@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace UCommerce.Sitefinity.UI.Api.Model
 {
-    public class OrderLineModel
+    /// <summary>
+    /// DTO class used for storing order item information.
+    /// </summary>
+    public class OrderLineDTO
     {
         public string ProductUrl { get; set; }
 

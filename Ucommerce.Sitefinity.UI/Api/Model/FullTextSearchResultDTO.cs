@@ -1,6 +1,9 @@
 ﻿namespace UCommerce.Sitefinity.UI.Api.Model
 {
-    public class FullTextSearchResultModel
+    /// <summary>
+    /// DTO class used for storing search result.
+    /// </summary>
+    public class FullTextSearchResultDTO
     {
         public string ThumbnailImageUrl { get; set; }
 

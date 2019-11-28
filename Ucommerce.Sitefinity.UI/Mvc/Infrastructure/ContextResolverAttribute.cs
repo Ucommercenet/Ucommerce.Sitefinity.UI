@@ -5,9 +5,12 @@ using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using UCommerce.Runtime;
 
-namespace UCommerce.Sitefinity.UI.Mvc.Filters
+namespace UCommerce.Sitefinity.UI.Mvc
 {
-    internal class ContextResolverAttribute : ActionFilterAttribute, IActionFilter
+    /// <summary>
+    /// Action attribute class that handles the initilization of the Catalog Context.
+    /// </summary>
+    public class ContextResolverAttribute : ActionFilterAttribute, IActionFilter
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

@@ -12,6 +12,9 @@ using UCommerce.Runtime;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
+    /// <summary>
+    /// API Controller exposing endpoints for managing the basket.
+    /// </summary>
     public class BasketController : ApiController
     {
         [Route(RouteConstants.GET_BASKET_ROUTE_VALUE)]
@@ -20,7 +23,7 @@ namespace UCommerce.Sitefinity.UI.Api
         {
             if (!TransactionLibrary.HasBasket())
             {
-                return Json(new BasketModel());
+                return Json(new BasketDTO());
             }
 
             return Json(this.GetBasketModel());
@@ -28,7 +31,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
         [Route(RouteConstants.ADD_VOUCHER_ROUTE_VALUE)]
         [HttpPost]
-        public IHttpActionResult AddVoucher(AddVoucherModel model)
+        public IHttpActionResult AddVoucher(AddVoucherDTO model)
         {
             var voucherAdded = MarketingLibrary.AddVoucher(model.VoucherCode);
             TransactionLibrary.ExecuteBasketPipeline();
@@ -37,7 +40,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
         [Route(RouteConstants.PRICE_GROUP_ROUTE_VALUE)]
         [HttpPut]
-        public IHttpActionResult ChangePriceGroup(ChangePriceGroupModel model)
+        public IHttpActionResult ChangePriceGroup(ChangePriceGroupDTO model)
         {
             var priceGroupRepository = ObjectFactory.Instance.Resolve<IRepository<PriceGroup>>();
             CatalogLibrary.ChangePriceGroup(priceGroupRepository.Get(model.PriceGroupId));
@@ -47,7 +50,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
         [Route(RouteConstants.UPDATE_LINE_ITEM_ROUTE_VALUE)]
         [HttpPost]
-        public IHttpActionResult UpdateLineItem(UpdateLineItemModel model)
+        public IHttpActionResult UpdateLineItem(UpdateLineItemDTO model)
         {
             TransactionLibrary.UpdateLineItem(model.OrderlineId, model.NewQuantity);
             TransactionLibrary.ExecuteBasketPipeline();
@@ -57,7 +60,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
         [Route(RouteConstants.ADD_TO_BASKET_ROUTE_VALUE)]
         [HttpPost]
-        public IHttpActionResult Add(AddToBasketModel model)
+        public IHttpActionResult Add(AddToBasketDTO model)
         {
             if (model.VariantSku == null)
             {
@@ -69,9 +72,9 @@ namespace UCommerce.Sitefinity.UI.Api
             return Json(this.GetBasketModel());
         }
 
-        private BasketModel GetBasketModel()
+        private BasketDTO GetBasketModel()
         {
-            var model = new BasketModel();
+            var model = new BasketDTO();
             var basket = TransactionLibrary.GetBasket(false).PurchaseOrder;
             var imageService = ObjectFactory.Instance.Resolve<IImageService>();
             var urlService = ObjectFactory.Instance.Resolve<IUrlService>();
@@ -90,7 +93,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
             foreach (var discount in basket.Discounts)
             {
-                model.Discounts.Add(new DiscountModel
+                model.Discounts.Add(new DiscountDTO
                 {
                     Name = discount.CampaignItemName,
                     Value = new Money(discount.AmountOffTotal, basket.BillingCurrency).ToString(),
@@ -109,9 +112,9 @@ namespace UCommerce.Sitefinity.UI.Api
             return model;
         }
 
-        private OrderLineModel MapOrderLine(OrderLine orderLine)
+        private OrderLineDTO MapOrderLine(OrderLine orderLine)
         {
-            var orderLineViewModel = new OrderLineModel
+            var orderLineViewModel = new OrderLineDTO
             {
                 ProductName = orderLine.ProductName,
                 Quantity = orderLine.Quantity,

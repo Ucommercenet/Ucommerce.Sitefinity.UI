@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.Infrastructure;
@@ -9,6 +9,9 @@ using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The Model class of the Mini Basket MVC widget.
+    /// </summary>
     public class MiniBasketModel : IMiniBasketModel
     {
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
@@ -29,6 +32,33 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             viewModel.Total = GetBasketTotal();
             viewModel.RefreshUrl = refreshUrl;
             viewModel.CartPageUrl = GetCartPageAbsoluteUrl(cartPageId);
+
+            return viewModel;
+        }
+
+        public virtual MiniBasketRefreshViewModel Refresh()
+        {
+            var viewModel = new MiniBasketRefreshViewModel
+            {
+                IsEmpty = true
+            };
+
+            if (!_transactionLibraryInternal.HasBasket())
+            {
+                return viewModel;
+            }
+
+            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+
+            var quantity = purchaseOrder.OrderLines.Sum(x => x.Quantity);
+
+            var total = purchaseOrder.OrderTotal.HasValue
+                ? new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency)
+                : new Money(0, purchaseOrder.BillingCurrency);
+
+            viewModel.NumberOfItems = quantity.ToString();
+            viewModel.IsEmpty = quantity == 0;
+            viewModel.Total = total.ToString();
 
             return viewModel;
         }

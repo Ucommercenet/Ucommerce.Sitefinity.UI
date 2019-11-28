@@ -9,8 +9,11 @@ using System.Web.UI.HtmlControls;
 using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Routing;
 using Telerik.Sitefinity.Services;
 
-namespace UCommerce.Sitefinity.UI.Mvc.Infrastructure
+namespace UCommerce.Sitefinity.UI.Mvc
 {
+    /// <summary>
+    /// Represents an extended route handler for Sitefinity's page editor that injects MVC specific logic. It is used to register the custom icons associated with the UCommerce widgets.
+    /// </summary>
     public class UCommerceMvcPageEditorRouteHandler : MvcPageEditorRouteHandler
     {
         protected override void ApplyLayoutsAndControls(Page page, RequestContext requestContext)

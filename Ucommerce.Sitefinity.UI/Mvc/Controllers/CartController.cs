@@ -3,13 +3,16 @@ using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
+    /// <summary>
+    /// The controller class for the Cart MVC widget.
+    /// </summary>
     [ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnCart sfMvcIcn")]
     public class CartController : Controller, IPersonalizable
     {
@@ -18,12 +21,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         public string TemplateName { get; set; } = "Index";
 
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
-        private readonly IMiniBasketService _miniBasketService;
 
-        public CartController(IMiniBasketService miniBasketService)
+        public CartController()
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-            _miniBasketService = miniBasketService;
         }
 
         public ActionResult Index()
@@ -58,9 +59,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             _transactionLibraryInternal.ExecuteBasketPipeline();
             var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
+            var miniBasketModel = ResolveMiniBasketModel();
+
             return Json(new
             {
-                MiniBasketRefresh = _miniBasketService.Refresh(),
+                MiniBasketRefresh = miniBasketModel.Refresh(),
                 orderlineId,
                 vm.OrderTotal,
                 vm.DiscountTotal,
@@ -84,9 +87,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             var updatedVM = model.Update(updateModel);
 
+            var miniBasketModel = ResolveMiniBasketModel();
+
             return Json(new
             {
-                MiniBasketRefresh = _miniBasketService.Refresh(),
+                MiniBasketRefresh = miniBasketModel.Refresh(),
                 updatedVM.OrderTotal,
                 updatedVM.DiscountTotal,
                 updatedVM.TaxTotal,
@@ -108,6 +113,18 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 {
                     nextStepId = this.NextStepId,
                     productDetailsPageId = this.ProductDetailsPageId
+                });
+
+            return model;
+        }
+
+        private IMiniBasketModel ResolveMiniBasketModel()
+        {
+            var container = UCommerceUIModule.Container;
+            var model = container.Resolve<IMiniBasketModel>(
+                new
+                {
+                    cartPageId = Guid.Empty
                 });
 
             return model;

@@ -1,6 +1,9 @@
 ﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
-    public class ProductViewModel
+    /// <summary>
+    /// DTO class used for storing the information assocaited with a product.
+    /// </summary>
+    public class ProductDTO
     {
         public string Sku { get; set; }
 

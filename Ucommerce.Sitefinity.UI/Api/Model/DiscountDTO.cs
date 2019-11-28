@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace UCommerce.Sitefinity.UI.Api.Model
 {
-    public class DiscountModel
+    /// <summary>
+    /// DTO class used for storing a discount information.
+    /// </summary>
+    public class DiscountDTO
     {
         public string Name { get; set; }
 

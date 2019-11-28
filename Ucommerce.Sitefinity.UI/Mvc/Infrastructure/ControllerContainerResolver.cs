@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers.Attributes;
 
-namespace UCommerce.Sitefinity.UI.Mvc.Infrastructure
+namespace UCommerce.Sitefinity.UI.Mvc
 {
     /// <summary>
     /// This class contains logic for locating assemblies containing MVC widget controllers.
     /// </summary>
-    internal class ControllerContainerResolver
+    public class ControllerContainerResolver
     {
         #region Public members
 

@@ -1,5 +1,8 @@
 ﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// DTO class used for storing the information assocaited with an item in an order.
+    /// </summary>
     public class PreviewOrderLine
     {
         public string Total { get; set; }

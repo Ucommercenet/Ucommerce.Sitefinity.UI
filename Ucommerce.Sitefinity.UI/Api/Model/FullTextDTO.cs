@@ -2,7 +2,10 @@
 
 namespace UCommerce.Sitefinity.UI.Api.Model
 {
-    public class FullTextModel
+    /// <summary>
+    /// DTO class used for passing search arguments.
+    /// </summary>
+    public class FullTextDTO
     {
         public string SearchQuery { get; set; }
 

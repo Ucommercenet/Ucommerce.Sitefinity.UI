@@ -2,6 +2,9 @@
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used for visualizing summary information regarding an order.
+    /// </summary>
     public class MiniBasketRenderingViewModel
     {
         public int NumberOfItems { get; set; }

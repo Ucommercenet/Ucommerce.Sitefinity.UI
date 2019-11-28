@@ -2,7 +2,10 @@
 
 namespace UCommerce.Sitefinity.UI.Api.Model
 {
-    public class ProductPricesViewModel
+    /// <summary>
+    /// DTO class used for storing product pricing information.
+    /// </summary>
+    public class ProductPricesDTO
     {
         public Guid ProductGuid { get; set; }
 

@@ -6,6 +6,9 @@ using Telerik.Sitefinity.Web;
 
 namespace UCommerce.Sitefinity.UI.Pages
 {
+    /// <summary>
+    /// Class that contains set of helper methods for URL retrieval.
+    /// </summary>
     internal class UrlResolver
     {
         public static string GetAbsoluteUrl(string relativeUrl)

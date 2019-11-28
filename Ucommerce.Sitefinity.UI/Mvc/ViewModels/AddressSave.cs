@@ -2,6 +2,9 @@
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// DTO class used to persist information related to single address.
+    /// </summary>
     public class AddressSave
     {
         [Required(ErrorMessage = "First name is required")]

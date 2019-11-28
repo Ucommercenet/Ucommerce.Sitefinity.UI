@@ -1,5 +1,8 @@
 ﻿namespace UCommerce.Sitefinity.UI.Constants
 {
+    /// <summary>
+    /// This class contains the route constants used by the UCommerce UI Module. 
+    /// </summary>
     internal class RouteConstants
     {
         public const string SEARCH_ROUTE_NAME = "productSearchUrl";

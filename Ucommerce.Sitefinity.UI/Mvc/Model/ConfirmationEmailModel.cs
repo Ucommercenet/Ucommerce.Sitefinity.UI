@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Telerik.Sitefinity.Abstractions;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.EntitiesV2;
@@ -10,6 +10,9 @@ using UCommerce.Infrastructure;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The Model class of the Confirmation Email MVC widget.
+    /// </summary>
     public class ConfirmationEmailModel: IConfirmationEmailModel
     {
         private readonly IRepository<PurchaseOrder> _purchaseOrderRepository;

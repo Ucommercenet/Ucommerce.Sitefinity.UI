@@ -4,6 +4,9 @@ using UCommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used for visualizing the detailed information assocaited with a product.
+    /// </summary>
     public class ProductDetailViewModel
     {
         public ProductDetailViewModel()

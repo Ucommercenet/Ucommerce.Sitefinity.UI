@@ -18,6 +18,9 @@ using UCommerce.Sitefinity.UI.Mvc.Controllers;
 
 namespace UCommerce.Sitefinity.UI.Pages
 {
+    /// <summary>
+    /// Class that contains set of extension methods that complement the <see cref="HttpContext"/> class.
+    /// </summary>
     internal static class HttpContextExtensions
     {
         public static string GetValue<T>(this Dictionary<string, string> context, Expression<Func<T, object>> expression)

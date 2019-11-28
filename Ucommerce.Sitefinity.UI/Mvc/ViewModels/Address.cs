@@ -1,5 +1,8 @@
 ﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// DTO class that contains information related to single address.
+    /// </summary>
     public class Address
     {
         public string FirstName { get; set; }

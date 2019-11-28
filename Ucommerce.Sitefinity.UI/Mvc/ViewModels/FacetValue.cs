@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// DTO class used for storing the details of a facet.
+    /// </summary>
     public class FacetValue
     {
         public FacetValue(string name, int hits)

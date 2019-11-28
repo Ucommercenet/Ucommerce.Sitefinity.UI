@@ -2,6 +2,9 @@
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class vizualized after saving the information related to the basket.
+    /// </summary>
     public class CartUpdateBasketViewModel
     {
         public CartUpdateBasketViewModel()
