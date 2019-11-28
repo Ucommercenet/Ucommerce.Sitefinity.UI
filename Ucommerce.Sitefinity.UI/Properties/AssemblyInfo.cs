@@ -3,16 +3,16 @@ using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.UI;
 using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers.Attributes;
-using Ucommerce.Sitefinity.UI.App_Start;
+using UCommerce.Sitefinity.UI.App_Start;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ucommerce.Sitefinity.UI")]
+[assembly: AssemblyTitle("UCommerce.Sitefinity.UI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ucommerce")]
-[assembly: AssemblyProduct("Ucommerce.Sitefinity.UI")]
+[assembly: AssemblyCompany("UCommerce")]
+[assembly: AssemblyProduct("UCommerce.Sitefinity.UI")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -42,4 +42,4 @@ using Ucommerce.Sitefinity.UI.App_Start;
 [assembly: ResourcePackage]
 [assembly: PreApplicationStartMethod(typeof(Startup), "OnApplicationStart")]
 
-[assembly: WebResource("Ucommerce.Sitefinity.UI.assets.dist.css.ucommerce-backend.css", "text/css")]
+[assembly: WebResource("UCommerce.Sitefinity.UI.assets.dist.css.ucommerce-backend.css", "text/css")]

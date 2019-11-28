@@ -4,7 +4,7 @@ using System.Web;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 
-namespace Ucommerce.Sitefinity.UI.Pages
+namespace UCommerce.Sitefinity.UI.Pages
 {
     internal class UrlResolver
     {

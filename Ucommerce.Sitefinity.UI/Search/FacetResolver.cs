@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
-using Ucommerce.Sitefinity.UI.Pages;
+using UCommerce.Sitefinity.UI.Pages;
 using UCommerce.Search.Facets;
 
-namespace Ucommerce.Sitefinity.UI.Search
+namespace UCommerce.Sitefinity.UI.Search
 {
     internal class FacetResolver
     {

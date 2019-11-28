@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces.Impl
+namespace UCommerce.Sitefinity.UI.Mvc.Model.Interfaces.Impl
 {
     class MiniBasketService : IMiniBasketService
     {

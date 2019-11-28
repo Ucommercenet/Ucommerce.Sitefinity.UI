@@ -4,13 +4,13 @@ using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Mvc.Model;
-using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using UCommerce.EntitiesV2;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
+namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uConfirmationEmail_MVC", Title = "Confirmation Email", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnConfirmationEmail sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uConfirmationEmail_MVC", Title = "Confirmation Email", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnConfirmationEmail sfMvcIcn")]
     public class ConfirmationEmailController : Controller, IPersonalizable
     {
         public string TemplateName { get; set; } = "Index";
@@ -55,7 +55,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public IConfirmationEmailModel ResolveModel()
         {
-            var container = UcommerceUIModule.Container;
+            var container = UCommerceUIModule.Container;
             var model = container.Resolve<IConfirmationEmailModel>();
 
             return model;

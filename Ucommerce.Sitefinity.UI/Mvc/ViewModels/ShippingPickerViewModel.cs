@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
+namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     public class ShippingPickerViewModel
     {

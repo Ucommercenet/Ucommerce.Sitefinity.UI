@@ -1,9 +1,9 @@
 ﻿using System;
 using UCommerce.EntitiesV2;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using System.Collections.Generic;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model
+namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     public interface IProductModel
     {

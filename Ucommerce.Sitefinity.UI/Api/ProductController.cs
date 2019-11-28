@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Ucommerce.Sitefinity.UI.Api.Model;
+using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce;
 using UCommerce.Api;
 using UCommerce.Catalog.Models;
@@ -10,7 +10,7 @@ using UCommerce.EntitiesV2;
 using UCommerce.Pipelines;
 using UCommerce.Runtime;
 
-namespace Ucommerce.Sitefinity.UI.Api
+namespace UCommerce.Sitefinity.UI.Api
 {
     [RoutePrefix("ProductApi")]
     public class ProductController : ApiController

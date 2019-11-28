@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Ucommerce.Sitefinity.UI.Api.Model;
-using Ucommerce.Sitefinity.UI.Constants;
-using Ucommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.Sitefinity.UI.Api.Model;
+using UCommerce.Sitefinity.UI.Constants;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
@@ -12,7 +12,7 @@ using UCommerce.Infrastructure;
 using UCommerce.Search;
 using Product = UCommerce.Documents.Product;
 
-namespace Ucommerce.Sitefinity.UI.Api
+namespace UCommerce.Sitefinity.UI.Api
 {
     public class SearchApiController : ApiController
     {

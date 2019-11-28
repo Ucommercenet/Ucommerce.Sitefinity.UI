@@ -2,11 +2,11 @@
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using System.Web.Mvc;
-using Ucommerce.Sitefinity.UI.Mvc.Model;
-using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
-using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces.Impl;
+using UCommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces.Impl;
 
-namespace Ucommerce.Sitefinity.UI.DI
+namespace UCommerce.Sitefinity.UI.DI
 {
     public class WindsorInstaller : IWindsorInstaller
     {

@@ -14,9 +14,9 @@ using Telerik.Sitefinity.Modules.Pages;
 using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Security;
 using Telerik.Sitefinity.Web;
-using Ucommerce.Sitefinity.UI.Mvc.Controllers;
+using UCommerce.Sitefinity.UI.Mvc.Controllers;
 
-namespace Ucommerce.Sitefinity.UI.Pages
+namespace UCommerce.Sitefinity.UI.Pages
 {
     internal static class HttpContextExtensions
     {
@@ -200,6 +200,6 @@ namespace Ucommerce.Sitefinity.UI.Pages
             return result;
         }
 
-        public const string PAGE_CONTEXT_FIELD_NAME = "UcommerceContext";
+        public const string PAGE_CONTEXT_FIELD_NAME = "UCommerceContext";
     }
 }

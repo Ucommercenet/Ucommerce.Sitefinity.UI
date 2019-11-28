@@ -6,10 +6,10 @@ using System.Web;
 using Telerik.Sitefinity;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
-using Ucommerce.Sitefinity.UI.Constants;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
-using Ucommerce.Sitefinity.UI.Pages;
-using Ucommerce.Sitefinity.UI.Search;
+using UCommerce.Sitefinity.UI.Constants;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Pages;
+using UCommerce.Sitefinity.UI.Search;
 using UCommerce;
 using UCommerce.Api;
 using UCommerce.Content;
@@ -18,7 +18,7 @@ using UCommerce.Extensions;
 using UCommerce.Runtime;
 using UCommerce.Search;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model
+namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     internal class ProductModel : IProductModel
     {

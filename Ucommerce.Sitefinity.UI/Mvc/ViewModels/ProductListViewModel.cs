@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
+namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     public class ProductListViewModel
     {

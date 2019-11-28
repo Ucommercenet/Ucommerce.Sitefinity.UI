@@ -6,15 +6,15 @@ using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
-using Ucommerce.Sitefinity.UI.Constants;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
-using Ucommerce.Sitefinity.UI.Pages;
+using UCommerce.Sitefinity.UI.Constants;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Pages;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
 using UCommerce.Extensions;
 using UCommerce.Runtime;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model
+namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     internal class CategoryModel : ICategoryModel
     {

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Http;
-using Ucommerce.Sitefinity.UI.Api.Model;
-using Ucommerce.Sitefinity.UI.Constants;
+using UCommerce.Sitefinity.UI.Api.Model;
+using UCommerce.Sitefinity.UI.Constants;
 using UCommerce;
 using UCommerce.Api;
 using UCommerce.Catalog;
@@ -10,7 +10,7 @@ using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Runtime;
 
-namespace Ucommerce.Sitefinity.UI.Api
+namespace UCommerce.Sitefinity.UI.Api
 {
     public class BasketController : ApiController
     {

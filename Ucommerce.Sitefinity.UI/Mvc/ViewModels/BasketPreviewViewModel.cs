@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UCommerce.EntitiesV2;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
+namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     public class BasketPreviewViewModel
     {

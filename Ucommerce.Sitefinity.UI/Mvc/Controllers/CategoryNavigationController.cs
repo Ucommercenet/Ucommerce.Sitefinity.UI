@@ -3,12 +3,12 @@ using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Mvc.Model;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
+namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uCategoryNavigation_MVC", Title = "Category Navigation", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnCategoryNavigation sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uCategoryNavigation_MVC", Title = "Category Navigation", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnCategoryNavigation sfMvcIcn")]
 
     public class CategoryNavigationController : Controller, IPersonalizable
     {
@@ -50,7 +50,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             }
             catch (Exception ex)
             {
-                if (UcommerceUIModule.TryHandleSystemError(ex, out ActionResult actionResult))
+                if (UCommerceUIModule.TryHandleSystemError(ex, out ActionResult actionResult))
                 {
                     return actionResult;
                 }
@@ -68,7 +68,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         private ICategoryModel ResolveModel()
         {
-            var container = UcommerceUIModule.Container;
+            var container = UCommerceUIModule.Container;
             var model = container.Resolve<ICategoryModel>(
                 new
                 {
