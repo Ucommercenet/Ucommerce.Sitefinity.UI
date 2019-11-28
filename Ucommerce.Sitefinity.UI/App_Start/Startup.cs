@@ -14,10 +14,10 @@ using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using Telerik.Sitefinity.Web.Events;
-using Ucommerce.Sitefinity.UI.DI.Events;
-using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
+using UCommerce.Sitefinity.UI.DI.Events;
+using UCommerce.Sitefinity.UI.Mvc.Infrastructure;
 
-namespace Ucommerce.Sitefinity.UI.App_Start
+namespace UCommerce.Sitefinity.UI.App_Start
 {
     public static class Startup
     {
@@ -35,18 +35,18 @@ namespace Ucommerce.Sitefinity.UI.App_Start
         {
             if (e.CommandName == "RegisterRoutes")
             {
-                UcommerceUIModule.Register();
-                UcommerceUIModule.InitializeContainer();
+                UCommerceUIModule.Register();
+                UCommerceUIModule.InitializeContainer();
             }
         }
 
         private static void Bootstrapper_Bootstrapped(object sender, EventArgs e)
         {
-            UcommerceUIModule.RegisterControllerFactory();
+            UCommerceUIModule.RegisterControllerFactory();
 
             EventHub.Raise(new WindsorContainerInitializedEvent
             {
-                Container = UcommerceUIModule.Container
+                Container = UCommerceUIModule.Container
             });
 
             //Use the following to register the BundleConfig
@@ -54,8 +54,8 @@ namespace Ucommerce.Sitefinity.UI.App_Start
             BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
             BundleTable.EnableOptimizations = true;
 
-            ObjectFactory.Container.RegisterType<PageEditorRouteHandler, UcommerceMvcPageEditorRouteHandler>();
-            ObjectFactory.Container.RegisterType<TemplateEditorRouteHandler, UcommerceMvcTemplateEditorRouteHandler>();
+            ObjectFactory.Container.RegisterType<PageEditorRouteHandler, UCommerceMvcPageEditorRouteHandler>();
+            ObjectFactory.Container.RegisterType<TemplateEditorRouteHandler, UCommerceMvcTemplateEditorRouteHandler>();
         }
     }
 }

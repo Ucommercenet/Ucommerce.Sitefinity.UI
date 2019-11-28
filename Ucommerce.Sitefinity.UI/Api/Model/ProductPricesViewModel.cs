@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ucommerce.Sitefinity.UI.Api.Model
+namespace UCommerce.Sitefinity.UI.Api.Model
 {
     public class ProductPricesViewModel
     {

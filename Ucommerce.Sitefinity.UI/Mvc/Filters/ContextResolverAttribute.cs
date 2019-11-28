@@ -5,7 +5,7 @@ using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using UCommerce.Runtime;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Filters
+namespace UCommerce.Sitefinity.UI.Mvc.Filters
 {
     internal class ContextResolverAttribute : ActionFilterAttribute, IActionFilter
     {
@@ -89,6 +89,6 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Filters
             }
         }
 
-        private const string contextInitializedKey = "UcommerceContextInitialized";
+        private const string contextInitializedKey = "UCommerceContextInitialized";
     }
 }

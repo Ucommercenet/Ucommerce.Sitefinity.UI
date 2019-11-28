@@ -3,9 +3,9 @@ using System.Web.Mvc;
 using System.Web.WebPages;
 using RazorGenerator.Mvc;
 
-[assembly: WebActivatorEx.PostApplicationStartMethod(typeof(Ucommerce.Sitefinity.UI.RazorGeneratorMvcStart), "Start")]
+[assembly: WebActivatorEx.PostApplicationStartMethod(typeof(UCommerce.Sitefinity.UI.RazorGeneratorMvcStart), "Start")]
 
-namespace Ucommerce.Sitefinity.UI {
+namespace UCommerce.Sitefinity.UI {
     public static class RazorGeneratorMvcStart {
         public static void Start() {
             var engine = new PrecompiledMvcEngine(typeof(RazorGeneratorMvcStart).Assembly) {

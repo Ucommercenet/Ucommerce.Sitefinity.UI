@@ -5,15 +5,15 @@ using System.Web;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using Telerik.Sitefinity.Web.DataResolving;
-using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model
+namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     public class CartModel : ICartModel
     {
@@ -142,7 +142,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 return CatalogLibrary.GetNiceUrlForProduct(product);
             }
 
-            var baseUrl = Ucommerce.Sitefinity.UI.Pages.UrlResolver.GetPageNodeUrl(detailPageId);
+            var baseUrl = UCommerce.Sitefinity.UI.Pages.UrlResolver.GetPageNodeUrl(detailPageId);
 
             string catUrl;
             var productCategory = product.GetCategories().FirstOrDefault();
@@ -166,7 +166,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             }
             else
             {
-                url = Ucommerce.Sitefinity.UI.Pages.UrlResolver.GetAbsoluteUrl(relativeUrl);
+                url = UCommerce.Sitefinity.UI.Pages.UrlResolver.GetAbsoluteUrl(relativeUrl);
             }
 
             return url;

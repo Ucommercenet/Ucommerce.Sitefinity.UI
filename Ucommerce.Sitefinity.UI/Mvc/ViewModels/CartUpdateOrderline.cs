@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
+namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     public class CartUpdateOrderline
     {

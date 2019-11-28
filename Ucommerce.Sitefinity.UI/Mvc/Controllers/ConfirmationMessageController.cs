@@ -2,11 +2,11 @@
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
+namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uConfirmationMessage_MVC", Title = "Confirmation Message", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnConfirmationMessage sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uConfirmationMessage_MVC", Title = "Confirmation Message", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnConfirmationMessage sfMvcIcn")]
     public class ConfirmationMessageController : Controller, IPersonalizable
     {
         public string Headline { get; set; }
@@ -31,7 +31,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         public IConfirmationMessageModel ResolveModel()
         {
-            var container = UcommerceUIModule.Container;
+            var container = UCommerceUIModule.Container;
             var model = container.Resolve<IConfirmationMessageModel>();
 
             return model;

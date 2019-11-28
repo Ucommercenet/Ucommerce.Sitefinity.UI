@@ -7,8 +7,8 @@
     <ProjectGuid>{7FFD1A52-79B1-49F8-B155-2BEADBA87EE0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ucommerce.Sitefinity.UI</RootNamespace>
-    <AssemblyName>Ucommerce.Sitefinity.UI</AssemblyName>
+    <RootNamespace>UCommerce.Sitefinity.UI</RootNamespace>
+    <AssemblyName>UCommerce.Sitefinity.UI</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -279,8 +279,8 @@
     <Compile Include="Mvc\Controllers\ShippingPickerController.cs" />
     <Compile Include="Mvc\Filters\ContextResolverAttribute.cs" />
     <Compile Include="Mvc\Infrastructure\ControllerContainerResolver.cs" />
-    <Compile Include="Mvc\Infrastructure\UcommerceMvcPageEditorRouteHandler.cs" />
-    <Compile Include="Mvc\Infrastructure\UcommerceMvcTemplateEditorRouteHandler.cs" />
+    <Compile Include="Mvc\Infrastructure\UCommerceMvcPageEditorRouteHandler.cs" />
+    <Compile Include="Mvc\Infrastructure\UCommerceMvcTemplateEditorRouteHandler.cs" />
     <Compile Include="Mvc\Infrastructure\WindsorControllerFactory.cs" />
     <Compile Include="Mvc\Model\AddressModel.cs" />
     <Compile Include="Mvc\Model\BasketPreviewModel.cs" />
@@ -339,7 +339,7 @@
     <Compile Include="Pages\UrlResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\FacetResolver.cs" />
-    <Compile Include="UcommerceUIModule.cs" />
+    <Compile Include="UCommerceUIModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\dist\css\fontawesome.min.css" />
@@ -5255,7 +5255,7 @@
     <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Products\Detail.Index.cshtml" />
     <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Products\List.Index.cshtml" />
     <EmbeddedResource Include="ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" />
-    <None Include="Ucommerce.Sitefinity.UI.nuspec" />
+    <None Include="UCommerce.Sitefinity.UI.nuspec" />
     <None Include="UCommerce\Apps\Debug\Clear-cache-in-scratchindexer.example" />
     <None Include="UCommerce\Apps\Debug\Dump-Basket-To-Log-In-Basket-Pipeline.config.example" />
     <None Include="UCommerce\Apps\Debug\Enable-Debug-On-Basket-Pipeline.config.example" />

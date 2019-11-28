@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model
+namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     public class ConfirmationMessageModel : IConfirmationMessageModel
     {

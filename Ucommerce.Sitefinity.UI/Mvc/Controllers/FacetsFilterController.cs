@@ -3,11 +3,11 @@ using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
+namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uFacetsFilter_MVC", Title = "Facets Filter", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnFacetsFilter sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uFacetsFilter_MVC", Title = "Facets Filter", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnFacetsFilter sfMvcIcn")]
     public class FacetsFilterController : Controller, IPersonalizable
     {
         public string TemplateName { get; set; } = "B4Index";
@@ -38,7 +38,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
             }
             catch (Exception ex)
             {
-                if (UcommerceUIModule.TryHandleSystemError(ex, out ActionResult actionResult))
+                if (UCommerceUIModule.TryHandleSystemError(ex, out ActionResult actionResult))
                 {
                     return actionResult;
                 }
@@ -56,7 +56,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         private IFacetsFilterModel ResolveModel()
         {
-            return UcommerceUIModule.Container.Resolve<IFacetsFilterModel>();
+            return UCommerceUIModule.Container.Resolve<IFacetsFilterModel>();
         }
     }
 }

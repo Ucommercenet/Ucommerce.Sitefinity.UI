@@ -1,4 +1,4 @@
-﻿namespace Ucommerce.Sitefinity.UI.Mvc.ViewModels
+﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     public class ProductViewModel
     {

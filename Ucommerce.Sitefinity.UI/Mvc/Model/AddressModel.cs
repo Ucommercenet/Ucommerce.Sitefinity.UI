@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
-using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model
+namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     public class AddressModel : IAddressModel
     {

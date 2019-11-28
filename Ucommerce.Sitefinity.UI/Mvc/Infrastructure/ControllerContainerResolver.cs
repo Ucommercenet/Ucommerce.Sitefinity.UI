@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers.Attributes;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Infrastructure
+namespace UCommerce.Sitefinity.UI.Mvc.Infrastructure
 {
     /// <summary>
     /// This class contains logic for locating assemblies containing MVC widget controllers.

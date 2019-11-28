@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.EntitiesV2;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces
+namespace UCommerce.Sitefinity.UI.Mvc.Model.Interfaces
 {
     public interface IBasketPreviewModel
     {

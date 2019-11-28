@@ -1,4 +1,4 @@
-﻿namespace Ucommerce.Sitefinity.UI.Constants
+﻿namespace UCommerce.Sitefinity.UI.Constants
 {
     internal class RouteConstants
     {

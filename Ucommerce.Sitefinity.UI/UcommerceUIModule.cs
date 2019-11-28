@@ -17,13 +17,13 @@ using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Publishing;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Mvc.Filters;
-using Ucommerce.Sitefinity.UI.Mvc.Infrastructure;
-using Ucommerce.Sitefinity.UI.Pages;
+using UCommerce.Sitefinity.UI.Mvc.Filters;
+using UCommerce.Sitefinity.UI.Mvc.Infrastructure;
+using UCommerce.Sitefinity.UI.Pages;
 
-namespace Ucommerce.Sitefinity.UI
+namespace UCommerce.Sitefinity.UI
 {
-    public class UcommerceUIModule : ModuleBase
+    public class UCommerceUIModule : ModuleBase
     {
         public override Guid LandingPageId
         {
@@ -67,8 +67,8 @@ namespace Ucommerce.Sitefinity.UI
                         {
                             Name = NAME,
                             Title = TITLE,
-                            Type = typeof(UcommerceUIModule).AssemblyQualifiedName,
-                            Description = "A module class used to encapsulate the Ucommerce SDK for Sitefinity",
+                            Type = typeof(UCommerceUIModule).AssemblyQualifiedName,
+                            Description = "A module class used to encapsulate the UCommerce SDK for Sitefinity",
                             StartupType = StartupType.OnApplicationStart,
                         });
 
@@ -266,8 +266,8 @@ namespace Ucommerce.Sitefinity.UI
         }
 
         public const string NAME = "UcommerceUIModule";
-        public const string TITLE = "Ucommerce UI";
-        public const string UCOMMERCE_WIDGET_SECTION = "Ucommerce";
+        public const string TITLE = "UCommerce UI";
+        public const string UCOMMERCE_WIDGET_SECTION = "UCommerce";
         private const string NO_CATALOG_ERROR_MESSAGE = "There is no product catalog configured.";
         private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
         private const string RAVEN_SOURCE = "Raven.Database";

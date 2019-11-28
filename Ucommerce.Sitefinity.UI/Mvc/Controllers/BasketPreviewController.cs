@@ -5,14 +5,14 @@ using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Mvc.Model.Interfaces;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
+namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview", SectionName = UcommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UcommerceUIModule.NAME, CssClass = "ucIcnBasketPreview sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnBasketPreview sfMvcIcn")]
     public class BasketPreviewController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
@@ -74,7 +74,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Controllers
 
         private IBasketPreviewModel ResolveModel()
         {
-            var container = UcommerceUIModule.Container;
+            var container = UCommerceUIModule.Container;
             var model = container.Resolve<IBasketPreviewModel>(new
             {
                 nextStepId = this.NextStepId,

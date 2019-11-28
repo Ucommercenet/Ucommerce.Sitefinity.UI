@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Raven.Client.Linq;
 using Telerik.Sitefinity.Services;
-using Ucommerce.Sitefinity.UI.Mvc.Controllers;
-using Ucommerce.Sitefinity.UI.Mvc.ViewModels;
-using Ucommerce.Sitefinity.UI.Pages;
-using Ucommerce.Sitefinity.UI.Search;
+using UCommerce.Sitefinity.UI.Mvc.Controllers;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Pages;
+using UCommerce.Sitefinity.UI.Search;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
 using UCommerce.Runtime;
 using UCommerce.Search;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Model
+namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     public class FacetsFilterModel : IFacetsFilterModel
     {

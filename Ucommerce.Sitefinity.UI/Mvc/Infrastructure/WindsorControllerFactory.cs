@@ -4,7 +4,7 @@ using System.Web.Routing;
 using Castle.Windsor;
 using Telerik.Sitefinity.Frontend.Mvc.Infrastructure.Controllers;
 
-namespace Ucommerce.Sitefinity.UI.Mvc.Infrastructure
+namespace UCommerce.Sitefinity.UI.Mvc.Infrastructure
 {
     public class WindsorControllerFactory : FrontendControllerFactory
     {
