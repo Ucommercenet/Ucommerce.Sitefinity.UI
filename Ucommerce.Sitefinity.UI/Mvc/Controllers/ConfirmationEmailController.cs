@@ -5,11 +5,13 @@ using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
 using UCommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
+    /// <summary>
+    /// The controller class for the Confirmation Email MVC widget.
+    /// </summary>
     [ControllerToolboxItem(Name = "uConfirmationEmail_MVC", Title = "Confirmation Email", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnConfirmationEmail sfMvcIcn")]
     public class ConfirmationEmailController : Controller, IPersonalizable
     {

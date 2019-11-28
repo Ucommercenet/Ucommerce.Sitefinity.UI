@@ -3,6 +3,9 @@ using UCommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used for visualizing the information assocaited with an order.
+    /// </summary>
     public class OrderOverviewViewModel
     {
         public OrderOverviewViewModel() => OrderLines = new List<OrderlineViewModel>();

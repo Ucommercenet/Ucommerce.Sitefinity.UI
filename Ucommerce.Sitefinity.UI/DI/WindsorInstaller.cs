@@ -3,11 +3,12 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using System.Web.Mvc;
 using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces.Impl;
 
 namespace UCommerce.Sitefinity.UI.DI
 {
+    /// <summary>
+    /// The class that contains the installation of the components in the Windsor container.
+    /// </summary>
     public class WindsorInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
@@ -45,12 +46,6 @@ namespace UCommerce.Sitefinity.UI.DI
                  Component
                  .For<ICategoryModel>()
                  .ImplementedBy<CategoryModel>()
-                 .LifestyleTransient());
-
-            container.Register(
-                 Component
-                 .For<IMiniBasketService>()
-                 .ImplementedBy<MiniBasketService>()
                  .LifestyleTransient());
 
             container.Register(

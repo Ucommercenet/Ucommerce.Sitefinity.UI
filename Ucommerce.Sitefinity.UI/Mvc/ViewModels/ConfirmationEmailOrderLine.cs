@@ -1,5 +1,8 @@
 ﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// DTO class used for storing the information of a single item in an order.
+    /// </summary>
     public class ConfirmationEmailOrderLine
     {
         public string Total { get; set; }

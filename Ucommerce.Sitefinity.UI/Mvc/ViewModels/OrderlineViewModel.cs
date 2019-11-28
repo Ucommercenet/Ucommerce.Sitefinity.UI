@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used for visualizing the information assocaited with an item in an order.
+    /// </summary>
     public class OrderlineViewModel
     {
         public string Total { get; set; }

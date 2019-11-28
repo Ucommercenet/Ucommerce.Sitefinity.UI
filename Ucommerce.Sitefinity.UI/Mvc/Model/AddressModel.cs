@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
@@ -11,6 +11,9 @@ using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The Model class of the Address MVC widget.
+    /// </summary>
     public class AddressModel : IAddressModel
     {
         private Guid nextStepId;

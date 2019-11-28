@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The contract to resolve the Model of the Product MVC widget.
+    /// </summary>
     public interface IProductModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);

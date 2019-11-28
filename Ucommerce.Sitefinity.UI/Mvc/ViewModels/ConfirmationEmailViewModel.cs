@@ -3,6 +3,9 @@ using UCommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used for visualizing the information assocaited with a confirmation email.
+    /// </summary>
     public class ConfirmationEmailViewModel
     {
         public ConfirmationEmailViewModel()

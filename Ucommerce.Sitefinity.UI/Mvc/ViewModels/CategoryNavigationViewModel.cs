@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used to list the information visualized by the Category Navigation.
+    /// </summary>
     public class CategoryNavigationViewModel
     {
         public CategoryNavigationViewModel()

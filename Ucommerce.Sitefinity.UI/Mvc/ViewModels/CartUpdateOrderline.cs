@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// DTO class used to update the details of a cart item.
+    /// </summary>
     public class CartUpdateOrderline
     {
         public int OrderlineId { get; set; }

@@ -3,6 +3,9 @@ using UCommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used to list the current state of the order in the cart.
+    /// </summary>
     public class CartRenderingViewModel
     {
         public CartRenderingViewModel()

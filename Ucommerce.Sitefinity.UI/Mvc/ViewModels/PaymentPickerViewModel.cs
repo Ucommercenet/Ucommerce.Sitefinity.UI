@@ -3,6 +3,9 @@ using System.Web.Mvc;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used for visualizing payment provider information.
+    /// </summary>
     public class PaymentPickerViewModel
     {
         public PaymentPickerViewModel()

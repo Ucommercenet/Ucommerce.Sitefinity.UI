@@ -20,6 +20,9 @@ using UCommerce.Search;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The Model class of the Product MVC widget.
+    /// </summary>
     internal class ProductModel : IProductModel
     {
         public ProductModel(int itemsPerPage, bool openInSamePage, bool isManualSelectionMode, bool enableCategoryFallback, 
@@ -343,9 +346,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return listOfProducts.AsQueryable();
         }
 
-        private IList<ProductViewModel> MapProducts(IList<Product> products, Category category, bool openInSamePage, Guid detailPageId)
+        private IList<ProductDTO> MapProducts(IList<Product> products, Category category, bool openInSamePage, Guid detailPageId)
         {
-            var result = new List<ProductViewModel>();
+            var result = new List<ProductDTO>();
             var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
             var currentCatalog = SiteContext.Current.CatalogContext.CurrentCatalog;
             var productsPrices = CatalogLibrary.CalculatePrice(products.Select(x => x.Guid).ToList());
@@ -369,7 +372,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                 }
 
-                var productViewModel = new ProductViewModel()
+                var productViewModel = new ProductDTO()
                 {
                     Sku = product.Sku,
                     VariantSku = product.VariantSku,

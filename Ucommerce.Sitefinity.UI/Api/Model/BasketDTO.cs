@@ -6,19 +6,22 @@ using System.Threading.Tasks;
 
 namespace UCommerce.Sitefinity.UI.Api.Model
 {
-    public class BasketModel
+    /// <summary>
+    /// DTO class used for storing the basket information.
+    /// </summary>
+    public class BasketDTO
     {
-        public BasketModel()
+        public BasketDTO()
         {
-            this.OrderLines = new List<OrderLineModel>();
-            this.Discounts = new List<DiscountModel>();
+            this.OrderLines = new List<OrderLineDTO>();
+            this.Discounts = new List<DiscountDTO>();
         }
 
         public int NumberOfItemsInBasket { get; set; }
 
-        public List<DiscountModel> Discounts { get; set; }
+        public List<DiscountDTO> Discounts { get; set; }
 
-        public List<OrderLineModel> OrderLines { get; set; }
+        public List<OrderLineDTO> OrderLines { get; set; }
 
         public string OrderTotal { get; set; }
 

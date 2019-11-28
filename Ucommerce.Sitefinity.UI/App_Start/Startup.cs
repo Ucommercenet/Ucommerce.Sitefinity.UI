@@ -15,10 +15,13 @@ using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using Telerik.Sitefinity.Web.Events;
 using UCommerce.Sitefinity.UI.DI.Events;
-using UCommerce.Sitefinity.UI.Mvc.Infrastructure;
+using UCommerce.Sitefinity.UI.Mvc;
 
 namespace UCommerce.Sitefinity.UI.App_Start
 {
+    /// <summary>
+    /// This class is the entry-level point for the UCommerce UI Module and it handles the initialization of the infrastructure related to the module.
+    /// </summary>
     public static class Startup
     {
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -49,7 +52,6 @@ namespace UCommerce.Sitefinity.UI.App_Start
                 Container = UCommerceUIModule.Container
             });
 
-            //Use the following to register the BundleConfig
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
             BundleTable.EnableOptimizations = true;

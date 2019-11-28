@@ -7,6 +7,9 @@ using UCommerce.Sitefinity.UI.Mvc.Model;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
+    /// <summary>
+    /// The controller class for the Facets Filter MVC widget.
+    /// </summary>
     [ControllerToolboxItem(Name = "uFacetsFilter_MVC", Title = "Facets Filter", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnFacetsFilter sfMvcIcn")]
     public class FacetsFilterController : Controller, IPersonalizable
     {

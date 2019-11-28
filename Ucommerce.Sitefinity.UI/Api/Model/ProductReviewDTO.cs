@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace UCommerce.Sitefinity.UI.Api.Model
 {
-    public class ProductReviewModel
+    /// <summary>
+    /// DTO class used for storing product review information.
+    /// </summary>
+    public class ProductReviewDTO
     {
         public string Sku { get; set; }
 

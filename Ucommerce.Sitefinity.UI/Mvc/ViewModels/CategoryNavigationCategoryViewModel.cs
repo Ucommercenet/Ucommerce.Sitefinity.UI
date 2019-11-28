@@ -2,6 +2,9 @@
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used to vizualize a single category item listed by the Category Navigation.
+    /// </summary>
     public class CategoryNavigationCategoryViewModel
     {
         public string DisplayName { get; set; }

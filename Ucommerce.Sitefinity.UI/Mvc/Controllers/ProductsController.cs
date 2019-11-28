@@ -8,6 +8,9 @@ using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
+    /// <summary>
+    /// The controller class for the Products MVC widget.
+    /// </summary>
     [ControllerToolboxItem(Name = "uProducts_MVC", Title = "Products", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnProducts sfMvcIcn")]
     public class ProductsController : Controller, IPersonalizable
     {

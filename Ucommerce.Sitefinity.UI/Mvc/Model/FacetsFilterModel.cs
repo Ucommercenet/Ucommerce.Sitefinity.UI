@@ -6,14 +6,17 @@ using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Mvc.Controllers;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
-using UCommerce.Sitefinity.UI.Search;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
 using UCommerce.Runtime;
 using UCommerce.Search;
+using UCommerce.Sitefinity.UI.Search;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The Model class of the Facet Filter MVC widget.
+    /// </summary>
     public class FacetsFilterModel : IFacetsFilterModel
     {
         public virtual IList<FacetViewModel> CreateViewModel()

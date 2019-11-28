@@ -3,6 +3,9 @@ using UCommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
+    /// <summary>
+    /// ViewModel class used to list the summary information associated with an order.
+    /// </summary>
     public class BasketPreviewViewModel
     {
         public BasketPreviewViewModel()

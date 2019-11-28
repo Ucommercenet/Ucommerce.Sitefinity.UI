@@ -16,6 +16,9 @@ using UCommerce.Runtime;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The Model class of the Category MVC widget.
+    /// </summary>
     internal class CategoryModel : ICategoryModel
     {
         public CategoryModel(bool hideMiniBasket, bool allowChangingCurrency, Guid? imageId = null, Guid? categoryPageId = null, Guid? searchPageId = null, Guid? productDetailsPageId = null)

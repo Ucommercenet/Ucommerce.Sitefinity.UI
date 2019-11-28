@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
-using UCommerce.Sitefinity.UI.Mvc.Model.Interfaces;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
+    /// <summary>
+    /// The Model class of the Confirmation Message MVC widget.
+    /// </summary>
     public class ConfirmationMessageModel : IConfirmationMessageModel
     {
         public virtual ConfirmationMessageViewModel GetViewModel(string headline, string message)
