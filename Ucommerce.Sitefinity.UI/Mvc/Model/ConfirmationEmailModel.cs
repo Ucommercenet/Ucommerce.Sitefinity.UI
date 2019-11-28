@@ -44,8 +44,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 var orderGuid = parameters["orderGuid"] as string;
                 if (string.IsNullOrWhiteSpace(orderGuid))
                 {
-                    message = "Can't resolve orderGuid! Confirmation Email can't be sent.";
-                    Log.Write(new Exception(message));
+                    message = null;
                     return false;
                 }
             }
