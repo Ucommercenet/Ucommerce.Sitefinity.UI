@@ -1,7 +1,5 @@
 <%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="../../masterpages/Dialog.master" CodeBehind="SelectProductCatalogTarget.aspx.cs" Inherits="UCommerce.Web.UI.Catalog.Dialogs.SelectProductCatalogTarget" %>
 
-<%@ import namespace="UCommerce.Web.UI.Catalog.Dialogs" %>
-<%@ register tagprefix="uc" tagname="CatalogItemSelector" src="CatalogItemSelector.ascx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="HeaderLabel" runat="server">
@@ -21,7 +19,7 @@
     </div>
     <div class="propertyPane contentCatalogItems dialog-content">
 	    <div class="propertyItems">
-            <asp:PlaceHolder ID="CatalogSelectorPlaceHolder" runat="server"/></asp:PlaceHolder>       
+            <asp:PlaceHolder ID="CatalogSelectorPlaceHolder" runat="server"></asp:PlaceHolder>       
 		</div>
 	</div>
     <div class="propertyPane dialog-actions">

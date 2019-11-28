@@ -8,10 +8,17 @@
                 "bPaginate": false,
                 // disable initial sort
                 "aaSorting": [],
+                "fnInitComplete": function (oSettings, json) {
+                    if (UCommerceClientMgr.Shell === "Umbraco8") {
+                        $('#order-audits_filter > label > input[type=text]').attr('placeholder', 'Type to search...');
+                        $('#order-audits_filter > label').append('<i class="icon icon-search"></i>');
+
+                    }
+                }
             });
     });
 </script>
-<div class="propertyPane orderAudit">
+<div class="propertyPane orderAudit tablePropertyPane">
     <h2 class="propertyPaneTitel"><asp:Literal runat="server" meta:resourcekey="OrderAudits"></asp:Literal></h2>
     <asp:Repeater ID="Repeater1" runat="server" DataSource="<%# OrderAudits %>">
         <HeaderTemplate>

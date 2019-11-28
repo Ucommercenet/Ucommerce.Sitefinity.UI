@@ -147,4 +147,10 @@
   <data name="Name.Text" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="CampaignItemHeader.Text" xml:space="preserve">
+    <value>Eigenschaften von Kampagnenelementen</value>
+  </data>
+  <data name="CampaignItemSetupHeader.Text" xml:space="preserve">
+    <value>Einrichtung für Kampagnenelementen</value>
+  </data>
 </root>

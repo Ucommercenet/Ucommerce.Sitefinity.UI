@@ -138,4 +138,10 @@
   <data name="VatRate.Text" xml:space="preserve">
     <value>Momssats</value>
   </data>
+  <data name="PriceGroupProperties.Text" xml:space="preserve">
+    <value>Prisgruppe Egenskaber</value>
+  </data>
+  <data name="PriceGroupPricing.Text" xml:space="preserve">
+    <value>Prisgruppe Prissætning</value>
+  </data>
 </root>

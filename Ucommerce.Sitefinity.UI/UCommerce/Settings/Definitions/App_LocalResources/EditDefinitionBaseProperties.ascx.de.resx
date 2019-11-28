@@ -132,4 +132,7 @@
   <data name="InheritedDefinitions.Text" xml:space="preserve">
     <value>Vererbte Definitionen</value>
   </data>
+  <data name="DefinitionProperties.Text" xml:space="preserve">
+    <value>Definitions-Eigenschaften</value>
+  </data>
 </root>

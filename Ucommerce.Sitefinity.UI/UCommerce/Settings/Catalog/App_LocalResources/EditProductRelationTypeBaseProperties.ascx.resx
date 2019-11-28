@@ -129,4 +129,7 @@
   <data name="Name.Text" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="ProductRelationTypeProperties.Text" xml:space="preserve">
+    <value>Product Relation Type Properties</value>
+  </data>
 </root>

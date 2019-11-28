@@ -135,4 +135,7 @@
   <data name="Definition.Text" xml:space="preserve">
     <value>Definition</value>
   </data>
+  <data name="DefinitionProperties.Text" xml:space="preserve">
+    <value>Definition Properties</value>
+  </data>
 </root>

@@ -6,17 +6,22 @@
 			{
 				"bPaginate": false,
 				// disable initial sort
-				"aaSorting": []
+                "aaSorting": [],
+                "fnInitComplete": function (oSettings, json) {
+                    $('#reportTable_filter > label > input[type=text]').attr('placeholder', 'Type to search...');
+                    $('#reportTable_filter > label').append('<i class="icon icon-search"></i>');
+                }
 			}
 		);
 	});
 </script>
-<div class="propertyPane leftAligned">
+<div class="propertyPane reportPropertyPane leftAligned">
+	<h2 class="propertyPaneTitel"><asp:Localize ID="Localize4" runat="server" meta:resourceKey="Filters" /></h2>
 	<asp:DropDownList id="ProductCatalogGroupDropDownList" CssClass="AnalyticsProductCatalogGroupDropDownList" runat="server" DataTextField="Name" DataValueField="ProductCatalogGroupId" />
 	<asp:Button id="ReportButton" runat="server" CssClass="ReportButton mediumButton" meta:resourcekey="ReportButton" />
 </div>
 
-<asp:panel runat="server" id="ReportPanel" cssclass="propertyPane leftAligned" visible="false">
+<asp:panel runat="server" id="ReportPanel" cssclass="propertyPane tablePropertyPane leftAligned" visible="false">
 	<h2 class="propertyPaneTitel reportHeader" style="margin:0px;"><asp:Localize runat="server" meta:resourcekey="ReportHeader" /></h2>
 	<asp:Repeater runat="server" ID="ProductTop10Repeater">
     <HeaderTemplate>

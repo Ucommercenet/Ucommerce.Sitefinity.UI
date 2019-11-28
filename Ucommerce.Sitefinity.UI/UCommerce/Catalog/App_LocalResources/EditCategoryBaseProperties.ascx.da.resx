@@ -150,4 +150,7 @@
   <data name="GeneralInformation.Text" xml:space="preserve">
     <value>General Information</value>
   </data>
+  <data name="CategoryDynamicProperties.Text" xml:space="preserve">
+    <value>Egenskaber</value>
+  </data>
 </root>

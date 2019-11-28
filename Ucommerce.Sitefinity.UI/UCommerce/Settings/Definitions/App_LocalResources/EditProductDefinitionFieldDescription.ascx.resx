@@ -123,4 +123,7 @@
 	<data name="Description.Text">
 		<value xml:space="preserve">Description</value>
 	</data>
+  <data name="ProductDefinitionFieldDescription.Text" xml:space="preserve">
+    <value>Multilingual Properties</value>
+  </data>
 </root>

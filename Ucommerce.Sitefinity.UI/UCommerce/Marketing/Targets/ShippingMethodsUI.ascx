@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ShippingMethodsUI.ascx.cs" Inherits="UCommerce.Web.UI.UCommerce.Marketing.Targets.ShippingMethodsUI" %>
 <%@ Register tagPrefix="uc" namespace="UCommerce.Presentation.Web.Controls" %>
+<%@ Register TagPrefix="presentation" Assembly="UCommerce.Presentation" namespace="UCommerce.Presentation.Web.Controls" %>
 <table cellpadding="0" cellspacing="0" style="width:100%;">
     <tr>
         <td>
@@ -13,9 +14,9 @@
             </asp:PlaceHolder>
         </td>
         <td style="width:50px; text-align:right; vertical-align:top;">
-            <asp:ImageButton id="EditButton" runat="server" ImageUrl="../../Images/ui/pencil.png" OnClick="EditButton_Click" />
-			<asp:ImageButton id="SaveButton" runat="server" imageurl="../../Images/ui/save.gif" visible="false" onclick="SaveButton_Click" />
-			<asp:ImageButton id="DeleteTargetButton" runat="server" ImageUrl="../../Images/ui/cross.png" onclick="DeleteTargetButton_Click" />
+            <presentation:LabeledImageButton CssClass="edit-image-button" id="EditButton" runat="server" ImageUrl="../../Images/ui/pencil.png" OnClick="EditButton_Click" />
+			<presentation:JavascriptEnabledImageButton CssClass="save-image-button" id="SaveButton" runat="server" imageurl="../../Images/ui/save.gif" visible="false" onclick="SaveButton_Click" />
+			<presentation:JavascriptEnabledImageButton CssClass="delete-image-button" id="DeleteTargetButton" runat="server" ImageUrl="../../Images/ui/cross.png" onclick="DeleteTargetButton_Click" />
         </td>
     </tr>
 </table>

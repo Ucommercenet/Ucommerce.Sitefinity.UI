@@ -17,7 +17,7 @@
 		<asp:DropDownList runat="server" ID="CategoryDefinitionDropDown" CssClass="mediumWidth" DataSource="<%# View.CategoryDefinitions %>" DataValueField="DefinitionId" DataTextField="Name"/>
 	</commerce:PropertyPanel>
 	<commerce:PropertyPanel runat="server" meta:resourceKey="DisplayOnWebSite">
-		<asp:CheckBox runat="server" ID="DisplayOnWebSiteCheckBox" Checked="<%# View.Category.DisplayOnSite %>" />
+		<asp:CheckBox runat="server" class="ucommerce-toggle-check-box" ID="DisplayOnWebSiteCheckBox" Checked="<%# View.Category.DisplayOnSite %>" />
 	</commerce:PropertyPanel>
 	<div class="propertyPaneFooter">-</div>
 

@@ -1,4 +1,5 @@
 <%@ control language="C#" autoeventwireup="true" codebehind="ProductUi.ascx.cs" inherits="UCommerce.Web.UI.UCommerce.Marketing.Targets.ProductUi" %>
+<%@ Register TagPrefix="presentation" Assembly="UCommerce.Presentation" namespace="UCommerce.Presentation.Web.Controls" %>
 
 <table cellpadding="0" cellspacing="0" style="width:100%;">
 	<tr>
@@ -17,8 +18,8 @@
 			</asp:Repeater>
 		</td>
 		<td style="width:50px; text-align:right; vertical-align:top;">
-			<asp:ImageButton id="SelectProductButton" runat="server" ImageUrl="../../Images/ui/pencil.png" meta:resourcekey="Edit" />
-			<asp:ImageButton id="DeleteTargetButton" runat="server" ImageUrl="../../Images/ui/cross.png" meta:resourcekey="Delete" onclick="DeleteTargetButton_Click" /><br />
+			<presentation:LabeledImageButton CssClass="edit-image-button" id="SelectProductButton" runat="server" ImageUrl="../../Images/ui/pencil.png" meta:resourcekey="Edit" />
+			<presentation:LabeledImageButton CssClass="delete-image-button" id="DeleteTargetButton" runat="server" ImageUrl="../../Images/ui/cross.png" meta:resourcekey="Delete" onclick="DeleteTargetButton_Click" /><br />
 		</td>
 	</tr>
 </table>

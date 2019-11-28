@@ -34,7 +34,14 @@
 					{ 'bSortable': false, 'aTargets': [0] },
                     { 'iDataSort': 5, 'aTargets': [4] },
 	                { 'bVisible': false, 'aTargets': [5] }
-	            ]
+                ],
+                "fnInitComplete": function (oSettings, json) {
+                    if (UCommerceClientMgr.Shell === "Umbraco8") {
+                        $('#orderTable_filter > label > input[type=text]').attr('placeholder', 'Type to search...');
+                        $('#orderTable_filter > label').append('<i class="icon icon-search"></i>');
+
+                    }
+                }
             });
 
 		$(".orderClickable").click(function () {
@@ -45,7 +52,7 @@
 
 
 
-<div class="propertyPane">
+<div class="propertyPane tablePropertyPane">
 	<h2 class="propertyPaneTitel orderDiscountsTitel"><asp:Literal runat="server" meta:resourcekey="OrderHeader"></asp:Literal></h2>
     <div class="orders-filter-panel">
         <asp:DropDownList class="mediumWidth" runat="server" ID="FilterOrdersDropDownList" style="margin-top: 20px;" AutoPostBack="True" OnSelectedIndexChanged="FilterOrdersDropDownList_Changed" ClientIDMode="Static">

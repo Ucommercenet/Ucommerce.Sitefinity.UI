@@ -142,7 +142,7 @@
     <value>SKU</value>
   </data>
   <data name="AddProductText" xml:space="preserve">
-    <value>Add Product</value>
+    <value>Add Products to Category</value>
   </data>
   <data name="ProductsInCategory.Text" xml:space="preserve">
     <value>Products In Category</value>

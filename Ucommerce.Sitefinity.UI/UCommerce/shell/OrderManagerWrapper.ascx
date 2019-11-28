@@ -1,4 +1,9 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="OrderManagerWrapper.ascx.cs" Inherits="UCommerce.Web.Shell.Sitefinity.OrderManagerWrapper" %>
+<%@ Register Assembly="Telerik.Sitefinity" Namespace="Telerik.Sitefinity.Web.UI" TagPrefix="sf" %>
+
+<sf:ResourceLinks ID="ResourceLinks" runat="server">
+    <sf:ResourceFile JavaScriptLibrary="JQuery"></sf:ResourceFile>
+</sf:ResourceLinks>
 
 <script type="application/javascript">
 

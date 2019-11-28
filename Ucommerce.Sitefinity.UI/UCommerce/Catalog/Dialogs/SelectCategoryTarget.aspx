@@ -1,6 +1,4 @@
 <%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="../../masterpages/Dialog.master" CodeBehind="SelectCategoryTarget.aspx.cs" Inherits="UCommerce.Web.UI.Catalog.Dialogs.SelectCategoryTarget" %>
-<%@ import namespace="UCommerce.Web.UI.Catalog.Dialogs" %>
-<%@ register tagprefix="uc" tagname="CatalogItemSelector" src="CatalogItemSelector.ascx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="HeaderLabel" runat="server">

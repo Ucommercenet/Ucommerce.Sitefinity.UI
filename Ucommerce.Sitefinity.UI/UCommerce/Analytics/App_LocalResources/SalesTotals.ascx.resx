@@ -144,4 +144,7 @@
   <data name="DateTimeError" xml:space="preserve">
     <value>Input must be a valid dateTime in format (YYYY-MM-DD)</value>
   </data>
+  <data name="SalesTotalsHeader.Text" xml:space="preserve">
+    <value>Report Filtering</value>
+  </data>
 </root>

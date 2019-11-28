@@ -66,7 +66,7 @@
 
 <div class="propertyPane">
 	<h2 class="propertyPaneTitel orderLinesTitel"><asp:Localize ID="Localize2" runat="server" meta:resourceKey="OrderLines" /></h2>
-    <table class="dataList clickable ordersTable" id="orderList" cellspacing="0" cellpadding="0" width="100%">
+    <table class="dataList clickable ordersTable orderLinesTable" id="orderList" cellspacing="0" cellpadding="0" width="100%">
 		<thead>
 			<tr class="headerRow">
 				<th style="width:31px;"><span></span></th>

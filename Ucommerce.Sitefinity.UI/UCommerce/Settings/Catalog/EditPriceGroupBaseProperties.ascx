@@ -4,7 +4,7 @@
 
 <commerce:ValidationSummary ID="ValidationSummary1" runat="server" />
 <div class="propertyPane leftAligned">
-
+    <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="PriceGroupProperties" /></h2>
     <div class="propertyItem">
 	    <div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="Description" /></div>
         <div class="propertyItemContent">
@@ -28,6 +28,7 @@
 </div>
 
 <div class="propertyPane leftAligned">
+    <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="PriceGroupPricing" /></h2>
     <div class="propertyItem">
 	    <div class="propertyItemHeader"><asp:Localize runat="server" meta:resourceKey="Currency" /></div>
         <div class="propertyItemContent">

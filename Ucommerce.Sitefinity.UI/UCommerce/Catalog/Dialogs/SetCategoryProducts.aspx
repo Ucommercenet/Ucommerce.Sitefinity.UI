@@ -21,7 +21,7 @@
         <a class="modal-close" onclick="UCommerceClientMgr.closeModalWindow();" data-dismiss="modal" aria-hidden="true"></a>
    	</div>
     <commerce:ValidationSummary runat="server" />
-    <div class="set-category-products dialog-content">
+    <div class="contentPane propertyPane set-category-products dialog-content">
         <asp:PlaceHolder ID="ProductsPlaceHolder" runat="server"></asp:PlaceHolder>
     </div>
 

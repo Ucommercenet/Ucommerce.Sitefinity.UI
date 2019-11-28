@@ -10,12 +10,19 @@
 		{
 			"bPaginate": false,
 			// disable initial sort
-			"aaSorting": []
+            "aaSorting": [],
+            "fnInitComplete": function (oSettings, json) {
+                if (UCommerceClientMgr.Shell === "Umbraco8") {
+                    $('#orderTable_filter > label > input[type=text]').attr('placeholder', 'Type to search...');
+                    $('#orderTable_filter > label').append('<i class="icon icon-search"></i>');
+
+                }
+            }
 		});
 	});	
 </script>
 
-<div class="propertyPane leftAligned">
+<div class="propertyPane leftAligned ">
 	<h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourcekey="Search" /></h2>
 	<commerce:PropertyPanel runat="server" meta:resourceKey="OrderNumberText">
         <asp:TextBox runat="server" ID="OrderNumberTextBox" CssClass="mediumWidth" />        
@@ -47,7 +54,7 @@
 	<div class="propertyPaneFooter"></div>
 </div>
 
-<asp:Panel ID="SearchResultsPane" Visible="False" runat="server" cssclass="propertyPane leftAligned">
+<asp:Panel ID="SearchResultsPane" Visible="False" runat="server" cssclass="propertyPane leftAligned tablePropertyPane">
 	<h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourcekey="SearchResults" /></h2>
 
 	<asp:Repeater runat="server" ID="OrdersRepeater" EnableViewState="false">

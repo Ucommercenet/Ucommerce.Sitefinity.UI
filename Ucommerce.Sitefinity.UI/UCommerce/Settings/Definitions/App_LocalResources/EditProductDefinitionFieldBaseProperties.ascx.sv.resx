@@ -147,4 +147,7 @@
   <data name="VariantProperty.Text" xml:space="preserve">
     <value>Variantfält</value>
   </data>
+  <data name="ProductDefinitionFieldProperties.Text" xml:space="preserve">
+    <value>Fältegenskaper för Produktdefinition</value>
+  </data>
 </root>

@@ -129,4 +129,13 @@
 	<data name="ValidationExpression.Text" xml:space="preserve">
     <value>Valideringsuttryck</value>
   </data>
+	<data name="DataTypeDefinition.Text" xml:space="preserve">
+    <value>Definition för Datatyp</value>
+  </data>
+	<data name="DataTypeDynamicProperties.Text" xml:space="preserve">
+    <value>Datatyp Dynamiska Egenskaper</value>
+  </data>
+	<data name="DataTypeProperties.Text" xml:space="preserve">
+    <value>Egenskaper för Datatyp</value>
+  </data>
 </root>

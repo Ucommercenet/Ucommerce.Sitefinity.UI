@@ -220,3 +220,7 @@ table.edittCampaigneItemTable th span {
 table.edittCampaigneItemTable td select {
     width: 284px; 
 }
+
+.umbraco.eight.only {
+    display: none;
+}

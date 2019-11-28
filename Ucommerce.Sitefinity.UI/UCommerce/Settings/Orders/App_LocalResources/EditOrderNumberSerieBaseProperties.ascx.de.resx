@@ -132,4 +132,7 @@
 	<data name="PrefixProperty.Text" xml:space="preserve">
     <value>Präfix</value>
   </data>
+	<data name="OrderNumberSerieProperties.Text" xml:space="preserve">
+    <value>Bestellnummer Serie Eigenschaften</value>
+  </data>
 </root>

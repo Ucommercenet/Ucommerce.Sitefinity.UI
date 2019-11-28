@@ -126,4 +126,13 @@
   <data name="ValidPaymentMethods.Text" xml:space="preserve">
     <value>Gyldige betalingsmetoder</value>
   </data>
+  <data name="ShippingMethodAccessCatalogGroups.Text" xml:space="preserve">
+    <value>Butikker</value>
+  </data>
+  <data name="ShippingMethodAccessCountries.Text" xml:space="preserve">
+    <value>Lande</value>
+  </data>
+  <data name="ShippingMethodAccessPaymentMethods.Text" xml:space="preserve">
+    <value>Betalingsmetoder</value>
+  </data>
 </root>

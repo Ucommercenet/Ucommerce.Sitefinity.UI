@@ -138,4 +138,7 @@
   <data name="TotalSales.Text" xml:space="preserve">
     <value>Absatz</value>
   </data>
+  <data name="Filters.Text" xml:space="preserve">
+    <value>Filter</value>
+  </data>
 </root>

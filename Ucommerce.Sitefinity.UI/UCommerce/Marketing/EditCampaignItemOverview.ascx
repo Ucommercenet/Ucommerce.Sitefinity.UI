@@ -5,21 +5,26 @@
 <commerce:ValidationSummary runat="server" />
 
 <div class="propertyPane leftAligned">
-
+	<div>
+        <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourcekey="CampaignItemHeader" /></h2>
+    </div>
 	<commerce:PropertyPanel runat="server" meta:resourcekey="CampaignItemDefinition">
 		<asp:DropDownList runat="server" ID="CampaignItemDefinitionDropDown" CssClass="mediumWidth"/>
 		<asp:RequiredFieldValidator runat="server" ControlToValidate="CampaignItemDefinitionDropDown" Text="*" ErrorMessage='<%# GetLocalResourceObject("CampaignItemDefinition.Text") %>' CssClass="validator" ></asp:RequiredFieldValidator>
 	</commerce:PropertyPanel>
     <commerce:PropertyPanel runat="server" meta:resourcekey="AllowNextCampaignItems">
-        <asp:CheckBox runat="server" ID="AllowNextCampaignItemsCheckBox" Checked="<%# View.CampaignItem.AllowNextCampaignItems %>"/>
+        <asp:CheckBox runat="server" ID="AllowNextCampaignItemsCheckBox" class="ucommerce-toggle-check-box" Checked="<%# View.CampaignItem.AllowNextCampaignItems %>"/>
     </commerce:PropertyPanel>
     <commerce:PropertyPanel runat="server" meta:resourcekey="Enabled">
-        <asp:CheckBox runat="server" ID="EnabledCheckBox" Checked="<%# View.CampaignItem.Enabled %>"/>
+        <asp:CheckBox runat="server" ID="EnabledCheckBox" class="ucommerce-toggle-check-box" Checked="<%# View.CampaignItem.Enabled %>"/>
     </commerce:PropertyPanel>
 	<div class="propertyPaneFooter">-</div>
 </div>
 
 <div class="propertyPane leftAligned">
+	<div>
+		<h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourcekey="CampaignItemSetupHeader" /></h2>
+    </div>
     <asp:HiddenField runat="server" ID="CampaignItemId"/>
 	<table class="edittCampaigneItemTable" style="width:100%">
 		<tr>

@@ -129,4 +129,7 @@
 	<data name="Name.Text" xml:space="preserve">
     <value>Name</value>
   </data>
+    <data name="EmailProfileProperties.Text" xml:space="preserve">
+    <value>E-Mail-Profileigenschaften</value>
+  </data>
 </root>

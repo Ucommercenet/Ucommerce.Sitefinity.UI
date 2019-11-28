@@ -138,4 +138,10 @@
   <data name="VatRate.Text" xml:space="preserve">
     <value>VAT Rate</value>
   </data>
+  <data name="PriceGroupProperties.Text" xml:space="preserve">
+    <value>Price Group Properties</value>
+  </data>
+  <data name="PriceGroupPricing.Text" xml:space="preserve">
+    <value>Price Group Pricing</value>
+  </data>
 </root>

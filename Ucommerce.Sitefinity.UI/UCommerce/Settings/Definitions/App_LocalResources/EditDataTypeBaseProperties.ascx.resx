@@ -129,4 +129,13 @@
   <data name="ValidationExpression.Text" xml:space="preserve">
     <value>Validation Expression</value>
   </data>
+  <data name="DataTypeDefinition.Text" xml:space="preserve">
+    <value>Data Type Definition</value>
+  </data>
+  <data name="DataTypeDynamicProperties.Text" xml:space="preserve">
+    <value>Data Type Dynamic Properties</value>
+  </data> 
+  <data name="DataTypeProperties.Text" xml:space="preserve">
+    <value>Data Type Properties</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DynamicOrderPropertyUi.ascx.cs" Inherits="UCommerce.Web.UI.UCommerce.Marketing.Targets.DynamicOrderPropertyUi" %>
+<%@ Register TagPrefix="presentation" Assembly="UCommerce.Presentation" namespace="UCommerce.Presentation.Web.Controls" %>
 
 <% var containerId = Guid.NewGuid().ToString(); %>
 <table cellpadding="0" cellspacing="0" style="width: 100%;" id="<% =containerId %>">
@@ -20,10 +21,10 @@
 			</asp:PlaceHolder>
         </td>
         <td style="width: 50px; text-align: right; vertical-align: top;">
-			<asp:ImageButton id="EditButton" runat="server" imageurl="../../Images/ui/pencil.png" meta:resourcekey="Edit" onclick="EditButton_Click" />
+			<presentation:LabeledImageButton CssClass="edit-image-button" id="EditButton" runat="server" imageurl="../../Images/ui/pencil.png" meta:resourcekey="Edit" onclick="EditButton_Click" />
             <%--<img src="../Images/ui/pencil.png" class="editButton" style="cursor: pointer;" id="button" alt="<%#GetLocalResourceObject("Edit.Text") %>" />--%>
-            <asp:imagebutton id="SaveButton" runat="server" imageurl="../../Images/save.gif" meta:resourcekey="Save" visible="false" onclick="SaveButton_Click" ValidationGroup="DynamicOrderPropertyGroup" CssClass="saveButton" />
-            <asp:imagebutton id="DeleteButton" runat="server" imageurl="../../Images/ui/cross.png" meta:resourcekey="Delete" onclick="DeleteButton_Click" /><br />
+            <presentation:JavascriptEnabledImageButton CssClass="save-image-button saveButton" id="SaveButton" runat="server" imageurl="../../Images/save.gif" meta:resourcekey="Save" visible="false" onclick="SaveButton_Click" ValidationGroup="DynamicOrderPropertyGroup" />
+            <presentation:JavascriptEnabledImageButton CssClass="delete-image-button" id="DeleteButton" runat="server" imageurl="../../Images/ui/cross.png" meta:resourcekey="Delete" onclick="DeleteButton_Click" /><br />
         </td>
     </tr>
 </table>

@@ -123,4 +123,7 @@
   <data name="Image.Text" xml:space="preserve">
     <value>Billede</value>
   </data>
+  <data name="CategoryCustomMedia.Text" xml:space="preserve">
+    <value>Brugerdefinerede Medier</value>
+  </data>
 </root>

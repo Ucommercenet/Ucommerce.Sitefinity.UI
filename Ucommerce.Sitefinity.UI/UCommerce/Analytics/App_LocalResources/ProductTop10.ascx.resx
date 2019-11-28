@@ -138,4 +138,7 @@
   <data name="ReportHeader.Text" xml:space="preserve">
     <value>Report</value>
   </data>
+  <data name="Filters.Text" xml:space="preserve">
+    <value>Filters</value>
+  </data>
 </root>

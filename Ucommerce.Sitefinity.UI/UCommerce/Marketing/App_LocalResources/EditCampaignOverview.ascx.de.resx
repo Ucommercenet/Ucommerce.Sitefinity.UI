@@ -132,4 +132,7 @@
   <data name="StartDate.Text" xml:space="preserve">
     <value>Startdatum</value>
   </data>
+  <data name="CampaignHeader.Text" xml:space="preserve">
+    <value>Kampagneneigenschaften</value>
+  </data>
 </root>

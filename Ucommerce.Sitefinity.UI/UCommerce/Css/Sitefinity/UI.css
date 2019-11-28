@@ -1435,7 +1435,7 @@ textarea:disabled,
 
 .multiPicker .multiPickerTree {
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .multiPicker .selectedNodes {
@@ -3251,3 +3251,24 @@ input[type='text'].contentPickerSearchInput {
 div#ModalControllerContainer div#ucommerceModal div.modal.ucommerce-modal {
   left: 35% !important;
 }
+
+.variantContainer label.secondary-button-label {
+    display: none;
+}
+
+.sorter.save.button.wrapper {
+    margin: 10px; margin-left: -2px;
+}
+
+.variantOptions .secondary-button-wrapper {
+    display: inline;
+}
+
+.marketing-container .secondary-button-wrapper {
+    display: inline;
+}
+
+.edittCampaigneItemTable .secondary-button-wrapper .secondary-button-label{
+  display:none;
+}
+

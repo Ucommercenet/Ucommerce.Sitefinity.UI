@@ -141,4 +141,10 @@
 	<data name="Pipeline.Text" xml:space="preserve">
     <value>Pipeline</value>
   </data>
+	<data name="PaymentMethodProperties.Text" xml:space="preserve">
+    <value>Egenskaper för Betalningsmetod</value>
+  </data>
+	<data name="PaymentMethodAudit.Text" xml:space="preserve">
+    <value>Betalningsmetod Revision</value>
+  </data>
 </root>

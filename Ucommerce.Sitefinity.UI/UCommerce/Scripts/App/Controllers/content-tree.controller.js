@@ -77,7 +77,7 @@
 
 		return {};
 	}
-
+	
 	$scope.iconIsIconFont = function(node) {
 		if (node == null)
 			return false;
@@ -85,6 +85,10 @@
 		if (node.icon == null)
 			return false;
 
+		if (UCommerceClientMgr.Shell === 'Umbraco8' && node.icon.indexOf('icon-') > -1) {
+			return true;
+		}
+		
 		return node.icon.indexOf('fa-') > -1;
 	}
 
@@ -103,16 +107,15 @@
 	}
 
 	$scope.nodeIconClasses = function (icon) {
-		if (UCommerceClientMgr.Shell === 'Umbraco7') {
+      if (UCommerceClientMgr.Shell === 'Umbraco7') {
 			if (icon === '.sprTreeFolder') {
 				icon = 'icon-folder';
 			}
-
 			return 'treeNodeIcon icon umb-tree-icon ' + icon;
 		} else {
 			return 'treeNodeIcon';
 		}
-	};
+	}
 
 	$scope.reloadNodes = function (keyVal) {
 		$rootScope.reloadNodes(keyVal);
@@ -264,6 +267,9 @@
 					classes.push('nodeSelectedStyle');
 				}
 			}
+			if (node.showOptions) {
+				classes.push('showingOptions');				
+			}
 
 			if (node.dimNode)
 				classes.push('dimNode');
@@ -274,13 +280,15 @@
 
 	function treeNodeOptionMenuStyle(icon) {
 		if (icon) {
+			if ($scope.iconIsIconFont({ icon: icon })) {
+				return {};
+			}
 			var backgroundImage = 'url("' + UCommerceClientMgr.BaseUCommerceUrl + 'Images/ui/' + icon + '")';
 			return {
 				'background-image': backgroundImage
 			};
 		}
-
-	};
+	}
 
 	$scope.$on('treeSetSelected', function (event, data) {
 		treeSetSelected(data);
@@ -351,30 +359,30 @@
 				return {
 					'background-image': 'url("' + newUrl + '")'
 				};
-            }
+			}
 
-            if (UCommerceClientMgr.Shell == 'Sitefinity') {
-                if ($scope.iconFolder == 'uCommerce') {
-                    if (icon.indexOf("/Apps/") > -1) {
-                        var object = {
-                            'background-image': 'url("' + UCommerceClientMgr.BaseUCommerceUrl + icon + '")'
-                        };
-                        return object;
-                    } else {
-                        var object = {
-                            'background-image': 'url("' + UCommerceClientMgr.BaseUCommerceUrl + 'shell/content/images/ui/' + icon + '")'
-                        };
-                        return object;
-                    }
-                } else {
-                    return {
-                        'background-image': 'url("' + icon + '")'
-                    };
-                }
-            }
+			if (UCommerceClientMgr.Shell == 'Sitefinity') {
+					if ($scope.iconFolder == 'uCommerce') {
+							if (icon.indexOf("/Apps/") > -1) {
+									var object = {
+											'background-image': 'url("' + UCommerceClientMgr.BaseUCommerceUrl + icon + '")'
+									};
+									return object;
+							} else {
+									var object = {
+											'background-image': 'url("' + UCommerceClientMgr.BaseUCommerceUrl + 'shell/content/images/ui/' + icon + '")'
+									};
+									return object;
+							}
+					} else {
+							return {
+									'background-image': 'url("' + icon + '")'
+							};
+					}
+			}
 
-			if (UCommerceClientMgr.Shell == 'Sitecore' || UCommerceClientMgr.Shell == 'Kentico') {
-			    if ($scope.iconFolder == 'uCommerce') {
+			if (UCommerceClientMgr.Shell === 'Sitecore' || UCommerceClientMgr.Shell === 'Kentico') {
+			    if ($scope.iconFolder === 'uCommerce') {
 					if (icon.indexOf("/Apps/") > -1) {
 						var object = {
 							'background-image': 'url("' + UCommerceClientMgr.BaseUCommerceUrl + icon + '")'
@@ -392,18 +400,18 @@
 					};
 				}
 			}
-			if (UCommerceClientMgr.Shell == 'Umbraco7') {
+			if (UCommerceClientMgr.Shell === 'Umbraco7') {
 				var lowerCaseIcon = icon.toLowerCase();
-				if ($scope.iconFolder == 'uCommerce') {
+				if ($scope.iconFolder === 'uCommerce') {
 					return {
 						'background-image': 'url("/umbraco/uCommerce/images/ui/' + icon + '")',
 						'background-repeat': 'no-repeat',
 						'padding-left': '16px'
 					};
 				}
-				if ((lowerCaseIcon.indexOf('.png') != -1) ||
-				(lowerCaseIcon.indexOf('.gif') != -1) ||
-				(lowerCaseIcon.indexOf('.jpg') != -1)) {
+				if ((lowerCaseIcon.indexOf('.png') !== -1) ||
+				(lowerCaseIcon.indexOf('.gif') !== -1) ||
+				(lowerCaseIcon.indexOf('.jpg') !== -1)) {
 					return {
 						'background-image': 'url("/umbraco/images/umbraco/' + icon + '")',
 						'background-repeat': 'no-repeat',
@@ -411,6 +419,10 @@
 					};
 				}
 			}
+			if (UCommerceClientMgr.Shell == 'Umbraco8') {
+				return { 'display': "inline", "color": "#1b264f" }; 
+			}
+			
 			if (UCommerceClientMgr.Shell == 'Umbraco') {
 				if ($scope.iconFolder == 'uCommerce') {
 					return {
@@ -423,15 +435,20 @@
 		}
 	}
 
-	function toggleOptions(node) {
-		if ($scope.hasRightClickMenu && $scope.hasRightClickMenu.toLowerCase() == 'true' && node.options.length > 0) {
-			for (var i = 0; i < $rootScope.openTreeNodes.length; i++) {
-				$rootScope.openTreeNodes[i].showOptions = false;
+	function toggleOptions(node, e) {
+		$timeout(function(){
+			if ($scope.hasRightClickMenu && $scope.hasRightClickMenu.toLowerCase() == 'true' && node.options.length > 0) {
+				for (var i = 0; i < $rootScope.openTreeNodes.length; i++) {
+					$rootScope.openTreeNodes[i].showOptions = false;
+				}
+				$rootScope.openTreeNodes = [];
+				$rootScope.openTreeNodes.push(node);
+				node.showOptions = !node.showOptions;
 			}
-			$rootScope.openTreeNodes = [];
-			$rootScope.openTreeNodes.push(node);
-			node.showOptions = !node.showOptions;
-			$scope.mousePosition = ($window.event.clientY - 10);
+		});
+		if (e) {
+			e.preventDefault();
+			e.stopPropagation();
 		}
 	}
 
@@ -445,7 +462,7 @@
 		if (node) {
 			if (node.hasChildren) {
 				var toggleState = node.toggleState;
-				if (UCommerceClientMgr.Shell === 'Umbraco7') {
+        if (UCommerceClientMgr.Shell === 'Umbraco7') {
 					switch (toggleState) {
 						case 'treeItemClosed':
 							return ['icon-navigation-right'];
@@ -531,7 +548,10 @@
 		loadChildNodes(node);
 	}
 
-	function toggleChildNodes(node) {
+	function toggleChildNodes(node, e) {
+		if (e) {
+			e.stopPropagation();
+		}
 		if (!node.loaded) {
 			loadChildNodes(node);
 			node.loaded = true;
@@ -572,6 +592,15 @@
 		var nodeSpinner = UCommerceClientMgr.BaseUCommerceUrl + 'Images/ui/ajax-loader.gif';
 
 		if (UCommerceClientMgr.Shell === 'Umbraco7') {
+			if ($scope.iconFolder == 'uCommerce') {
+				nodeSpinner = "ajax-loader.gif";
+
+			} else {
+				nodeSpinner = 'icon-node-spinner';
+			}
+		}
+
+		if (UCommerceClientMgr.Shell === 'Umbraco8') {
 			if ($scope.iconFolder == 'uCommerce') {
 				nodeSpinner = "ajax-loader.gif";
 

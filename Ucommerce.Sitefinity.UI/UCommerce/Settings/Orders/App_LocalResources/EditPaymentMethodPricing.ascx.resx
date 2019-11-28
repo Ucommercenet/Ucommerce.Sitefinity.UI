@@ -135,4 +135,10 @@
   <data name="PriceHeader.HeaderText" xml:space="preserve">
     <value>Price</value>
   </data>
+  <data name="PaymentMethodPricingFee.Text" xml:space="preserve">
+    <value>Payment Method Fees</value>
+  </data>
+  <data name="PaymentMethodPricing.Text" xml:space="preserve">
+    <value>Payment Method Pricing</value>
+  </data>
 </root>

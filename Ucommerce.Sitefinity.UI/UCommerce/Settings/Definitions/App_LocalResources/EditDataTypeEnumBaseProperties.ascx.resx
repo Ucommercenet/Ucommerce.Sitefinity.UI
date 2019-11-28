@@ -120,4 +120,7 @@
   <data name="Value.Text" xml:space="preserve">
     <value>Value</value>
   </data>
+  <data name="EnumProperties.Text" xml:space="preserve">
+    <value>Properties</value>
+  </data>
 </root>

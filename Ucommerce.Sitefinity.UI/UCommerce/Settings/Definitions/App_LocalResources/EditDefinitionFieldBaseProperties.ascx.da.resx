@@ -144,4 +144,7 @@
   <data name="VariantProperty.Text" xml:space="preserve">
     <value>Variant egenskab</value>
   </data>
+  <data name="DefinitionFieldProperties.Text" xml:space="preserve">
+    <value>Definitionfelt Egenskaber</value>
+  </data>
 </root>

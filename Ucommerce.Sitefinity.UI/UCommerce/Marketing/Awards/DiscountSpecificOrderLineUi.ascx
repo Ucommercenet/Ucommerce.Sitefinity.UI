@@ -1,4 +1,5 @@
 ﻿<%@ control language="C#" autoeventwireup="true" codebehind="DiscountSpecificOrderLineUi.ascx.cs" inherits="UCommerce.Web.UI.UCommerce.Marketing.Awards.DiscountSpecificOrderLineUi" %>
+<%@ Register TagPrefix="presentation" Assembly="UCommerce.Presentation" namespace="UCommerce.Presentation.Web.Controls" %>
 
 <table cellpadding="0" cellspacing="0" style="width: 100%;">
 	<tr>
@@ -33,9 +34,9 @@
 			</asp:panel>
 		</td>
 		<td style="width: 50px; text-align: right; vertical-align: top;">
-			<asp:imagebutton id="EditButton" runat="server" imageurl="../../Images/ui/pencil.png" meta:resourcekey="Edit" onclick="EditButton_Click" />
-			<asp:imagebutton id="SaveButton" runat="server" imageurl="../../Images/ui/save.gif" meta:resourcekey="Save" visible="false" onclick="SaveButton_Click" />
-			<asp:imagebutton id="DeleteButton" runat="server" imageurl="../../Images/ui/cross.png" meta:resourcekey="Delete" onclick="DeleteButton_Click" />
+			<presentation:LabeledImageButton CssClass="edit-image-button" id="EditButton" runat="server" imageurl="../../Images/ui/pencil.png" meta:resourcekey="Edit" onclick="EditButton_Click" />
+			<presentation:JavascriptEnabledImageButton CssClass="save-image-button" id="SaveButton" runat="server" imageurl="../../Images/ui/save.gif" meta:resourcekey="Save" visible="false" onclick="SaveButton_Click" />
+			<presentation:JavascriptEnabledImageButton CssClass="delete-image-button" id="DeleteButton" runat="server" imageurl="../../Images/ui/cross.png" meta:resourcekey="Delete" onclick="DeleteButton_Click" />
 		</td>
 	</tr>
 </table>

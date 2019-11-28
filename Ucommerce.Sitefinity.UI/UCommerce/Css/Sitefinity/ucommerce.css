@@ -1,4 +1,4 @@
-﻿/*CSS to make the top of the application transparent.*/
+﻿﻿/*CSS to make the top of the application transparent.*/
 .columns.content {
 	background-color: #fff;
 }
@@ -503,4 +503,9 @@ div#ModalControllerContainer div#ucommerceModal div.modal.ucommerce-modal {
     top: 5% !important;
 }
 
-
+@media (max-width: 1400px) {
+    div[id*="ucommerce-orders-addproduct"] {
+        height: 500px !important;
+        width: 800px !important;
+    }
+}

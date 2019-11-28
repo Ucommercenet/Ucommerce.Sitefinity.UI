@@ -123,4 +123,7 @@
   <data name="DisplayName.Text" xml:space="preserve">
     <value>Navn</value>
   </data>
+  <data name="PaymentMethodDescription.Text" xml:space="preserve">
+    <value>Flersprogede egenskaber</value>
+  </data>
 </root>

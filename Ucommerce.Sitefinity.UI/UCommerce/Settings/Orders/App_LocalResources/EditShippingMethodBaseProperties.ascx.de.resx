@@ -132,4 +132,10 @@
 	<data name="ShippingMethodCalculator.Text" xml:space="preserve">
     <value>Dienst</value>
   </data>
+	<data name="ShippingMethodProperties.Text" xml:space="preserve">
+    <value>Versandart Eigenschaften</value>
+  </data>
+	<data name="ShippingMethodMedia.Text" xml:space="preserve">
+    <value>Versandart Medien</value>
+  </data>
 </root>

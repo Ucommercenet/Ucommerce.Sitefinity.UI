@@ -132,4 +132,7 @@
 	<data name="PriceHeader.HeaderText" xml:space="preserve">
     <value>Pris</value>
   </data>
+	<data name="ShippingMethodPricing.Text" xml:space="preserve">
+    <value>Fraktmetod prissättning</value>
+  </data>
 </root>

@@ -135,4 +135,10 @@
   <data name="PaymentMethodService.Text" xml:space="preserve">
     <value>Service</value>
   </data>
+  <data name="PaymentMethodProperties.Text" xml:space="preserve">
+    <value>Egenskaber for Betalingsmetode</value>
+  </data>
+  <data name="PaymentMethodAudit.Text" xml:space="preserve">
+    <value>Betalingsmetode Revision</value>
+  </data>
 </root>

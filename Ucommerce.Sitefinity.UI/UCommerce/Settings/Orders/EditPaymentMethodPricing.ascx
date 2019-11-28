@@ -4,6 +4,7 @@
 
 <commerce:ValidationSummary runat="server" />
 <div class="propertyPane leftAligned">
+	<h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="PaymentMethodPricingFee" /></h2>
 	<div>
 		<div class="propertyItem">
 			<div class="propertyItemHeader"><asp:Localize runat="server" meta:resourcekey="FeePercentage" /> %</div>
@@ -21,10 +22,11 @@
 	<div class="propertyPaneFooter">
 		-</div>
 </div>
-<div class="propertyPane leftAligned">
+<div class="propertyPane leftAligned tablePropertyPane">
+	<h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="PaymentMethodPricing" /></h2>
 	<div>
 		<div class="">
-			<div class=""><asp:Localize runat="server" meta:resourcekey="Description" /></div>
+			<div class="" id="pricingDescription"><asp:Localize runat="server" meta:resourcekey="Description" /></div>
             <div class="" style="width: 100%;">
 				<commerce:BulkEditGridView bulkedit="true" runat="server" id="PaymentMethodPricesGridView" CssClass="dataList customDataList paymentMethodPrices" Style="margin-top: 20px;"
 					datasource="<%# PaymentMethodFees %>" showheader="true" datakeynames="PaymentMethodFeeId"

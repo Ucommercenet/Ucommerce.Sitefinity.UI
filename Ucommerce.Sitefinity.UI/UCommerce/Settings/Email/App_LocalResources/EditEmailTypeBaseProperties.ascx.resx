@@ -129,4 +129,7 @@
   <data name="Name.Text" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="EmailTypeProperties.Text" xml:space="preserve">
+    <value>E-mail Type Properties</value>
+  </data>
 </root>

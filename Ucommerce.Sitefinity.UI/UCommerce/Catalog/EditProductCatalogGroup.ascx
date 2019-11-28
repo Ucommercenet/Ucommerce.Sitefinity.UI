@@ -33,7 +33,7 @@
 	</commerce:PropertyPanel>
 
 	<commerce:PropertyPanel runat="server" meta:resourceKey="ProductReviewsRequireApproval">
-		<asp:CheckBox runat="server" ID="ProductReviewsRequireApproval" Checked="<%# View.ProductCatalogGroup.ProductReviewsRequireApproval %>" />
+		<asp:CheckBox runat="server" ID="ProductReviewsRequireApproval" class="ucommerce-toggle-check-box" Checked="<%# View.ProductCatalogGroup.ProductReviewsRequireApproval %>" />
 	</commerce:PropertyPanel>
     <div class="propertyPaneFooter">-</div>
 </div>
@@ -42,7 +42,7 @@
     <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourcekey="customersandmembers"></asp:Localize></h2>    
     
     <commerce:PropertyPanel runat="server" meta:resourceKey="CreateCustomersAsMembers">
-        <asp:CheckBox runat="server" ID="CreateCustomersAsMembers" Checked="<%# View.ProductCatalogGroup.CreateCustomersAsMembers %>" />
+        <asp:CheckBox runat="server" ID="CreateCustomersAsMembers" class="ucommerce-toggle-check-box" Checked="<%# View.ProductCatalogGroup.CreateCustomersAsMembers %>" />
     </commerce:PropertyPanel>
             
     <commerce:PropertyPanel runat="server" meta:resourceKey="MemberGroup">

@@ -4,6 +4,7 @@
 
 <commerce:ValidationSummary runat="server" />
 <asp:Panel runat="server" id="FixedPropertyPanel" CssClass="propertyPane">
+	<h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="PaymentMethodProperties" /></h2>
 	<div class="propertyItem">
 		<div class="propertyItemHeader"><asp:Localize ID="Localize6" runat="server" meta:resourceKey="PaymentMethodService" /></div>
 		<div class="propertyItemContent">
@@ -25,13 +26,14 @@
 	<div class="propertyItem">
 		<div class="propertyItemHeader"><asp:Localize ID="Localize2" runat="server" meta:resourceKey="Enabled" /></div>
 		<div class="propertyItemContent">
-			<asp:CheckBox runat="server" ID="EnabledCheckBox" Checked="<%# View.PaymentMethod.Enabled %>" />
+			<asp:CheckBox class="ucommerce-toggle-check-box" runat="server" ID="EnabledCheckBox" Checked="<%# View.PaymentMethod.Enabled %>" />
 		</div>
 	</div>
 	<div class="propertyPaneFooter">-</div>
 </asp:Panel>
 <asp:Panel runat="server" id="PropertyPanel" cssclass="propertyPane"></asp:Panel>
 <asp:Panel runat="server" id="AuditPropertyPanel" CssClass="propertyPane">
+	<h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourceKey="PaymentMethodAudit" /></h2>
 	<div class="propertyItem">
 		<div class="propertyItemHeader"><asp:Localize ID="Localize3" runat="server" meta:resourceKey="LastModified" /></div>
 		<div class="propertyItemContent">

@@ -123,4 +123,7 @@
   <data name="IsoCodeProperty.Text" xml:space="preserve">
     <value>ISO kode</value>
   </data>
+  <data name="CurrencyProperties.Text" xml:space="preserve">
+    <value>Valutaegenskaber</value>
+  </data>
 </root>

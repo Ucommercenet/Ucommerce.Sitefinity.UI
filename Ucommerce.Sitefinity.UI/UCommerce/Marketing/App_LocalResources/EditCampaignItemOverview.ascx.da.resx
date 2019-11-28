@@ -150,4 +150,10 @@
   <data name="ProductCatalogGroup.Text" xml:space="preserve">
     <value>Produkt katalog gruppe</value>
   </data>
+  <data name="CampaignItemHeader.Text" xml:space="preserve">
+    <value>Egenskaber for kampagneelementet</value>
+  </data>
+  <data name="CampaignItemSetupHeader.Text" xml:space="preserve">
+    <value>Opsætning til kampagneelementet</value>
+  </data>
 </root>

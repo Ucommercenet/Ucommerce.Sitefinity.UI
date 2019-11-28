@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddProductText" xml:space="preserve">
-    <value>Tilføj produkt</value>
+    <value>Tilføj produkter til denne kategori</value>
   </data>
   <data name="Currency.Text" xml:space="preserve">
     <value>Valuta</value>

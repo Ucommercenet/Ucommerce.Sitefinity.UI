@@ -138,4 +138,7 @@
   <data name="Subject.Text" xml:space="preserve">
     <value>Subject</value>
   </data>
+  <data name="EmailContentProperties.Text" xml:space="preserve">
+    <value>Email Content</value>
+  </data>
 </root>

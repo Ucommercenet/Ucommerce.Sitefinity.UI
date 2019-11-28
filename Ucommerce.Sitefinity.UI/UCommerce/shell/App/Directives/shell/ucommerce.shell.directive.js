@@ -8,6 +8,7 @@ var uc_shell = function($compile) {
 			'contentPickerType': '@',
 			'disableResize': '@',
 			'fixedLeftSize': '@',
+			'resizeImmediately': '=',
 			'treeIndetionSize': '@',
 			'stylesheet': '@',
 			'script' : '@'
@@ -15,7 +16,9 @@ var uc_shell = function($compile) {
 		templateUrl: 'App/Directives/shell/shellView.html',
 		controller: shellController,
 		link: function ($scope, $elem, $attr) {
+			setTimeout(function(){
+				$('#mainframe').attr('src', $attr.startPage);
+			}, 10)
 		}
 	}
 }
-

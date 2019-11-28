@@ -15,7 +15,7 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Price">
                 <EditItemTemplate>
-                    <asp:TextBox class="uc-short-text propertyText mediumWidth amountInput" runat="server" ID="ProductPriceTextBox" Text="<%# GetSinglePriceForPriceGroup(((PriceGroup)Container.DataItem).PriceGroupId) %>"></asp:TextBox>
+                    <asp:TextBox class="uc-short-text propertyText mediumWidth amountInput" autocomplete="off" runat="server" ID="ProductPriceTextBox" Text="<%# GetSinglePriceForPriceGroup(((PriceGroup)Container.DataItem).PriceGroupId) %>"></asp:TextBox>
                 </EditItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField>

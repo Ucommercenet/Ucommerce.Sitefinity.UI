@@ -6,13 +6,19 @@
 			{
 				"bPaginate": false,
 				// disable initial sort
-				"aaSorting": []
+                "aaSorting": [],
+                "fnInitComplete": function (oSettings, json) {
+                    $('#reportTable_filter > label > input[type=text]').attr('placeholder', 'Type to search...');
+                    $('#reportTable_filter > label').append('<i class="icon icon-search"></i>');
+                }
 			}
 		);
 	});
 </script>
 <commerce:validationsummary runat="server" />
-<div class="propertyPane leftAligned SalesStrip" ID="SalesStrip" runat="server"></div>
+<div class="propertyPane leftAligned SalesStrip" ID="SalesStrip" runat="server">
+	  <h2 class="propertyPaneTitel"><asp:Localize runat="server" meta:resourcekey="SalesTotalsHeader" /></h2>
+</div>
 <asp:panel runat="server" cssclass="propertyPane leftAligned" visible="false" id="ReportPanel">
 	<h2 class="propertyPaneTitel reportHeader" style="margin:0px;"><asp:Localize runat="server" meta:resourcekey="ReportHeader" /></h2>
     <asp:Repeater runat="server" ID="SalesTotalRepeater">

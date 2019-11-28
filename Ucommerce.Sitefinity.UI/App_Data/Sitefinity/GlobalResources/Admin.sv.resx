@@ -651,4 +651,7 @@
   <data name="menu_catalogs_root" xml:space="preserve">
     <value>Kataloger</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Radera</value>
+  </data>
 </root>
