@@ -53,8 +53,9 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             viewModel.CurrentPage = this.GetRequestedPage();
 
             var currentCategory = SiteContext.Current.CatalogContext.CurrentCategory;
+            var searchTerm = System.Web.HttpContext.Current.Request.QueryString["search"];
 
-            var queryResult = this.GetProductsQuery(currentCategory);
+            var queryResult = this.GetProductsQuery(currentCategory, searchTerm);
 
             var itemsToSkip = (viewModel.CurrentPage > 1) ? this.itemsPerPage * (viewModel.CurrentPage - 1) : 0;
 
@@ -211,33 +212,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return url;
         }
 
-        private IQueryable<Product> FilterByFacets(Category category, List<Product> productsInCategory)
-        {
-            var facetsResolver = new FacetResolver(this.queryStringBlackList);
-            var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
-            var filterProducts = SearchLibrary.GetProductsFor(category, facetsForQuerying);
-
-            if (!filterProducts.Any())
-            {
-                return productsInCategory.AsQueryable();
-            }
-
-            var listOfProducts = new List<Product>();
-
-            foreach (var product in filterProducts)
-            {
-                var filterProduct =
-                    productsInCategory.FirstOrDefault(x => x.Sku == product.Sku && x.VariantSku == product.VariantSku);
-                if (filterProduct != null)
-                {
-                    listOfProducts.Add(filterProduct);
-                }
-            }
-
-            return listOfProducts.AsQueryable();
-        }
-
-        private IQueryable<Product> GetProductsQuery(Category category)
+        private IQueryable<Product> GetProductsQuery(Category category, string searchTerm)
         {
             if (this.isManualSelectionMode)
             {
@@ -248,7 +223,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             }
             else
             {
-                if (category == null && this.enableCategoryFallback == true)
+                if (string.IsNullOrWhiteSpace(searchTerm) && category == null && this.enableCategoryFallback == true)
                 {
                     var categoryIds = this.fallbackCategoryIds?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
 
@@ -256,7 +231,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
                 }
                 else
                 {
-                    return this.ApplyAutoSelection(category);
+                    return this.ApplyAutoSelection(category, searchTerm);
                 }
 
             }
@@ -283,6 +258,7 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return products.Where(x => productsFromFacets.Any(y => x.Sku == y.Sku)).AsQueryable();
         }
 
+
         private IList<Product> GetProductsFromSelectedCategoryIds(List<int> categoryIds)
         {
             List<Product> result = new List<Product>();
@@ -303,27 +279,68 @@ namespace Ucommerce.Sitefinity.UI.Mvc.Model
             return Product.All().Where(x => productIds.Contains(x.ProductId)).ToList();
         }
 
-        private IQueryable<Product> ApplyAutoSelection(Category currentCategory)
+        private IQueryable<Product> ApplyAutoSelection(Category currentCategory, string searchTerm)
         {
+            IList<UCommerce.Documents.Product> products = null;
+            var facetsResolver = new FacetResolver(this.queryStringBlackList);
+            var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
+
             if (currentCategory == null)
             {
-                var catalog = CatalogLibrary.GetAllCatalogs().FirstOrDefault();
-                if (catalog != null)
+                if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    currentCategory = CatalogLibrary.GetRootCategories(catalog.Id).FirstOrDefault();
-                    if (currentCategory == null)
-                    {
-                        throw new InvalidOperationException(NO_CATEGORIES_ERROR_MESSAGE);
-                    }
+                    var matchingProducts = Product.Find(p =>
+                                              p.VariantSku == null
+                                              && p.DisplayOnSite
+                                              && (p.Sku.Contains(searchTerm)
+                                                  || p.Name.Contains(searchTerm)
+                                                  || p.ProductDescriptions.Any(d => d.DisplayName.Contains(searchTerm) || d.ShortDescription.Contains(searchTerm) || d.LongDescription.Contains(searchTerm))));
+
+                    return matchingProducts.AsQueryable();
                 }
                 else
                 {
-                    throw new InvalidOperationException(NO_CATALOG_ERROR_MESSAGE);
+                    var catalog = CatalogLibrary.GetAllCatalogs().FirstOrDefault();
+                    if (catalog != null)
+                    {
+                        currentCategory = CatalogLibrary.GetRootCategories(catalog.Id).FirstOrDefault();
+                        products = SearchLibrary.GetProductsFor(currentCategory, facetsForQuerying);
+                        if (currentCategory == null)
+                        {
+                            throw new InvalidOperationException(NO_CATEGORIES_ERROR_MESSAGE);
+                        }
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(NO_CATALOG_ERROR_MESSAGE);
+                    }
+                }
+            }
+            else
+            {
+                products = SearchLibrary.GetProductsFor(currentCategory, facetsForQuerying);
+            }
+
+            ICollection<Product> productsInCategory = null;
+            productsInCategory = CatalogLibrary.GetProducts(currentCategory).ToList();
+
+            if (!products.Any())
+            {
+                return productsInCategory.AsQueryable();
+            }
+
+            var listOfProducts = new List<Product>();
+
+            foreach (var product in products)
+            {
+                var filterProduct = productsInCategory.FirstOrDefault(x => x.Sku == product.Sku && x.VariantSku == product.VariantSku);
+                if (filterProduct != null)
+                {
+                    listOfProducts.Add(filterProduct);
                 }
             }
 
-            var productsInCategory = CatalogLibrary.GetProducts(currentCategory).ToList();
-            return this.FilterByFacets(currentCategory, productsInCategory);
+            return listOfProducts.AsQueryable();
         }
 
         private IList<ProductViewModel> MapProducts(IList<Product> products, Category category, bool openInSamePage, Guid detailPageId)
