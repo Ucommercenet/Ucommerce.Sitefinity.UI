@@ -13,7 +13,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uFacetsFilter_MVC", Title = "Facets Filter", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnFacetsFilter sfMvcIcn")]
     public class FacetsFilterController : Controller, IPersonalizable
     {
-        public string TemplateName { get; set; } = "B4Index";
+        public string TemplateName { get; set; } = "Index";
 
         [RelativeRoute("{categoryName?}")]
         [RelativeRoute("{parentCategory1?}/{categoryName?}")]

@@ -28,7 +28,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         public Guid? ProductDetailsPageId { get; set; }
 
-        public string TemplateName { get; set; } = "B4Index";
+        public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
         {
