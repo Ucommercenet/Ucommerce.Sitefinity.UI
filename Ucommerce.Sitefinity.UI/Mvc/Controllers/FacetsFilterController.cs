@@ -36,8 +36,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 }
 
                 var viewModel = model.CreateViewModel();
+                var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-                return this.View(this.TemplateName, viewModel);
+                return this.View(detailTemplateName, viewModel);
             }
             catch (Exception ex)
             {
@@ -61,5 +62,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         {
             return UCommerceUIModule.Container.Resolve<IFacetsFilterModel>();
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }
