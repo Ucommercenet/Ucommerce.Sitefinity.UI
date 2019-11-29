@@ -1,0 +1,128 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
+@using Telerik.Sitefinity.Modules.Pages;
+@using Telerik.Sitefinity.UI.MVC;
+@using Telerik.Sitefinity.Services;
+
+@model UCommerce.Sitefinity.UI.Mvc.ViewModels.CartRenderingViewModel
+
+@if (!SystemManager.IsDesignMode)
+{
+    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+}
+
+@if (Model.OrderLines.Count == 0)
+{
+    <div>
+        <p>Your cart is empty. Please <a href="/">return to our store and add some items</a>.</p>
+    </div>
+}
+else
+{
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>VAT</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.OrderLines.Count; i++)
+                {
+                    var line = Model.OrderLines[i];
+                    <tr class="order-line" data-orderline="@line.OrderLineId">
+                        @Html.HiddenFor(model => model.OrderLines[i].Sku)
+                        @Html.HiddenFor(model => model.OrderLines[i].VariantSku)
+                        @Html.HiddenFor(model => model.OrderLines[i].OrderLineId)
+
+                        <td><a href="@line.ProductUrl">@line.ProductName</a></td>
+                        <td>
+                            @if (@line.Discount.HasValue && @line.Discount > 0)
+                            {
+                                <span data-price>
+                                    @line.Price
+                                </span>
+                                <span data-price-with-discount>
+                                    @line.PriceWithDiscount
+                                </span>
+                            }
+                            else
+                            {
+                                <span data-price>
+                                    @line.Price
+                                </span>
+
+                            }
+                        </td>
+                        <td data-tax>
+                            @line.Tax
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control inline-block no-padding", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
+                            <button name="update-basket" class="btn-none inline-block update-basket js-update-basket" data-remove-orderline-url="@Model.RemoveOrderlineUrl" data-refresh-url="@Model.RefreshUrl" data-cart-container=".cart-container" data-item-total=".item-total" data-line-remove=".line-remove" data-order-subtotal=".order-subtotal" data-order-tax=".order-tax" data-order-discounts=".order-discounts" data-order-total=".order-total" data-basket="@Model" type="button">
+                                <span>&#10227;</span> <span>Update</span>
+                            </button>
+                        </td>
+                        <td class="item-total">
+                            @line.Total
+                        </td>
+                        <td>
+                            <button type="button" data-line-id="@line.OrderLineId" name="RemoveOrderlineId" class="line-remove">Remove</button>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td rowspan="4" colspan="3"></td>
+                    <td colspan="1">Sub total:</td>
+                    <td>
+                        @Model.SubTotal
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="1">VAT:</td>
+                    <td>
+                        @Model.TaxTotal
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="1">Discounts:</td>
+                    <td>
+                        @Model.DiscountTotal
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="1"><strong>Order total:</strong></td>
+                    <td>
+                        @Model.OrderTotal
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div>
+            <div>
+                @{
+                    var showContinueButton = true;
+
+                    if (Model.NextStepUrl == "")
+                    {
+                        showContinueButton = false;
+                    }
+
+                }
+                <a href="@Model.NextStepUrl" style="@(showContinueButton ? "display:block" : "display:none")" name="review-product">Continue</a>
+            </div>
+        </div>
+    </div>
+}
