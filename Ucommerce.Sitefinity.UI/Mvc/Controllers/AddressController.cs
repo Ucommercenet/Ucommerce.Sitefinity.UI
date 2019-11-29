@@ -29,8 +29,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             }
 
             var viewModel = model.GetViewModel();
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(TemplateName, viewModel);
+            return View(detailTemplateName, viewModel);
         }
 
         [HttpPost]
@@ -43,6 +44,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var parameters = new System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("addressRendering", addressRendering);
             parameters.Add("modelState", ModelState);
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
             if (!model.CanProcessRequest(parameters, out message))
             {
@@ -54,7 +56,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 model.Save(addressRendering);
                 if (viewModel.NextStepUrl?.Length == 0)
                 {
-                    return View(TemplateName, viewModel);
+                    return View(detailTemplateName, viewModel);
                 }
                 else
                 {
@@ -63,7 +65,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             }
             else
             {
-                return View(TemplateName, viewModel);
+                return View(detailTemplateName, viewModel);
             }
         }
 
@@ -84,5 +86,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }

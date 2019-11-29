@@ -30,8 +30,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             }
 
             var paymentPickerVM = model.GetViewModel();
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(TemplateName, paymentPickerVM);
+            return View(detailTemplateName, paymentPickerVM);
         }
 
         [HttpPost]
@@ -77,5 +78,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }

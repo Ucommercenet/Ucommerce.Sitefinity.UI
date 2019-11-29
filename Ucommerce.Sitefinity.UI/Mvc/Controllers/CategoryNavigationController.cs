@@ -48,7 +48,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
                 categoryNavigationViewModel = model.CreateViewModel();
 
-                return this.View(this.TemplateName, categoryNavigationViewModel);
+                var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+
+                return this.View(detailTemplateName, categoryNavigationViewModel);
             }
             catch (Exception ex)
             {
@@ -84,5 +86,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }

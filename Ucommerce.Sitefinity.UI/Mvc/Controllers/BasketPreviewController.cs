@@ -50,7 +50,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 ViewBag.RowSpan++;
             }
 
-            return View(TemplateName, basketPreviewViewModel);
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+
+            return View(detailTemplateName, basketPreviewViewModel);
         }
 
         [HttpPost]
@@ -86,5 +88,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }

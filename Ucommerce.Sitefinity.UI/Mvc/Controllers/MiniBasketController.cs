@@ -37,13 +37,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             }
 
             var miniBasketRenderingViewModel = miniBasketModel.CreateViewModel(Url.Action("Refresh"));
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
             if (!_transactionLibraryInternal.HasBasket())
             {
-                return View(TemplateName, miniBasketRenderingViewModel);
+                return View(detailTemplateName, miniBasketRenderingViewModel);
             }
 
-            return View(TemplateName, miniBasketRenderingViewModel);
+            return View(detailTemplateName, miniBasketRenderingViewModel);
         }
 
         [HttpGet]
@@ -69,5 +70,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }
