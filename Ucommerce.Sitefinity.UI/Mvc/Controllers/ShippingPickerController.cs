@@ -29,9 +29,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             {
                 return this.PartialView("_Warning", message);
             }
-            var sippingPickerVM = model.GetViewModel();
 
-            return View(TemplateName, sippingPickerVM);
+            var sippingPickerVM = model.GetViewModel();
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+
+            return View(detailTemplateName, sippingPickerVM);
         }
 
         [HttpPost]
@@ -77,5 +79,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         {
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }

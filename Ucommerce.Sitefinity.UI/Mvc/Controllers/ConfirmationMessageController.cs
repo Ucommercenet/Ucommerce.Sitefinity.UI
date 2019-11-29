@@ -28,8 +28,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             }
 
             var confirmationMessageVM = model.GetViewModel(Headline, Message);
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(this.TemplateName, confirmationMessageVM);
+            return View(detailTemplateName, confirmationMessageVM);
         }
 
         public IConfirmationMessageModel ResolveModel()
@@ -44,5 +45,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         {
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }

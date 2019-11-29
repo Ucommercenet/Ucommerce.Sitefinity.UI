@@ -40,7 +40,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
-            return View(TemplateName, vm);
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+
+            return View(detailTemplateName, vm);
         }
 
         [HttpPost]
@@ -129,5 +131,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
+
+        private string detailTemplateNamePrefix = "Detail.";
     }
 }
