@@ -454,7 +454,7 @@
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\DesignerView.Simple.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mvc\Views\FacetsFilter\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\FacetsFilter\Detail.Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mvc\Views\Products\DesignerView.Simple.cshtml" />
@@ -464,7 +464,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Scripts\jquery.validate.min.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsAddress.js" />
     <EmbeddedResource Include="Mvc\Scripts\jsAddToBasketButton.js" />
@@ -482,21 +482,21 @@
     <None Include="assets\src\js\components\search.vue" />
     <EmbeddedResource Include="Mvc\Views\Cart\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Cart\DesignerView.Simple.json" />
-    <EmbeddedResource Include="Mvc\Views\Cart\Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Address\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Cart\Detail.Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Address\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.json" />
-    <EmbeddedResource Include="Mvc\Views\BasketPreview\Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\MiniBasket\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\BasketPreview\Detail.Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\MiniBasket\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\ShippingPicker\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ShippingPicker\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ShippingPicker\DesignerView.Simple.json" />
-    <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\Detail.Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Scripts\jsVariantPicker.js" />
@@ -510,7 +510,7 @@
     <EmbeddedResource Include="Mvc\Scripts\jquery.validate.js" />
     <EmbeddedResource Include="Mvc\Scripts\popper.js" />
     <EmbeddedResource Include="Mvc\Scripts\initBootstrap.js" />
-    <EmbeddedResource Include="Mvc\Views\PaymentPicker\Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\PaymentPicker\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Layouts\Email.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ConfirmationEmail\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\DesignerView.Simple.cshtml" />

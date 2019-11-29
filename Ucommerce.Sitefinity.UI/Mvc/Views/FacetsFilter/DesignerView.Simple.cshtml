@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-xs-6">
             <select id="facetTemplateName" ng-model="properties.TemplateName.PropertyValue" class="form-control">
-                @foreach (var viewName in Html.GetViewNames("FacetsFilter", @"(?<viewName>[\w\s]*)$"))
+                @foreach (var viewName in Html.GetViewNames("FacetsFilter", @"Detail\.(?<viewName>[\w\s]*)$"))
                 {
                     <option value="@viewName"> @viewName.SplitCamelCase()</option>
                 }
