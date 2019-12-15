@@ -11,7 +11,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
     {
         public ProductDetailViewModel()
         {
-            this.Variants = new List<ProductDetailViewModel>();
+            this.VariantTypes = new List<VariantTypeViewModel>();
             this.Routes = new Dictionary<string, string>();
         }
 
@@ -43,10 +43,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 
         public int Rating { get; set; }
 
-        public IList<ProductDetailViewModel> Variants { get; set; }
+        public IList<VariantTypeViewModel> VariantTypes { get; set; }
 
         public bool IsVariant { get; set; }
-
+                
         public bool IsProductFamily { get; set; }
 
         public string ParentProductDisplayName { get; set; }

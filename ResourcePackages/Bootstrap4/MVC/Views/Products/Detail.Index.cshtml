@@ -1,5 +1,6 @@
 ﻿@model UCommerce.Sitefinity.UI.Mvc.ViewModels.ProductDetailViewModel
 
+@using Newtonsoft.Json;
 @using Telerik.Sitefinity.Frontend.Mvc.Helpers
 @using Telerik.Sitefinity.Services;
 
@@ -23,24 +24,29 @@
                         <img class="mx-auto d-block" src="@Model.PrimaryImageMediaUrl" />
                     </a>
                 </div>
-
                 <div>
-                    @if (Model.Variants.Any())
-                    {
-                        <ul class="list-group">
-                            @foreach (var variant in Model.Variants)
-                            {
-                                if (!string.IsNullOrEmpty(variant.PrimaryImageMediaUrl))
-                                {
-                                    <li class="list-group-item">
-                                        <a href="@variant.PrimaryImageMediaUrl" rel="fancybox">
-                                            <img class="mx-auto d-block" src="@variant.PrimaryImageMediaUrl" />
-                                        </a>
-                                    </li>
-                                }
-                            }
-                        </ul>
-                    }
+					@if (Model.VariantTypes.Any())
+					{
+						foreach (var variantType in Model.VariantTypes)
+						{
+							if (variantType.Values.Any())
+							{
+								<ul class="list-group">
+									@foreach (var variant in variantType.Values)
+									{
+										if (!string.IsNullOrEmpty(variant.PrimaryImageMediaUrl))
+										{
+											<li class="sfproductImgWrp">
+												<a href="@variant.PrimaryImageMediaUrl" rel="fancybox">
+													<img class="mx-auto d-block" src="@variant.PrimaryImageMediaUrl" />
+												</a>
+											</li>
+										}
+									}
+								</ul>
+							}
+						}
+					}
                 </div>
             </div>
             <div class="col-sx-12 offset-1 col-sm-6 col-md-6 col-lg-6">
@@ -81,36 +87,30 @@
                 <div class="row">
                     <div class="col-sx-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="mt-3 w-75">
-                            @{
-                                var uniqueVariants = from v in Model.Variants.SelectMany(p => p.ProductProperties)
-                                                     where v.ProductDefinitionField.DisplayOnSite
-                                                     group v by v.ProductDefinitionField into g
-                                                     select g;
-                                if (uniqueVariants.Any())
-                                {
-                                    <fieldset class="options">
-                                        @foreach (var prop in uniqueVariants)
-                                        {
-                                            var controlName = string.Format("variation-{0}", prop.Key.Name.ToLower());
-                                            <div class="general">
-                                                <label for="@controlName">@prop.Key.GetDisplayName()</label>
-                                                <span class="wrap">
-                                                    <select v-model="variantSku" name="@controlName" id="@controlName" class="variant float-right">
-                                                        @{
-                                                            var products = prop.GroupBy(p => p.Value).Select(g => g.First()).ToList();
-                                                        }
-                                                        <option>Please select ...</option>
-                                                        @foreach (var product in products)
-                                                        {
-                                                            <option value="@product.Product.VariantSku">@product.Value</option>
-                                                        }
-                                                    </select>
-                                                </span>
-                                            </div>
-                                        }
-                                    </fieldset>
-                                }
-                            }
+							@{
+								if (Model.VariantTypes.Any())
+								{
+									<script type="application/json" data-variants="true">
+										{
+										"variants": @Html.Raw(JsonConvert.SerializeObject(Model.VariantTypes.ToList()))
+										}
+									</script>
+
+									<fieldset v-for="v in variants" class="options">
+										<div class="general">
+											<label>{{v.DisplayName}}</label>
+											<span class="wrap">
+												<select v-model="v" v-on:change="onChange($event, v)" class="variant float-right">
+													<option>Please select...</option>
+													<option v-for="val in v.Values" v-bind:value="val">
+														{{val.Value}}
+													</option>
+												</select>
+											</span>
+										</div>
+									</fieldset>
+								}
+							}
                         </div>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                             <input type="hidden" class="@route.Key" value="@route.Value" />
                         }
 
-                        <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" :variant-sku="variantSku">
+                        <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" :selected-variants="selectedVariants">
                         </add-to-basket>
                     </div>
                 </div>
