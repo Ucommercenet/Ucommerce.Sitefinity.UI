@@ -5254,7 +5254,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="UCommerce.Sitefinity.UI.nuspec" />
+    <None Include="UCommerce.Sitefinity.UI.0.9.0.nuspec" />
     <None Include="UCommerce\Apps\Debug\Clear-cache-in-scratchindexer.example" />
     <None Include="UCommerce\Apps\Debug\Dump-Basket-To-Log-In-Basket-Pipeline.config.example" />
     <None Include="UCommerce\Apps\Debug\Enable-Debug-On-Basket-Pipeline.config.example" />
