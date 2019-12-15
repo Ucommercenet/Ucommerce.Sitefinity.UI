@@ -345,6 +345,8 @@
     <Compile Include="Mvc\ViewModels\ProductDTO.cs" />
     <Compile Include="Mvc\ViewModels\ShippingPickerViewModel.cs" />
     <Compile Include="Mvc\ViewModels\UpdateOrderLine.cs" />
+    <Compile Include="Mvc\ViewModels\VariantTypeViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\VariantViewModel.cs" />
     <Compile Include="node_modules\node-gyp\lib\Find-VS2017.cs" />
     <Compile Include="Pages\HttpContextExtensions.cs" />
     <Compile Include="Pages\UrlResolver.cs" />

@@ -62,13 +62,35 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPost]
         public IHttpActionResult Add(AddToBasketDTO model)
         {
-            if (model.VariantSku == null)
+            string variantSku = null;
+            var product = CatalogLibrary.GetProduct(model.Sku);
+
+            if (model.Variants == null || !model.Variants.Any())
             {
-                var product = CatalogLibrary.GetProduct(model.Sku);
                 var variant = product.Variants.FirstOrDefault();
-                model.VariantSku = variant.VariantSku;
+
+                if (variant != null)
+                {
+                    variantSku = variant.VariantSku;
+                }
             }
-            TransactionLibrary.AddToBasket(model.Quantity, model.Sku, model.VariantSku);
+            else
+            {
+                var variants = product.Variants.AsEnumerable();
+
+                foreach (var v in model.Variants)
+                {
+                    variants = variants.Where(pv => pv.ProductProperties.Any(pp => pp.Value == v.Value));
+                }
+
+                var variant = variants.FirstOrDefault();
+                if (variant != null)
+                {
+                    variantSku = variant.VariantSku;
+                }
+            }
+
+            TransactionLibrary.AddToBasket(model.Quantity, model.Sku, variantSku);
             return Json(this.GetBasketModel());
         }
 

@@ -147,26 +147,70 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     productDetailViewModel.ProductUrl = CatalogLibrary.GetNiceUrlForProduct(currentProduct, currentCategory);
                 }
 
-                foreach (var variant in currentProduct.Variants)
-                {
-                    var variantViewModel = new ProductDetailViewModel
-                    {
-                        ProductProperties = variant.ProductProperties,
-                        Sku = variant.Sku,
-                        Guid = variant.Guid,
-                        VariantSku = variant.VariantSku,
-                        DisplayName = variant.DisplayName(),
-                        IsVariant = true,
-                        AllowOrdering = variant.AllowOrdering,
-                    };
 
-                    if (!string.IsNullOrEmpty(variant.PrimaryImageMediaId))
+                foreach (var pv in currentProduct.Variants)
+                {
+                    foreach (var v in pv.ProductProperties)
                     {
-                        var variantImageUrl = imageService.GetImage(variant.PrimaryImageMediaId).Url;
-                        variantViewModel.PrimaryImageMediaUrl = UrlPath.ResolveAbsoluteUrl(variantImageUrl);
+                        if (v.ProductDefinitionField != null && v.ProductDefinitionField.IsVariantProperty)
+                        {
+                            if (productDetailViewModel.VariantTypes.Any(t => t.Id == v.ProductDefinitionField.Id))
+                            {
+
+                            }
+                        }
+                    }
+                }
+
+
+                var uniqueVariants = from v in currentProduct.Variants.SelectMany(p => p.ProductProperties)
+                                     where v.ProductDefinitionField.DisplayOnSite
+                                     group v by v.ProductDefinitionField into g
+                                     select g;
+
+                foreach (var vt in uniqueVariants)
+                {
+                    var typeViewModel = productDetailViewModel.VariantTypes
+                                                            .Where(z => z.Id == vt.Key.ProductDefinitionFieldId)
+                                                            .FirstOrDefault();
+
+                    if (typeViewModel == null)
+                    {
+                        typeViewModel = new VariantTypeViewModel
+                        {
+                            Id = vt.Key.ProductDefinitionFieldId,
+                            Name = vt.Key.Name,
+                            DisplayName = vt.Key.GetDisplayName()
+                        };
+                      
+                        productDetailViewModel.VariantTypes.Add(typeViewModel);
                     }
 
-                    productDetailViewModel.Variants.Add(variantViewModel);
+                    var variants = vt.ToList();
+
+                    foreach (var variant in variants)
+                    {
+                        var variantViewModel = typeViewModel.Values
+                                                          .Where(v => v.Value == variant.Value)
+                                                          .FirstOrDefault();
+
+                        if (variantViewModel == null)
+                        {
+                            variantViewModel = new VariantViewModel
+                            {
+                                Value = variant.Value,
+                                TypeName = typeViewModel.Name
+                            };
+
+                            if (!string.IsNullOrEmpty(variant.Product.PrimaryImageMediaId))
+                            {
+                                var variantImageUrl = imageService.GetImage(variant.Product.PrimaryImageMediaId).Url;
+                                variantViewModel.PrimaryImageMediaUrl = UrlPath.ResolveAbsoluteUrl(variantImageUrl);
+                            }
+
+                            typeViewModel.Values.Add(variantViewModel);
+                        }
+                    }
                 }
 
                 productDetailViewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);

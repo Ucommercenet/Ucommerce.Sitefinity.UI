@@ -10,8 +10,8 @@
                 type: String,
                 default: null
             },
-            variantSku: {
-                type: String,
+            selectedVariants: {
+                type: Object,
                 default: null
             },
             addToBasketMessage: String,
@@ -35,7 +35,15 @@
                         productQuantity = parseInt(this.quantity);
                     }
 
-                    var addToBasketModel = { Quantity: productQuantity, Sku: this.productSku, VariantSku: this.variantSku };
+                    var variants = [];
+
+                    if (this.selectedVariants) {
+                        for (var i = 0; i < Object.keys(this.selectedVariants).length; i++) {
+                            variants.push(this.selectedVariants[Object.keys(this.selectedVariants)[i]]);
+                        }
+                    }
+
+                    var addToBasketModel = { Quantity: productQuantity, Sku: this.productSku, Variants: variants };
 
                     this.$http.post(addToBasketUrl, addToBasketModel)
                         .then(function (response) {

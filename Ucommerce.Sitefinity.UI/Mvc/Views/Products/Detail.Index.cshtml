@@ -1,5 +1,6 @@
 ﻿@model UCommerce.Sitefinity.UI.Mvc.ViewModels.ProductDetailViewModel
 
+@using Newtonsoft.Json;
 @using Telerik.Sitefinity.Frontend.Mvc.Helpers
 @using Telerik.Sitefinity.Services;
 
@@ -21,23 +22,28 @@
             </a>
         </div>
 
-        @if (Model.Variants.Any())
+        @if (Model.VariantTypes.Any())
         {
-            <ul>
-                @foreach (var variant in Model.Variants)
+            foreach (var variantType in Model.VariantTypes)
+            {
+                if (variantType.Values.Any())
                 {
-                    if (!string.IsNullOrEmpty(variant.PrimaryImageMediaUrl))
-                    {
-                        <li>
-                            <a href="@variant.PrimaryImageMediaUrl" rel="fancybox">
-                                <img src="@variant.PrimaryImageMediaUrl" />
-                            </a>
-                        </li>
-                    }
+                    <ul>
+                        @foreach (var variant in variantType.Values)
+                        {
+                            if (!string.IsNullOrEmpty(variant.PrimaryImageMediaUrl))
+                            {
+                                <li>
+                                    <a href="@variant.PrimaryImageMediaUrl" rel="fancybox">
+                                        <img src="@variant.PrimaryImageMediaUrl" />
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
                 }
-            </ul>
+            }
         }
-
 
         <div>
             <h1>
@@ -65,40 +71,35 @@
                 @if (Model.AllowOrdering)
                 {
                     <span>In stock</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Out of stock</span>
-                                                        }
+                }
+                else
+                {
+                    <span>Out of stock</span>
+                }
             </div>
+
             <div>
                 @{
-                    var uniqueVariants = from v in Model.Variants.SelectMany(p => p.ProductProperties)
-                                         where v.ProductDefinitionField.DisplayOnSite
-                                         group v by v.ProductDefinitionField into g
-                                         select g;
-                    if (uniqueVariants.Any())
+                    if (Model.VariantTypes.Any())
                     {
-                        <fieldset>
-                            @foreach (var prop in uniqueVariants)
+                        <script type="application/json" data-variants="true">
                             {
-                                var controlName = string.Format("variation-{0}", prop.Key.Name.ToLower());
-                                <div>
-                                    <label for="@controlName">@prop.Key.GetDisplayName()</label>
-                                    <span>
-                                        <select v-model="variantSku" name="@controlName" id="@controlName">
-                                            @{
-                                                var products = prop.GroupBy(p => p.Value).Select(g => g.First()).ToList();
-                                            }
-                                            <option>Please select ...</option>
-                                            @foreach (var product in products)
-                                            {
-                                                <option value="@product.Product.VariantSku">@product.Value</option>
-                                            }
-                                        </select>
-                                    </span>
-                                </div>
+                            "variants": @Html.Raw(JsonConvert.SerializeObject(Model.VariantTypes.ToList()))
                             }
+                        </script>
+
+                        <fieldset v-for="v in variants">
+                            <div>
+                                <label>{{v.DisplayName}}</label>
+                                <span>
+                                    <select v-model="v" v-on:change="onChange($event, v)">
+                                        <option>Please select...</option>
+                                        <option v-for="val in v.Values" v-bind:value="val">
+                                            {{val.Value}}
+                                        </option>
+                                    </select>
+                                </span>
+                            </div>
                         </fieldset>
                     }
                 }
@@ -112,7 +113,7 @@
                     <input type="hidden" class="@route.Key" value="@route.Value" />
                 }
 
-                <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" :variant-sku="variantSku">
+                <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" :selected-variants="selectedVariants">
                 </add-to-basket>
             </div>
 

@@ -1,4 +1,7 @@
-﻿namespace UCommerce.Sitefinity.UI.Api.Model
+﻿using System.Collections.Generic;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+
+namespace UCommerce.Sitefinity.UI.Api.Model
 {
     /// <summary>
     /// DTO class used for adding item to basket.
@@ -13,6 +16,6 @@
 
         public string Sku { get; set; }
 
-        public string VariantSku { get; set; }
+        public List<VariantViewModel> Variants { get; set; }
     }
 }

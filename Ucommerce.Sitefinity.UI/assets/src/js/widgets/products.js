@@ -4,27 +4,26 @@ import addToBasket from '../components/add-to-basket';
 initializeComponent("products", initProducts);
 
 function initProducts(rootElement) {
+    const scriptElement = rootElement.querySelector('script[data-variants=true]');
+    const variants = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).variants;
     new Vue({
         el: '#' + rootElement.id,
+        data: {
+            variants: variants,
+            selectedVariants: {}
+        },
         components: {
             addToBasket
         },
         props: {
-            variantSku: {
-                type: String,
-                default: null
-            },
             productGuid: '',
             variantGuid: '',
             price: 0,
             listPrice: 0
         },
         methods: {
-            variantUpdated: function () {
-                var variantSelector = document.getElementById('variantSku');
-                this.variantGuid = variantSelector.options[variantSelector.selectedIndex].dataset.variantGuid;
-
-                this.getPrices();
+            onChange(event, variant) {
+                this.selectedVariants[variant.TypeName] = variant;
             },
             getPrices: function () {
                 this.$http.post('/ProductApi/productPrices',
@@ -47,10 +46,6 @@ function initProducts(rootElement) {
                                     this.price = pricePoint.Price;
                                 }
                             }
-
-                            var variantSelector = document.getElementById('variantSku');
-                            if (variantSelector.options[0].text === "")
-                                variantSelector.remove(0);
                         }
                     });
             }
