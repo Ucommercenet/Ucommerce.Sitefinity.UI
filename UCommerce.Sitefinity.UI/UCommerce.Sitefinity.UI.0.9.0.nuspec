@@ -18,21 +18,21 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Address\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Address\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\BasketPreview\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\BasketPreview\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Cart\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Cart\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\CategoryNavigation\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\CategoryNavigation\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationEmail\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationEmail\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationMessage\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationMessage\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\FacetsFilter\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\FacetsFilter\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\MiniBasket\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\MiniBasket\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\PaymentPicker\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\PaymentPicker\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Products\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Products\Detail.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Products\List.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Products\List.Index.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\readme.txt" target="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\readme.txt" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" />
-    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" />
-    <file src="lib\UCommerce.Sitefinity.UI.dll" target="lib\UCommerce.Sitefinity.UI.dll" />
-    <file src="readme.txt" target="readme.txt" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\Address\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Address\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\BasketPreview\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\BasketPreview\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\Cart\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Cart\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\CategoryNavigation\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\CategoryNavigation\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationEmail\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationEmail\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationMessage\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationMessage\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\FacetsFilter\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\FacetsFilter\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\MiniBasket\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\MiniBasket\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\PaymentPicker\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\PaymentPicker\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\Products\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Products\Detail.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\Products\List.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Products\List.Index.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\Shared\readme.txt" target="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\readme.txt" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" />
+    <file src="..\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" />
+    <file src="obj\Release\UCommerce.Sitefinity.UI.dll" target="lib\UCommerce.Sitefinity.UI.dll" />
+    <file src="..\readme.txt" target="readme.txt" />
   </files>
 </package>
