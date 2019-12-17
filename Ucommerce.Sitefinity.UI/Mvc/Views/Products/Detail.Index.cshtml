@@ -47,7 +47,7 @@
 
         <div>
             <h1>
-                @Model.DisplayName
+                @Html.HtmlSanitize((string)Model.DisplayName)
             </h1>
             <div>
 
