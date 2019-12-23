@@ -47,7 +47,7 @@
 
         <div>
             <h1>
-                @Model.DisplayName
+                @Html.HtmlSanitize((string)Model.DisplayName)
             </h1>
             <div>
 
@@ -144,7 +144,7 @@
 
     <script type="text/x-template" id="add-to-basket-template">
         <div>
-            <spanQuantity:</span>
+            <span>Quantity:</span>
             <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" style="display:none;">
                 <span>
                     When adding product to a cart you must specify the quantity
