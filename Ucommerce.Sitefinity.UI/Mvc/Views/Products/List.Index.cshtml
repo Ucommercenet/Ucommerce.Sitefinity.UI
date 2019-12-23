@@ -39,11 +39,11 @@
         @foreach (var product in Model.Products)
         {
             <li>
-                <a title="@product.DisplayName" href="@product.ProductUrl">
-                    <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@product.DisplayName">
+                <a title="@Html.HtmlSanitize((string)product.DisplayName)" href="@product.ProductUrl">
+                    <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@Html.HtmlSanitize((string)product.DisplayName)">
                 </a>
 
-                <a href="@product.ProductUrl">@product.DisplayName</a>
+                <a href="@product.ProductUrl">@Html.HtmlSanitize((string)product.DisplayName)</a>
 
                 <div>
                     <span>@product.Price</span>
@@ -54,9 +54,6 @@
                 <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">
                 </add-to-basket>
 
-                <div>
-                    <a href="#" onclick="return false;">Write a review</a>
-                </div>
             </li>
         }
     </ul>
