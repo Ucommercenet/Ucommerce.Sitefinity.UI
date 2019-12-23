@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>UCommerce.Sitefinity.UI</id>
+    <version>12.2.7200</version>
+    <authors>UCommerce</authors>
+    <owners>UCommerce</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://ucommerce.net/media/1750/ucommerce-nuget-250x250.png</iconUrl>
+    <description>UCommerce Sitefinity UI</description>
+    <tags>UCommerce Sitefinity ecommerce commerce</tags>
+    <dependencies>
+      <dependency id="uCommerce.Sitefinity" version="[8.3.1.19271, 8.4.9.9999]" />
+      <dependency id="Telerik.DataAccess.Core" version="2018.0.1127.1" />
+      <dependency id="Telerik.Sitefinity.Core" version="[12.2.7200, 12.9.9999]" />
+      <dependency id="Telerik.Sitefinity.Feather.Core" version="[12.2.7200, 12.9.9999]" />
+      <dependency id="Microsoft.AspNet.Web.Optimization" version="1.1.3" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Address\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Address\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\BasketPreview\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\BasketPreview\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Cart\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Cart\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\CategoryNavigation\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\CategoryNavigation\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationEmail\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationEmail\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationMessage\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ConfirmationMessage\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\FacetsFilter\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\FacetsFilter\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\MiniBasket\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\MiniBasket\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\PaymentPicker\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\PaymentPicker\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Products\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Products\Detail.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Products\List.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Products\List.Index.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\readme.txt" target="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\readme.txt" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" />
+    <file src="content\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" />
+    <file src="lib\UCommerce.Sitefinity.UI.dll" target="lib\UCommerce.Sitefinity.UI.dll" />
+    <file src="readme.txt" target="readme.txt" />
+  </files>
+</package>

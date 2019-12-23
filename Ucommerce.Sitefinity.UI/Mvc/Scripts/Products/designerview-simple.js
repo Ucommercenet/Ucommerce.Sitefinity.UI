@@ -1,7 +1,10 @@
 ﻿(function ($) {
-    angular.module('designer').controller('SimpleCtrl', ['$scope', 'propertyService', '$timeout', function ($scope, propertyService, $timeout) {
+    angular.module('designer').requires.push('expander', 'sfSelectors');
+
+    angular.module('designer').controller('SimpleCtrl', ['$scope', 'propertyService', function ($scope, propertyService) {
 
         $scope.feedback.showLoadingIndicator = true;
+        var emptyGuid = '00000000-0000-0000-0000-000000000000';
         
         propertyService.get()
             .then(function (data) {
@@ -44,7 +47,15 @@
                 })
             .then(function () {
                 $scope.feedback.savingHandlers.push(function () {
-             
+                    if ($scope.properties.OpenInSamePage.PropertyValue && $scope.properties.OpenInSamePage.PropertyValue.toLowerCase() === 'true') {
+                        $scope.properties.DetailsPageId.PropertyValue = emptyGuid;
+                    }
+                    else {
+                        if (!$scope.properties.DetailsPageId.PropertyValue ||
+                            $scope.properties.DetailsPageId.PropertyValue === emptyGuid) {
+                            $scope.properties.OpenInSamePage.PropertyValue = true;
+                        }
+                    }
                 });
             })
             .finally(function () {
