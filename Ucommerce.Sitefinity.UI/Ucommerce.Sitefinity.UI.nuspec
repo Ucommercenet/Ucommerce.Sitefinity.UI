@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <id>UCommerce.Sitefinity.UI</id>
-    <version>12.2.7200</version>
-    <authors>UCommerce</authors>
-    <owners>UCommerce</owners>
+    <id>Ucommerce.Sitefinity.UI</id>
+    <version>1.0.0.20014</version>
+    <authors>Ucommerce</authors>
+    <owners>Ucommerce</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://ucommerce.net/media/1750/ucommerce-nuget-250x250.png</iconUrl>
-    <description>UCommerce Sitefinity UI</description>
-    <tags>UCommerce Sitefinity ecommerce commerce</tags>
+    <description>Ucommerce for Sitefinity website widgets to implement a full e-commerce store on Sitefinity. Catalog browse, faceted navigation, and full checkout.</description>
+    <tags>Ucommerce Sitefinity ecommerce commerce</tags>
     <dependencies>
       <dependency id="uCommerce.Sitefinity" version="[8.3.1.19271, 8.4.9.9999]" />
       <dependency id="Telerik.DataAccess.Core" version="2018.0.1127.1" />
@@ -34,5 +34,5 @@
     <file src="content\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" />
     <file src="lib\UCommerce.Sitefinity.UI.dll" target="lib\UCommerce.Sitefinity.UI.dll" />
     <file src="readme.txt" target="readme.txt" />
-  </files>
+  </files> 
 </package>
