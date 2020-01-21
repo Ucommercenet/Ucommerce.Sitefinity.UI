@@ -66,9 +66,9 @@ require(["jsShippingPicker"], function (component) {
     component.init();
 });
 
-require(["jsUpdateBasket"], function (component) {
-    component.init();
-});
+//require(["jsUpdateBasket"], function (component) {
+//    component.init();
+//});
 
 require(["jsVariantPicker"], function (component) {
     component.init();

@@ -4,125 +4,135 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
+@using Newtonsoft.Json;
 
 @model UCommerce.Sitefinity.UI.Mvc.ViewModels.CartRenderingViewModel
 
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
+
 @if (!SystemManager.IsDesignMode)
 {
-    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
 @if (Model.OrderLines.Count == 0)
 {
-    <div>
+    <div class="alert alert-info section-margin">
         <p>Your cart is empty. Please <a href="/">return to our store and add some items</a>.</p>
     </div>
 }
 else
 {
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>VAT</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (var i = 0; i < Model.OrderLines.Count; i++)
-                {
-                    var line = Model.OrderLines[i];
-                    <tr class="order-line" data-orderline="@line.OrderLineId">
-                        @Html.HiddenFor(model => model.OrderLines[i].Sku)
-                        @Html.HiddenFor(model => model.OrderLines[i].VariantSku)
-                        @Html.HiddenFor(model => model.OrderLines[i].OrderLineId)
+    <div data-component="cart" class="cart-table" id="shopping-cart">
+        <script type="application/json" data-items="true">
+            { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
+        </script>
+        <div class="cart table-wrapper">
+            <div class="table-body">
+                <div class="table-row t-heading">
+                    <div class="span3 table-cell">Description</div>
+                    <div class="span1 table-cell money">Price</div>
+                    <div class="span1 table-cell money">VAT</div>
+                    <div class="span1 table-cell">Quantity</div>
+                    <div class="span1 money table-cell">Total</div>
+                    <div class="span05 table-cell"></div>
+                    <div class="span05 table-cell"></div>
+                </div>
 
-                        <td><a href="@line.ProductUrl">@line.ProductName</a></td>
-                        <td>
-                            @if (@line.Discount.HasValue && @line.Discount > 0)
-                            {
-                                <span data-price>
-                                    @line.Price
+                <template v-for="(item, key) in model.OrderLines" :key="item.OrderLineId">
+                    <div class="table-row item-info order-line" data-orderline="{{ item.OrderLineId }}">
+                        <div class="table-cell"><a class="a-heading" href="{{ item.ProductUrl }}">{{ item.ProductName }}</a></div>
+                        <div class="table-cell money">
+                            <template v-if="item.Discount.HasValue && item.Discount > 0">
+                                <span style="text-decoration: line-through" data-price>
+                                    {{ item.Price }}
                                 </span>
                                 <span data-price-with-discount>
-                                    @line.PriceWithDiscount
+                                    {{ item.PriceWithDiscount }}
                                 </span>
-                            }
-                            else
-                            {
+                            </template>
+                            <template v-else>
                                 <span data-price>
-                                    @line.Price
+                                    {{ item.Price }}
                                 </span>
-
-                            }
-                        </td>
-                        <td data-tax>
-                            @line.Tax
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(model => model.OrderLines[i].Quantity, new { @class = "qty form-control inline-block no-padding", data_orderline_id = @Model.OrderLines[i].OrderLineId, data_orderline_qty = @Model.OrderLines[i].Quantity })
-                            <button name="update-basket" class="btn-none inline-block update-basket js-update-basket" data-remove-orderline-url="@Model.RemoveOrderlineUrl" data-refresh-url="@Model.RefreshUrl" data-cart-container=".cart-container" data-item-total=".item-total" data-line-remove=".line-remove" data-order-subtotal=".order-subtotal" data-order-tax=".order-tax" data-order-discounts=".order-discounts" data-order-total=".order-total" data-basket="@Model" type="button">
-                                <span>&#10227;</span> <span>Update</span>
+                            </template>
+                        </div>
+                        <div class="table-cell money" data-tax>
+                            {{ item.Tax }}
+                        </div>
+                        <div class="table-cell">
+                            <input class="qty form-control inline-block no-padding" type="text" v-model="item.Quantity">
+                        </div>
+                        <div class="table-cell money item-total">
+                            {{ item.Total }}
+                        </div>
+                        <div class="table-cell">
+                            <button class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="updateCartItems">
+                                <i class="fas fa-sync-alt fa-1x" aria-hidden="true"></i>
+                                <span class="btn-text">Update</span>
                             </button>
-                        </td>
-                        <td class="item-total">
-                            @line.Total
-                        </td>
-                        <td>
-                            <button type="button" data-line-id="@line.OrderLineId" name="RemoveOrderlineId" class="line-remove">Remove</button>
-                        </td>
-                    </tr>
-                }
-                <tr>
-                    <td rowspan="4" colspan="3"></td>
-                    <td colspan="1">Sub total:</td>
-                    <td>
-                        @Model.SubTotal
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="1">VAT:</td>
-                    <td>
-                        @Model.TaxTotal
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="1">Discounts:</td>
-                    <td>
-                        @Model.DiscountTotal
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="1"><strong>Order total:</strong></td>
-                    <td>
-                        @Model.OrderTotal
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-            </tbody>
-        </table>
+                        </div>
+                        <div class="table-cell">
+                            <button type="button" class="line-remove" v-on:click="removeCartItem(item.OrderLineId)">
+                                <i class="fas fa-times fa-1x"></i>
+                                <span class="btn-text">Remove</span>
+                            </button>
+                        </div>
+                    </div>
+                </template>
 
-
-        <div>
-            <div>
-                @{
-                    var showContinueButton = true;
-
-                    if (Model.NextStepUrl == "")
-                    {
-                        showContinueButton = false;
-                    }
-
-                }
-                <a href="@Model.NextStepUrl" style="@(showContinueButton ? "display:block" : "display:none")" name="review-product">Continue</a>
+                <div class="table-row">
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell">Sub total:</div>
+                    <div class="money table-cell order-subtotal">
+                        {{ model.SubTotal }}
+                    </div>
+                    <div class="table-cell empty-cell">&nbsp;</div>
+                    <div class="table-cell empty-cell">&nbsp;</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell">VAT:</div>
+                    <div class="table-cell money order-tax">
+                        {{ model.TaxTotal }}
+                    </div>
+                    <div class="table-cell empty-cell">&nbsp;</div>
+                    <div class="table-cell empty-cell">&nbsp;</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell">Discounts:</div>
+                    <div class="table-cell money order-discounts">
+                        {{ model.DiscountTotal }}
+                    </div>
+                    <div class="table-cell empty-cell">&nbsp;</div>
+                    <div class="table-cell empty-cell">&nbsp;</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                    <div class="table-cell" colspan="1"><strong>Order total:</strong></div>
+                    <div class="table-cell money order-total">
+                        {{ model.OrderTotal }}
+                    </div>
+                    <div class="table-cell empty-cell">&nbsp;</div>
+                    <div class="table-cell empty-cell">&nbsp;</div>
+                </div>
             </div>
         </div>
+
+        <next-step v-bind:sfmodel="model"></next-step>
+
     </div>
+
+
 }

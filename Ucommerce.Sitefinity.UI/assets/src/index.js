@@ -15,3 +15,4 @@ Vue.use(VueResource);
 import "./js/widgets/facet-filter";
 import "./js/widgets/category-navigation";
 import "./js/widgets/products";
+import "./js/widgets/cart";

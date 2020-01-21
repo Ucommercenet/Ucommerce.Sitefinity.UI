@@ -22,7 +22,7 @@ namespace UCommerce.Sitefinity.UI.App_Start
                 .Include("~/Frontend-Assembly/UCommerce.Sitefinity.UI/Mvc/Scripts/jsPaymentPicker.js")
                 .Include("~/Frontend-Assembly/UCommerce.Sitefinity.UI/Mvc/Scripts/jsQuantityPicker.js")
                 .Include("~/Frontend-Assembly/UCommerce.Sitefinity.UI/Mvc/Scripts/jsShippingPicker.js")
-                .Include("~/Frontend-Assembly/UCommerce.Sitefinity.UI/Mvc/Scripts/jsUpdateBasket.js")
+                //.Include("~/Frontend-Assembly/UCommerce.Sitefinity.UI/Mvc/Scripts/jsUpdateBasket.js")
                 .Include("~/Frontend-Assembly/UCommerce.Sitefinity.UI/Mvc/Scripts/jsVariantPicker.js")
                 .Include("~/Frontend-Assembly/UCommerce.Sitefinity.UI/Mvc/Scripts/jsVoucher.js")
                 .Include("~/Frontend-Assembly/UCommerce.Sitefinity.UI/Mvc/Scripts/jsInit.js"));
