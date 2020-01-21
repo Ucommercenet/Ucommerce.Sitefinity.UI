@@ -1,5 +1,5 @@
 ﻿import { initializeComponent } from "../functions/init";
-import nextStep from "../components/next-step";
+import checkoutNavigation from "../components/checkout-navigation";
 
 initializeComponent("cart", initCart);
 
@@ -13,7 +13,7 @@ function initCart(rootElement) {
             model
         },
         components: {
-            nextStep
+            checkoutNavigation
         },
         methods: {
             updateCartItems: function () {

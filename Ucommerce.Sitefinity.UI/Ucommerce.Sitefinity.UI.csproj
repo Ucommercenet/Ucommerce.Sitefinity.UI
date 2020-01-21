@@ -540,7 +540,7 @@
     <EmbeddedResource Include="assets\src\js\widgets\cart.js" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
-    <None Include="assets\src\js\components\next-step.vue" />
+    <None Include="assets\src\js\components\checkout-navigation.vue" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
