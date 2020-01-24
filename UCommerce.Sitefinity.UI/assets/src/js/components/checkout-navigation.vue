@@ -25,10 +25,21 @@
     export default {
         name: "checkoutNavigation",
         props: {
-            model: null,
-            nextStepLink: false,
-            continueLabel: 'Continue to next step',
-            classes: 'row control-group multistep-btn-a section-margin'
+            model: {
+                default: null
+            },
+            nextStepLink: {
+                type: Boolean,
+                default: false
+            },
+            continueLabel: {
+                type: String,
+                default: 'Continue'
+            },
+            classes: {
+                type: String,
+                default: 'row control-group multistep-btn-a section-margin'
+            }
         },
         computed: {
             continueUrl: function () {
