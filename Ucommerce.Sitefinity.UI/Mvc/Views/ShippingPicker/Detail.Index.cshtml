@@ -11,16 +11,14 @@
     Layout = null;
 }
 
-@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
-
 @if (!SystemManager.IsDesignMode)
 {
     @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<h3 class="heading-underline">Shipping method</h3>
 
+<h3>Shipping method</h3>
 <div data-component="shipping-widget" id="shipping-method">
     <script type="application/json" data-items="true">
         { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
@@ -28,16 +26,16 @@
     <form action="/shop/checkout/shipping/CreateShipment" method="POST" name="ShippingPicker">
         <template v-if="model.AvailableShippingMethods.length">
             <template v-for="method in model.AvailableShippingMethods" :model="model">
-                <div class="radio-btn-ml section-margin">
-                    <label class="radio">
-                        <input class="js-shipping-picker" id="SelectedShippingMethodId" name="SelectedShippingMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedShippingMethodId"> {{ method.Text }}
+                <div>
+                    <label>
+                        <input id="SelectedShippingMethodId" name="SelectedShippingMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedShippingMethodId"> {{ method.Text }}
                     </label>
                 </div>
             </template>
-            <checkout-navigation v-bind:model="model" continue-label="Continue to next step"></checkout-navigation>
+            <checkout-navigation v-bind:model="model" continue-label="Continue to next step" classes=""></checkout-navigation>
         </template>
         <template v-else>
-            <p class="alert">
+            <p>
                 WARNING: No shipping methods have been configured for {{ model.ShippingCountry }} within <a href="http://ucommerce.dk">UCommerce</a> administration area.
             </p>
         </template>

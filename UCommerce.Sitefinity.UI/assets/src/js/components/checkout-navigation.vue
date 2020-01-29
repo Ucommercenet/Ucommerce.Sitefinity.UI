@@ -1,20 +1,20 @@
 ﻿<template>
-    <div v-bind:class="classes">
+    <div :class="classes">
         <div class="controls">
-            <div v-bind:class="backBtnClasses">
+            <div :class="backBtnClasses">
                 <template v-if="showBackButton">
-                    <a v-bind:href="backUrl" class="btn btn-next btn-transparent pull-left">Back</a>
+                    <a :href="backUrl" :class="backLinkClasses">Back</a>
                 </template>
             </div>
-            <div v-bind:class="continueBtnClasses">
+            <div :class="continueBtnClasses">
                 <template v-if="showContinueButton">
                     <template v-if="nextStepLink">
-                        <a v-bind:href="continueUrl">
-                            <button type="button" class="btn btn-success btn-next pull-right">{{ continueLabel }}</button>
+                        <a :href="continueUrl">
+                            <button type="button" :class="nextLinkClasses">{{ continueLabel }}</button>
                         </a>
                     </template>
                     <template v-else>
-                        <input type="submit" class="btn btn-success pull-right submit-address" v-bind:value="continueLabel" />
+                        <input type="submit" :class="nextSubmitClasses" :value="continueLabel" />
                     </template>
                 </template>
             </div>
@@ -39,6 +39,10 @@
             classes: {
                 type: String,
                 default: 'row control-group multistep-btn-a section-margin'
+            },
+            mode: {
+                type: String,
+                default: ''
             }
         },
         computed: {
@@ -69,6 +73,33 @@
             backBtnClasses: function () {
                 if (this.showBackButton) {
                     return 'col-md-6 padding-0';
+                }
+            },
+            backLinkClasses: function () {
+                switch (this.mode) {
+                    case 'Bootstrap':
+                        return 'btn btn-next btn-transparent pull-left';
+
+                    default:
+                        return '';
+                }
+            },
+            nextLinkClasses: function () {
+                switch (this.mode) {
+                    case 'Bootstrap':
+                        return 'btn btn-success btn-next pull-right';
+
+                    default:
+                        return '';
+                }
+            },
+            nextSubmitClasses: function () {
+                switch (this.mode) {
+                    case 'Bootstrap':
+                        return 'btn btn-success pull-right submit-address';
+
+                    default:
+                        return '';
                 }
             }
         }

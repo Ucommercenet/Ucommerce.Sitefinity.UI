@@ -27,16 +27,16 @@
     <form action="/shop/checkout/payment/CreatePayment" method="POST" name="PaymentPicker">
         <template v-if="model.AvailablePaymentMethods.length">
             <template v-for="method in model.AvailablePaymentMethods" :model="model">
-                <div class="radio-btn-ml section-margin">
-                    <label class="radio">
-                        <input class="js-payment-picker" id="SelectedPaymentMethodId" name="SelectedPaymentMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedPaymentMethodId"> {{ method.Text }}
+                <div>
+                    <label>
+                        <input id="SelectedPaymentMethodId" name="SelectedPaymentMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedPaymentMethodId"> {{ method.Text }}
                     </label>
                 </div>
             </template>
-            <checkout-navigation v-bind:model="model" continue-label="Continue to next step"></checkout-navigation>
+            <checkout-navigation v-bind:model="model" continue-label="Continue to next step" classes=""></checkout-navigation>
         </template>
         <template v-else>
-            <p class="alert">
+            <p>
                 WARNING: No payment methods have been configured for {{ model.ShippingCountry }} within <a href="http://ucommerce.dk">UCommerce</a> administration area.
             </p>
         </template>

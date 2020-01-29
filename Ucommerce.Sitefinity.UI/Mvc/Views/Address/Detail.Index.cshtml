@@ -8,8 +8,6 @@
 
 @model UCommerce.Sitefinity.UI.Mvc.ViewModels.AddressRenderingViewModel
 
-@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
-
 @{
     Layout = null;
     var showShippingAddress = Model.IsShippingAddressDifferent ? "display:block;" : "display:none;";
@@ -21,150 +19,147 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
+
 <div data-component="address-widget" id="address-widget">
     <script type="application/json" data-items="true">
         { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
     </script>
     <form v-on:submit="checkForm" action="/shop/checkout/address/Save" method="POST" name="Address" class="js-address" ref="form">
-        <div class="flex-contain">
-            <div class="js-address-billing section-margin">
-                <h3 class="heading-underline">Billing address</h3>
-                <div class="row">
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
-                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="FirstName" label="First name *" input-classes="form-control required margin-bottom"></input-field>
+
+        <div>
+            <div class="js-address-billing">
+                <h3>Billing address</h3>
+                <div>
+                    <div>
+                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="FirstName" label="First name" input-classes="form-control required margin-bottom"></input-field>
                     </div>
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
-                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="LastName" label="Last name *" input-classes="form-control required margin-bottom"></input-field>
+                    <div>
+                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="LastName" label="Last name" input-classes="form-control required margin-bottom"></input-field>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
-                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="EmailAddress" label="E-mail *" input-classes="form-control required margin-bottom"></input-field>
+                <div>
+                    <div>
+                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="EmailAddress" label="E-mail" input-classes="form-control required margin-bottom"></input-field>
                     </div>
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
+                    <div>
                         <input-field type="text" :model="model" address-type="BillingAddress" field-name="Attention" label="Attention" input-classes="form-control margin-bottom"></input-field>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
+                <div>
+                    <div>
                         <input-field type="text" :model="model" address-type="BillingAddress" field-name="MobilePhoneNumber" label="Mobile phone" input-classes="form-control margin-bottom"></input-field>
                     </div>
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
+                    <div>
                         <input-field type="text" :model="model" address-type="BillingAddress" field-name="PhoneNumber" label="Phone" input-classes="form-control margin-bottom"></input-field>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
-                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="Line1" label="Street *" input-classes="form-control required margin-bottom"></input-field>
+                <div>
+                    <div>
+                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="Line1" label="Street" input-classes="form-control required margin-bottom"></input-field>
                     </div>
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
+                    <div>
                         <input-field type="text" :model="model" address-type="BillingAddress" field-name="Line2" label="Street 2" input-classes="form-control margin-bottom"></input-field>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
-                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="PostalCode" label="Postal code *" input-classes="form-control required margin-bottom"></input-field>
+                <div>
+                    <div>
+                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="PostalCode" label="Postal code" input-classes="form-control required margin-bottom"></input-field>
                     </div>
 
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
-                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="City" label="City *" input-classes="form-control required margin-bottom"></input-field>
+                    <div>
+                        <input-field type="text" required=true :model="model" address-type="BillingAddress" field-name="City" label="City" input-classes="form-control required margin-bottom"></input-field>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
+                <div>
+                    <div>
                         <label>Country</label>
                         <select id="BillingAddress_CountryId" name="BillingAddress.CountryId" class="countryDropdownCheckout margin-bottom form-control">
                             <option v-for="(country, index) in model.AvailableCountries" :selected="country.Value == model.BillingAddress.CountryId" :value="country.Value">{{ country.Text }}</option>
                         </select>
                     </div>
 
-                    <div class="col-md-6 no-vertical-margin control-group form-group">
+                    <div>
                         <input-field type="text" :model="model" address-type="BillingAddress" field-name="CompanyName" label="Company" input-classes="form-control margin-bottom"></input-field>
                     </div>
                 </div>
-
             </div>
-
         </div>
 
-        <div v-if="model.IsShippingAddressDifferent" class="js-address-shipping">
-            <h3 class="heading-underline">Shipping address</h3>
+        <div class="js-address-shipping" v-if="model.IsShippingAddressDifferent">
+            <legend>Shipping address</legend>
 
-            <div class="row">
-                <div class="col-md-6 no-vertical-margin control-group form-group">
-                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="FirstName" label="First name *" input-classes="form-control required margin-bottom"></input-field>
+            <div>
+                <div>
+                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="FirstName" label="First name" input-classes="form-control required margin-bottom"></input-field>
                 </div>
-                <div class="col-md-6 no-vertical-margin control-group form-group">
-                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="LastName" label="Last name *" input-classes="form-control required margin-bottom"></input-field>
+                <div>
+                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="LastName" label="Last name" input-classes="form-control required margin-bottom"></input-field>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 no-vertical-margin control-group form-group">
-                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="EmailAddress" label="E-mail *" input-classes="form-control required margin-bottom"></input-field>
+            <div>
+                <div>
+                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="EmailAddress" label="E-mail" input-classes="form-control required margin-bottom"></input-field>
                 </div>
-                <div class="col-md-6 no-vertical-margin control-group form-group">
+                <div>
                     <input-field type="text" :model="model" address-type="ShippingAddress" field-name="Attention" label="Attention" input-classes="form-control margin-bottom"></input-field>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 no-vertical-margin control-group form-group">
+            <div>
+                <div>
                     <input-field type="text" :model="model" address-type="ShippingAddress" field-name="MobilePhoneNumber" label="Mobile phone" input-classes="form-control margin-bottom"></input-field>
                 </div>
-                <div class="col-md-6 no-vertical-margin control-group form-group">
+                <div>
                     <input-field type="text" :model="model" address-type="ShippingAddress" field-name="PhoneNumber" label="Phone" input-classes="form-control margin-bottom"></input-field>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 no-vertical-margin control-group form-group">
-                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="Line1" label="Street *" input-classes="form-control required margin-bottom"></input-field>
+            <div>
+                <div>
+                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="Line1" label="Street" input-classes="form-control required margin-bottom"></input-field>
                 </div>
-                <div class="col-md-6 no-vertical-margin control-group form-group">
+                <div>
                     <input-field type="text" :model="model" address-type="ShippingAddress" field-name="Line2" label="Street 2" input-classes="form-control margin-bottom"></input-field>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 no-vertical-margin control-group form-group">
-                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="PostalCode" label="Postal code *" input-classes="form-control required margin-bottom"></input-field>
+            <div>
+                <div>
+                    <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="PostalCode" label="Postal code" input-classes="form-control required margin-bottom"></input-field>
                 </div>
-
-                <div class="col-md-6 no-vertical-margin control-group form-group">
+                <div>
                     <input-field type="text" required=true :model="model" address-type="ShippingAddress" field-name="City" label="City *" input-classes="form-control required margin-bottom"></input-field>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 no-vertical-margin control-group form-group">
+            <div>
+                <div>
                     <label>Country</label>
                     <select id="ShippingAddress_CountryId" name="ShippingAddress.CountryId" class="countryDropdownCheckout margin-bottom form-control">
                         <option v-for="(country, index) in model.AvailableCountries" :selected="country.Value == model.ShippingAddress.CountryId" :value="country.Value">{{ country.Text }}</option>
                     </select>
                 </div>
-
-                <div class="col-md-6 no-vertical-margin control-group form-group">
+                <div>
                     <input-field type="text" :model="model" address-type="ShippingAddress" field-name="CompanyName" label="Company" input-classes="form-control margin-bottom"></input-field>
                 </div>
             </div>
-
         </div>
 
-        <div class="row section-margin">
-            <div class="col-md-12 padding-0">
-                <label for="toggleShippingView" class="display-checkbox-inline">
-                    Use a different address for shipping
-                    <input id="IsShippingAddressDifferent" name="IsShippingAddressDifferent" type="checkbox" class="js-address-checkbox" v-bind:checked="model.IsShippingAddressDifferent" v-on:change="model.IsShippingAddressDifferent = $event.target.checked">
-                </label>
-            </div>
+        <div>
+            <label for="toggleShippingView">
+                Use a different address for shipping
+                <input id="IsShippingAddressDifferent" name="" type="checkbox" class="js-address-checkbox" v-bind:checked="model.IsShippingAddressDifferent" v-on:change="model.IsShippingAddressDifferent = $event.target.checked">
+                <input name="IsShippingAddressDifferent" type="hidden" value="false">
+            </label>
         </div>
 
-        <checkout-navigation v-bind:model="model" continue-label="Continue to next step"></checkout-navigation>
+
+        <checkout-navigation v-bind:model="model" continue-label="Continue to next step" classes=""></checkout-navigation>
     </form>
 </div>
