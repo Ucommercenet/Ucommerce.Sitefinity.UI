@@ -2,7 +2,9 @@
 
 ## Intro
 
-This is an initial commit. More info to come 
+To get started with using the Widgets for Ucommerce on Sitefinity you can watch this youtube video: 
+
+https://www.youtube.com/watch?v=vBS7qVVYJtg&t=131s
 
 ## Vue Migration Notes
 
