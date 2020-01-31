@@ -1,9 +1,9 @@
 ﻿<template>
     <div>
         <template v-if="type == 'text'">
-            <label>{{ label }}</label>
+            <label :class="labelClasses" :for="inputId">{{ label }}</label>
             <input :id="inputId" :name="inputName" :type="type" :class="inputClasses" :required="required" v-model.lazy="value" @input="handleInput" @change="handleChange">
-            <span class="field-validation-error text-danger">{{ errorMessage }}</span>
+            <span :class="errorClasses">{{ errorMessage }}</span>
         </template>
     </div>
 </template>
@@ -38,6 +38,12 @@
             },
             inputClasses: {
                 default: ''
+            },
+            labelClasses: {
+                default: ''
+            },
+            errorClasses: {
+                default: 'field-validation-error text-danger'
             }
         },
         computed: {
