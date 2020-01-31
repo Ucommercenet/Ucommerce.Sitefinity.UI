@@ -77,7 +77,7 @@
 
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label class="font-weight-bold">Country</label>
+                    <label for="BillingAddress_CountryId" class="font-weight-bold">Country</label>
                     <select id="BillingAddress_CountryId" name="BillingAddress.CountryId" class="countryDropdownCheckout margin-bottom form-control">
                         <option v-for="(country, index) in model.AvailableCountries" :selected="country.Value == model.BillingAddress.CountryId" :value="country.Value">{{ country.Text }}</option>
                     </select>
@@ -140,7 +140,7 @@
 
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label class="font-weight-bold">Country</label>
+                    <label for="ShippingAddress_CountryId" class="font-weight-bold">Country</label>
                     <select id="ShippingAddress_CountryId" name="ShippingAddress.CountryId" class="countryDropdownCheckout margin-bottom form-control">
                         <option v-for="(country, index) in model.AvailableCountries" :selected="country.Value == model.ShippingAddress.CountryId" :value="country.Value">{{ country.Text }}</option>
                     </select>
@@ -154,7 +154,7 @@
     <div class="container my-4">
         <div class="row">
             <div class="col-md-12">
-                <label for="toggleShippingView" class="d-inline">
+                <label for="IsShippingAddressDifferent" class="d-inline">
                     Use a different address for shipping
                     <input id="IsShippingAddressDifferent" name="" type="checkbox" class="js-address-checkbox" v-bind:checked="model.IsShippingAddressDifferent" v-on:change="model.IsShippingAddressDifferent = $event.target.checked">
                     <input name="IsShippingAddressDifferent" type="hidden" value="false">
