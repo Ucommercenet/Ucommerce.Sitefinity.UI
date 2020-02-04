@@ -6,7 +6,7 @@
 @using Telerik.Sitefinity.Services;
 @using Newtonsoft.Json;
 
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.AddressRenderingViewModel
+@*@model UCommerce.Sitefinity.UI.Mvc.ViewModels.AddressRenderingViewModel*@
 
 @{
     Layout = null;
@@ -24,7 +24,7 @@
     <script type="application/json" data-items="true">
         { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
     </script>
-    <form v-on:submit="checkForm" action="/shop/checkout/address/Save" method="POST" name="Address" class="js-address" ref="form">
+    <form v-on:submit="checkForm" action="uc/checkout/address" method="POST" name="Address" class="js-address" ref="form">
 
         <div>
             <div class="js-address-billing">

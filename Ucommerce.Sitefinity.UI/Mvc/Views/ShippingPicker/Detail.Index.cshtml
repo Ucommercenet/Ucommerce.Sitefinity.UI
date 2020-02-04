@@ -6,7 +6,7 @@
 @using Telerik.Sitefinity.Services;
 @using Newtonsoft.Json;
 
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.ShippingPickerViewModel
+@*@model UCommerce.Sitefinity.UI.Mvc.ViewModels.ShippingPickerViewModel*@
 @{
     Layout = null;
 }
@@ -20,9 +20,9 @@
 
 <h3>Shipping method</h3>
 <div data-component="shipping-widget" id="shipping-method">
-    <script type="application/json" data-items="true">
+    @*<script type="application/json" data-items="true">
         { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>
+    </script>*@
     <form action="/shop/checkout/shipping/CreateShipment" method="POST" name="ShippingPicker">
         <template v-if="model.AvailableShippingMethods.length">
             <template v-for="method in model.AvailableShippingMethods" :model="model">

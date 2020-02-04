@@ -6,8 +6,6 @@
 @using Telerik.Sitefinity.Services;
 @using Newtonsoft.Json;
 
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.BasketPreviewViewModel
-
 @{
     Layout = null;
 }
@@ -20,9 +18,9 @@
 }
 
 <div class="section-margin " data-component="checkout-overview" id="checkout-overview">
-    <script type="application/json" data-items="true">
+    @*<script type="application/json" data-items="true">
         { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>
+    </script>*@
     <form v-if="model" action="/shop/checkout/overview/RequestPayment" method="POST" name="BasketPreview">
         <div>
             <div>

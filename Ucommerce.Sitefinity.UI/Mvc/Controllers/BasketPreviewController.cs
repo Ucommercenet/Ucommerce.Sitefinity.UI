@@ -9,6 +9,7 @@ using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
+using UCommerce.Sitefinity.UI.Api.Model;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -33,26 +34,33 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             {
                 return this.PartialView("_Warning", message);
             }
-
-            var basketPreviewViewModel = model.GetViewModel();
             
-            ViewBag.RowSpan = 4;
-            if (basketPreviewViewModel.DiscountAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
-            if (basketPreviewViewModel.ShipmentAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
-            if (basketPreviewViewModel.PaymentAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
-
             var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(detailTemplateName, basketPreviewViewModel);
+            return View(detailTemplateName);
+        }
+
+        [HttpGet]
+        [Route("uc/checkout/preview")]
+        public ActionResult Data()
+        {
+            var model = ResolveModel();
+
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+            }
+
+            var basketPreviewViewModel = model.GetViewModel();
+
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "success";
+            responseDTO.Data.Add("data", basketPreviewViewModel);
+
+            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

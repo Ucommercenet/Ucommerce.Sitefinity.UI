@@ -6,7 +6,7 @@
 @using Telerik.Sitefinity.Services;
 @using Newtonsoft.Json;
 
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.PaymentPickerViewModel
+@*@model UCommerce.Sitefinity.UI.Mvc.ViewModels.PaymentPickerViewModel*@
 @{
     Layout = null;
 }
@@ -21,9 +21,9 @@
 <h3 class="heading-underline">Payment method</h3>
 
 <div data-component="payment-widget" id="payment-method">
-    <script type="application/json" data-items="true">
+    @*<script type="application/json" data-items="true">
         { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>
+    </script>*@
     <form action="/shop/checkout/payment/CreatePayment" method="POST" name="PaymentPicker">
         <template v-if="model.AvailablePaymentMethods.length">
             <template v-for="method in model.AvailablePaymentMethods" :model="model">

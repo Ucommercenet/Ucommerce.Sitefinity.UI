@@ -265,6 +265,7 @@
     <Compile Include="Api\Model\FullTextDTO.cs" />
     <Compile Include="Api\Model\FullTextSearchResultDTO.cs" />
     <Compile Include="Api\Model\GetProductReviewsDTO.cs" />
+    <Compile Include="Api\Model\OperationStatusDTO.cs" />
     <Compile Include="Api\Model\OrderLineDTO.cs" />
     <Compile Include="Api\Model\ProductDTO.cs" />
     <Compile Include="Api\Model\ProductPricesDTO.cs" />

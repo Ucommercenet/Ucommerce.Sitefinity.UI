@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Telerik.Sitefinity.Services;
+using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -27,14 +29,35 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             {
                 return this.PartialView("_Warning", message);
             }
-
-            var viewModel = model.GetViewModel();
+            
             var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(detailTemplateName, viewModel);
+            return View(detailTemplateName);
+        }
+
+        [HttpGet]
+        [RelativeRoute("uc/checkout/address")]
+        public ActionResult Data()
+        {
+            var model = ResolveModel();
+            string message;
+
+            if (!model.CanProcessRequest(new System.Collections.Generic.Dictionary<string, object>(), out message))
+            {
+                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+            }
+
+            var viewModel = model.GetViewModel();
+
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "success";
+            responseDTO.Data.Add("data", viewModel);
+
+            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
+        [RelativeRoute("uc/checkout/address")]
         public ActionResult Save(AddressSaveViewModel addressRendering)
         {
             var model = ResolveModel();
@@ -48,7 +71,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
             }
 
             if (ModelState.IsValid)
@@ -56,7 +79,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 model.Save(addressRendering);
                 if (viewModel.NextStepUrl?.Length == 0)
                 {
-                    return View(detailTemplateName, viewModel);
+                    return this.Json(new OperationStatusDTO() { Status = "success" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -65,7 +88,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             }
             else
             {
-                return View(detailTemplateName, viewModel);
+                var errorList = ModelState.ToDictionary(
+                                    kvp => kvp.Key,
+                                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                                );
+
+                var responseDTO = new OperationStatusDTO();
+                responseDTO.Status = "failed";
+                responseDTO.Data.Add("errors", errorList);
+
+                return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
             }
         }
 
