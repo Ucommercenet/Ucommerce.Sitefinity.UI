@@ -1,5 +1,5 @@
 ﻿<template>
-    <div :class="classes">
+    <div v-if="model" :class="classes">
         <div :class="backWrapperClasses">
             <template v-if="showBackButton">
                 <a :href="backUrl" :class="backLinkClasses">Back</a>
@@ -7,14 +7,7 @@
         </div>
         <div :class="continueWrapperClasses">
             <template v-if="showContinueButton">
-                <template v-if="nextStepLink">
-                    <a :href="continueUrl">
-                        <button type="button" :class="continueBtnClasses">{{ continueLabel }}</button>
-                    </a>
-                </template>
-                <template v-else>
-                    <input type="submit" :class="continueBtnClasses" :value="continueLabel" />
-                </template>
+                <button type="button" :class="continueBtnClasses" @click="continueHandler">{{ continueLabel }}</button>
             </template>
         </div>
     </div>
@@ -49,6 +42,21 @@
             mode: {
                 type: String,
                 default: ''
+            },
+            continueFn: {
+                type: Function,
+                default: null
+            },
+            allowNavigate: {
+                default: true
+            }
+        },
+        watch: {
+            allowNavigate: function (allow) {
+                console.log(allow);
+                if (allow) {
+                    //location.href = this.model.NextStepUrl;
+                }
             }
         },
         computed: {
@@ -100,6 +108,20 @@
                     default:
                         return '';
                 }
+            }
+        },
+        methods: {
+            continueHandler: function () {
+                if (this.continueFn) {
+                    this.continueFn((allowRedirect) => {
+                        if (allowRedirect) {
+                            location.href = this.model.NextStepUrl;
+                        }
+                    });
+                    return;
+                }
+
+                location.href = this.model.NextStepUrl;
             }
         }
     };

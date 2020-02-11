@@ -77,14 +77,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             if (ModelState.IsValid)
             {
                 model.Save(addressRendering);
-                if (viewModel.NextStepUrl?.Length == 0)
-                {
-                    return this.Json(new OperationStatusDTO() { Status = "success" }, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    return Redirect(viewModel.NextStepUrl);
-                }
+                return this.Json(new OperationStatusDTO() { Status = "success" }, JsonRequestBehavior.AllowGet);
             }
             else
             {

@@ -44,7 +44,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             return View(detailTemplateName);
         }
         
-        [HttpPost]
+        [HttpGet]
         [RelativeRoute("uc/checkout/cart")]
         public ActionResult Data()
         {
@@ -67,6 +67,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpPost]
+        [RelativeRoute("uc/checkout/cart/remove-orderline")]
         public ActionResult RemoveOrderline(int orderlineId)
         {
             var model = ResolveModel();
@@ -97,6 +98,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpPost]
+        [RelativeRoute("uc/checkout/cart/update-basket")]
         public ActionResult UpdateBasket(CartUpdateBasket updateModel)
         {
             var model = ResolveModel();

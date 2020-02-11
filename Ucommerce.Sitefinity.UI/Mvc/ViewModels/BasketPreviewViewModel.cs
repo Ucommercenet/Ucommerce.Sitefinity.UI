@@ -11,6 +11,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public BasketPreviewViewModel()
         {
             OrderLines = new List<PreviewOrderLine>();
+            ShipmentAddressDTO = new Address();
+            BillingAddressDTO = new Address();
         }
 
         public IList<PreviewOrderLine> OrderLines { get; set; }
@@ -26,9 +28,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public decimal ShipmentAmount { get; set; }
         public decimal PaymentAmount { get; set; }
         public decimal DiscountAmount { get; set; }
-        public OrderAddress ShipmentAddress { get; set; }
-        public OrderAddress BillingAddress { get; set; }
         public string NextStepUrl { get; set; }
         public string PreviousStepUrl { get; set; }
+        public Address ShipmentAddressDTO { get; set; }
+        public Address BillingAddressDTO { get; set; }
     }
 }
