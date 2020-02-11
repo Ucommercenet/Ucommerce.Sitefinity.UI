@@ -4,15 +4,11 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-@using Newtonsoft.Json;
-
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.AddressRenderingViewModel
 
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
 
 @{
     Layout = null;
-    var showShippingAddress = Model.IsShippingAddressDifferent ? "display:block;" : "display:none;";
 }
 
 @if (!SystemManager.IsDesignMode)
@@ -22,10 +18,7 @@
 }
 
 <div data-component="address-widget" id="address-widget">
-    <script type="application/json" data-items="true">
-        { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>
-    <form v-on:submit="checkForm" action="/shop/checkout/address/Save" method="POST" name="Address" class="js-address" ref="form">
+    <template v-if="model">
         <div class="flex-contain">
             <div class="js-address-billing section-margin">
                 <h3 class="heading-underline">Billing address</h3>
@@ -160,8 +153,7 @@
             <div class="col-md-12 padding-0">
                 <label for="IsShippingAddressDifferent" class="display-checkbox-inline">
                     Use a different address for shipping
-                    <input id="IsShippingAddressDifferent" name="" type="checkbox" class="js-address-checkbox" v-bind:checked="model.IsShippingAddressDifferent" v-on:change="model.IsShippingAddressDifferent = $event.target.checked">
-                    <input name="IsShippingAddressDifferent" type="hidden" value="false">
+                    <input id="IsShippingAddressDifferent" name="IsShippingAddressDifferent" type="checkbox" class="js-address-checkbox" v-model="model.IsShippingAddressDifferent" v-on:change="handleIsShippingAddressDifferent">
                 </label>
             </div>
         </div>
@@ -169,8 +161,9 @@
         <checkout-navigation v-bind:model="model" 
                              continue-label="Continue to next step" 
                              mode="Bootstrap" 
+                             :continue-fn="continueFn" 
                              back-link-classes="btn btn-next btn-transparent pull-left" 
-                             continue-btn-classes="btn btn-success btn-next pull-right"
+                             continue-btn-classes="btn btn-success btn-next btn-complete pull-right"
                              classes="row control-group multistep-btn-a section-margin"></checkout-navigation>
-    </form>
+    </template>
 </div>
