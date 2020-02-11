@@ -1,16 +1,31 @@
 ﻿import { initializeComponent } from "../functions/init";
 import checkoutNavigation from "../components/checkout-navigation";
+import store from '../store';
+
+import { mapState } from 'vuex';
 
 initializeComponent("cart", initCart);
 
 function initCart(rootElement) {
-    const scriptElement = rootElement.querySelector('script[data-items]');
-    const model = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).model;
-
     new Vue({
         el: '#' + rootElement.id,
+        store,
         data: {
-            model
+            model: null
+        },
+        computed: {
+            ...mapState([
+                'triggerSubmit'
+            ]),
+        },
+        watch: {
+            triggerSubmit: function () {
+                this.submit((success) => {
+                    if (success) {
+                        this.$store.dispatch('widgetSubmitted');
+                    }
+                });
+            }
         },
         components: {
             checkoutNavigation
@@ -18,64 +33,50 @@ function initCart(rootElement) {
         methods: {
             updateCartItems: function () {
                 var model = this.model;
-
-                var orderlineArray = [];
-                var overallQty = 0;
+                var orderlineKeyValue = [];
+                var store = this.$store;
 
                 for (var item of model.OrderLines) {
                     var orderlineId = item.OrderLineId;
                     var orderlineQty = item.Quantity;
-
-                    overallQty += orderlineQty;
-
-                    if (orderlineQty == 0) {
-                        this.removeCartItem(orderlineId);
-                    }
-                    else {
-                        var currentKeyValue = { orderlineId, orderlineQty };
-                        orderlineArray.push(currentKeyValue);
-                    }
+                    var currentKeyValue = { orderlineId, orderlineQty };
+                    orderlineKeyValue.push(currentKeyValue);
                 }
 
-                if (overallQty == 0) {
-                    location.reload();
-                }
-                else {
-                    this.$http.post(model.RefreshUrl,
-                        {
-                            RefreshBasket: orderlineArray
-                        }).then(function (response) {
-                            if (response.data) {
-                                var data = response.data;
-                                // TODO: Set mapping fields in ViewModel
-                                var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal']
+                this.$http.post(location.href + '/uc/checkout/cart/update-basket',
+                    {
+                        RefreshBasket: orderlineKeyValue
+                    }).then(function (response) {
+                        if (response.data) {
+                            var data = response.data;
+                            var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal']
+                            var orderLineArray = [];
 
-                                for (var field of updatedFields) {
-                                    model[field] = data[field];
-                                }
+                            for (var field of updatedFields) {
+                                model[field] = data[field];
+                            }
 
-                                var updatedListFields = ['Total'];
-
+                            for (var updatedItem of data.OrderLines) {
                                 for (var currentItem of model.OrderLines) {
-                                    for (var updatedItem of data.OrderLines) {
-                                        if (currentItem.OrderLineId == updatedItem.OrderlineId) {
-                                            for (var field of updatedListFields) {
-                                                currentItem[field] = updatedItem[field];
-                                            }
-                                        }
+                                    if (currentItem.OrderLineId == updatedItem.OrderlineId) {
+                                        orderLineArray.push(Object.assign({}, currentItem, updatedItem));
                                     }
                                 }
                             }
-                        });
-                }
+
+                            model.OrderLines = orderLineArray;
+                            store.commit('update');
+                        }
+                    });
 
                 // TODO: Investigate
                 // config.$triggerEventSelector.trigger("basket-changed", data.MiniBasketRefresh);
             },
             removeCartItem: function (itemId) {
                 var model = this.model;
+                var store = this.$store;
 
-                this.$http.post(model.RemoveOrderlineUrl,
+                this.$http.post(location.href + '/uc/checkout/cart/remove-orderline',
                     {
                         orderlineId: itemId
                     }).then(function (response) {
@@ -83,7 +84,7 @@ function initCart(rootElement) {
                             var data = response.data;
 
                             if (data.OrderLines.length == 0) {
-                                location.reload();
+                                model.OrderLines = [];
                             }
                             else {
                                 // TODO: Set mapping fields in ViewModel
@@ -103,10 +104,24 @@ function initCart(rootElement) {
                                 }
 
                                 model.OrderLines = updatedItems;
+                                store.commit('update');
                             }
                         }
                     });
+            },
+            // required for consistency
+            submit: function (callback) {
+                callback(true)
             }
+        },
+        created: function () {
+            this.$store.commit('vuecreated', 'cart');
+
+            this.$http.get(location.href + '/uc/checkout/cart', {}).then((response) => {
+                if (response.data) {
+                    this.model = response.data.Data ? response.data.Data.data : null;
+                }
+            });
         }
     });
 }

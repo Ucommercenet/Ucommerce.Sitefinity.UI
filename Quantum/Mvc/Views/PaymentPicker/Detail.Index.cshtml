@@ -4,9 +4,7 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-@using Newtonsoft.Json;
 
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.PaymentPickerViewModel
 @{
     Layout = null;
 }
@@ -18,26 +16,24 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<h3 class="heading-underline">Payment method</h3>
-
 <div data-component="payment-widget" id="payment-method">
-    <script type="application/json" data-items="true">
-        { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>
-    <form action="/shop/checkout/payment/CreatePayment" method="POST" name="PaymentPicker">
+    <template v-if="model">
+        <h3 class="heading-underline">Payment method</h3>
+
         <template v-if="model.AvailablePaymentMethods.length">
             <template v-for="method in model.AvailablePaymentMethods" :model="model">
                 <div class="radio-btn-ml section-margin">
                     <label class="radio">
-                        <input class="js-payment-picker" id="SelectedPaymentMethodId" name="SelectedPaymentMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedPaymentMethodId"> {{ method.Text }}
+                        <input class="js-payment-picker" name="SelectedPaymentMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedPaymentMethodId"> {{ method.Text }}
                     </label>
                 </div>
             </template>
-            <checkout-navigation v-bind:model="model" 
-                                 continue-label="Continue to next step" 
-                                 mode="Bootstrap" 
-                                 back-link-classes="btn btn-next btn-transparent pull-left" 
-                                 continue-btn-classes="btn btn-success btn-next pull-right"
+            <checkout-navigation v-bind:model="model"
+                                 continue-label="Continue to next step"
+                                 mode="Bootstrap"
+                                 :continue-fn="submit" 
+                                 back-link-classes="btn btn-next btn-transparent pull-left"
+                                 continue-btn-classes="btn btn-success btn-next btn-complete pull-right"
                                  classes="row control-group multistep-btn-a section-margin">
             </checkout-navigation>
         </template>
@@ -46,5 +42,5 @@
                 WARNING: No payment methods have been configured for {{ model.ShippingCountry }} within <a href="http://ucommerce.dk">UCommerce</a> administration area.
             </p>
         </template>
-    </form>
+    </template>
 </div>

@@ -1,8 +1,8 @@
 ﻿<template>
-    <div>
+    <div v-if="model">
         <template v-if="type == 'text'">
             <label :class="labelClasses" :for="inputId">{{ label }}</label>
-            <input :id="inputId" :name="inputName" :type="type" :class="inputClasses" :required="required" v-model.lazy="value" @input="handleInput" @change="handleChange">
+            <input :id="inputId" :name="inputName" :type="type" :class="inputClasses"  v-model.lazy="value" @input="handleInput" @change="handleChange">
             <span :class="errorClasses">{{ errorMessage }}</span>
         </template>
     </div>
@@ -55,7 +55,7 @@
             }
         },
         created: function () {
-            this.value = this.model[this.addressType][this.fieldName];
+            this.value = this.model ? this.model[this.addressType][this.fieldName] : null;
         },
         methods: {
             getValue: function () {
@@ -81,24 +81,7 @@
                     return;
                 }
 
-                // dummy erquest
-                setTimeout(function () {
-                    callback(true, null);
-                }, 500);
-
-                if (this.model.ValidationUrl) {
-                    this.$http.post(model.ValidationUrl,
-                        {
-                            FieldName: name,
-                            FieldValue: value
-                        }).then(function (response) {
-                            if (response.data) {
-                                var valid = response.data.valid;
-                                var message = response.data.message;
-                                callback(valid, message);
-                            }
-                        });
-                }
+                this.$root.submit(name, callback);
             }
         }
     };

@@ -1,41 +1,116 @@
 ﻿import { initializeComponent } from "../functions/init";
 import checkoutNavigation from "../components/checkout-navigation";
 import inputField from "../components/input-field";
+import store from '../store';
+
+import { mapState } from 'vuex';
 
 initializeComponent("address-widget", initCart);
 
 function initCart(rootElement) {
-    const scriptElement = rootElement.querySelector('script[data-items]');
-    const model = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).model;
-
     new Vue({
         el: '#' + rootElement.id,
+        store,
         data: {
-            model
+            model: null
+        },
+        computed: {
+            ...mapState([
+                'triggerSubmit'
+            ]),
+        },
+        watch: {
+            triggerSubmit: function () {
+                this.submit(null, (success) => {
+                    if (success) {
+                        this.$store.dispatch('widgetSubmitted');
+                    }
+                });
+            }
         },
         components: {
             checkoutNavigation,
             inputField
         },
         methods: {
-            checkForm: function (e) {
-                var valid = true;
-                var form = this.$refs.form;
-                var errors = form.querySelectorAll("span.field-validation-error");
+            submit: function (fieldName, callback) {
+                var fields = this.$el.querySelectorAll('input[name], select[name]');
+                var requestData = {};
+                var store = this.$store;
 
-                if (errors.length) {
-                    for (var i = 0; i < errors.length; i++) {
-                        if (errors[i].innerHTML) {
-                            valid = false;
-                            break;
-                        }
+                if (!callback) {
+                    callback = function () { };
+                }
+
+                for (var field of fields) {
+                    if (field.type == 'checkbox' || field.type == 'radio') {
+                        requestData[field.name] = field.checked;
+                    }
+                    else {
+                        requestData[field.name] = field.value;
                     }
                 }
 
-                if (!valid) {
-                    e.preventDefault();
+                this.$http.post(location.href + '/uc/checkout/address', requestData).then((response) => {
+                    if (response.data) {
+                        var data = response.data;
+
+                        store.commit('update');
+
+                        if (data.Status) {
+                            if (fieldName) {
+                                if (data.Data.errors && data.Data.errors[fieldName].length) {
+                                    callback(false, data.Data.errors[fieldName][0]);
+                                }
+                                else {
+                                    callback(true, '');
+                                }
+                            }
+                            else if (data.Status == 'success') {
+                                callback(true, '');
+                            }
+                            else {
+                                this.highlightFields(data.Data.errors);
+                                callback(false, data.Message);
+                            }
+                        }
+                        else {
+                            console.log("Unhandled exception");
+                            callback(false, '');
+                        }
+                    }
+                });
+            },
+            continueFn: function (callback) {
+                this.submit(null, callback);
+            },
+            highlightFields: function (errors) {
+                if (!errors || errors.length == 0) {
+                    return;
                 }
+
+                for (var fieldName in errors) {
+                    for (var input of this.$children) {
+                        if (input.inputName == fieldName) {
+                            input.errorMessage = errors[fieldName][0];
+                        }
+                    }
+                }
+            },
+            handleIsShippingAddressDifferent: function () {
+                setTimeout(() => {
+                    this.submit();
+                }, 1000);
             }
+        },
+        created: function () {
+            this.$store.commit('vuecreated', 'address');
+
+            this.$http.get(location.href + '/uc/checkout/address', {}).then((response) => {
+                if (response.data) {
+                    this.model = response.data.Data ? response.data.Data.data : null;
+                }
+            });
         }
     });
 }
