@@ -265,6 +265,7 @@
     <Compile Include="Api\Model\FullTextDTO.cs" />
     <Compile Include="Api\Model\FullTextSearchResultDTO.cs" />
     <Compile Include="Api\Model\GetProductReviewsDTO.cs" />
+    <Compile Include="Api\Model\OperationStatusDTO.cs" />
     <Compile Include="Api\Model\OrderLineDTO.cs" />
     <Compile Include="Api\Model\ProductDTO.cs" />
     <Compile Include="Api\Model\ProductPricesDTO.cs" />
@@ -537,8 +538,15 @@
     <EmbeddedResource Include="assets\src\images\icons\products.png" />
     <EmbeddedResource Include="assets\src\images\icons\shipping-picker.png" />
     <EmbeddedResource Include="Mvc\Scripts\Products\designerview-simple.js" />
+    <EmbeddedResource Include="assets\src\js\widgets\cart.js" />
+    <Content Include="assets\src\js\widgets\address.js" />
+    <Content Include="assets\src\js\widgets\checkout-overview.js" />
+    <Content Include="assets\src\js\widgets\payment-method.js" />
+    <Content Include="assets\src\js\widgets\shipping-method.js" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
+    <None Include="assets\src\js\components\checkout-navigation.vue" />
+    <None Include="assets\src\js\components\input-field.vue" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />

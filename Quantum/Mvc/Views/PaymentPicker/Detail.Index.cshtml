@@ -6,7 +6,7 @@
 @using Telerik.Sitefinity.Services;
 @using Newtonsoft.Json;
 
-@*@model UCommerce.Sitefinity.UI.Mvc.ViewModels.PaymentPickerViewModel*@
+@model UCommerce.Sitefinity.UI.Mvc.ViewModels.PaymentPickerViewModel
 @{
     Layout = null;
 }
@@ -21,22 +21,28 @@
 <h3 class="heading-underline">Payment method</h3>
 
 <div data-component="payment-widget" id="payment-method">
-    @*<script type="application/json" data-items="true">
+    <script type="application/json" data-items="true">
         { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>*@
+    </script>
     <form action="/shop/checkout/payment/CreatePayment" method="POST" name="PaymentPicker">
         <template v-if="model.AvailablePaymentMethods.length">
             <template v-for="method in model.AvailablePaymentMethods" :model="model">
-                <div>
-                    <label>
-                        <input id="SelectedPaymentMethodId" name="SelectedPaymentMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedPaymentMethodId"> {{ method.Text }}
+                <div class="radio-btn-ml section-margin">
+                    <label class="radio">
+                        <input class="js-payment-picker" id="SelectedPaymentMethodId" name="SelectedPaymentMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedPaymentMethodId"> {{ method.Text }}
                     </label>
                 </div>
             </template>
-            <checkout-navigation v-bind:model="model" continue-label="Continue to next step" classes=""></checkout-navigation>
+            <checkout-navigation v-bind:model="model" 
+                                 continue-label="Continue to next step" 
+                                 mode="Bootstrap" 
+                                 back-link-classes="btn btn-next btn-transparent pull-left" 
+                                 continue-btn-classes="btn btn-success btn-next pull-right"
+                                 classes="row control-group multistep-btn-a section-margin">
+            </checkout-navigation>
         </template>
         <template v-else>
-            <p>
+            <p class="alert">
                 WARNING: No payment methods have been configured for {{ model.ShippingCountry }} within <a href="http://ucommerce.dk">UCommerce</a> administration area.
             </p>
         </template>

@@ -4,7 +4,8 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.BasketPreviewViewModel
+@using Newtonsoft.Json;
+
 @{
     Layout = null;
 }
@@ -12,45 +13,45 @@
 
 @if (!SystemManager.IsDesignMode)
 {
-    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-    @using (Html.BeginFormSitefinity("RequestPayment", "BasketPreview", FormMethod.Post))
-    {
+<div class="section-margin " data-component="checkout-overview" id="checkout-overview">
+    @*<script type="application/json" data-items="true">
+        { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
+    </script>*@
+    <form v-if="model" action="/shop/checkout/overview/RequestPayment" method="POST" name="BasketPreview">
         <div>
             <div>
                 <h3>Billing address</h3>
                 <br />
                 <address>
-                    <span><strong>@Model.BillingAddress.FirstName @Model.BillingAddress.LastName</strong></span><br>
-                    <span>@Model.BillingAddress.Line1<br></span>
-                    <span>@Model.BillingAddress.PostalCode @Model.BillingAddress.City</span><br>
-                    <span>@Model.BillingAddress.Country.Name</span>
-                    @if (!String.IsNullOrWhiteSpace(@Model.BillingAddress.Attention))
-                    {
-                        <span><text>att. </text> @Model.BillingAddress.Attention</span>
-                    }<br>
-                    <span><abbr title="Phone">P:</abbr>@Model.BillingAddress.PhoneNumber</span><br>
-                    <span><abbr title="Mobile">M:</abbr>@Model.BillingAddress.MobilePhoneNumber </span><br>
-                    <span><abbr title="Email">E:</abbr><a href="mailto:@Model.BillingAddress.EmailAddress">@Model.BillingAddress.EmailAddress</a></span>
+                    <span><strong>{{ model.BillingAddressDTO.FirstName }} {{ model.BillingAddressDTO.LastName }}</strong></span><br>
+                    <span>{{ model.BillingAddressDTO.Line1 }}<br></span>
+                    <span>{{ model.BillingAddressDTO.PostalCode }} {{ model.BillingAddressDTO.City }}</span><br>
+                    <span>{{ model.BillingAddressDTO.CountryId }}</span>
+                    <span v-if="model.BillingAddressDTO.Attention"><text>att. </text> {{ model.BillingAddressDTO.Attention }}</span>
+                    <br>
+                    <span><abbr title="Phone">P:</abbr>{{ model.BillingAddressDTO.PhoneNumber }}</span><br>
+                    <span><abbr title="Mobile">M:</abbr>{{ model.BillingAddressDTO.MobilePhoneNumber }} </span><br>
+                    <span><abbr title="Email">E:</abbr><a :href="'mailto:' + model.BillingAddressDTO.EmailAddress">{{ model.BillingAddressDTO.EmailAddress }}</a></span>
                 </address>
             </div>
             <div>
                 <h3>Shipping address</h3>
                 <br />
                 <address>
-                    <span><strong>@Model.ShipmentAddress.FirstName @Model.ShipmentAddress.LastName</strong></span><br>
-                    <span>@Model.ShipmentAddress.CompanyName</span>
-                    @if (!String.IsNullOrWhiteSpace(@Model.ShipmentAddress.Attention))
-                    {
-                        <span><text>att. </text> @Model.ShipmentAddress.Attention </span>
-                    }<br />
-                    <span>@Model.ShipmentAddress.Line1</span><br>
-                    <span>@Model.ShipmentAddress.PostalCode @Model.ShipmentAddress.City</span><br>
-                    <span>@Model.ShipmentAddress.Country.Name</span><br>
-                    <span><abbr title="Phone">P:</abbr>@Model.ShipmentAddress.PhoneNumber</span><br>
-                    <span><abbr title="Mobile">M:</abbr>@Model.ShipmentAddress.MobilePhoneNumber</span><br>
-                    <span><abbr title="Email">E:</abbr><a href="mailto:@Model.ShipmentAddress.EmailAddress">@Model.ShipmentAddress.EmailAddress</a></span>
+                    <span><strong>{{ model.ShipmentAddressDTO.FirstName }} {{ model.ShipmentAddressDTO.LastName }}</strong></span><br>
+                    <span>{{ model.ShipmentAddressDTO.CompanyName }}</span>
+                    <span v-if="model.ShipmentAddressDTO.Attention"><text>att. </text> {{ model.ShipmentAddressDTO.Attention }} </span>
+                    <br />
+                    <span>{{ model.ShipmentAddressDTO.Line1 }}</span><br>
+                    <span>{{ model.ShipmentAddressDTO.PostalCode }} {{ model.ShipmentAddressDTO.City }}</span><br>
+                    <span>{{ model.ShipmentAddressDTO.CountryId }}</span><br>
+                    <span><abbr title="Phone">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
+                    <span><abbr title="Mobile">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
+                    <span><abbr title="Email">E:</abbr><a href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
                 </address>
             </div>
         </div>
@@ -66,100 +67,69 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var lineItem in @Model.OrderLines)
-                {
+                <template v-for="lineItem in model.OrderLines">
                     <tr>
-                        <td>@lineItem.Sku</td>
-                        <td>@lineItem.ProductName</td>
+                        <td>{{ lineItem.Sku }}</td>
+                        <td>{{ lineItem.ProductName }}</td>
                         <td>
-                            @if (lineItem.Discount.HasValue && lineItem.Discount > 0)
-                            {
+                            <template v-if="lineItem.Discount.HasValue && lineItem.Discount > 0">
                                 <span>
-                                    @lineItem.Price
+                                    {{ lineItem.Price }}
                                 </span>
-                                @lineItem.PriceWithDiscount
-                            }
-                            else
-                            {
-                                @lineItem.Price
-                            }
+                                {{ lineItem.PriceWithDiscount }}
+                            </template>
+                            <template v-else>
+                                {{ lineItem.Price }}
+                            </template>
                         </td>
-                        <td>@lineItem.Tax</td>
-                        <td>@lineItem.Quantity</td>
-                        <td>@lineItem.Total</td>
+                        <td>{{ lineItem.Tax }}</td>
+                        <td>{{ lineItem.Quantity }}</td>
+                        <td>{{ lineItem.Total }}</td>
                     </tr>
-                }
+                </template>
                 <tr>
                     <td rowspan="@ViewBag.RowSpan" colspan="2"></td>
                     <td colspan="3">Sub total: </td>
                     <td>
-                        @Model.SubTotal
+                        {{ model.SubTotal }}
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3">VAT: </td>
                     <td>
-                        @Model.TaxTotal
+                        {{ model.TaxTotal }}
                     </td>
                 </tr>
-                @if (@Model.DiscountAmount != 0)
-                {
+                <template v-if="model.DiscountAmount != 0">
                     <tr>
                         <td colspan="3">Order discounts: </td>
-                        <td>-@Model.DiscountTotal</td>
+                        <td>-{{ model.DiscountTotal }}</td>
                     </tr>
-                }
-                @if (@Model.ShipmentAmount != 0)
-                {
+                </template>
+                <template v-if="model.ShipmentAmount != 0">
                     <tr>
                         <td colspan="3">
                             Shipping
-                            <text> (via @Model.ShipmentName)</text>
+                            <text> (via {{ model.ShipmentName }})</text>
                         </td>
-                        <td>@Model.ShippingTotal</td>
+                        <td>{{ model.ShippingTotal }}</td>
                     </tr>
-                }
-                @if (@Model.PaymentAmount != 0)
-                {
+                </template>
+                <template v-if="model.PaymentAmount != 0">
                     <tr>
                         <td colspan="3">
                             Payment
-                            <text> (@Model.PaymentName)</text>
+                            <text> ({{ model.PaymentName }})</text>
                         </td>
-                        <td>@Model.PaymentTotal</td>
+                        <td>{{ model.PaymentTotal }}</td>
                     </tr>
-                }
+                </template>
                 <tr>
                     <td colspan="3">Order total: </td>
-                    <td>@Model.OrderTotal</td>
+                    <td>{{ model.OrderTotal }}</td>
                 </tr>
             </tbody>
         </table>
-        <div>
-            <div>
-                @{
-                    var showBackButton = true;
-
-                    if (Model.PreviousStepUrl == "")
-                    {
-                        showBackButton = false;
-                    }
-
-                }
-                <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")" type="submit">Back</a>
-
-            </div>
-            <div>
-                @{
-                    var showContinueButton = true;
-
-                    if (Model.NextStepUrl == "")
-                    {
-                        showContinueButton = false;
-                    }
-
-                }
-                <input name="send-order" type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Complete Order" />
-            </div>
-        </div>
-    }
+        <checkout-navigation v-bind:model="model" continue-label="Complete Order" classes=""></checkout-navigation>
+    </form>
+</div>

@@ -11,7 +11,7 @@
     Layout = null;
 }
 
-@Html.StyleSheet(Url.WidgetContent("assets/dist/css/main.min.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -19,39 +19,31 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<div class="container my-4" data-component="shipping-widget" id="shipping-method">
+<h3 class="heading-underline">Shipping method</h3>
+
+<div data-component="shipping-widget" id="shipping-method">
     <script type="application/json" data-items="true">
         { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
     </script>
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Shipping method</h3>
-            <hr />
-        </div>
-    </div>
     <form action="/shop/checkout/shipping/CreateShipment" method="POST" name="ShippingPicker">
         <template v-if="model.AvailableShippingMethods.length">
             <template v-for="method in model.AvailableShippingMethods" :model="model">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="js-shipping-picker" id="SelectedShippingMethodId" name="SelectedShippingMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedShippingMethodId"> {{ method.Text }}
-                            </label>
-                        </div>
-                    </div>
+                <div class="radio-btn-ml section-margin">
+                    <label class="radio">
+                        <input class="js-shipping-picker" id="SelectedShippingMethodId" name="SelectedShippingMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedShippingMethodId"> {{ method.Text }}
+                    </label>
                 </div>
             </template>
             <checkout-navigation v-bind:model="model"
                                  continue-label="Continue to next step"
-                                 mode="Bootstrap4"
-                                 back-link-classes="btn btn-light btn-lg float-md-left"
-                                 continue-btn-classes="btn btn-info btn-lg w-100 mt-3 mt-md-0 float-md-right"
-                                 classes="row my-4">
+                                 mode="Bootstrap"
+                                 back-link-classes="btn btn-next btn-transparent pull-left"
+                                 continue-btn-classes="btn btn-success btn-next pull-right"
+                                 classes="row control-group multistep-btn-a section-margin">
             </checkout-navigation>
         </template>
         <template v-else>
-            <p class="alert alert-danger">
+            <p class="alert">
                 WARNING: No shipping methods have been configured for {{ model.ShippingCountry }} within <a href="http://ucommerce.dk">UCommerce</a> administration area.
             </p>
         </template>

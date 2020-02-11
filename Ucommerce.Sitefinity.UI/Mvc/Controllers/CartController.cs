@@ -7,6 +7,7 @@ using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Infrastructure;
 using UCommerce.Transactions;
+using UCommerce.Sitefinity.UI.Api.Model;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -37,12 +38,32 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             {
                 return this.PartialView("_Warning", message);
             }
-
-            var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
-
+            
             var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(detailTemplateName, vm);
+            return View(detailTemplateName);
+        }
+        
+        [HttpPost]
+        [RelativeRoute("uc/checkout/cart")]
+        public ActionResult Data()
+        {
+            var model = ResolveModel();
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+            }
+
+            var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
+            
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "success";
+            responseDTO.Data.Add("data", vm);
+
+            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
