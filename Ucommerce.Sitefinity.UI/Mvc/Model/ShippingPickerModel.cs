@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce;
-using UCommerce.Infrastructure;
+using Telerik.Sitefinity.Abstractions;
 using UCommerce.Runtime;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
+using ObjectFactory = UCommerce.Infrastructure.ObjectFactory;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -35,66 +34,91 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return false;
             }
 
-            var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
-            var address = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
+            try
+            {
+                var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
 
-            if (address == null)
-            {
-                message = "Address must be specified";
-                return false;
+                if (basket != null)
+                {
+                    var address = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
+
+                    if (address == null)
+                    {
+                        message = "Address must be specified";
+                        return false;
+                    }
+                    else
+                    {
+                        message = null;
+                        return true;
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                message = null;
-                return true;
+                Log.Write(ex, ConfigurationPolicy.ErrorLog);
             }
+
+            message = "No basket for current user";
+            return false;
         }
 
         public virtual ShippingPickerViewModel GetViewModel()
         {
-            var shipmentPickerViewModel = new ShippingPickerViewModel();
-            var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
-            if (_transactionLibraryInternal.HasBasket())
+            try
             {
-                var shippingCountry = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName).Country;
-                shipmentPickerViewModel.ShippingCountry = shippingCountry.Name;
-                var availableShippingMethods = _transactionLibraryInternal.GetShippingMethods(shippingCountry);
-
-                if (basket.Shipments.Count > 0)
+                var shipmentPickerViewModel = new ShippingPickerViewModel();
+                var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
+                if (_transactionLibraryInternal.HasBasket())
                 {
-                    shipmentPickerViewModel.SelectedShippingMethodId = basket.Shipments.FirstOrDefault()?.ShippingMethod.ShippingMethodId ?? 0;
-                }
-                else
-                {
-                    shipmentPickerViewModel.SelectedShippingMethodId = -1;
-                }
+                    var shippingCountry = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName).Country;
+                    shipmentPickerViewModel.ShippingCountry = shippingCountry.Name;
+                    var availableShippingMethods = _transactionLibraryInternal.GetShippingMethods(shippingCountry);
 
-                foreach (var availableShippingMethod in availableShippingMethods)
-                {
-                    var priceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
-
-                    var price = availableShippingMethod.GetPriceForPriceGroup(priceGroup);
-                    var formattedprice = new Money((price == null ? 0 : price.Price), basket.BillingCurrency);
-
-                    shipmentPickerViewModel.AvailableShippingMethods.Add(new SelectListItem()
+                    if (basket.Shipments.Count > 0)
                     {
-                        Selected = shipmentPickerViewModel.SelectedShippingMethodId == availableShippingMethod.ShippingMethodId,
-                        Text = String.Format(" {0} ({1})", availableShippingMethod.Name, formattedprice),
-                        Value = availableShippingMethod.ShippingMethodId.ToString()
-                    });
+                        shipmentPickerViewModel.SelectedShippingMethodId =
+                            basket.Shipments.FirstOrDefault()?.ShippingMethod.ShippingMethodId ?? 0;
+                    }
+                    else
+                    {
+                        shipmentPickerViewModel.SelectedShippingMethodId = -1;
+                    }
+
+                    foreach (var availableShippingMethod in availableShippingMethods)
+                    {
+                        var priceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
+
+                        var price = availableShippingMethod.GetPriceForPriceGroup(priceGroup);
+                        var formattedprice = new Money((price == null ? 0 : price.Price), basket.BillingCurrency);
+
+                        shipmentPickerViewModel.AvailableShippingMethods.Add(new SelectListItem()
+                        {
+                            Selected = shipmentPickerViewModel.SelectedShippingMethodId ==
+                                       availableShippingMethod.ShippingMethodId,
+                            Text = String.Format(" {0} ({1})", availableShippingMethod.Name, formattedprice),
+                            Value = availableShippingMethod.ShippingMethodId.ToString()
+                        });
+                    }
                 }
+
+                _transactionLibraryInternal.ExecuteBasketPipeline();
+
+                shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+                shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
+
+                return shipmentPickerViewModel;
             }
-            _transactionLibraryInternal.ExecuteBasketPipeline();
-
-            shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
-            shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
-
-            return shipmentPickerViewModel;
+            catch
+            {
+                return null;
+            }
         }
 
         public virtual void CreateShipment(ShippingPickerViewModel createShipmentViewModel)
         {
-            _transactionLibraryInternal.CreateShipment(createShipmentViewModel.SelectedShippingMethodId, UCommerce.Constants.DefaultShipmentAddressName, true);
+            _transactionLibraryInternal.CreateShipment(createShipmentViewModel.SelectedShippingMethodId,
+                UCommerce.Constants.DefaultShipmentAddressName, true);
             _transactionLibraryInternal.ExecuteBasketPipeline();
         }
 

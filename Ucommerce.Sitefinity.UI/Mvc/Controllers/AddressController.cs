@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -13,7 +12,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Address MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uAddressInformation_MVC", Title = "Address Information", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnAddressInformation sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uAddressInformation_MVC", Title = "Address Information",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnAddressInformation sfMvcIcn")]
     public class AddressController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
@@ -29,7 +30,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             {
                 return this.PartialView("_Warning", message);
             }
-            
+
             var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
             return View(detailTemplateName);
@@ -44,13 +45,20 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!model.CanProcessRequest(new System.Collections.Generic.Dictionary<string, object>(), out message))
             {
-                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                    JsonRequestBehavior.AllowGet);
             }
 
             var viewModel = model.GetViewModel();
 
             var responseDTO = new OperationStatusDTO();
             responseDTO.Status = "success";
+
+            if (viewModel == null)
+            {
+                responseDTO.Status = "failed";
+            }
+
             responseDTO.Data.Add("data", viewModel);
 
             return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
@@ -71,20 +79,21 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                    JsonRequestBehavior.AllowGet);
             }
 
             if (ModelState.IsValid)
             {
                 model.Save(addressRendering);
-                return this.Json(new OperationStatusDTO() { Status = "success" }, JsonRequestBehavior.AllowGet);
+                return this.Json(new OperationStatusDTO() {Status = "success"}, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 var errorList = ModelState.ToDictionary(
-                                    kvp => kvp.Key,
-                                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                                );
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
 
                 var responseDTO = new OperationStatusDTO();
                 responseDTO.Status = "failed";
