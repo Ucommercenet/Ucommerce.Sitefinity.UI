@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using UCommerce.EntitiesV2;
-using UCommerce.Infrastructure;
+using Telerik.Sitefinity.Abstractions;
 using UCommerce.Runtime;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
+using ObjectFactory = UCommerce.Infrastructure.ObjectFactory;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -34,26 +34,29 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return false;
             }
 
-            PurchaseOrder basket = null;
-            if (_transactionLibraryInternal.GetBasket() != null)
+            try
             {
-                basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
+                var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
+
+                if (basket != null)
+                {
+                    var address = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
+
+                    if (address == null)
+                    {
+                        message = "Address must be specified";
+                        return false;
+                    }
+                    else
+                    {
+                        message = null;
+                        return true;
+                    }
+                }
             }
-
-            if (basket != null)
+            catch (Exception ex)
             {
-                var address = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
-
-                if (address == null)
-                {
-                    message = "Address must be specified";
-                    return false;
-                }
-                else
-                {
-                    message = null;
-                    return true;
-                }
+                Log.Write(ex, ConfigurationPolicy.ErrorLog);
             }
 
             message = "No basket for current user";
