@@ -55,7 +55,7 @@
             allowNavigate: function (allow) {
                 console.log(allow);
                 if (allow) {
-                    //location.href = this.model.NextStepUrl;
+                    location.href = this.model.NextStepUrl;
                 }
             }
         },

@@ -30,8 +30,15 @@ function initCart(rootElement) {
         methods: {
             fetchData: function () {
                 this.$http.get('/uc/checkout/preview', {}).then((response) => {
-                    if (response.data) {
-                        this.model = response.data.Data ? response.data.Data.data : null;
+                    if (response.data &&
+                        response.data.Status &&
+                        response.data.Status == 'success' &&
+                        response.data.Data && response.data.Data.data) {
+                        
+                        this.model = response.data.Data.data;
+                    }
+                    else {
+                        this.model = null;
                     }
                 });
             },

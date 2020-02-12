@@ -148,7 +148,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 basketPreviewViewModel.BillingAddressDTO.CompanyName = purchaseOrder.BillingAddress.CompanyName;
             }
 
-            basketPreviewViewModel.BillingAddressDTO.CountryId = purchaseOrder.BillingAddress.Country.CountryId;
+            if (!purchaseOrder.BillingAddress.Country.Name.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.CountryName = purchaseOrder.BillingAddress.Country.Name;
+            }
 
             OrderAddress ShipmentAddress =
                 purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName);
@@ -213,7 +216,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 basketPreviewViewModel.ShipmentAddressDTO.CompanyName = ShipmentAddress.CompanyName;
             }
 
-            basketPreviewViewModel.ShipmentAddressDTO.CountryId = ShipmentAddress.Country.CountryId;
+            if (!ShipmentAddress.Country.Name.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.CountryName = ShipmentAddress.Country.Name;
+            }
         }
 
         public virtual string GetPaymentUrl()

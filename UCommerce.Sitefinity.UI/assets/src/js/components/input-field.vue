@@ -81,7 +81,7 @@
                     return;
                 }
 
-                this.$root.submit(name, callback);
+                this.$root.submit(name, false, callback);
             }
         }
     };

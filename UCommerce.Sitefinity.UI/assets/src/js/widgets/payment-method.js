@@ -63,14 +63,37 @@ function initCart(rootElement) {
                         }
                     }
                 });
+            },
+            selectDefalut: function () {
+                var methodIsAvaialle = () => {
+                    for (var method of this.model.AvailablePaymentMethods) {
+                        if (method.Value == this.model.SelectedPaymentMethodId) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+                if (!methodIsAvaialle() && this.model.AvailablePaymentMethods.length) {
+                    this.model.SelectedPaymentMethodId = this.model.AvailablePaymentMethods[0].Value;
+                }
             }
         },
         created: function () {
             this.$store.commit('vuecreated', 'payment');
 
             this.$http.get(location.href + '/uc/checkout/payment', {}).then((response) => {
-                if (response.data) {
-                    this.model = response.data.Data ? response.data.Data.data : null;
+                if (response.data &&
+                    response.data.Status &&
+                    response.data.Status == 'success' &&
+                    response.data.Data && response.data.Data.data) {
+
+                    this.model = response.data.Data.data;
+                    this.selectDefalut();
+                }
+                else {
+                    this.model = null;
                 }
             });
         }

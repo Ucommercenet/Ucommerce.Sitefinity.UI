@@ -15,7 +15,8 @@ function initCart(rootElement) {
         },
         computed: {
             ...mapState([
-                'triggerSubmit'
+                'triggerSubmit',
+                'updateIteration'
             ]),
         },
         watch: {
@@ -25,12 +26,30 @@ function initCart(rootElement) {
                         this.$store.dispatch('widgetSubmitted');
                     }
                 });
+            },
+            updateIteration: function () {
+                this.fetchData();
             }
         },
         components: {
             checkoutNavigation
         },
         methods: {
+            fetchData: function () {
+                this.$http.get(location.href + '/uc/checkout/shipping', {}).then((response) => {
+                    if (response.data &&
+                        response.data.Status &&
+                        response.data.Status == 'success' &&
+                        response.data.Data && response.data.Data.data) {
+
+                        this.model = response.data.Data.data;
+                        this.selectDefalut();
+                    }
+                    else {
+                        this.model = null;
+                    }
+                });
+            },
             submit: function (callback) {
                 var fields = this.$el.querySelectorAll('input[name]');
                 var requestData = {};
@@ -63,16 +82,27 @@ function initCart(rootElement) {
                         }
                     }
                 });
+            },
+            selectDefalut: function () {
+                var methodIsAvaialle = () => {
+                    for (var method of this.model.AvailableShippingMethods) {
+                        if (method.Value == this.model.SelectedShippingMethodId) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+                if (!methodIsAvaialle() && this.model.AvailableShippingMethods.length) {
+                    this.model.SelectedShippingMethodId = this.model.AvailableShippingMethods[0].Value;
+                }
             }
         },
         created: function () {
             this.$store.commit('vuecreated', 'shipping');
 
-            this.$http.get(location.href + '/uc/checkout/shipping', {}).then((response) => {
-                if (response.data) {
-                    this.model = response.data.Data ? response.data.Data.data : null;
-                }
-            });
+            this.fetchData();
         }
     });
 }

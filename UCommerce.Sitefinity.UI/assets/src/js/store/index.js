@@ -21,7 +21,6 @@ export default new Vuex.Store({
             state.triggerSubmit++
         },
         allowNavigation(state) {
-            console.log('Navigation allowed');
             state.allowNavigate = true;
         },
         vuecreated(state, name) {
@@ -29,7 +28,6 @@ export default new Vuex.Store({
         },
         widgetSubmitted(state) {
             state.submittedWidgets++;
-            console.log('Widget submitted');
         }
     },
     actions: {

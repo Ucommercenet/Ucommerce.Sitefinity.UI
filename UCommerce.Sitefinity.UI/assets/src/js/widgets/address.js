@@ -21,7 +21,7 @@ function initCart(rootElement) {
         },
         watch: {
             triggerSubmit: function () {
-                this.submit(null, (success) => {
+                this.submit(null, false, (success) => {
                     if (success) {
                         this.$store.dispatch('widgetSubmitted');
                     }
@@ -33,7 +33,7 @@ function initCart(rootElement) {
             inputField
         },
         methods: {
-            submit: function (fieldName, callback) {
+            submit: function (fieldName, doNotHighlight, callback) {
                 var fields = this.$el.querySelectorAll('input[name], select[name]');
                 var requestData = {};
                 var store = this.$store;
@@ -70,7 +70,10 @@ function initCart(rootElement) {
                                 callback(true, '');
                             }
                             else {
-                                this.highlightFields(data.Data.errors);
+                                if (!doNotHighlight) {
+                                    this.highlightFields(data.Data.errors);
+                                }
+
                                 callback(false, data.Message);
                             }
                         }
@@ -82,7 +85,7 @@ function initCart(rootElement) {
                 });
             },
             continueFn: function (callback) {
-                this.submit(null, callback);
+                this.submit(null, false, callback);
             },
             highlightFields: function (errors) {
                 if (!errors || errors.length == 0) {
@@ -99,16 +102,23 @@ function initCart(rootElement) {
             },
             handleIsShippingAddressDifferent: function () {
                 setTimeout(() => {
-                    this.submit();
-                }, 1000);
+                    this.submit(null, true);
+                }, 500);
             }
         },
         created: function () {
             this.$store.commit('vuecreated', 'address');
 
             this.$http.get(location.href + '/uc/checkout/address', {}).then((response) => {
-                if (response.data) {
-                    this.model = response.data.Data ? response.data.Data.data : null;
+                if (response.data &&
+                    response.data.Status &&
+                    response.data.Status == 'success' &&
+                    response.data.Data && response.data.Data.data) {
+
+                    this.model = response.data.Data.data;
+                }
+                else {
+                    this.model = null;
                 }
             });
         }
