@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
+using UCommerce.EntitiesV2;
 using UCommerce.Runtime;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
@@ -34,51 +35,71 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return false;
             }
 
+            PurchaseOrder basketPurchaseOrder = null;
             try
             {
-                var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
-
-                if (basket != null)
-                {
-                    var address = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
-
-                    if (address == null)
-                    {
-                        message = "Address must be specified";
-                        return false;
-                    }
-                    else
-                    {
-                        message = null;
-                        return true;
-                    }
-                }
+                var basket = _transactionLibraryInternal.GetBasket();
+                basketPurchaseOrder = basket.PurchaseOrder;
             }
             catch (Exception ex)
             {
                 Log.Write(ex, ConfigurationPolicy.ErrorLog);
             }
 
-            message = "No basket for current user";
+            if (basketPurchaseOrder != null)
+            {
+                var address = basketPurchaseOrder.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
+
+                if (address == null)
+                {
+                    message = "Address must be specified";
+                    return false;
+                }
+                else
+                {
+                    message = null;
+                    return true;
+                }
+            }
+
+            message = "The checkout is not started yet";
             return false;
         }
 
         public virtual ShippingPickerViewModel GetViewModel()
         {
+            var shipmentPickerViewModel = new ShippingPickerViewModel();
+            PurchaseOrder basketPurchaseOrder = null;
+
             try
             {
-                var shipmentPickerViewModel = new ShippingPickerViewModel();
-                var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
-                if (_transactionLibraryInternal.HasBasket())
+                var basket = _transactionLibraryInternal.GetBasket();
+                basketPurchaseOrder = basket.PurchaseOrder;
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex, ConfigurationPolicy.ErrorLog);
+                return null;
+            }
+
+            if (!basketPurchaseOrder.OrderLines.Any())
+            {
+                return null;
+            }
+
+            if (_transactionLibraryInternal.HasBasket())
+            {
+                var shippingCountry = basketPurchaseOrder.GetAddress(UCommerce.Constants.DefaultShipmentAddressName)?
+                    .Country;
+                if (shippingCountry != null)
                 {
-                    var shippingCountry = basket.GetAddress(UCommerce.Constants.DefaultShipmentAddressName).Country;
                     shipmentPickerViewModel.ShippingCountry = shippingCountry.Name;
                     var availableShippingMethods = _transactionLibraryInternal.GetShippingMethods(shippingCountry);
 
-                    if (basket.Shipments.Count > 0)
+                    if (basketPurchaseOrder.Shipments.Count > 0)
                     {
                         shipmentPickerViewModel.SelectedShippingMethodId =
-                            basket.Shipments.FirstOrDefault()?.ShippingMethod.ShippingMethodId ?? 0;
+                            basketPurchaseOrder.Shipments.FirstOrDefault()?.ShippingMethod.ShippingMethodId ?? 0;
                     }
                     else
                     {
@@ -90,7 +111,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                         var priceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
 
                         var price = availableShippingMethod.GetPriceForPriceGroup(priceGroup);
-                        var formattedprice = new Money((price == null ? 0 : price.Price), basket.BillingCurrency);
+                        var formattedprice = new Money((price == null ? 0 : price.Price),
+                            basketPurchaseOrder.BillingCurrency);
 
                         shipmentPickerViewModel.AvailableShippingMethods.Add(new SelectListItem()
                         {
@@ -101,18 +123,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                         });
                     }
                 }
-
-                _transactionLibraryInternal.ExecuteBasketPipeline();
-
-                shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
-                shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
-
-                return shipmentPickerViewModel;
             }
-            catch
-            {
-                return null;
-            }
+
+            _transactionLibraryInternal.ExecuteBasketPipeline();
+
+            shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+            shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
+
+            return shipmentPickerViewModel;
         }
 
         public virtual void CreateShipment(ShippingPickerViewModel createShipmentViewModel)

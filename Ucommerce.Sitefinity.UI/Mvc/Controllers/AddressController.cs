@@ -23,14 +23,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            var model = ResolveModel();
-            string message;
-
-            if (!model.CanProcessRequest(new System.Collections.Generic.Dictionary<string, object>(), out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
-
             var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
             return View(detailTemplateName);

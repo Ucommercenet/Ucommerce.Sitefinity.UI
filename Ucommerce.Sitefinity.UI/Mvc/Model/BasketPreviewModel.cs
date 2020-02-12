@@ -237,30 +237,31 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return false;
             }
 
+            PurchaseOrder purchaseOrder;
             try
             {
-                var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-
-                if (purchaseOrder.BillingAddress == null)
-                {
-                    message = "The Billing Address must be specified.";
-                    return false;
-                }
-
-                if (purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) == null)
-                {
-                    message = "The Billing Address must be specified.";
-                    return false;
-                }
-
-                message = null;
-                return true;
+                purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
             }
             catch
             {
-                message = "No Basket existing for the current user.";
+                message = "The checkout has not started yet";
                 return false;
             }
+
+            if (purchaseOrder.BillingAddress == null)
+            {
+                message = "The Billing Address must be specified.";
+                return false;
+            }
+
+            if (purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) == null)
+            {
+                message = "The Shipping Address must be specified.";
+                return false;
+            }
+
+            message = null;
+            return true;
         }
 
         private string GetNextStepUrl(Guid nextStepId, Guid orderGuid)

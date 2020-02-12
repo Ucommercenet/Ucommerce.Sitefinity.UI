@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Telerik.Sitefinity.Abstractions;
 using UCommerce.Api;
-using UCommerce.Infrastructure;
+using UCommerce.EntitiesV2;
 using UCommerce.Runtime;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
+using ObjectFactory = UCommerce.Infrastructure.ObjectFactory;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -28,18 +30,32 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual PaymentPickerViewModel GetViewModel()
         {
+            PurchaseOrder purchaseOrder;
+            var paymentPickerViewModel = new PaymentPickerViewModel();
+
             try
             {
-                var paymentPickerViewModel = new PaymentPickerViewModel();
+                purchaseOrder = _transactionLibraryInternal.GetBasket().PurchaseOrder;
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex, ConfigurationPolicy.ErrorLog);
+                return null;
+            }
 
-                var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
-                var shippingCountry = TransactionLibrary.GetCountries().SingleOrDefault(x => x.Name == "Germany");
+            if (!purchaseOrder.OrderLines.Any())
+            {
+                return null;
+            }
+            var shippingCountry = TransactionLibrary.GetCountries().SingleOrDefault(x => x.Name == "Germany");
 
+            if (shippingCountry != null)
+            {
                 paymentPickerViewModel.ShippingCountry = shippingCountry.Name;
 
                 var availablePaymentMethods = _transactionLibraryInternal.GetPaymentMethods(shippingCountry);
 
-                var existingPayment = basket.Payments.FirstOrDefault();
+                var existingPayment = purchaseOrder.Payments.FirstOrDefault();
                 paymentPickerViewModel.SelectedPaymentMethodId = existingPayment != null
                     ? existingPayment.PaymentMethod.PaymentMethodId
                     : -1;
@@ -50,7 +66,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     var option = new SelectListItem();
                     decimal feePercent = availablePaymentMethod.FeePercent;
                     var fee = availablePaymentMethod.GetFeeForPriceGroup(priceGroup);
-                    var formattedFee = new Money(fee == null ? 0 : fee.Fee, basket.BillingCurrency);
+                    var formattedFee = new Money(fee == null ? 0 : fee.Fee, purchaseOrder.BillingCurrency);
 
                     option.Text = String.Format(" {0} ({1} + {2}%)", availablePaymentMethod.Name, formattedFee,
                         feePercent.ToString("0.00"));
@@ -60,18 +76,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                     paymentPickerViewModel.AvailablePaymentMethods.Add(option);
                 }
-
-                _transactionLibraryInternal.ExecuteBasketPipeline();
-
-                paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
-                paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
-
-                return paymentPickerViewModel;
             }
-            catch
-            {
-                return null;
-            }
+
+            _transactionLibraryInternal.ExecuteBasketPipeline();
+
+            paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+            paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
+
+            return paymentPickerViewModel;
         }
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
@@ -82,7 +94,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return false;
             }
 
-            message = null;
+            message = "No order is available";
             return true;
         }
 

@@ -21,8 +21,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public AddressModel(Guid? nextStepId = null, Guid? previousStepId = null)
         {
-            
-            _transactionLibraryInternal = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
+            _transactionLibraryInternal =
+                UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             _countries = Country.All();
             this.nextStepId = nextStepId ?? Guid.Empty;
             this.previousStepId = previousStepId ?? Guid.Empty;
@@ -31,56 +31,66 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         public virtual AddressRenderingViewModel GetViewModel()
         {
             var viewModel = new AddressRenderingViewModel();
+            OrderAddress shippingInformation;
+            OrderAddress billingInformation;
+            PurchaseOrder purchaseOrder;
             try
             {
-                var shippingInformation =
+                purchaseOrder = _transactionLibraryInternal.GetBasket().PurchaseOrder;
+                shippingInformation =
                     _transactionLibraryInternal.GetBasket().PurchaseOrder
                         .GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) ?? new OrderAddress();
-                var billingInformation = _transactionLibraryInternal.GetBasket().PurchaseOrder.BillingAddress ??
-                                         new OrderAddress();
-
-                viewModel.BillingAddress.FirstName = billingInformation.FirstName;
-                viewModel.BillingAddress.LastName = billingInformation.LastName;
-                viewModel.BillingAddress.EmailAddress = billingInformation.EmailAddress;
-                viewModel.BillingAddress.PhoneNumber = billingInformation.PhoneNumber;
-                viewModel.BillingAddress.MobilePhoneNumber = billingInformation.MobilePhoneNumber;
-                viewModel.BillingAddress.Line1 = billingInformation.Line1;
-                viewModel.BillingAddress.Line2 = billingInformation.Line2;
-                viewModel.BillingAddress.PostalCode = billingInformation.PostalCode;
-                viewModel.BillingAddress.City = billingInformation.City;
-                viewModel.BillingAddress.State = billingInformation.State;
-                viewModel.BillingAddress.Attention = billingInformation.Attention;
-                viewModel.BillingAddress.CompanyName = billingInformation.CompanyName;
-                viewModel.BillingAddress.CountryId =
-                    billingInformation.Country != null ? billingInformation.Country.CountryId : -1;
-
-                viewModel.ShippingAddress.FirstName = shippingInformation.FirstName;
-                viewModel.ShippingAddress.LastName = shippingInformation.LastName;
-                viewModel.ShippingAddress.EmailAddress = shippingInformation.EmailAddress;
-                viewModel.ShippingAddress.PhoneNumber = shippingInformation.PhoneNumber;
-                viewModel.ShippingAddress.MobilePhoneNumber = shippingInformation.MobilePhoneNumber;
-                viewModel.ShippingAddress.Line1 = shippingInformation.Line1;
-                viewModel.ShippingAddress.Line2 = shippingInformation.Line2;
-                viewModel.ShippingAddress.PostalCode = shippingInformation.PostalCode;
-                viewModel.ShippingAddress.City = shippingInformation.City;
-                viewModel.ShippingAddress.State = shippingInformation.State;
-                viewModel.ShippingAddress.Attention = shippingInformation.Attention;
-                viewModel.ShippingAddress.CompanyName = shippingInformation.CompanyName;
-                viewModel.ShippingAddress.CountryId =
-                    shippingInformation.Country != null ? shippingInformation.Country.CountryId : -1;
-
-                viewModel.AvailableCountries = _countries.ToList()
-                    .Select(x => new SelectListItem() {Text = x.Name, Value = x.CountryId.ToString()}).ToList();
-
-                viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
-                viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
-
-                return viewModel;
+                billingInformation = _transactionLibraryInternal.GetBasket().PurchaseOrder.BillingAddress ??
+                                     new OrderAddress();
             }
-            catch
+            catch (Exception ex)
+            {
+                Log.Write(ex, ConfigurationPolicy.ErrorLog);
+                return null;
+            }
+
+            if (!purchaseOrder.OrderLines.Any())
             {
                 return null;
             }
+
+            viewModel.BillingAddress.FirstName = billingInformation.FirstName;
+            viewModel.BillingAddress.LastName = billingInformation.LastName;
+            viewModel.BillingAddress.EmailAddress = billingInformation.EmailAddress;
+            viewModel.BillingAddress.PhoneNumber = billingInformation.PhoneNumber;
+            viewModel.BillingAddress.MobilePhoneNumber = billingInformation.MobilePhoneNumber;
+            viewModel.BillingAddress.Line1 = billingInformation.Line1;
+            viewModel.BillingAddress.Line2 = billingInformation.Line2;
+            viewModel.BillingAddress.PostalCode = billingInformation.PostalCode;
+            viewModel.BillingAddress.City = billingInformation.City;
+            viewModel.BillingAddress.State = billingInformation.State;
+            viewModel.BillingAddress.Attention = billingInformation.Attention;
+            viewModel.BillingAddress.CompanyName = billingInformation.CompanyName;
+            viewModel.BillingAddress.CountryId =
+                billingInformation.Country != null ? billingInformation.Country.CountryId : -1;
+
+            viewModel.ShippingAddress.FirstName = shippingInformation.FirstName;
+            viewModel.ShippingAddress.LastName = shippingInformation.LastName;
+            viewModel.ShippingAddress.EmailAddress = shippingInformation.EmailAddress;
+            viewModel.ShippingAddress.PhoneNumber = shippingInformation.PhoneNumber;
+            viewModel.ShippingAddress.MobilePhoneNumber = shippingInformation.MobilePhoneNumber;
+            viewModel.ShippingAddress.Line1 = shippingInformation.Line1;
+            viewModel.ShippingAddress.Line2 = shippingInformation.Line2;
+            viewModel.ShippingAddress.PostalCode = shippingInformation.PostalCode;
+            viewModel.ShippingAddress.City = shippingInformation.City;
+            viewModel.ShippingAddress.State = shippingInformation.State;
+            viewModel.ShippingAddress.Attention = shippingInformation.Attention;
+            viewModel.ShippingAddress.CompanyName = shippingInformation.CompanyName;
+            viewModel.ShippingAddress.CountryId =
+                shippingInformation.Country != null ? shippingInformation.Country.CountryId : -1;
+
+            viewModel.AvailableCountries = _countries.ToList()
+                .Select(x => new SelectListItem() {Text = x.Name, Value = x.CountryId.ToString()}).ToList();
+
+            viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+            viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
+
+            return viewModel;
         }
 
         public virtual JsonResult Save(AddressSaveViewModel addressRendering)
@@ -100,7 +110,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
-            result.Data = new { ShippingUrl = GetNextStepUrl(nextStepId) };
+            result.Data = new {ShippingUrl = GetNextStepUrl(nextStepId)};
             return result;
         }
 
@@ -133,19 +143,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         private void EditBillingInformation(AddressSave billingAddress)
         {
             _transactionLibraryInternal.EditBillingInformation(
-               billingAddress.FirstName,
-               billingAddress.LastName,
-               billingAddress.EmailAddress,
-               billingAddress.PhoneNumber,
-               billingAddress.MobilePhoneNumber,
-               billingAddress.CompanyName,
-               billingAddress.Line1,
-               billingAddress.Line2,
-               billingAddress.PostalCode,
-               billingAddress.City,
-               billingAddress.State,
-               billingAddress.Attention,
-               billingAddress.CountryId);
+                billingAddress.FirstName,
+                billingAddress.LastName,
+                billingAddress.EmailAddress,
+                billingAddress.PhoneNumber,
+                billingAddress.MobilePhoneNumber,
+                billingAddress.CompanyName,
+                billingAddress.Line1,
+                billingAddress.Line2,
+                billingAddress.PostalCode,
+                billingAddress.City,
+                billingAddress.State,
+                billingAddress.Attention,
+                billingAddress.CountryId);
         }
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
