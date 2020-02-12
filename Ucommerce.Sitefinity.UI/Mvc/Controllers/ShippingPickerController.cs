@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -13,7 +12,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Shipping Picker MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnShippingPicker sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnShippingPicker sfMvcIcn")]
     public class ShippingPickerController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
@@ -22,16 +23,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
-            var model = ResolveModel();
-            string message;
-
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
-
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
-            
             var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
             return View(detailTemplateName);
@@ -48,13 +39,20 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                    JsonRequestBehavior.AllowGet);
             }
 
             var sippingPickerVM = model.GetViewModel();
 
             var responseDTO = new OperationStatusDTO();
             responseDTO.Status = "success";
+
+            if (sippingPickerVM == null)
+            {
+                responseDTO.Status = "failed";
+            }
+
             responseDTO.Data.Add("data", sippingPickerVM);
 
             return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
@@ -76,17 +74,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var viewModel = model.GetViewModel();
 
             model.CreateShipment(createShipmentViewModel);
-            
+
             if (ModelState.IsValid)
             {
-                return this.Json(new OperationStatusDTO() { Status = "success" }, JsonRequestBehavior.AllowGet);
+                return this.Json(new OperationStatusDTO() {Status = "success"}, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 var errorList = ModelState.ToDictionary(
-                                    kvp => kvp.Key,
-                                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                                );
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
 
                 var responseDTO = new OperationStatusDTO();
                 responseDTO.Status = "failed";

@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
@@ -40,10 +38,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     ProductName = orderLine.ProductName,
                     Sku = orderLine.Sku,
                     VariantSku = orderLine.VariantSku,
-                    Total = new Money(orderLine.Total.GetValueOrDefault(), orderLine.PurchaseOrder.BillingCurrency).ToString(),
+                    Total = new Money(orderLine.Total.GetValueOrDefault(), orderLine.PurchaseOrder.BillingCurrency)
+                        .ToString(),
                     Tax = new Money(orderLine.VAT, purchaseOrder.BillingCurrency).ToString(),
                     Price = new Money(orderLine.Price, purchaseOrder.BillingCurrency).ToString(),
-                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString(),
+                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(),
+                        purchaseOrder.BillingCurrency).ToString(),
                     Quantity = orderLine.Quantity,
                     Discount = orderLine.Discount
                 };
@@ -51,13 +51,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 basketPreviewViewModel.OrderLines.Add(orderLineModel);
             }
 
-            basketPreviewViewModel.DiscountTotal = new Money(purchaseOrder.DiscountTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.DiscountTotal =
+                new Money(purchaseOrder.DiscountTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
             basketPreviewViewModel.DiscountAmount = purchaseOrder.DiscountTotal.GetValueOrDefault();
-            basketPreviewViewModel.SubTotal = new Money(purchaseOrder.SubTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            basketPreviewViewModel.OrderTotal = new Money(purchaseOrder.OrderTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            basketPreviewViewModel.TaxTotal = new Money(purchaseOrder.TaxTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            basketPreviewViewModel.ShippingTotal = new Money(purchaseOrder.ShippingTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            basketPreviewViewModel.PaymentTotal = new Money(purchaseOrder.PaymentTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.SubTotal =
+                new Money(purchaseOrder.SubTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.OrderTotal =
+                new Money(purchaseOrder.OrderTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.TaxTotal =
+                new Money(purchaseOrder.TaxTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.ShippingTotal =
+                new Money(purchaseOrder.ShippingTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.PaymentTotal =
+                new Money(purchaseOrder.PaymentTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
 
             var shipment = purchaseOrder.Shipments.FirstOrDefault();
             if (shipment != null)
@@ -72,6 +78,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 basketPreviewViewModel.PaymentName = payment.PaymentMethodName;
                 basketPreviewViewModel.PaymentAmount = purchaseOrder.PaymentTotal.GetValueOrDefault();
             }
+
             basketPreviewViewModel.NextStepUrl = GetNextStepUrl(nextStepId, purchaseOrder.OrderGuid);
             basketPreviewViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
@@ -102,7 +109,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             if (!purchaseOrder.BillingAddress.MobilePhoneNumber.IsNullOrWhitespace())
             {
-                basketPreviewViewModel.BillingAddressDTO.MobilePhoneNumber = purchaseOrder.BillingAddress.MobilePhoneNumber;
+                basketPreviewViewModel.BillingAddressDTO.MobilePhoneNumber =
+                    purchaseOrder.BillingAddress.MobilePhoneNumber;
             }
 
             if (!purchaseOrder.BillingAddress.Line1.IsNullOrWhitespace())
@@ -142,7 +150,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             basketPreviewViewModel.BillingAddressDTO.CountryId = purchaseOrder.BillingAddress.Country.CountryId;
 
-            OrderAddress ShipmentAddress = purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName);
+            OrderAddress ShipmentAddress =
+                purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName);
 
             if (!ShipmentAddress.FirstName.IsNullOrWhitespace())
             {
@@ -228,7 +237,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return false;
             }
 
-            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            PurchaseOrder purchaseOrder;
+            try
+            {
+                purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            }
+            catch
+            {
+                message = "The checkout has not started yet";
+                return false;
+            }
 
             if (purchaseOrder.BillingAddress == null)
             {
@@ -238,7 +256,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             if (purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) == null)
             {
-                message = "The Billing Address must be specified.";
+                message = "The Shipping Address must be specified.";
                 return false;
             }
 
