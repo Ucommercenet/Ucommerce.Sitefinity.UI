@@ -22,6 +22,9 @@ function initCart(rootElement) {
         watch: {
             updateIteration: function () {
                 this.fetchData();
+            },
+            allowNavigate: function () {
+                this.submit();
             }
         },
         components: {
@@ -42,14 +45,31 @@ function initCart(rootElement) {
                     }
                 });
             },
-            submit: function (callback) {
+            continueFn: function (callback) {
+                // Prevent the default redirect action
+                callback(false);
+
                 if (this.$store.state.widgets.length) {
                     this.$store.commit('triggersubmit');
-                    callback(false);
                 }
                 else {
-                    callback(true);
+                    this.submit();
                 }
+            },
+            submit: function () {
+                this.$http.post(location.href + '/uc/checkout/complete-order', {}).then((response) => {
+                    if (response.data) {
+                        var data = response.data;
+
+                        if (data.Status && data.Status == 'success') {
+                            // If the transaction is completed, redirect the user the the payment URL
+                            location.href = data.Message;
+                        }
+                        else {
+                            console.error('Order not complete!');
+                        }
+                    }
+                });
             }
         },
         created: function () {

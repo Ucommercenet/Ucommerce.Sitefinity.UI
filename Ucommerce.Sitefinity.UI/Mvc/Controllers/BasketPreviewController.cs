@@ -51,6 +51,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpPost]
+        [RelativeRoute("uc/checkout/complete-order")]
         public ActionResult RequestPayment()
         {
             var model = ResolveModel();
@@ -59,12 +60,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return this.Json(new OperationStatusDTO { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
             }
 
             var paymentUrl = model.GetPaymentUrl();
 
-            return Redirect(paymentUrl);
+            return this.Json(new OperationStatusDTO { Status = "success", Message = paymentUrl }, JsonRequestBehavior.AllowGet); ;
         }
 
         protected override void HandleUnknownAction(string actionName)
