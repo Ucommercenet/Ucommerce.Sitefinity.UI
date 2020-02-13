@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce;
 using UCommerce.Infrastructure;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
@@ -59,6 +57,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             viewModel.NumberOfItems = quantity.ToString();
             viewModel.IsEmpty = quantity == 0;
             viewModel.Total = total.ToString();
+            viewModel.CartPageUrl = GetCartPageAbsoluteUrl(cartPageId);
 
             return viewModel;
         }

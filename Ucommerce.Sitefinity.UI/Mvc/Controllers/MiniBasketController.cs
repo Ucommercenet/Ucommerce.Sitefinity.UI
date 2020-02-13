@@ -2,9 +2,9 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
-using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Infrastructure;
+using UCommerce.Sitefinity.UI.Api.Model;
+using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
@@ -48,10 +48,23 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpGet]
+        [RelativeRoute("uc/checkout/mini-basket")]
         public ActionResult Refresh()
         {
-            var miniBasketModel = ResolveModel();
-            return Json(miniBasketModel.Refresh(), JsonRequestBehavior.AllowGet);
+            var model = ResolveModel();
+            var viewModel = model.Refresh();
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out var message))
+            {
+                return this.Json(new OperationStatusDTO { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+            }
+
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "success";
+            responseDTO.Data.Add("data", viewModel);
+
+            return Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         protected override void HandleUnknownAction(string actionName)

@@ -14,12 +14,12 @@
 }
 
 <div data-component="mini-basket" id="mini-basket">
-    <div v-if="model" class="navbar-collapse js-mini-basket">
+    <div v-if="model" class="pull-xs-right navbar-collapse js-mini-basket">
         <ul class="nav navbar-nav">
             <li>
-                <div class="m-3">
-                    <a class="text-black" :href="model.CartPageUrl">
-                        <span>&#128722;</span><span class="js-mini-basket-number-of-items">{{ model.NumberOfItems }}</span>
+                <div>
+                    <a class="shopping-cart" :href="model.CartPageUrl">
+                        <i class="fa fa-shopping-cart margin-right-small" aria-hidden="true"></i><span>{{ model.NumberOfItems }}</span>
                     </a>
                 </div>
             </li>

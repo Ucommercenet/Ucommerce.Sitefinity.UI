@@ -20,3 +20,4 @@ import "./js/widgets/address";
 import "./js/widgets/shipping-method";
 import "./js/widgets/payment-method";
 import "./js/widgets/checkout-overview";
+import "./js/widgets/mini-basket";

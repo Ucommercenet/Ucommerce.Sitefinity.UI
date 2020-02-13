@@ -1,39 +1,31 @@
 ﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
 @using Telerik.Sitefinity.Services;
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.MiniBasketRenderingViewModel
+
 @{
     Layout = null;
-    var emptyClass = Model.IsEmpty ? null : "display:none;";
-    var notEmptyClass = !Model.IsEmpty ? null : "display:none;";
 }
 
 @if (!SystemManager.IsDesignMode)
 {
-    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<div class="js-mini-basket" data-refresh-url="@Model.RefreshUrl" data-mini-basket-empty-selector=".js-mini-basket-empty" data-mini-basket-not-empty-selector=".js-mini-basket-not-empty" data-mini-basket-number-of-items-selector=".js-mini-basket-number-of-items" data-mini-basket-total-selector=".js-mini-basket-total">
-    <div style="@emptyClass" class="js-mini-basket-empty @emptyClass">
-        <div>
-            <ul>
-                <li>
+<div data-component="mini-basket" id="mini-basket">
+    <div v-if="model" class="js-mini-basket">
+        <ul>
+            <li>
+                <template v-if="model.IsEmpty">
                     <div>Your basket is empty</div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div style="@notEmptyClass" class="js-mini-basket-not-empty @notEmptyClass">
-        <div>
-            <ul>
-                <li>
+                </template>
+                <template v-else>
                     <div>
-                        <a href="@Model.CartPageUrl">
-                            <span>&#128722;</span><span class="js-mini-basket-number-of-items">@Model.NumberOfItems</span> item(s): <span class="js-mini-basket-total">@Model.Total</span>
+                        <a :href="model.CartPageUrl">
+                            <span>&#128722;</span><span class="js-mini-basket-number-of-items">{{ model.NumberOfItems }}</span> item(s): <span class="js-mini-basket-total">{{ model.Total }}</span>
                         </a>
                     </div>
-                </li>
-            </ul>
-        </div>
+                </template>
+            </li>
+        </ul>
     </div>
 </div>
