@@ -12,7 +12,7 @@ namespace UCommerce.Sitefinity.UI.Api.Model
         {
         }
 
-        public int Quantity { get; set; }
+        public uint Quantity { get; set; }
 
         public string Sku { get; set; }
 

@@ -105,9 +105,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var parameters = new System.Collections.Generic.Dictionary<string, object>();
             string message;
 
+            parameters.Add("submitModel", updateModel);
+
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
+                   JsonRequestBehavior.AllowGet);
             }
 
             var updatedVM = model.Update(updateModel);

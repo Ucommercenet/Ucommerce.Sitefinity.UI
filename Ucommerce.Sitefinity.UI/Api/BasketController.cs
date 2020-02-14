@@ -62,6 +62,15 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPost]
         public IHttpActionResult Add(AddToBasketDTO model)
         {
+            if (model.Quantity < 1)
+            {
+                var responseDTO = new OperationStatusDTO();
+                responseDTO.Status = "failed";
+                responseDTO.Message = "Quantity must be greater than 0";
+
+                return this.Json(responseDTO);
+            }
+
             string variantSku = null;
             var product = CatalogLibrary.GetProduct(model.Sku);
 
@@ -90,7 +99,7 @@ namespace UCommerce.Sitefinity.UI.Api
                 }
             }
 
-            TransactionLibrary.AddToBasket(model.Quantity, model.Sku, variantSku);
+            TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku, variantSku);
             return Json(this.GetBasketModel());
         }
 

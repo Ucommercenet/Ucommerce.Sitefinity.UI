@@ -81,6 +81,26 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return false;
             }
 
+            object submitModel = null;
+
+            if (parameters.TryGetValue("submitModel", out submitModel))
+            {
+                var updateModel = submitModel as CartUpdateBasket;
+
+                if (updateModel != null)
+                {
+                    foreach (var item in updateModel.RefreshBasket)
+                    {
+                        if (item.OrderLineQty < 1)
+                        {
+                            message = string.Format("Quantity of {0} must be greater than 0", item.OrderLineId);
+                            return false;
+
+                        }
+                    }
+                }
+            }
+
             message = null;
             return true;
         }
