@@ -237,37 +237,50 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-            {
-                message = "The widget is in Page Edit mode.";
-                return false;
-            }
+            object mode = null;
 
-            PurchaseOrder purchaseOrder;
-            try
+            if (parameters.TryGetValue("mode", out mode) && mode != null)
             {
-                purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-            }
-            catch
-            {
-                message = "The checkout has not started yet";
-                return false;
-            }
+                if (mode.ToString() == "index")
+                {
+                    if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+                    {
+                        message = "The widget is in Page Edit mode.";
+                        return false;
+                    }
+                }
 
-            if (purchaseOrder.BillingAddress == null)
-            {
-                message = "The Billing Address must be specified.";
-                return false;
+                message = null;
+                return true;
             }
-
-            if (purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) == null)
+            else
             {
-                message = "The Shipping Address must be specified.";
-                return false;
-            }
+                PurchaseOrder purchaseOrder;
+                try
+                {
+                    purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+                }
+                catch
+                {
+                    message = "The checkout has not started yet";
+                    return false;
+                }
 
-            message = null;
-            return true;
+                if (purchaseOrder.BillingAddress == null)
+                {
+                    message = "The Billing Address must be specified.";
+                    return false;
+                }
+
+                if (purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) == null)
+                {
+                    message = "The Shipping Address must be specified.";
+                    return false;
+                }
+
+                message = null;
+                return true;
+            }
         }
 
         private string GetNextStepUrl(Guid nextStepId, Guid orderGuid)

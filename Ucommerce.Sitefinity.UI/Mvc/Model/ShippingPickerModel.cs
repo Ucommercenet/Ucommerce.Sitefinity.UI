@@ -29,41 +29,54 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            object mode = null;
+
+            if (parameters.TryGetValue("mode", out mode) && mode != null)
             {
-                message = "The widget is in Page Edit mode.";
+                if (mode.ToString() == "index")
+                {
+                    if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+                    {
+                        message = "The widget is in Page Edit mode.";
+                        return false;
+                    }
+                }
+
+                message = null;
+                return true;
+            }
+            else
+            {
+                PurchaseOrder basketPurchaseOrder = null;
+                try
+                {
+                    var basket = _transactionLibraryInternal.GetBasket();
+                    basketPurchaseOrder = basket.PurchaseOrder;
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(ex, ConfigurationPolicy.ErrorLog);
+                }
+
+                if (basketPurchaseOrder != null)
+                {
+                    var address = basketPurchaseOrder.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
+
+                    if (address == null)
+                    {
+                        message = "Address must be specified";
+                        return false;
+                    }
+                    else
+                    {
+                        message = null;
+                        return true;
+                    }
+                }
+
+                message = "The checkout is not started yet";
                 return false;
             }
-
-            PurchaseOrder basketPurchaseOrder = null;
-            try
-            {
-                var basket = _transactionLibraryInternal.GetBasket();
-                basketPurchaseOrder = basket.PurchaseOrder;
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex, ConfigurationPolicy.ErrorLog);
-            }
-
-            if (basketPurchaseOrder != null)
-            {
-                var address = basketPurchaseOrder.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
-
-                if (address == null)
-                {
-                    message = "Address must be specified";
-                    return false;
-                }
-                else
-                {
-                    message = null;
-                    return true;
-                }
-            }
-
-            message = "The checkout is not started yet";
-            return false;
         }
 
         public virtual ShippingPickerViewModel GetViewModel()

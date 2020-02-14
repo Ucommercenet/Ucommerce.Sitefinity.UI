@@ -1,14 +1,13 @@
 ﻿using System.Linq;
 using System.Web.Http;
-using UCommerce.Sitefinity.UI.Api.Model;
-using UCommerce.Sitefinity.UI.Constants;
-using UCommerce;
 using UCommerce.Api;
 using UCommerce.Catalog;
 using UCommerce.Content;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Runtime;
+using UCommerce.Sitefinity.UI.Api.Model;
+using UCommerce.Sitefinity.UI.Constants;
 
 namespace UCommerce.Sitefinity.UI.Api
 {

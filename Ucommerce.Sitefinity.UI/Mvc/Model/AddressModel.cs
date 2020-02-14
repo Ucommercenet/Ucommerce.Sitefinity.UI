@@ -160,26 +160,42 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-            {
-                message = "The widget is in Page Edit mode.";
-                return false;
-            }
+            object mode = null;
 
-            if (parameters.ContainsKey("addressRendering") && parameters.ContainsKey("modelState"))
+            if (parameters.TryGetValue("mode", out mode) && mode != null)
             {
-                var addressRendering = parameters["addressRendering"] as AddressSaveViewModel;
-                var modelState = parameters["modelState"] as ModelStateDictionary;
-
-                if (!addressRendering.IsShippingAddressDifferent)
+                if (mode.ToString() == "index")
                 {
-                    modelState.Remove("ShippingAddress.FirstName");
-                    modelState.Remove("ShippingAddress.LastName");
-                    modelState.Remove("ShippingAddress.EmailAddress");
-                    modelState.Remove("ShippingAddress.Line1");
-                    modelState.Remove("ShippingAddress.PostalCode");
-                    modelState.Remove("ShippingAddress.City");
+                    if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+                    {
+                        message = "The widget is in Page Edit mode.";
+                        return false;
+                    }
                 }
+
+                message = null;
+                return true;
+            }
+            else
+            {
+                if (parameters.ContainsKey("addressRendering") && parameters.ContainsKey("modelState"))
+                {
+                    var addressRendering = parameters["addressRendering"] as AddressSaveViewModel;
+                    var modelState = parameters["modelState"] as ModelStateDictionary;
+
+                    if (!addressRendering.IsShippingAddressDifferent)
+                    {
+                        modelState.Remove("ShippingAddress.FirstName");
+                        modelState.Remove("ShippingAddress.LastName");
+                        modelState.Remove("ShippingAddress.EmailAddress");
+                        modelState.Remove("ShippingAddress.Line1");
+                        modelState.Remove("ShippingAddress.PostalCode");
+                        modelState.Remove("ShippingAddress.City");
+                    }
+                }
+
+                message = null;
+                return true;
             }
 
             message = null;

@@ -47,6 +47,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             {
                 return null;
             }
+
             var shippingCountry = TransactionLibrary.GetCountries().SingleOrDefault(x => x.Name == "Germany");
 
             if (shippingCountry != null)
@@ -88,13 +89,24 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            object mode = null;
+
+            if (parameters.TryGetValue("mode", out mode) && mode != null)
             {
-                message = "The widget is in Page Edit mode.";
-                return false;
+                if (mode.ToString() == "index")
+                {
+                    if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+                    {
+                        message = "The widget is in Page Edit mode.";
+                        return false;
+                    }
+                }
+
+                message = null;
+                return true;
             }
 
-            message = "No order is available";
+            message = null;
             return true;
         }
 
