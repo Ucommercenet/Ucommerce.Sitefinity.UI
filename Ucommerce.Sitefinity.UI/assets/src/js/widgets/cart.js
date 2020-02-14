@@ -48,24 +48,29 @@ function initCart(rootElement) {
                         RefreshBasket: orderlineKeyValue
                     }).then(function (response) {
                         if (response.data) {
-                            var data = response.data;
-                            var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal']
-                            var orderLineArray = [];
-
-                            for (var field of updatedFields) {
-                                model[field] = data[field];
+                            if (response.data.Status && response.data.Status == 'failed') {
+                                console.error(response.data.Message);
                             }
+                            else {
+                                var data = response.data;
+                                var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal']
+                                var orderLineArray = [];
 
-                            for (var updatedItem of data.OrderLines) {
-                                for (var currentItem of model.OrderLines) {
-                                    if (currentItem.OrderLineId == updatedItem.OrderlineId) {
-                                        orderLineArray.push(Object.assign({}, currentItem, updatedItem));
+                                for (var field of updatedFields) {
+                                    model[field] = data[field];
+                                }
+
+                                for (var updatedItem of data.OrderLines) {
+                                    for (var currentItem of model.OrderLines) {
+                                        if (currentItem.OrderLineId == updatedItem.OrderlineId) {
+                                            orderLineArray.push(Object.assign({}, currentItem, updatedItem));
+                                        }
                                     }
                                 }
-                            }
 
-                            model.OrderLines = orderLineArray;
-                            store.commit('update');
+                                model.OrderLines = orderLineArray;
+                                store.commit('update');
+                            }
                         }
                     });
 
