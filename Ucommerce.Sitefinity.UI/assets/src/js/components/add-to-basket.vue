@@ -47,39 +47,49 @@
 
                     this.$http.post(addToBasketUrl, addToBasketModel)
                         .then(function (response) {
-                            this.addToBasketMessage = addToBasketSuccessMessage;
-                            this.showAddToBasketMessage = true;
+                            if (response.data.Status && response.data.Status == 'failed') {
+                                this.addToBasketMessage = response.data.Message;
+                                this.showAddToBasketMessage = true;
 
-							var isEmpty = !(response.data.NumberOfItemsInBasket > 0);
-                            var miniBasketRefresh = { NumberOfItems: response.data.NumberOfItemsInBasket, Total: response.data.PaymentTotal, IsEmpty: isEmpty };
+                                setTimeout(() =>
+                                    this.showAddToBasketMessage = false,
+                                    5000);
+                            }
+                            else {
+                                this.addToBasketMessage = addToBasketSuccessMessage;
+                                this.showAddToBasketMessage = true;
 
-							$(document).find('.js-mini-basket').each(function () {
+                                var isEmpty = !(response.data.NumberOfItemsInBasket > 0);
+                                var miniBasketRefresh = { NumberOfItems: response.data.NumberOfItemsInBasket, Total: response.data.PaymentTotal, IsEmpty: isEmpty };
 
-                                var $miniBasket = $(this);
+                                $(document).find('.js-mini-basket').each(function () {
 
-                                var emptySelector = $miniBasket.data("mini-basket-empty-selector");
-                                var notEmptySelector = $miniBasket.data("mini-basket-not-empty-selector");
-                                var numberOfItemsSelector = $miniBasket.data("mini-basket-number-of-items-selector");
-                                var totalSelector = $miniBasket.data("mini-basket-total-selector");
+                                    var $miniBasket = $(this);
 
-                                if (miniBasketRefresh) {
-                                    if (miniBasketRefresh.IsEmpty) {
-                                        $miniBasket.find(notEmptySelector).hide();
-                                        $miniBasket.find(emptySelector).show();
+                                    var emptySelector = $miniBasket.data("mini-basket-empty-selector");
+                                    var notEmptySelector = $miniBasket.data("mini-basket-not-empty-selector");
+                                    var numberOfItemsSelector = $miniBasket.data("mini-basket-number-of-items-selector");
+                                    var totalSelector = $miniBasket.data("mini-basket-total-selector");
 
-                                    } else {
-                                        $miniBasket.find(numberOfItemsSelector).text(miniBasketRefresh.NumberOfItems);
-                                        $miniBasket.find(totalSelector).text(miniBasketRefresh.Total);
+                                    if (miniBasketRefresh) {
+                                        if (miniBasketRefresh.IsEmpty) {
+                                            $miniBasket.find(notEmptySelector).hide();
+                                            $miniBasket.find(emptySelector).show();
 
-                                        $miniBasket.find(notEmptySelector).show();
-                                        $miniBasket.find(emptySelector).hide();
+                                        } else {
+                                            $miniBasket.find(numberOfItemsSelector).text(miniBasketRefresh.NumberOfItems);
+                                            $miniBasket.find(totalSelector).text(miniBasketRefresh.Total);
+
+                                            $miniBasket.find(notEmptySelector).show();
+                                            $miniBasket.find(emptySelector).hide();
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-							setTimeout(() =>
-                                this.showAddToBasketMessage = false,
-                                5000);
+                                setTimeout(() =>
+                                    this.showAddToBasketMessage = false,
+                                    5000);
+                            }
                         }, function (error) {
                             this.addToBasketMessage = addToBasketFailedMessage;
                             this.showAddToBasketMessage = true;
@@ -88,7 +98,7 @@
                                 this.showAddToBasketMessage = false,
                                 5000);
                         });
-                }                
+                }
             }
         }
     };
