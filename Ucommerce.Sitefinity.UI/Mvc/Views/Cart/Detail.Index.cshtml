@@ -63,7 +63,7 @@ else
                             {{ line.Tax }}
                         </td>
                         <td>
-                            <input class="qty form-control inline-block no-padding" type="text" v-model="line.Quantity">
+                            <input class="qty form-control inline-block no-padding" type="number" v-model="line.Quantity">
                             <button name="update-basket" class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="updateCartItems">
                                 <span>&#10227;</span> <span>Update</span>
                             </button>
