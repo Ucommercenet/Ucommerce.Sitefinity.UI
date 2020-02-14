@@ -4,9 +4,7 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-@using Newtonsoft.Json;
 
-@*@model UCommerce.Sitefinity.UI.Mvc.ViewModels.ShippingPickerViewModel*@
 @{
     Layout = null;
 }
@@ -20,10 +18,7 @@
 
 <h3>Shipping method</h3>
 <div data-component="shipping-widget" id="shipping-method">
-    @*<script type="application/json" data-items="true">
-        { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>*@
-    <form action="/shop/checkout/shipping/CreateShipment" method="POST" name="ShippingPicker">
+    <template v-if="model">
         <template v-if="model.AvailableShippingMethods.length">
             <template v-for="method in model.AvailableShippingMethods" :model="model">
                 <div>
@@ -32,12 +27,15 @@
                     </label>
                 </div>
             </template>
-            <checkout-navigation v-bind:model="model" continue-label="Continue to next step" classes=""></checkout-navigation>
+            <checkout-navigation v-bind:model="model"
+                                 :continue-fn="submit"
+                                 continue-label="Continue to next step"
+                                 classes=""></checkout-navigation>
         </template>
         <template v-else>
             <p>
                 WARNING: No shipping methods have been configured for {{ model.ShippingCountry }} within <a href="http://ucommerce.dk">UCommerce</a> administration area.
             </p>
         </template>
-    </form>
+    </template>
 </div>

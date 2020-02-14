@@ -4,13 +4,9 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-@using Newtonsoft.Json;
-
-@*@model UCommerce.Sitefinity.UI.Mvc.ViewModels.AddressRenderingViewModel*@
 
 @{
     Layout = null;
-    var showShippingAddress = Model.IsShippingAddressDifferent ? "display:block;" : "display:none;";
 }
 
 @if (!SystemManager.IsDesignMode)
@@ -21,11 +17,7 @@
 
 
 <div data-component="address-widget" id="address-widget">
-    <script type="application/json" data-items="true">
-        { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>
-    <form v-on:submit="checkForm" action="uc/checkout/address" method="POST" name="Address" class="js-address" ref="form">
-
+    <template v-if="model">
         <div>
             <div class="js-address-billing">
                 <h3>Billing address</h3>
@@ -154,12 +146,13 @@
         <div>
             <label for="toggleShippingView">
                 Use a different address for shipping
-                <input id="IsShippingAddressDifferent" name="" type="checkbox" class="js-address-checkbox" v-bind:checked="model.IsShippingAddressDifferent" v-on:change="model.IsShippingAddressDifferent = $event.target.checked">
-                <input name="IsShippingAddressDifferent" type="hidden" value="false">
+                <input id="IsShippingAddressDifferent" name="IsShippingAddressDifferent" type="checkbox" class="js-address-checkbox" v-model="model.IsShippingAddressDifferent" v-on:change="handleIsShippingAddressDifferent">
             </label>
         </div>
 
 
-        <checkout-navigation v-bind:model="model" continue-label="Continue to next step" classes=""></checkout-navigation>
-    </form>
+        <checkout-navigation v-bind:model="model" 
+                             continue-label="Continue to next step"
+                             :continue-fn="continueFn" ></checkout-navigation>
+    </template>
 </div>

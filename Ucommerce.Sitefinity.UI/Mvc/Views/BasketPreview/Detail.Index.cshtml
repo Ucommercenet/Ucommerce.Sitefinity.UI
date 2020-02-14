@@ -4,7 +4,6 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-@using Newtonsoft.Json;
 
 @{
     Layout = null;
@@ -18,10 +17,7 @@
 }
 
 <div class="section-margin " data-component="checkout-overview" id="checkout-overview">
-    @*<script type="application/json" data-items="true">
-        { "model" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
-    </script>*@
-    <form v-if="model" action="/shop/checkout/overview/RequestPayment" method="POST" name="BasketPreview">
+    <template v-if="model">
         <div>
             <div>
                 <h3>Billing address</h3>
@@ -30,7 +26,7 @@
                     <span><strong>{{ model.BillingAddressDTO.FirstName }} {{ model.BillingAddressDTO.LastName }}</strong></span><br>
                     <span>{{ model.BillingAddressDTO.Line1 }}<br></span>
                     <span>{{ model.BillingAddressDTO.PostalCode }} {{ model.BillingAddressDTO.City }}</span><br>
-                    <span>{{ model.BillingAddressDTO.CountryId }}</span>
+                    <span>{{ model.BillingAddressDTO.CountryName }}</span>
                     <span v-if="model.BillingAddressDTO.Attention"><text>att. </text> {{ model.BillingAddressDTO.Attention }}</span>
                     <br>
                     <span><abbr title="Phone">P:</abbr>{{ model.BillingAddressDTO.PhoneNumber }}</span><br>
@@ -48,7 +44,7 @@
                     <br />
                     <span>{{ model.ShipmentAddressDTO.Line1 }}</span><br>
                     <span>{{ model.ShipmentAddressDTO.PostalCode }} {{ model.ShipmentAddressDTO.City }}</span><br>
-                    <span>{{ model.ShipmentAddressDTO.CountryId }}</span><br>
+                    <span>{{ model.ShipmentAddressDTO.CountryName }}</span><br>
                     <span><abbr title="Phone">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
                     <span><abbr title="Mobile">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
                     <span><abbr title="Email">E:</abbr><a href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
@@ -130,6 +126,9 @@
                 </tr>
             </tbody>
         </table>
-        <checkout-navigation v-bind:model="model" continue-label="Complete Order" classes=""></checkout-navigation>
-    </form>
+        <checkout-navigation v-bind:model="model"
+                             continue-label="Complete Order"
+                             :continue-fn="continueFn" 
+                             classes=""></checkout-navigation>
+    </template>
 </div>

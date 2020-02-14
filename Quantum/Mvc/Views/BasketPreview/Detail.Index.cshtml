@@ -27,7 +27,7 @@
                     <span class="address-line"><strong>{{ model.BillingAddressDTO.FirstName }} {{ model.BillingAddressDTO.LastName }}</strong></span><br>
                     <span class="address-line">{{ model.BillingAddressDTO.Line1 }}<br></span>
                     <span class="address-line">{{ model.BillingAddressDTO.PostalCode }} {{ model.BillingAddressDTO.City }}</span><br>
-                    <span class="address-line">{{ model.BillingAddressDTO.CountryId }}</span>
+                    <span class="address-line">{{ model.BillingAddressDTO.CountryName }}</span>
                     <template v-if="model.BillingAddressDTO.Attention">
                         <span class="address-line"><text>att. </text> {{ model.BillingAddressDTO.Attention }}</span>
                     </template>
@@ -49,7 +49,7 @@
                     <br>
                     <span class="address-line">{{ model.ShipmentAddressDTO.Line1 }}</span><br>
                     <span class="address-line">{{ model.ShipmentAddressDTO.PostalCode }} {{ model.ShipmentAddressDTO.City }}</span><br>
-                    <span class="address-line">{{ model.ShipmentAddressDTO.CountryId }}</span><br>
+                    <span class="address-line">{{ model.ShipmentAddressDTO.CountryName }}</span><br>
                     <span class="address-line"><abbr title="Phone">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
                     <span class="address-line"><abbr title="Mobile">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
                     <span class="address-line"><abbr title="Email">E:</abbr><a href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
@@ -153,8 +153,7 @@
                              mode="Bootstrap" 
                              back-link-classes="btn btn-next btn-transparent pull-left" 
                              continue-btn-classes="btn btn-success btn-next btn-complete pull-right"
-                             :allow-navigate="allowNavigate" 
-                             :continue-fn="submit" 
+                             :continue-fn="continueFn" 
                              classes="row control-group multistep-btn-a section-margin"></checkout-navigation>
     </template>
 </div>
