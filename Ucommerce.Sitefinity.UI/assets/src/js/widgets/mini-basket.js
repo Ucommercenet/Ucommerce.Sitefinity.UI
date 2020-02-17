@@ -24,7 +24,7 @@ function initCart(rootElement) {
         },
         methods: {
             fetchData: function () {
-                this.$http.get(location.href + '/uc/checkout/mini-basket', {}).then((response) => {
+                this.$http.get('/uc/checkout/mini-basket', {}).then((response) => {
                     if (response.data &&
                         response.data.Status &&
                         response.data.Status == 'success' &&

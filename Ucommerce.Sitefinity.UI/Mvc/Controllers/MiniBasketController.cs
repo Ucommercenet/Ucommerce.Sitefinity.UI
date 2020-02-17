@@ -48,7 +48,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpGet]
-        [RelativeRoute("uc/checkout/mini-basket")]
+        [Route("uc/checkout/mini-basket")]
         public ActionResult Refresh()
         {
             var model = ResolveModel();
