@@ -18,29 +18,28 @@ function initCart(rootElement) {
             ]),
         },
         watch: {
-            updateIteration: function () {
+            updateIteration: function() {
                 this.fetchData();
             }
         },
         methods: {
-            fetchData: function () {
-                this.$http.get('/uc/checkout/mini-basket', {}).then((response) => {
+            fetchData: function() {
+                this.$http.get(location.href + '/uc/checkout/mini-basket', {}).then((response) => {
                     if (response.data &&
                         response.data.Status &&
                         response.data.Status == 'success' &&
-                        response.data.Data && response.data.Data.data) {
+                        response.data.Data &&
+                        response.data.Data.data) {
 
                         this.model = response.data.Data.data;
-                    }
-                    else {
+                    } else {
                         this.model = null;
                     }
                 });
             }
         },
-        created: function () {
+        created: function() {
             this.fetchData();
         }
     });
 }
-

@@ -48,7 +48,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpGet]
-        [Route("uc/checkout/mini-basket")]
+        [RelativeRoute("uc/checkout/mini-basket")]
+        [RelativeRoute("{parentCategory1?}/uc/checkout/mini-basket")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/uc/checkout/mini-basket")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/uc/checkout/mini-basket")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/uc/checkout/mini-basket")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/uc/checkout/mini-basket")]
         public ActionResult Refresh()
         {
             var model = ResolveModel();
