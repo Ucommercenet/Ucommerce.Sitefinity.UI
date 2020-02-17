@@ -24,7 +24,7 @@
         },
         methods: {
             addToBasket: function () {
-
+                var store = this.$root.$store;
                 var routesSelector = '#' + this.rootId + ' .addToBasketUrl';
                 var addToBasketUrlContainers = document.querySelectorAll(routesSelector);
                 if (addToBasketUrlContainers && addToBasketUrlContainers.length > 0) {
@@ -59,32 +59,9 @@
                                 this.addToBasketMessage = addToBasketSuccessMessage;
                                 this.showAddToBasketMessage = true;
 
-                                var isEmpty = !(response.data.NumberOfItemsInBasket > 0);
-                                var miniBasketRefresh = { NumberOfItems: response.data.NumberOfItemsInBasket, Total: response.data.PaymentTotal, IsEmpty: isEmpty };
-
-                                $(document).find('.js-mini-basket').each(function () {
-
-                                    var $miniBasket = $(this);
-
-                                    var emptySelector = $miniBasket.data("mini-basket-empty-selector");
-                                    var notEmptySelector = $miniBasket.data("mini-basket-not-empty-selector");
-                                    var numberOfItemsSelector = $miniBasket.data("mini-basket-number-of-items-selector");
-                                    var totalSelector = $miniBasket.data("mini-basket-total-selector");
-
-                                    if (miniBasketRefresh) {
-                                        if (miniBasketRefresh.IsEmpty) {
-                                            $miniBasket.find(notEmptySelector).hide();
-                                            $miniBasket.find(emptySelector).show();
-
-                                        } else {
-                                            $miniBasket.find(numberOfItemsSelector).text(miniBasketRefresh.NumberOfItems);
-                                            $miniBasket.find(totalSelector).text(miniBasketRefresh.Total);
-
-                                            $miniBasket.find(notEmptySelector).show();
-                                            $miniBasket.find(emptySelector).hide();
-                                        }
-                                    }
-                                });
+                                if (store) {
+                                    store.commit('update');
+                                }
 
                                 setTimeout(() =>
                                     this.showAddToBasketMessage = false,
