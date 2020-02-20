@@ -9,68 +9,65 @@ using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    /// <summary>
-    /// The controller class for the Mini Basket MVC widget.
-    /// </summary>
-    [ControllerToolboxItem(Name = "uMiniBasket_MVC", Title = "Mini Basket", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnMiniBasket sfMvcIcn")]
-    public class MiniBasketController : Controller, IPersonalizable
-    {
-        public Guid? CartPageId { get; set; }
-        public string TemplateName { get; set; } = "Index";
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
+	/// <summary>
+	/// The controller class for the Mini Basket MVC widget.
+	/// </summary>
+	[ControllerToolboxItem(Name = "uMiniBasket_MVC", Title = "Mini Basket", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnMiniBasket sfMvcIcn")]
+	public class MiniBasketController : Controller, IPersonalizable
+	{
+		public Guid? CartPageId { get; set; }
+		public string TemplateName { get; set; } = "Index";
+		private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
-        public MiniBasketController()
-        {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-        }
+		public MiniBasketController()
+		{
+			_transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
+		}
 
-        public ActionResult Index()
-        {
-            var miniBasketModel = ResolveModel();
-            string message;
+		public ActionResult Index()
+		{
+			var miniBasketModel = ResolveModel();
+			string message;
 
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            if (!miniBasketModel.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
+			if (!miniBasketModel.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-            var miniBasketRenderingViewModel = miniBasketModel.CreateViewModel(Url.Action("Refresh"));
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+			var miniBasketRenderingViewModel = miniBasketModel.CreateViewModel(Url.Action("Refresh"));
+			var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            if (!_transactionLibraryInternal.HasBasket())
-            {
-                return View(detailTemplateName, miniBasketRenderingViewModel);
-            }
+			if (!_transactionLibraryInternal.HasBasket())
+			{
+				return View(detailTemplateName, miniBasketRenderingViewModel);
+			}
 
-            return View(detailTemplateName, miniBasketRenderingViewModel);
-        }
+			return View(detailTemplateName, miniBasketRenderingViewModel);
+		}
 
-        [HttpGet]
-        public ActionResult Refresh()
-        {
-            var miniBasketModel = ResolveModel();
-            return Json(miniBasketModel.Refresh(), JsonRequestBehavior.AllowGet);
-        }
+		[HttpGet]
+		public ActionResult Refresh()
+		{
+			var miniBasketModel = ResolveModel();
+			return Json(miniBasketModel.Refresh(), JsonRequestBehavior.AllowGet);
+		}
 
-        protected override void HandleUnknownAction(string actionName)
-        {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
-        }
+		protected override void HandleUnknownAction(string actionName)
+		{
+			this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+		}
 
-        private IMiniBasketModel ResolveModel()
-        {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IMiniBasketModel>(
-                new
-                {
-                    cartPageId = this.CartPageId
-                });
+		private IMiniBasketModel ResolveModel()
+		{
+			var container = UCommerceUIModule.Container;
+			var args = new Castle.MicroKernel.Arguments { { "cartPageId", this.CartPageId } };
+			var model = container.Resolve<IMiniBasketModel>(args);
 
-            return model;
-        }
+			return model;
+		}
 
-        private string detailTemplateNamePrefix = "Detail.";
-    }
+		private string detailTemplateNamePrefix = "Detail.";
+	}
 }

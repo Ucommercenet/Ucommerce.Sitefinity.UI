@@ -12,83 +12,83 @@ using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    /// <summary>
-    /// The controller class for the Basket Preview MVC widget.
-    /// </summary>
-    [ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnBasketPreview sfMvcIcn")]
-    public class BasketPreviewController : Controller, IPersonalizable
-    {
-        public Guid? NextStepId { get; set; }
-        public Guid? PreviousStepId { get; set; }
-        public string TemplateName { get; set; } = "Index";
+	/// <summary>
+	/// The controller class for the Basket Preview MVC widget.
+	/// </summary>
+	[ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnBasketPreview sfMvcIcn")]
+	public class BasketPreviewController : Controller, IPersonalizable
+	{
+		public Guid? NextStepId { get; set; }
+		public Guid? PreviousStepId { get; set; }
+		public string TemplateName { get; set; } = "Index";
 
-        public ActionResult Index()
-        {
-            var model = ResolveModel();
+		public ActionResult Index()
+		{
+			var model = ResolveModel();
 
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			string message;
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-            var basketPreviewViewModel = model.GetViewModel();
-            
-            ViewBag.RowSpan = 4;
-            if (basketPreviewViewModel.DiscountAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
-            if (basketPreviewViewModel.ShipmentAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
-            if (basketPreviewViewModel.PaymentAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
+			var basketPreviewViewModel = model.GetViewModel();
 
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+			ViewBag.RowSpan = 4;
+			if (basketPreviewViewModel.DiscountAmount > 0)
+			{
+				ViewBag.RowSpan++;
+			}
+			if (basketPreviewViewModel.ShipmentAmount > 0)
+			{
+				ViewBag.RowSpan++;
+			}
+			if (basketPreviewViewModel.PaymentAmount > 0)
+			{
+				ViewBag.RowSpan++;
+			}
 
-            return View(detailTemplateName, basketPreviewViewModel);
-        }
+			var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-        [HttpPost]
-        public ActionResult RequestPayment()
-        {
-            var model = ResolveModel();
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			return View(detailTemplateName, basketPreviewViewModel);
+		}
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
+		[HttpPost]
+		public ActionResult RequestPayment()
+		{
+			var model = ResolveModel();
+			string message;
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            var paymentUrl = model.GetPaymentUrl();
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-            return Redirect(paymentUrl);
-        }
+			var paymentUrl = model.GetPaymentUrl();
 
-        protected override void HandleUnknownAction(string actionName)
-        {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
-        }
+			return Redirect(paymentUrl);
+		}
 
-        private IBasketPreviewModel ResolveModel()
-        {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IBasketPreviewModel>(new
-            {
-                nextStepId = this.NextStepId,
-                previousStepId = this.PreviousStepId
-            });
+		protected override void HandleUnknownAction(string actionName)
+		{
+			this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+		}
 
-            return model;
-        }
+		private IBasketPreviewModel ResolveModel()
+		{
+			var container = UCommerceUIModule.Container;
+			var args = new Castle.MicroKernel.Arguments {
+				{ "nextStepId", this.NextStepId },
+				{ "previousStepId",this.PreviousStepId} };
 
-        private string detailTemplateNamePrefix = "Detail.";
-    }
+			var model = container.Resolve<IBasketPreviewModel>(args);
+
+			return model;
+		}
+
+		private string detailTemplateNamePrefix = "Detail.";
+	}
 }

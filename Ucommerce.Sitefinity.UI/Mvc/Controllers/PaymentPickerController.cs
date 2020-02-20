@@ -8,77 +8,77 @@ using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    /// <summary>
-    /// The controller class for the Payment Picker MVC widget.
-    /// </summary>
-    [ControllerToolboxItem(Name = "uPaymentPicker_MVC", Title = "Payment Picker", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnPaymentPicker sfMvcIcn")]
-    public class PaymentPickerController : Controller, IPersonalizable
-    {
-        public Guid? NextStepId { get; set; }
-        public Guid? PreviousStepId { get; set; }
-        public string TemplateName { get; set; } = "Index";
+	/// <summary>
+	/// The controller class for the Payment Picker MVC widget.
+	/// </summary>
+	[ControllerToolboxItem(Name = "uPaymentPicker_MVC", Title = "Payment Picker", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnPaymentPicker sfMvcIcn")]
+	public class PaymentPickerController : Controller, IPersonalizable
+	{
+		public Guid? NextStepId { get; set; }
+		public Guid? PreviousStepId { get; set; }
+		public string TemplateName { get; set; } = "Index";
 
-        public ActionResult Index()
-        {
-            var model = ResolveModel();
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+		public ActionResult Index()
+		{
+			var model = ResolveModel();
+			string message;
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-            var paymentPickerVM = model.GetViewModel();
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+			var paymentPickerVM = model.GetViewModel();
+			var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(detailTemplateName, paymentPickerVM);
-        }
+			return View(detailTemplateName, paymentPickerVM);
+		}
 
-        [HttpPost]
-        public ActionResult CreatePayment(PaymentPickerViewModel createPaymentViewModel)
-        {
-            var model = ResolveModel();
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+		[HttpPost]
+		public ActionResult CreatePayment(PaymentPickerViewModel createPaymentViewModel)
+		{
+			var model = ResolveModel();
+			string message;
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-            var viewModel = model.GetViewModel();
+			var viewModel = model.GetViewModel();
 
-            model.CreatePayment(createPaymentViewModel);
+			model.CreatePayment(createPaymentViewModel);
 
-            if (viewModel.NextStepUrl?.Length == 0)
-            {
-                return new EmptyResult();
-            }
-            else
-            {
-                return Redirect(viewModel.NextStepUrl);
-            }
-        }
+			if (viewModel.NextStepUrl?.Length == 0)
+			{
+				return new EmptyResult();
+			}
+			else
+			{
+				return Redirect(viewModel.NextStepUrl);
+			}
+		}
 
-        protected override void HandleUnknownAction(string actionName)
-        {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
-        }
+		protected override void HandleUnknownAction(string actionName)
+		{
+			this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+		}
 
-        private IPaymentPickerModel ResolveModel()
-        {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IPaymentPickerModel>(
-                new
-                {
-                    nextStepId = this.NextStepId,
-                    previousStepId = this.PreviousStepId
-                });
+		private IPaymentPickerModel ResolveModel()
+		{
+			var container = UCommerceUIModule.Container;
+			var args = new Castle.MicroKernel.Arguments {
+				{ "nextStepId", this.NextStepId },
+				{ "previousStepId", this.PreviousStepId }
+			};
 
-            return model;
-        }
+			var model = container.Resolve<IPaymentPickerModel>(args);
 
-        private string detailTemplateNamePrefix = "Detail.";
-    }
+			return model;
+		}
+
+		private string detailTemplateNamePrefix = "Detail.";
+	}
 }

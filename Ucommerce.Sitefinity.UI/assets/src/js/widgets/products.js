@@ -1,5 +1,5 @@
 ﻿import { initializeComponent } from "../functions/init";
-import addToBasket from '../components/add-to-basket';
+import addToBasket from '../components/add-to-basket'; 
 
 initializeComponent("products", initProducts);
 

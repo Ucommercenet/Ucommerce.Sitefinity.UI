@@ -8,78 +8,78 @@ using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    /// <summary>
-    /// The controller class for the Shipping Picker MVC widget.
-    /// </summary>
-    [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnShippingPicker sfMvcIcn")]
-    public class ShippingPickerController : Controller, IPersonalizable
-    {
-        public Guid? NextStepId { get; set; }
-        public Guid? PreviousStepId { get; set; }
-        public string TemplateName { get; set; } = "Index";
+	/// <summary>
+	/// The controller class for the Shipping Picker MVC widget.
+	/// </summary>
+	[ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnShippingPicker sfMvcIcn")]
+	public class ShippingPickerController : Controller, IPersonalizable
+	{
+		public Guid? NextStepId { get; set; }
+		public Guid? PreviousStepId { get; set; }
+		public string TemplateName { get; set; } = "Index";
 
-        public ActionResult Index()
-        {
-            var model = ResolveModel();
-            string message;
+		public ActionResult Index()
+		{
+			var model = ResolveModel();
+			string message;
 
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-            var sippingPickerVM = model.GetViewModel();
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+			var sippingPickerVM = model.GetViewModel();
+			var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(detailTemplateName, sippingPickerVM);
-        }
+			return View(detailTemplateName, sippingPickerVM);
+		}
 
-        [HttpPost]
-        public ActionResult CreateShipment(ShippingPickerViewModel createShipmentViewModel)
-        {
-            var model = ResolveModel();
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+		[HttpPost]
+		public ActionResult CreateShipment(ShippingPickerViewModel createShipmentViewModel)
+		{
+			var model = ResolveModel();
+			string message;
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-            var viewModel = model.GetViewModel();
+			var viewModel = model.GetViewModel();
 
-            model.CreateShipment(createShipmentViewModel);
+			model.CreateShipment(createShipmentViewModel);
 
-            if (viewModel.NextStepUrl?.Length == 0)
-            {
-                return new EmptyResult();
-            }
-            else
-            {
-                return Redirect(viewModel.NextStepUrl);
-            }
-        }
+			if (viewModel.NextStepUrl?.Length == 0)
+			{
+				return new EmptyResult();
+			}
+			else
+			{
+				return Redirect(viewModel.NextStepUrl);
+			}
+		}
 
-        public IShippingPickerModel ResolveModel()
-        {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IShippingPickerModel>(
-                new
-                {
-                    nextStepId = this.NextStepId,
-                    previousStepId = this.PreviousStepId
-                });
+		public IShippingPickerModel ResolveModel()
+		{
+			var container = UCommerceUIModule.Container;
+			var args = new Castle.MicroKernel.Arguments{
+				{ "nextStepId",this.NextStepId },
+				{ "previousStepId", this.PreviousStepId }
+			};
 
-            return model;
-        }
+			var model = container.Resolve<IShippingPickerModel>(args);
 
-        protected override void HandleUnknownAction(string actionName)
-        {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
-        }
+			return model;
+		}
 
-        private string detailTemplateNamePrefix = "Detail.";
-    }
+		protected override void HandleUnknownAction(string actionName)
+		{
+			this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+		}
+
+		private string detailTemplateNamePrefix = "Detail.";
+	}
 }

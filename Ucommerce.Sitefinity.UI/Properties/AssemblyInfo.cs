@@ -43,3 +43,5 @@ using UCommerce.Sitefinity.UI.App_Start;
 [assembly: PreApplicationStartMethod(typeof(Startup), "OnApplicationStart")]
 
 [assembly: WebResource("UCommerce.Sitefinity.UI.assets.dist.css.ucommerce-backend.css", "text/css")]
+[assembly: WebResource("UCommerce.Sitefinity.UI.assets.build.js.main.js", "application/x-javascript")]
+[assembly: WebResource("UCommerce.Sitefinity.UI.assets.build.js.vendor.bundle.js", "application/x-javascript")]

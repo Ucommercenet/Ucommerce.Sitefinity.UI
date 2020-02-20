@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Castle.Windsor;
+using System;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
@@ -77,12 +78,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         private IAddressModel ResolveModel()
         {
             var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IAddressModel>(
-                new
-                {
-                    nextStepId = this.NextStepId,
-                    previousStepId = this.PreviousStepId
-                });
+			var args = new Castle.MicroKernel.Arguments
+			{
+				{ "nextStepId", this.NextStepId },
+				{ "previousStepId", this.PreviousStepId }
+			};
+
+
+			var model = container.Resolve<IAddressModel>(args);
 
             return model;
         }
