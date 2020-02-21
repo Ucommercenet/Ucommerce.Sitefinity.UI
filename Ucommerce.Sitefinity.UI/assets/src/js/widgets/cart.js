@@ -53,7 +53,7 @@ function initCart(rootElement) {
                             }
                             else {
                                 var data = response.data;
-                                var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal']
+                                var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal'];
                                 var orderLineArray = [];
 
                                 for (var field of updatedFields) {
@@ -73,9 +73,6 @@ function initCart(rootElement) {
                             }
                         }
                     });
-
-                // TODO: Investigate
-                // config.$triggerEventSelector.trigger("basket-changed", data.MiniBasketRefresh);
             },
             removeCartItem: function (itemId) {
                 var model = this.model;
@@ -110,6 +107,29 @@ function initCart(rootElement) {
 
                                 model.OrderLines = updatedItems;
                                 store.commit('update');
+                            }
+                        }
+                    });
+            },
+            applyVoucher: function () {
+                var model = this.model;
+                var voucher = model.Voucher;
+
+                this.$http.post(location.href + '/uc/checkout/cart/add-voucher',
+                    {
+                        Voucher: voucher
+                    }).then(function (response) {
+                        if (response.data) {
+                            if (response.data.Status && response.data.Status == 'failed') {
+                                console.error(response.data.Message);
+                            }
+                            else {
+                                var data = response.data;
+                                var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal'];
+
+                                for (var field of updatedFields) {
+                                    model[field] = data[field];
+                                }
                             }
                         }
                     });
