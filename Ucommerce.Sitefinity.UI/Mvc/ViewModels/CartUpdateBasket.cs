@@ -13,5 +13,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         }
 
         public IList<UpdateOrderLine> RefreshBasket { get; set; }
+        public string Voucher { get; set; }
     }
 }

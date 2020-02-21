@@ -2,12 +2,11 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
+using UCommerce.Infrastructure;
+using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Infrastructure;
 using UCommerce.Transactions;
-using UCommerce.Sitefinity.UI.Api.Model;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -125,6 +124,34 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 updatedVM.TaxTotal,
                 updatedVM.SubTotal,
                 updatedVM.OrderLines
+            });
+        }
+
+        [HttpPost]
+        [RelativeRoute("uc/checkout/cart/add-voucher")]
+        public ActionResult AddVoucher(CartUpdateBasket updateModel)
+        {
+            var model = ResolveModel();
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            string message;
+
+            parameters.Add("submitModel", updateModel);
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
+                    JsonRequestBehavior.AllowGet);
+            }
+
+            var updatedVM = model.Update(updateModel);
+
+            return Json(new
+            {
+                updatedVM.OrderTotal,
+                updatedVM.DiscountTotal,
+                updatedVM.TaxTotal,
+                updatedVM.SubTotal,
+                updatedVM.Voucher,
             });
         }
 
