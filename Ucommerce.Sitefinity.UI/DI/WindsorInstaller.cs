@@ -21,80 +21,83 @@ namespace UCommerce.Sitefinity.UI.DI
         private void InstallControllers(IWindsorContainer container)
         {
             container.Register(
-                Classes.
-                    FromThisAssembly().
-                    BasedOn<IController>().
-                    If(c => c.Name.EndsWith("Controller")).
-                    LifestyleTransient());
+                Classes.FromThisAssembly().BasedOn<IController>().If(c => c.Name.EndsWith("Controller"))
+                    .LifestyleTransient());
         }
 
         private void InstallServices(IWindsorContainer container)
         {
             container.Register(
-                 Component
-                 .For<IFacetsFilterModel>()
-                 .ImplementedBy<FacetsFilterModel>()
-                 .LifestyleTransient());
-
-            container.Register(
-                 Component
-                 .For<IProductModel>()
-                 .ImplementedBy<ProductModel>()
-                 .LifestyleTransient());
-
-            container.Register(
-                 Component
-                 .For<ICategoryModel>()
-                 .ImplementedBy<CategoryModel>()
-                 .LifestyleTransient());
-
-            container.Register(
-                 Component
-                 .For<IMiniBasketModel>()
-                 .ImplementedBy<MiniBasketModel>()
-                 .LifestyleTransient());
-
-            container.Register(
-                 Component
-                 .For<ICartModel>()
-                 .ImplementedBy<CartModel>()
-                 .LifestyleTransient());
-
-            container.Register(
-                 Component
-                 .For<IAddressModel>()
-                 .ImplementedBy<AddressModel>()
-                 .LifestyleTransient());
+                Component
+                    .For<IFacetsFilterModel>()
+                    .ImplementedBy<FacetsFilterModel>()
+                    .LifestyleTransient());
 
             container.Register(
                 Component
-                .For<IShippingPickerModel>()
-                .ImplementedBy<ShippingPickerModel>()
-                .LifestyleTransient());
+                    .For<IProductModel>()
+                    .ImplementedBy<ProductModel>()
+                    .LifestyleTransient());
 
             container.Register(
-                 Component
-                 .For<IPaymentPickerModel>()
-                 .ImplementedBy<PaymentPickerModel>()
-                 .LifestyleTransient());
+                Component
+                    .For<ICategoryModel>()
+                    .ImplementedBy<CategoryModel>()
+                    .LifestyleTransient());
 
             container.Register(
-                 Component
-                 .For<IConfirmationMessageModel>()
-                 .ImplementedBy<ConfirmationMessageModel>()
-                 .LifestyleTransient());
+                Component
+                    .For<IMiniBasketModel>()
+                    .ImplementedBy<MiniBasketModel>()
+                    .LifestyleTransient());
 
             container.Register(
-                 Component
-                 .For<IConfirmationEmailModel>()
-                 .ImplementedBy<ConfirmationEmailModel>()
-                 .LifestyleTransient());
+                Component
+                    .For<ICartModel>()
+                    .ImplementedBy<CartModel>()
+                    .LifestyleTransient());
 
             container.Register(
-                 Component
-                 .For<IBasketPreviewModel>()
-                 .ImplementedBy<BasketPreviewModel>()
-                 .LifestyleTransient());
+                Component
+                    .For<IAddressModel>()
+                    .ImplementedBy<AddressModel>()
+                    .LifestyleTransient());
+
+            container.Register(
+                Component
+                    .For<IShippingPickerModel>()
+                    .ImplementedBy<ShippingPickerModel>()
+                    .LifestyleTransient());
+
+            container.Register(
+                Component
+                    .For<IPaymentPickerModel>()
+                    .ImplementedBy<PaymentPickerModel>()
+                    .LifestyleTransient());
+
+            container.Register(
+                Component
+                    .For<IConfirmationMessageModel>()
+                    .ImplementedBy<ConfirmationMessageModel>()
+                    .LifestyleTransient());
+
+            container.Register(
+                Component
+                    .For<IConfirmationEmailModel>()
+                    .ImplementedBy<ConfirmationEmailModel>()
+                    .LifestyleTransient());
+
+            container.Register(
+                Component
+                    .For<IBasketPreviewModel>()
+                    .ImplementedBy<BasketPreviewModel>()
+                    .LifestyleTransient());
+
+            container.Register(
+                Component
+                    .For<ICommentsModel>()
+                    .ImplementedBy<CommentsModel>()
+                    .LifestyleTransient());
         }
     }
 }
