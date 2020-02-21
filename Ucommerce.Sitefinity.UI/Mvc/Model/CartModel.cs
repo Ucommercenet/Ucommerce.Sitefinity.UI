@@ -4,13 +4,10 @@ using System.Linq;
 using System.Web;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
-using Telerik.Sitefinity.Web.DataResolving;
-using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce;
 using UCommerce.Api;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
@@ -117,7 +114,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                 _transactionLibraryInternal.UpdateLineItemByOrderLineId(updateOrderline.OrderLineId, newQuantity);
             }
-
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
             var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;

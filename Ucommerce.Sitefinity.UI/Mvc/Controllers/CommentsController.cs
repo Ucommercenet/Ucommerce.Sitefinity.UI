@@ -24,6 +24,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return View(detailTemplateName);
         }
+
         protected override void HandleUnknownAction(string actionName)
         {
             base.ActionInvoker.InvokeAction(this.ControllerContext, "Index");

@@ -355,6 +355,7 @@
     <Compile Include="Pages\HttpContextExtensions.cs" />
     <Compile Include="Pages\UrlResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\UcommerceResources.cs" />
     <Compile Include="Search\FacetResolver.cs" />
     <Compile Include="UCommerceUIModule.cs" />
   </ItemGroup>
@@ -496,12 +497,12 @@
     <EmbeddedResource Include="Mvc\Views\Cart\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Cart\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\Cart\Detail.Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Address\Detail.Index.cshtml" />
+    <Content Include="Mvc\Views\Address\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.json" />
-    <EmbeddedResource Include="Mvc\Views\BasketPreview\Detail.Index.cshtml" />
+    <Content Include="Mvc\Views\BasketPreview\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />
