@@ -25,11 +25,11 @@
             <div class="cart table-wrapper">
                 <div class="table-body">
                     <div class="table-row t-heading">
-                        <div class="span3 table-cell">Description</div>
-                        <div class="span1 table-cell money">Price</div>
-                        <div class="span1 table-cell money">VAT</div>
-                        <div class="span1 table-cell">Quantity</div>
-                        <div class="span1 money table-cell">Total</div>
+                        <div class="span3 table-cell">@Html.Resource("Description", "UcommerceResources")</div>
+                        <div class="span1 table-cell money">@Html.Resource("Price", "UcommerceResources")</div>
+                        <div class="span1 table-cell money">@Html.Resource("VAT", "UcommerceResources")</div>
+                        <div class="span1 table-cell">@Html.Resource("Quantity", "UcommerceResources")</div>
+                        <div class="span1 money table-cell">@Html.Resource("Total", "UcommerceResources")</div>
                         <div class="span05 table-cell"></div>
                         <div class="span05 table-cell"></div>
                     </div>
@@ -67,13 +67,13 @@
                             <div class="table-cell">
                                 <button class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="updateCartItems">
                                     <i class="fas fa-sync-alt fa-1x" aria-hidden="true"></i>
-                                    <span class="btn-text">Update</span>
+                                    <span class="btn-text">@Html.Resource("Update", "UcommerceResources")</span>
                                 </button>
                             </div>
                             <div class="table-cell">
                                 <button type="button" class="line-remove" v-on:click="removeCartItem(item.OrderLineId)">
                                     <i class="fas fa-times fa-1x"></i>
-                                    <span class="btn-text">Remove</span>
+                                    <span class="btn-text">>@Html.Resource("Remove", "UcommerceResources")</span>
                                 </button>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell">Sub total:</div>
+                        <div class="table-cell">>@Html.Resource("SubTotal", "UcommerceResources"):</div>
                         <div class="money table-cell order-subtotal">
                             {{ model.SubTotal }}
                         </div>
@@ -94,7 +94,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell">VAT:</div>
+                        <div class="table-cell">>@Html.Resource("VAT", "UcommerceResources"):</div>
                         <div class="table-cell money order-tax">
                             {{ model.TaxTotal }}
                         </div>
@@ -105,7 +105,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell">Discounts:</div>
+                        <div class="table-cell">>@Html.Resource("Discounts", "UcommerceResources"):</div>
                         <div class="table-cell money order-discounts">
                             {{ model.DiscountTotal }}
                         </div>
@@ -116,7 +116,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell" colspan="1"><strong>Order total:</strong></div>
+                        <div class="table-cell" colspan="1"><strong>>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></div>
                         <div class="table-cell money order-total">
                             {{ model.OrderTotal }}
                         </div>
@@ -127,7 +127,7 @@
             </div>
 
             <checkout-navigation v-bind:model="model"
-                                 continue-label="Continue"
+                                 continue-label="@Html.Resource("Continue", "UcommerceResources")"
                                  classes="control-group margin-top"
                                  back-link-classes="btn btn-next btn-transparent pull-left"
                                  continue-btn-classes="btn btn-success btn-next pull-right"

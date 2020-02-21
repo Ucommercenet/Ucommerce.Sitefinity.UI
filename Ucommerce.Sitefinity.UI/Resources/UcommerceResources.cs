@@ -265,5 +265,29 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["Complete Order"]; }
         }
+
+        [ResourceEntry("EmptyBasket", Value = "Your basket is empty", Description = "Your basket is empty", LastModified = "2020/02/21")]
+        public string EmptyBasket
+        {
+            get { return this["Your basket is empty"]; }
+        }
+
+        [ResourceEntry("PaymentMethod", Value = "Payment method", Description = "Payment method", LastModified = "2020/02/21")]
+        public string PaymentMethod
+        {
+            get { return this["Payment method"]; }
+        }
+
+        [ResourceEntry("ShippingMethod", Value = "Shipping Method", Description = "Shipping Method", LastModified = "2020/02/21")]
+        public string ShippingMethod
+        {
+            get { return this["Shipping Method"]; }
+        }
+
+        [ResourceEntry("ContinueToNextStep", Value = "Continue to next step", Description = "Continue to next step", LastModified = "2020/02/21")]
+        public string ContinueToNextStep
+        {
+            get { return this["Continue to next step"]; }
+        }
     }
 }

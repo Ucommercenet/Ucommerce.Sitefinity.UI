@@ -16,7 +16,7 @@
         <ul>
             <li>
                 <template v-if="model.IsEmpty">
-                    <div>Your basket is empty</div>
+                    <div>@Html.Resource("EmptyBasket", "UcommerceResources")</div>
                 </template>
                 <template v-else>
                     <div>

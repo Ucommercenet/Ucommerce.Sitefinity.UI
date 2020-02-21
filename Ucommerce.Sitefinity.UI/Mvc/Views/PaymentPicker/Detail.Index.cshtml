@@ -16,7 +16,7 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<h3 class="heading-underline">Payment method</h3>
+    <h3 class="heading-underline">@Html.Resource("PaymentMethod", "UcommerceResources")</h3>
 
 <div data-component="payment-widget" id="payment-method">
     <template v-if="model">
@@ -30,7 +30,7 @@
             </template>
             <checkout-navigation v-bind:model="model"
                                  :continue-fn="submit"
-                                 continue-label="Continue to next step"
+                                 continue-label="@Html.Resource("ContinueToNextStep", "UcommerceResources")"
                                  classes=""></checkout-navigation>
         </template>
         <template v-else>
