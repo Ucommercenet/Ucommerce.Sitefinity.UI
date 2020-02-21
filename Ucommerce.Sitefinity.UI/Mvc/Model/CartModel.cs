@@ -143,7 +143,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             string taxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             string subTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            string voucher = model.Voucher;
+            string voucher = "";
+
+            if (basket.Discounts.FirstOrDefault(d => d.Description == model.Voucher) != null)
+            {
+                voucher = model.Voucher;
+            }
 
             updatedBasket.OrderTotal = orderTotal;
             updatedBasket.DiscountTotal = discountTotal;
