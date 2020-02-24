@@ -73,7 +73,7 @@
                             <div class="table-cell">
                                 <button type="button" class="line-remove" v-on:click="removeCartItem(item.OrderLineId)">
                                     <i class="fas fa-times fa-1x"></i>
-                                    <span class="btn-text">>@Html.Resource("Remove", "UcommerceResources")</span>
+                                    <span class="btn-text">@Html.Resource("Remove", "UcommerceResources")</span>
                                 </button>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell">>@Html.Resource("SubTotal", "UcommerceResources"):</div>
+                        <div class="table-cell">@Html.Resource("SubTotal", "UcommerceResources"):</div>
                         <div class="money table-cell order-subtotal">
                             {{ model.SubTotal }}
                         </div>
@@ -94,7 +94,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell">>@Html.Resource("VAT", "UcommerceResources"):</div>
+                        <div class="table-cell">@Html.Resource("VAT", "UcommerceResources"):</div>
                         <div class="table-cell money order-tax">
                             {{ model.TaxTotal }}
                         </div>
@@ -105,7 +105,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell">>@Html.Resource("Discounts", "UcommerceResources"):</div>
+                        <div class="table-cell">@Html.Resource("Discounts", "UcommerceResources"):</div>
                         <div class="table-cell money order-discounts">
                             {{ model.DiscountTotal }}
                         </div>
@@ -116,7 +116,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell" colspan="1"><strong>>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></div>
+                        <div class="table-cell" colspan="1"><strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></div>
                         <div class="table-cell money order-total">
                             {{ model.OrderTotal }}
                         </div>
