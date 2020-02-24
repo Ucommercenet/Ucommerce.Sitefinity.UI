@@ -18,7 +18,7 @@
 
 <div data-component="payment-widget" id="payment-method">
     <template v-if="model">
-        <h3 class="heading-underline">Payment method</h3>
+        <h3 class="heading-underline">@Html.Resource("PaymentMethod", "UcommerceResources")</h3>
 
         <template v-if="model.AvailablePaymentMethods.length">
             <template v-for="method in model.AvailablePaymentMethods" :model="model">
@@ -29,7 +29,7 @@
                 </div>
             </template>
             <checkout-navigation v-bind:model="model"
-                                 continue-label="Continue to next step"
+                                 continue-label="@Html.Resource("ContinueToNextStep", "UcommerceResources")"
                                  mode="Bootstrap"
                                  :continue-fn="submit" 
                                  back-link-classes="btn btn-next btn-transparent pull-left"

@@ -16,7 +16,7 @@
 }
 
 
-<h3>Shipping method</h3>
+    <h3>@Html.Resource("ShippingMethod", "UcommerceResources")</h3>
 <div data-component="shipping-widget" id="shipping-method">
     <template v-if="model">
         <template v-if="model.AvailableShippingMethods.length">
@@ -29,7 +29,7 @@
             </template>
             <checkout-navigation v-bind:model="model"
                                  :continue-fn="submit"
-                                 continue-label="Continue to next step"
+                                 continue-label="@Html.Resource("ContinueToNextStep", "UcommerceResources")"
                                  classes=""></checkout-navigation>
         </template>
         <template v-else>

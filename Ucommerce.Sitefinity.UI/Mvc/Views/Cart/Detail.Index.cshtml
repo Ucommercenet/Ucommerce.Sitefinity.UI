@@ -22,11 +22,11 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>VAT</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
+                        <th>@Html.Resource("Description", "UcommerceResources")</th>
+                        <th>@Html.Resource("Price", "UcommerceResources")</th>
+                        <th>@Html.Resource("VAT", "UcommerceResources")</th>
+                        <th>@Html.Resource("Quantity", "UcommerceResources")</th>
+                        <th>@Html.Resource("Total", "UcommerceResources")</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -58,41 +58,41 @@
                             <td>
                                 <input class="qty form-control inline-block no-padding" type="number" v-model="line.Quantity">
                                 <button name="update-basket" class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="updateCartItems">
-                                    <span>&#10227;</span> <span>Update</span>
+                                    <span>&#10227;</span> <span>@Html.Resource("Update", "UcommerceResources")</span>
                                 </button>
                             </td>
                             <td class="item-total">
                                 {{ line.Total }}
                             </td>
                             <td>
-                                <button type="button" name="RemoveOrderlineId" class="line-remove" v-on:click="removeCartItem(line.OrderLineId)">Remove</button>
+                                <button type="button" name="RemoveOrderlineId" class="line-remove" v-on:click="removeCartItem(line.OrderLineId)">@Html.Resource("Remove", "UcommerceResources")</button>
                             </td>
                         </tr>
                     </template>
                     <tr>
                         <td rowspan="4" colspan="3"></td>
-                        <td colspan="1">Sub total:</td>
+                        <td colspan="1">@Html.Resource("SubTotal", "UcommerceResources"):</td>
                         <td>
                             {{ model.SubTotal }}
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td colspan="1">VAT:</td>
+                        <td colspan="1">@Html.Resource("VAT", "UcommerceResources"):</td>
                         <td>
                             {{ model.TaxTotal }}
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td colspan="1">Discounts:</td>
+                        <td colspan="1">@Html.Resource("Discounts", "UcommerceResources"):</td>
                         <td>
                             {{ model.DiscountTotal }}
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td colspan="1"><strong>Order total:</strong></td>
+                        <td colspan="1"><strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></td>
                         <td>
                             {{ model.OrderTotal }}
                         </td>
@@ -101,7 +101,7 @@
                 </tbody>
             </table>
 
-            <checkout-navigation v-bind:model="model" next-step-link=true continue-label="Continue" classes=""></checkout-navigation>
+            <checkout-navigation v-bind:model="model" next-step-link=true continue-label="@Html.Resource("Continue", "UcommerceResources")" classes=""></checkout-navigation>
         </template>
     </template>
 </div>
