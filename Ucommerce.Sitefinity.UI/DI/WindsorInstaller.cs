@@ -3,6 +3,7 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using System.Web.Mvc;
 using UCommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 
 namespace UCommerce.Sitefinity.UI.DI
 {
@@ -95,8 +96,14 @@ namespace UCommerce.Sitefinity.UI.DI
 
             container.Register(
                 Component
-                    .For<ICommentsModel>()
-                    .ImplementedBy<CommentsModel>()
+                    .For<IReviewListModel>()
+                    .ImplementedBy<ReviewListModel>()
+                    .LifestyleTransient());
+
+            container.Register(
+                Component
+                    .For<IReviewFormModel>()
+                    .ImplementedBy<ReviewFormModel>()
                     .LifestyleTransient());
         }
     }
