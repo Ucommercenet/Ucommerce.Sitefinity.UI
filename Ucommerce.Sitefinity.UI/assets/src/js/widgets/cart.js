@@ -16,22 +16,7 @@ function initCart(rootElement) {
         computed: {
             ...mapState([
                 'triggerSubmit'
-            ]),
-            hasDiscount: function () {
-                if (this.model && this.model.DiscountTotal) {
-                    var match = this.model.DiscountTotal.match(/\$(.*)/);
-
-                    if (match.length > 1) {
-                        return (parseFloat(match[1]) > 0);
-                    }
-                    else {
-                        return false;
-                    }
-                }
-                else {
-                    return false;
-                }
-            }
+            ])
         },
         watch: {
             triggerSubmit: function () {
