@@ -84,7 +84,7 @@
                         </td>
                         <td>&nbsp;</td>
                     </tr>
-                    <tr>
+                    <tr v-if="hasDiscount">
                         <td colspan="1">@Html.Resource("Discounts", "UcommerceResources"):</td>
                         <td>
                             {{ model.DiscountTotal }}
