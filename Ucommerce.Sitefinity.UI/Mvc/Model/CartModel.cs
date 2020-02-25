@@ -5,6 +5,7 @@ using System.Web;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using UCommerce.Api;
+using UCommerce.Content;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -41,6 +42,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             foreach (var orderLine in basket.OrderLines)
             {
+                var product = CatalogLibrary.GetProduct(orderLine.Sku);
+                var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
                 var orderLineViewModel = new OrderlineViewModel
                 {
                     Quantity = orderLine.Quantity,
@@ -53,7 +56,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     Price = new Money(orderLine.Price, basket.BillingCurrency).ToString(),
                     ProductUrl = GetProductUrl(CatalogLibrary.GetProduct(orderLine.Sku), this.productDetailsPageId),
                     PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), basket.BillingCurrency).ToString(),
-                    OrderLineId = orderLine.OrderLineId
+                    OrderLineId = orderLine.OrderLineId,
+                    ThumbnailName = imageService.GetImage(product.ThumbnailImageMediaId).Name,
+                    ThumbnailUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url
                 };
                 basketVM.OrderLines.Add(orderLineViewModel);
             }
