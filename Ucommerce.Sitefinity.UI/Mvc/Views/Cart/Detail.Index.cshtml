@@ -38,7 +38,7 @@
                             <input :id="'OrderLines_' + key + '__OrderLineId'" :name="'OrderLines[' + key + '].OrderLineId'" type="hidden" :value="line.OrderLineId">
                             <td><a :href="line.ProductUrl">{{ line.ProductName }}</a></td>
                             <td>
-                                <template v-if="line.Discount.HasValue && line.Discount > 0">
+                                <template v-if="line.Discount && line.Discount > 0">
                                     <span>
                                         {{ line.Price }}
                                     </span>
@@ -84,7 +84,7 @@
                         </td>
                         <td>&nbsp;</td>
                     </tr>
-                    <tr>
+                    <tr v-if="model.DiscountTotal">
                         <td colspan="1">@Html.Resource("Discounts", "UcommerceResources"):</td>
                         <td>
                             {{ model.DiscountTotal }}

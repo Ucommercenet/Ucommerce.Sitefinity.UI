@@ -47,8 +47,11 @@
 
                 <div>
                     <span>@product.Price</span>
-                    <p>@Html.Resource("Discount", "UcommerceResources"):</p>
-                    <span>@product.Discount</span>
+					@if (!string.IsNullOrWhiteSpace(product.Discount))
+                    {
+						<p>@Html.Resource("Discount", "UcommerceResources"):</p>
+						<span>@product.Discount</span>
+					}
                 </div>
 
                 <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">

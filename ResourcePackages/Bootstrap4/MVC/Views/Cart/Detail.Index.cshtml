@@ -60,7 +60,7 @@
 
                     <div class="col-md-1 money mb-2 mb-md-0">
                         <span class="font-weight-bold d-md-none">@Html.Resource("Price", "UcommerceResources"): </span>
-                        <template v-if="line.Discount.HasValue && line.Discount > 0">
+                        <template v-if="line.Discount && line.Discount > 0">
                             <span>
                                 {{ line.Price }}
                             </span>
@@ -113,7 +113,7 @@
                     {{ model.TaxTotal }}
                 </div>
             </div>
-            <div class="row border-bottom py-2 text-right">
+            <div v-if="model.DiscountTotal" class="row border-bottom py-2 text-right">
                 <div class="offset-md-8 col-md-2">
                     <span class="font-weight-bold">@Html.Resource("Discounts", "UcommerceResources"):</span>
                 </div>
