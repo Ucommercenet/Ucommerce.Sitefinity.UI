@@ -87,10 +87,10 @@
             continueWrapperClasses: function () {
                 if (this.mode == 'Bootstrap' || this.mode == 'Bootstrap4') {
                     if (this.showContinueButton && this.showBackButton) {
-                        return 'col-md-6 padding-0';
+                        return 'col-md-6  padding-0';
                     }
                     else if (this.showContinueButton) {
-                        return 'col-md-12 padding-0';
+                        return 'col-md-12 clear padding-0';
                     }
                 }
                 else {
@@ -100,7 +100,7 @@
             backLinkClasses: function () {
                 switch (this.mode) {
                     case 'Bootstrap':
-                        return 'btn btn-next btn-transparent pull-left';
+                        return 'btn btn-back btn-transparent pull-left';
 
                     case 'Bootstrap4':
                         return '';
