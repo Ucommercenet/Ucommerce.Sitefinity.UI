@@ -102,19 +102,22 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         private IProductModel ResolveModel()
         {
+            var args = new Castle.MicroKernel.Arguments();
+
+            args.AddProperties(new
+            {
+                itemsPerPage = this.ItemsPerPage,
+                openInSamePage = this.OpenInSamePage,
+                isManualSelectionMode = this.IsManualSelectionMode,
+                enableCategoryFallback = this.EnableCategoryFallback,
+                detailsPageId = this.DetailsPageId,
+                productIds = this.ProductIds,
+                categoryIds = this.CategoryIds,
+                fallbackCategoryIds = this.FallbackCategoryIds
+            });
+
             var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IProductModel>(
-                new
-                {
-                    itemsPerPage = this.ItemsPerPage,
-                    openInSamePage = this.OpenInSamePage,
-                    isManualSelectionMode = this.IsManualSelectionMode,
-                    enableCategoryFallback = this.EnableCategoryFallback,
-                    detailsPageId = this.DetailsPageId,
-                    productIds = this.ProductIds,
-                    categoryIds = this.CategoryIds,
-                    fallbackCategoryIds = this.FallbackCategoryIds
-                });
+            var model = container.Resolve<IProductModel>(args);                
 
             return model;
         }

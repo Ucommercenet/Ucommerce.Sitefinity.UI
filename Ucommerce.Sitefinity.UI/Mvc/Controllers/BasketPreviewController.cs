@@ -79,12 +79,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         private IBasketPreviewModel ResolveModel()
         {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IBasketPreviewModel>(new
+            var args = new Castle.MicroKernel.Arguments();
+
+            args.AddProperties(new
             {
                 nextStepId = this.NextStepId,
                 previousStepId = this.PreviousStepId
             });
+
+            var container = UCommerceUIModule.Container;
+            var model = container.Resolve<IBasketPreviewModel>(args);
 
             return model;
         }

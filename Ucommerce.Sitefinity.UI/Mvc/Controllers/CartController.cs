@@ -109,26 +109,32 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         private ICartModel ResolveModel()
         {
+            var args = new Castle.MicroKernel.Arguments();
+
+            args.AddProperties(new
+            {
+                nextStepId = this.NextStepId,
+                productDetailsPageId = this.ProductDetailsPageId
+            });
+
             var container = UCommerceUIModule.Container;
-            var model = container.Resolve<ICartModel>(
-                new
-                {
-                    nextStepId = this.NextStepId,
-                    productDetailsPageId = this.ProductDetailsPageId
-                });
+            var model = container.Resolve<ICartModel>(args);
 
             return model;
         }
 
         private IMiniBasketModel ResolveMiniBasketModel()
         {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IMiniBasketModel>(
-                new
-                {
-                    cartPageId = Guid.Empty
-                });
+            var args = new Castle.MicroKernel.Arguments();
 
+            args.AddProperties(new
+            {
+                cartPageId = Guid.Empty
+            });
+
+            var container = UCommerceUIModule.Container;
+            var model = container.Resolve<IMiniBasketModel>(args);
+               
             return model;
         }
 

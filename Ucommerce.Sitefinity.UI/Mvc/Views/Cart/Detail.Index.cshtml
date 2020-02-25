@@ -80,28 +80,28 @@ else
                 <tr>
                     <td rowspan="4" colspan="3"></td>
                     <td colspan="1">Sub total:</td>
-                    <td>
+                    <td class="order-subtotal">
                         @Model.SubTotal
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="1">VAT:</td>
-                    <td>
+                    <td class="order-tax">
                         @Model.TaxTotal
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="1">Discounts:</td>
-                    <td>
+                    <td class="order-discounts">
                         @Model.DiscountTotal
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="1"><strong>Order total:</strong></td>
-                    <td>
+                    <td class="order-total">
                         @Model.OrderTotal
                     </td>
                     <td>&nbsp;</td>

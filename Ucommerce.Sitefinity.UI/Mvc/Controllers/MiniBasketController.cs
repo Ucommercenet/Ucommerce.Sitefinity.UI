@@ -61,13 +61,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         private IMiniBasketModel ResolveModel()
         {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IMiniBasketModel>(
-                new
-                {
-                    cartPageId = this.CartPageId
-                });
+            var args = new Castle.MicroKernel.Arguments();
 
+            args.AddProperties(new
+            {
+                cartPageId = this.CartPageId
+            });
+
+            var container = UCommerceUIModule.Container;
+            var model = container.Resolve<IMiniBasketModel>(args);
+               
             return model;
         }
 

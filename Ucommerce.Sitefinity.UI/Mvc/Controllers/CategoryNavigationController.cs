@@ -72,18 +72,21 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         private ICategoryModel ResolveModel()
         {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<ICategoryModel>(
-                new
-                {
-                    hideMiniBasket = this.HideMiniBasket,
-                    allowChangingCurrency = this.AllowChangingCurrency,
-                    imageId = this.ImageId,
-                    categoryPageId = this.CategoryPageId,
-                    searchPageId = this.SearchPageId,
-                    productDetailsPageId = this.ProductDetailsPageId 
-                });
+            var args = new Castle.MicroKernel.Arguments();
 
+            args.AddProperties(new
+            {
+                hideMiniBasket = this.HideMiniBasket,
+                allowChangingCurrency = this.AllowChangingCurrency,
+                imageId = this.ImageId,
+                categoryPageId = this.CategoryPageId,
+                searchPageId = this.SearchPageId,
+                productDetailsPageId = this.ProductDetailsPageId
+            });
+
+            var container = UCommerceUIModule.Container;
+            var model = container.Resolve<ICategoryModel>(args);
+               
             return model;
         }
 

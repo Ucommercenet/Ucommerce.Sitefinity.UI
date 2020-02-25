@@ -68,14 +68,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         private IPaymentPickerModel ResolveModel()
         {
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IPaymentPickerModel>(
-                new
-                {
-                    nextStepId = this.NextStepId,
-                    previousStepId = this.PreviousStepId
-                });
+            var args = new Castle.MicroKernel.Arguments();
 
+            args.AddProperties(new
+            {
+                nextStepId = this.NextStepId,
+                previousStepId = this.PreviousStepId
+            });
+
+            var container = UCommerceUIModule.Container;
+            var model = container.Resolve<IPaymentPickerModel>(args);
+            
             return model;
         }
 
