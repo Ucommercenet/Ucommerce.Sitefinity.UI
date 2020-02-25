@@ -79,22 +79,34 @@
                         </div>
                     </template>
 
-                    <div class="table-row item-info order-line">
-                        <div class="table-cell"><span class="a-heading">Voucher #</span></div>
-                        <div class="table-cell empty-cell">&nbsp;</div>
-                        <div class="table-cell empty-cell">&nbsp;</div>
-                        <div class="table-cell">
+                    <div class="table-row">
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0">Vouchers:</div>
+                        <div class="table-cell border-cell-0">
                             <input class="qty form-control inline-block no-padding" type="text" v-model="model.Voucher">
                         </div>
-                        <div class="table-cell empty-cell">&nbsp;</div>
-                        <div class="table-cell">
+                        <div class="table-cell border-cell-0">
                             <button class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="applyVoucher">
                                 <i class="fas fa-sync-alt fa-1x" aria-hidden="true"></i>
-                                <span class="btn-text">Apply</span>
+                                <span class="btn-text">Add</span>
                             </button>
                         </div>
-                        <div class="table-cell empty-cell">&nbsp;</div>
+                        <div class="table-cell empty-cell border-cell-0">&nbsp;</div>
                     </div>
+
+                    <template v-for="Voucher in model.Discounts">
+                        <div class="table-row">
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0">{{ Voucher }}</div>
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        </div>
+                    </template>
 
                     <div class="table-row">
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
