@@ -130,6 +130,12 @@ function initCart(rootElement) {
                                 for (var field of updatedFields) {
                                     model[field] = data[field];
                                 }
+
+                                if (response.data.Voucher) {
+                                    var vouchers = new Set(model.Discounts);
+                                    vouchers.add(response.data.Voucher);
+                                    model.Discounts = vouchers;
+                                }
                             }
                         }
                     });
