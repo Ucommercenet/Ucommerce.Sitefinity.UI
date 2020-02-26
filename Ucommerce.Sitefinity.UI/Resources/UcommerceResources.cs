@@ -140,10 +140,22 @@ namespace UCommerce.Sitefinity.UI.Resources
             get { return this["Order Total"]; }
         }
 
-        [ResourceEntry("Continue", Value = "Continue", Description = "Continue", LastModified = "2020/02/21")]
-        public string Continue
+        [ResourceEntry("ShoppingCart", Value = "Shopping cart", Description = "Shopping cart", LastModified = "2020/02/25")]
+        public string ShoppingCart
         {
-            get { return this["Continue"]; }
+            get { return this["Shopping cart"]; }
+        }
+
+        [ResourceEntry("Checkout", Value = "Checkout", Description = "Checkout", LastModified = "2020/02/25")]
+        public string Checkout
+        {
+            get { return this["Checkout"]; }
+        }
+
+        [ResourceEntry("ContinueShopping", Value = "Continue shopping", Description = "Continue shopping", LastModified = "2020/02/25")]
+        public string ContinueShopping
+        {
+            get { return this["Continue shopping"]; }
         }
 
         [ResourceEntry("Description", Value = "Description", Description = "Description", LastModified = "2020/02/21")]
