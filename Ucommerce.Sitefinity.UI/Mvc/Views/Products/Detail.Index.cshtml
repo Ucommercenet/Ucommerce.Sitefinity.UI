@@ -58,11 +58,11 @@
                 @*End of Write review link section*@
                 <div>
                     <span>@Model.Price</span>
-					@if (!string.IsNullOrWhiteSpace(@Model.Discount))
+                    @if (!string.IsNullOrWhiteSpace(@Model.Discount))
                     {
-						<p>@Html.Resource("Discount", "UcommerceResources"):</p>
-						<span>@Model.Discount</span>
-					}
+                         <p>@Html.Resource("Discount", "UcommerceResources"):</p>
+                         <span>@Model.Discount</span>
+                    }
                 </div>
             </div>
             <div>
