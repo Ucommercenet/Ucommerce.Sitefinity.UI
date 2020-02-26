@@ -325,5 +325,11 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["CityValidation"]; }
         }
+
+        [ResourceEntry("BackButton", Value = "Back", Description = "Back Button", LastModified = "2020/02/26")]
+        public string BackButton
+        {
+            get { return this["BackButton"]; }
+        }
     }
 }

@@ -2,7 +2,7 @@
     <div v-if="model" :class="classes">
         <div :class="backWrapperClasses">
             <template v-if="showBackButton">
-                <a :href="backUrl" :class="backLinkClasses">Back</a>
+                <a :href="backUrl" :class="backLinkClasses">{{ backLabel }}</a>
             </template>
         </div>
         <div :class="continueWrapperClasses">
@@ -26,6 +26,10 @@
             continueLabel: {
                 type: String,
                 default: 'Continue'
+            },
+            backLabel: {
+                type: String,
+                default: 'Back'
             },
             classes: {
                 type: String,

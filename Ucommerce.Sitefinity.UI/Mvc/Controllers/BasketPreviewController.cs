@@ -36,7 +36,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpGet]
-        [Route("uc/checkout/preview")]
+        [RelativeRoute("uc/checkout/preview")]
         public ActionResult Data()
         {
             var model = ResolveModel();
