@@ -3,7 +3,7 @@ using Telerik.Sitefinity.Localization.Data;
 
 namespace UCommerce.Sitefinity.UI.Resources
 {
-    [ObjectInfo("UcommerceResources", ResourceClassId = "UcommerceResources", Title = "UCommerce Resource", TitlePlural = "UCommerce Resources", Description = "Custom resources for UCommerce")]
+    [ObjectInfo("UcommerceResources", ResourceClassId = "UcommerceResources", Title = "UCommerceResource", TitlePlural = "UCommerceResources", Description = "CustomResourcesUCommerce")]
     class UcommerceResources : Resource
     {
         public UcommerceResources()
