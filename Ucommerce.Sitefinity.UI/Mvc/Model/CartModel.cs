@@ -64,7 +64,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
 
             basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            basketVM.DiscountTotal = new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+            basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0 ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString() : "";
             basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.SubTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.NextStepUrl = GetNextStepUrl(nextStepId);

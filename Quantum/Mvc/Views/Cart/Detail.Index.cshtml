@@ -50,7 +50,7 @@
                             </div>
                             <div class="table-cell"><a class="a-heading" :href="item.ProductUrl">{{ item.ProductName }}</a></div>
                             <div class="table-cell money">
-                                <template v-if="item.Discount.HasValue && item.Discount > 0">
+                                <template v-if="item.Discount && item.Discount > 0">
                                     <span style="text-decoration: line-through" data-price>
                                         {{ item.Price }}
                                     </span>
@@ -112,7 +112,7 @@
                         <div class="table-cell empty-cell">&nbsp;</div>
                         <div class="table-cell empty-cell">&nbsp;</div>
                     </div>
-                    <div class="table-row">
+                    <div v-if="model.DiscountTotal" class="table-row">
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
