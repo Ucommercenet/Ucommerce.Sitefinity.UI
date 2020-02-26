@@ -17,7 +17,7 @@ namespace UCommerce.Sitefinity.UI.Resources
         [ResourceEntry("WriteReview", Value = "Write a review", Description = "Write a review", LastModified = "2020/02/21")]
         public string AllCategories
         {
-            get { return this["Write a review"]; }
+            get { return this["WriteReview"]; }
         }
 
         [ResourceEntry("Discount", Value = "Discount", Description = "Discount", LastModified = "2020/02/21")]
@@ -41,49 +41,49 @@ namespace UCommerce.Sitefinity.UI.Resources
         [ResourceEntry("InStock", Value = "In Stock", Description = "In Stock", LastModified = "2020/02/21")]
         public string InStock
         {
-            get { return this["In Stock"]; }
+            get { return this["InStock"]; }
         }
 
         [ResourceEntry("OutOfStock", Value = "Out of Stock", Description = "Out of Stock", LastModified = "2020/02/21")]
         public string OutOfStock
         {
-            get { return this["Out Of Stock"]; }
+            get { return this["OutOfStock"]; }
         }
 
         [ResourceEntry("PleaseSelect", Value = "Please select...", Description = "Please select...", LastModified = "2020/02/21")]
         public string PleaseSelect
         {
-            get { return this["Please select..."]; }
+            get { return this["PleaseSelect"]; }
         }
 
         [ResourceEntry("AddToWishList", Value = "Add To Wish List", Description = "Add To Wish List", LastModified = "2020/02/21")]
         public string AddToWishList
         {
-            get { return this["Add To Wish List"]; }
+            get { return this["AddToWishList"]; }
         }
 
         [ResourceEntry("AddToCart", Value = "Add To Cart", Description = "Add To Cart", LastModified = "2020/02/21")]
         public string AddToCart
         {
-            get { return this["Add To Cart"]; }
+            get { return this["AddToCart"]; }
         }
 
         [ResourceEntry("Products", Value = "products", Description = "products", LastModified = "2020/02/21")]
         public string Products
         {
-            get { return this["products"]; }
+            get { return this["Products"]; }
         }
 
         [ResourceEntry("ProductQuantity", Value = "Product Quantity", Description = "Product Quantity", LastModified = "2020/02/21")]
         public string ProductQuantity
         {
-            get { return this["Product Quantity"]; }
+            get { return this["ProductQuantity"]; }
         }
 
         [ResourceEntry("SpecifyQuantity", Value = "When adding product to a cart you must specify the quantity", Description = "When adding product to a cart you must specify the quantity", LastModified = "2020/02/21")]
         public string SpecifyQuantity
         {
-            get { return this["When adding product to a cart you must specify the quantity"]; }
+            get { return this["SpecifyQuantity"]; }
         }
 
         [ResourceEntry("QuantityValidation", Value = "The quantity must be greater than 0 and less than 9,999.", Description = "The quantity must be greater than 0 and less than 9,999.", LastModified = "2020/02/21")]
@@ -288,6 +288,42 @@ namespace UCommerce.Sitefinity.UI.Resources
         public string ContinueToNextStep
         {
             get { return this["Continue to next step"]; }
+        }
+
+        [ResourceEntry("FirstNameValidation", Value = "First name is required", Description = "First name is required", LastModified = "2020/02/25")]
+        public string FirstNameValidation
+        {
+            get { return this["FirstNameValidation"]; }
+        }
+
+        [ResourceEntry("LastNameValidation", Value = "Last name is required", Description = "Last name is required", LastModified = "2020/02/25")]
+        public string LastNameValidation
+        {
+            get { return this["LastNameValidation"]; }
+        }
+
+        [ResourceEntry("EmailAddressValidation", Value = "Email is required", Description = "Email is required", LastModified = "2020/02/25")]
+        public string EmailAddressValidation
+        {
+            get { return this["EmailAddressValidation"]; }
+        }
+
+        [ResourceEntry("Line1Validation", Value = "Address line 1 is required", Description = "Address line 1 is required", LastModified = "2020/02/25")]
+        public string Line1Validation
+        {
+            get { return this["Line1Validation"]; }
+        }
+
+        [ResourceEntry("PostalCodeValidation", Value = "Postal code is required", Description = "Postal code is required", LastModified = "2020/02/25")]
+        public string PostalCodeValidation
+        {
+            get { return this["PostalCodeValidation"]; }
+        }
+
+        [ResourceEntry("CityValidation", Value = "City is required", Description = "City is required", LastModified = "2020/02/25")]
+        public string CityValidation
+        {
+            get { return this["CityValidation"]; }
         }
     }
 }
