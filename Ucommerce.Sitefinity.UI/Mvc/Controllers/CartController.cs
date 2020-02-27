@@ -154,6 +154,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 updatedVM.TaxTotal,
                 updatedVM.SubTotal,
                 updatedVM.Voucher,
+                updatedVM.OrderLines
             });
         }
 
