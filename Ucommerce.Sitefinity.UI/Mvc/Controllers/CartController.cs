@@ -18,6 +18,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     {
         public Guid? NextStepId { get; set; }
         public Guid? ProductDetailsPageId { get; set; }
+        public Guid? RedirectPageId { get; set; }
         public string TemplateName { get; set; } = "Index";
 
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
@@ -92,7 +93,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 vm.DiscountTotal,
                 vm.TaxTotal,
                 vm.SubTotal,
-                vm.OrderLines
+                vm.OrderLines,
+                vm.RedirectUrl
             });
         }
 
@@ -167,7 +169,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 new
                 {
                     nextStepId = this.NextStepId,
-                    productDetailsPageId = this.ProductDetailsPageId
+                    productDetailsPageId = this.ProductDetailsPageId,
+                    redirectPageId = this.RedirectPageId
                 });
 
             return model;
