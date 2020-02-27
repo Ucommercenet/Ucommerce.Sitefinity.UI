@@ -32,7 +32,7 @@ function initCart(rootElement) {
         },
         methods: {
             fetchData: function () {
-                this.$http.get('/uc/checkout/preview', {}).then((response) => {
+                this.$http.get(location.href + '/uc/checkout/preview', {}).then((response) => {
                     if (response.data &&
                         response.data.Status &&
                         response.data.Status == 'success' &&
