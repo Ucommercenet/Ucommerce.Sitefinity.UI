@@ -21,7 +21,7 @@
     <template v-if="model">
         <template v-if="model.OrderLines.length == 0">
             <div class="alert alert-info section-margin">
-                <p>@Html.Resource("RedirectMessage","UcommerceResources") <a :href="model.RedirectUrl">@Html.Resource("ReturnToStore", "UcommerceResources")</a>.</p>
+                <p>@Html.Resource("YourCartIsEmpty","UcommerceResources") <a :href="model.RedirectUrl">@Html.Resource("ReturnToStore", "UcommerceResources")</a>.</p>
             </div>
         </template>
         <template v-else>
@@ -139,7 +139,7 @@
                 </div>
             </div>
             <div class="continue-shopping-wrapper">
-                <a id="continue-shopping-link" class="continue-shopping-link" href="/shop/e-shop">@Html.Resource("ContinueShopping", "UcommerceResources")</a>
+                <a id="continue-shopping-link" class="continue-shopping-link" :href="model.RedirectUrl">@Html.Resource("ContinueShopping", "UcommerceResources")</a>
             </div>
             <checkout-navigation v-bind:model="model"
                                  continue-label="@Html.Resource("Continue", "UcommerceResources")"
