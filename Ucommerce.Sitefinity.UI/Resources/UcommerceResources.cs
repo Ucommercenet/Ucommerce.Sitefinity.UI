@@ -361,5 +361,17 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["Shipping"]; }
         }
+
+        [ResourceEntry("AddToBasket", Value = "Added to basket", Description = "Added to basket", LastModified = "2020/02/27")]
+        public string AddToBasket
+        {
+            get { return this["AddToBasket"]; }
+        }
+
+        [ResourceEntry("NotAddToBasket", Value = "Not added to basket", Description = "Not added to basket", LastModified = "2020/02/27")]
+        public string NotAddToBasket
+        {
+            get { return this["NotAddToBasket"]; }
+        }
     }
 }
