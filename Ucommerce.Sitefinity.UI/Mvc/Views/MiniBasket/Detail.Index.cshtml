@@ -21,7 +21,7 @@
                 <template v-else>
                     <div>
                         <a :href="model.CartPageUrl">
-                            <span>&#128722;</span><span class="js-mini-basket-number-of-items">{{ model.NumberOfItems }}</span> item(s): <span class="js-mini-basket-total">{{ model.Total }}</span>
+                            <span>&#128722;</span><span class="js-mini-basket-number-of-items" v-if="model.NumberOfItems > 0">{{ model.NumberOfItems }}</span> item(s): <span class="js-mini-basket-total">{{ model.Total }}</span>
                         </a>
                     </div>
                 </template>
