@@ -19,14 +19,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public class CartModel : ICartModel
     {
         private Guid productDetailsPageId;
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private Guid nextStepId;
+        private Guid redirectPageId;
+        private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
-        public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null)
+        public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null, Guid? redirectPageId = null)
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             this.nextStepId = nextStepId ?? Guid.Empty;
             this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
+            this.redirectPageId = redirectPageId ?? Guid.Empty;
         }
 
         public virtual CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl)
@@ -68,7 +70,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.SubTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.NextStepUrl = GetNextStepUrl(nextStepId);
-
+            basketVM.RedirectUrl = GetRedirectUrl(redirectPageId);
             basketVM.RefreshUrl = refreshUrl;
             basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
 
@@ -157,6 +159,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
 
             return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+        }
+
+        private string GetRedirectUrl(Guid redirectPageId)
+        {
+            var redirectUrl = Pages.UrlResolver.GetPageNodeUrl(redirectPageId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(redirectUrl);
         }
 
         private string GetProductUrl(Product product, Guid detailPageId)
