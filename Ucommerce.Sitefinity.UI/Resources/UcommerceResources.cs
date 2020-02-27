@@ -301,5 +301,59 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["Continue to next step"]; }
         }
+
+        [ResourceEntry("FirstNameValidation", Value = "First name is required", Description = "First name is required", LastModified = "2020/02/25")]
+        public string FirstNameValidation
+        {
+            get { return this["FirstNameValidation"]; }
+        }
+
+        [ResourceEntry("LastNameValidation", Value = "Last name is required", Description = "Last name is required", LastModified = "2020/02/25")]
+        public string LastNameValidation
+        {
+            get { return this["LastNameValidation"]; }
+        }
+
+        [ResourceEntry("EmailAddressValidation", Value = "Email is required", Description = "Email is required", LastModified = "2020/02/25")]
+        public string EmailAddressValidation
+        {
+            get { return this["EmailAddressValidation"]; }
+        }
+
+        [ResourceEntry("Line1Validation", Value = "Address line 1 is required", Description = "Address line 1 is required", LastModified = "2020/02/25")]
+        public string Line1Validation
+        {
+            get { return this["Line1Validation"]; }
+        }
+
+        [ResourceEntry("PostalCodeValidation", Value = "Postal code is required", Description = "Postal code is required", LastModified = "2020/02/25")]
+        public string PostalCodeValidation
+        {
+            get { return this["PostalCodeValidation"]; }
+        }
+
+        [ResourceEntry("CityValidation", Value = "City is required", Description = "City is required", LastModified = "2020/02/25")]
+        public string CityValidation
+        {
+            get { return this["CityValidation"]; }
+        }
+
+        [ResourceEntry("BackButton", Value = "Back", Description = "Back Button", LastModified = "2020/02/26")]
+        public string BackButton
+        {
+            get { return this["BackButton"]; }
+        }
+
+        [ResourceEntry("YourCartIsEmpty", Value = "Your cart is empty. Please", Description = "Your Cart is Empty", LastModified = "2020/02/26")]
+        public string YourCartIsEmpty
+        {
+            get { return this["YourCartIsEmpty"]; }
+        }
+
+        [ResourceEntry("ReturnToStore", Value = "return to our store and add some items", Description = "Return to Store", LastModified = "2020/02/26")]
+        public string ReturnToStore
+        {
+            get { return this["ReturnToStore"]; }
+        }
     }
 }
