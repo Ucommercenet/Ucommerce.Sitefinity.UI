@@ -21,7 +21,7 @@
     <template v-if="model">
         <template v-if="model.OrderLines.length == 0">
             <div class="alert alert-info section-margin">
-                <p>@Html.Resource("YourCartIsEmpty","UcommerceResources") <a :href="model.RedirectUrl">@Html.Resource("ReturnToStore", "UcommerceResources")</a>.</p>
+                <p>@Html.Resource("YourCartIsEmpty", "UcommerceResources") <a :href="model.RedirectUrl">@Html.Resource("ReturnToStore", "UcommerceResources")</a>.</p>
             </div>
         </template>
         <template v-else>
@@ -88,30 +88,48 @@
                         </div>
                     </template>
 
-                    <div class="table-row">
-                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell border-cell-0">Vouchers:</div>
-                        <div class="table-cell border-cell-0">
-                            <input class="qty form-control inline-block no-padding" type="text" v-model="model.Voucher">
-                        </div>
-                        <div class="table-cell border-cell-0">
-                            <button class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="applyVoucher">
-                                <i class="fas fa-sync-alt fa-1x" aria-hidden="true"></i>
-                                <span class="btn-text">Add</span>
-                            </button>
-                        </div>
-                        <div class="table-cell empty-cell border-cell-0">&nbsp;</div>
-                    </div>
-
-                    <template v-for="Voucher in model.Discounts">
+                    <template v-if="hasVoucher">
                         <div class="table-row">
                             <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                             <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                             <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                             <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                            <div class="table-cell border-cell-0">{{ Voucher }}</div>
+                            <div class="table-cell border-cell-0">Discount code:</div>
+                            <div class="table-cell border-cell-0">
+                                <input class="qty form-control inline-block no-padding" type="text" v-model="model.Voucher">
+                            </div>
+                            <div class="table-cell border-cell-0">
+                                <button class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="applyVoucher">
+                                    <i class="fas fa-sync-alt fa-1x" aria-hidden="true"></i>
+                                    <span class="btn-text">Add</span>
+                                </button>
+                            </div>
+                            <div class="table-cell empty-cell border-cell-0">&nbsp;</div>
+                        </div>
+
+                        <template v-for="Voucher in model.Discounts">
+                            <div class="table-row">
+                                <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                                <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                                <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                                <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                                <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                                <div class="table-cell border-cell-0">{{ Voucher }}</div>
+                                <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                                <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            </div>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <div class="table-row">
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                            <div class="table-cell border-cell-0 empty-cell">
+                                <input id="hasVoucher" type="checkbox" v-model="hasVoucher"/>
+                                <label for="hasVoucher">Has a voucher</label>
+                            </div>
                             <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                             <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         </div>
@@ -121,22 +139,10 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-						<div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell">@Html.Resource("SubTotal", "UcommerceResources"):</div>
                         <div class="money table-cell order-subtotal">
                             {{ model.SubTotal }}
-                        </div>
-                        <div class="table-cell empty-cell">&nbsp;</div>
-                        <div class="table-cell empty-cell">&nbsp;</div>
-                    </div>
-                    <div class="table-row">
-                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell">@Html.Resource("VAT", "UcommerceResources"):</div>
-                        <div class="table-cell money order-tax">
-                            {{ model.TaxTotal }}
                         </div>
                         <div class="table-cell empty-cell">&nbsp;</div>
                         <div class="table-cell empty-cell">&nbsp;</div>
@@ -149,6 +155,18 @@
                         <div class="table-cell">@Html.Resource("Discounts", "UcommerceResources"):</div>
                         <div class="table-cell money order-discounts">
                             {{ model.DiscountTotal }}
+                        </div>
+                        <div class="table-cell empty-cell">&nbsp;</div>
+                        <div class="table-cell empty-cell">&nbsp;</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell">@Html.Resource("VAT", "UcommerceResources"):</div>
+                        <div class="table-cell money order-tax">
+                            {{ model.TaxTotal }}
                         </div>
                         <div class="table-cell empty-cell">&nbsp;</div>
                         <div class="table-cell empty-cell">&nbsp;</div>

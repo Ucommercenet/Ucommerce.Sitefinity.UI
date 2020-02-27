@@ -11,7 +11,8 @@ function initCart(rootElement) {
         el: '#' + rootElement.id,
         store,
         data: {
-            model: null
+            model: null,
+            hasVoucher: false
         },
         computed: {
             ...mapState([
@@ -126,15 +127,27 @@ function initCart(rootElement) {
                             else {
                                 var data = response.data;
                                 var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal'];
+                                var orderLineArray = [];
 
                                 for (var field of updatedFields) {
                                     model[field] = data[field];
                                 }
 
+                                for (var updatedItem of data.OrderLines) {
+                                    for (var currentItem of model.OrderLines) {
+                                        if (currentItem.OrderLineId == updatedItem.OrderlineId) {
+                                            orderLineArray.push(Object.assign({}, currentItem, updatedItem));
+                                        }
+                                    }
+                                }
+
+                                model.OrderLines = orderLineArray;
+
                                 if (response.data.Voucher) {
                                     var vouchers = new Set(model.Discounts);
                                     vouchers.add(response.data.Voucher);
                                     model.Discounts = vouchers;
+                                    model.Voucher = null;
                                 }
                             }
                         }
@@ -155,6 +168,13 @@ function initCart(rootElement) {
                     response.data.Data && response.data.Data.data) {
 
                     this.model = response.data.Data.data;
+
+                    if (this.model.Discounts.length) {
+                        this.hasVoucher = true;
+                    }
+                    else {
+                        this.hasVoucher = false;
+                    }
                 }
                 else {
                     this.model = null;
