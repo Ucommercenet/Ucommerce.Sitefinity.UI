@@ -15,7 +15,7 @@ namespace UCommerce.Sitefinity.UI.Resources
         }
 
         [ResourceEntry("WriteReview", Value = "Write a review", Description = "Write a review", LastModified = "2020/02/21")]
-        public string AllCategories
+        public string WriteReview
         {
             get { return this["WriteReview"]; }
         }
@@ -89,7 +89,7 @@ namespace UCommerce.Sitefinity.UI.Resources
         [ResourceEntry("QuantityValidation", Value = "The quantity must be greater than 0 and less than 9,999.", Description = "The quantity must be greater than 0 and less than 9,999.", LastModified = "2020/02/21")]
         public string QuantityValidation
         {
-            get { return this["The quantity must be greater than 0 and less than 9,999."]; }
+            get { return this["QuantityValidation"]; }
         }
 
         [ResourceEntry("Quantity", Value = "Quantity", Description = "Quantity", LastModified = "2020/02/21")]
@@ -131,13 +131,13 @@ namespace UCommerce.Sitefinity.UI.Resources
         [ResourceEntry("SubTotal", Value = "Sub Total", Description = "Sub Total", LastModified = "2020/02/21")]
         public string SubTotal
         {
-            get { return this["Sub Total"]; }
+            get { return this["SubTotal"]; }
         }
 
         [ResourceEntry("OrderTotal", Value = "Order Total", Description = "Order Total", LastModified = "2020/02/21")]
         public string OrderTotal
         {
-            get { return this["Order Total"]; }
+            get { return this["OrderTotal"]; }
         }
 
         [ResourceEntry("Continue", Value = "Continue", Description = "Continue", LastModified = "2020/02/21")]
@@ -155,31 +155,31 @@ namespace UCommerce.Sitefinity.UI.Resources
         [ResourceEntry("BillingAddress", Value = "Billing Address", Description = "Billing Address", LastModified = "2020/02/21")]
         public string BillingAddress
         {
-            get { return this["Billing Address"]; }
+            get { return this["BillingAddress"]; }
         }
 
         [ResourceEntry("ShippingAddress", Value = "Shipping Address", Description = "Shipping Address", LastModified = "2020/02/21")]
         public string ShippingAddress
         {
-            get { return this["ComShippingAddresspany"]; }
+            get { return this["ShippingAddress"]; }
         }
 
         [ResourceEntry("FirstName", Value = "First Name", Description = "First Name", LastModified = "2020/02/21")]
         public string FirstName
         {
-            get { return this["First Name"]; }
+            get { return this["FirstName"]; }
         }
 
         [ResourceEntry("LastName", Value = "Last Name", Description = "Last Name", LastModified = "2020/02/21")]
         public string LastName
         {
-            get { return this["Last Name"]; }
+            get { return this["LastName"]; }
         }
 
         [ResourceEntry("Email", Value = "E-mail", Description = "E-mail", LastModified = "2020/02/21")]
         public string Email
         {
-            get { return this["E-mail"]; }
+            get { return this["Email"]; }
         }
 
         [ResourceEntry("Attention", Value = "Attention", Description = "Attention", LastModified = "2020/02/21")]
@@ -239,19 +239,19 @@ namespace UCommerce.Sitefinity.UI.Resources
         [ResourceEntry("DifferentShippingAddress", Value = "Use a different address for shipping", Description = "Use a different address for shipping", LastModified = "2020/02/21")]
         public string DifferentShippingAddress
         {
-            get { return this["Use a different address for shipping"]; }
+            get { return this["DifferentShippingAddress"]; }
         }
 
         [ResourceEntry("ItemNo", Value = "Item no.", Description = "Item no.", LastModified = "2020/02/21")]
         public string ItemNo
         {
-            get { return this["Item no."]; }
+            get { return this["ItemNo"]; }
         }
 
         [ResourceEntry("OrderDiscounts", Value = "Order Discounts", Description = "Order Discounts", LastModified = "2020/02/21")]
         public string OrderDiscounts
         {
-            get { return this["Order Discounts"]; }
+            get { return this["OrderDiscounts"]; }
         }
 
         [ResourceEntry("Payment", Value = "Payment", Description = "Payment", LastModified = "2020/02/21")]
@@ -263,31 +263,31 @@ namespace UCommerce.Sitefinity.UI.Resources
         [ResourceEntry("CompleteOrder", Value = "Complete Order", Description = "Complete Order", LastModified = "2020/02/21")]
         public string CompleteOrder
         {
-            get { return this["Complete Order"]; }
+            get { return this["CompleteOrder"]; }
         }
 
         [ResourceEntry("EmptyBasket", Value = "Your basket is empty", Description = "Your basket is empty", LastModified = "2020/02/21")]
         public string EmptyBasket
         {
-            get { return this["Your basket is empty"]; }
+            get { return this["EmptyBasket"]; }
         }
 
         [ResourceEntry("PaymentMethod", Value = "Payment method", Description = "Payment method", LastModified = "2020/02/21")]
         public string PaymentMethod
         {
-            get { return this["Payment method"]; }
+            get { return this["PaymentMethod"]; }
         }
 
         [ResourceEntry("ShippingMethod", Value = "Shipping Method", Description = "Shipping Method", LastModified = "2020/02/21")]
         public string ShippingMethod
         {
-            get { return this["Shipping Method"]; }
+            get { return this["ShippingMethod"]; }
         }
 
         [ResourceEntry("ContinueToNextStep", Value = "Continue to next step", Description = "Continue to next step", LastModified = "2020/02/21")]
         public string ContinueToNextStep
         {
-            get { return this["Continue to next step"]; }
+            get { return this["ContinueToNextStep"]; }
         }
 
         [ResourceEntry("FirstNameValidation", Value = "First name is required", Description = "First name is required", LastModified = "2020/02/25")]
@@ -332,6 +332,28 @@ namespace UCommerce.Sitefinity.UI.Resources
             get { return this["BackButton"]; }
         }
 
+        [ResourceEntry("ThankYou", Value = "Thank you for the order", Description = "Continue to next step", LastModified = "2020/02/27")]
+        public string ThankYou
+        {
+            get { return this["ThankYou"]; }
+        }
 
+        [ResourceEntry("ContactUs", Value = "Contact Us", Description = "Contact Us", LastModified = "2020/02/27")]
+        public string ContactUs
+        {
+            get { return this["ContactUs"]; }
+        }
+
+        [ResourceEntry("Quantum", Value = "Quantum", Description = "Quantum", LastModified = "2020/02/27")]
+        public string Quantum
+        {
+            get { return this["Quantum"]; }
+        }
+
+        [ResourceEntry("Copyright", Value = "Copyright © 2002-2019 Quantum. All rights reserved.", Description = "Copyright Message", LastModified = "2020/02/27")]
+        public string Copyright
+        {
+            get { return this["Copyright"]; }
+        }
     }
 }
