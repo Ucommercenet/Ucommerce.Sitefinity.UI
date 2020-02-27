@@ -2,12 +2,11 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
+using UCommerce.Infrastructure;
+using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Infrastructure;
 using UCommerce.Transactions;
-using UCommerce.Sitefinity.UI.Api.Model;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -19,6 +18,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     {
         public Guid? NextStepId { get; set; }
         public Guid? ProductDetailsPageId { get; set; }
+        public Guid? RedirectPageId { get; set; }
         public string TemplateName { get; set; } = "Index";
 
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
@@ -93,7 +93,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 vm.DiscountTotal,
                 vm.TaxTotal,
                 vm.SubTotal,
-                vm.OrderLines
+                vm.OrderLines,
+                vm.RedirectUrl
             });
         }
 
@@ -140,7 +141,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 new
                 {
                     nextStepId = this.NextStepId,
-                    productDetailsPageId = this.ProductDetailsPageId
+                    productDetailsPageId = this.ProductDetailsPageId,
+                    redirectPageId = this.RedirectPageId
                 });
 
             return model;

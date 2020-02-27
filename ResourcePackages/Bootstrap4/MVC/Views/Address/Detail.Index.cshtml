@@ -14,7 +14,7 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<div data-component="address-widget" id="address-widget">
+<div data-component="address-widget" id="address-widget" class="mb-5">
     <template v-if="model">
         <div class="container mt-5">
             <div class="js-address-billing">
@@ -155,8 +155,8 @@
                                  back-label="@Html.Resource("BackButton", "UcommerceResources")"
                                  mode="Bootstrap4"
                                  :continue-fn="continueFn"
-                                 back-link-classes="btn btn-light btn-lg float-md-left"
-                                 continue-btn-classes="btn btn-info btn-lg w-100 mt-3 mt-md-0 float-md-right"
+                                 back-link-classes="btn btn-light btn-lg text-info float-right float-md-left"
+                                 continue-btn-classes="btn btn-info btn-lg mt-3 mt-md-0 float-right"
                                  classes="row my-4">
             </checkout-navigation>
         </div>

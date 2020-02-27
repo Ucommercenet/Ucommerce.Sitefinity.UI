@@ -16,7 +16,7 @@ function initCart(rootElement) {
         computed: {
             ...mapState([
                 'triggerSubmit'
-            ]),
+            ])
         },
         watch: {
             triggerSubmit: function () {

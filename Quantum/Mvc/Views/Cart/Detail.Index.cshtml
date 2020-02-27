@@ -15,16 +15,20 @@
 }
 
 <div data-component="cart" class="cart-table" id="shopping-cart">
+    <hgroup>
+        <h1> @Html.Resource("ShoppingCart", "UcommerceResources")</h1>
+    </hgroup>
     <template v-if="model">
         <template v-if="model.OrderLines.length == 0">
             <div class="alert alert-info section-margin">
-                <p>Your cart is empty. Please <a href="/">return to our store and add some items</a>.</p>
+                <p>@Html.Resource("RedirectMessage","UcommerceResources") <a :href="model.RedirectUrl">@Html.Resource("ReturnToStore", "UcommerceResources")</a>.</p>
             </div>
         </template>
         <template v-else>
             <div class="cart table-wrapper">
                 <div class="table-body">
                     <div class="table-row t-heading">
+                        <div class="span3 table-cell"></div>
                         <div class="span3 table-cell">@Html.Resource("Description", "UcommerceResources")</div>
                         <div class="span1 table-cell money">@Html.Resource("Price", "UcommerceResources")</div>
                         <div class="span1 table-cell money">@Html.Resource("VAT", "UcommerceResources")</div>
@@ -39,9 +43,14 @@
                             <input :id="'OrderLines_' + key + '__Sku'" :name="'OrderLines[' + key + '].Sku'" type="hidden" :value="item.Sku">
                             <input :id="'OrderLines_' + key + '__VariantSku'" :name="'OrderLines[' + key + '].VariantSku'" type="hidden" :value="item.VariantSku">
                             <input :id="'OrderLines_' + key + '__OrderLineId'" :name="'OrderLines[' + key + '].OrderLineId'" type="hidden" :value="item.OrderLineId">
+                            <div class="table-cell">
+                                <figure>
+                                    <img class="product-thumbnail" :title="item.ProductName" :src="item.ThumbnailUrl" :alt="item.ProductName" />
+                                </figure>
+                            </div>
                             <div class="table-cell"><a class="a-heading" :href="item.ProductUrl">{{ item.ProductName }}</a></div>
                             <div class="table-cell money">
-                                <template v-if="item.Discount.HasValue && item.Discount > 0">
+                                <template v-if="item.Discount && item.Discount > 0">
                                     <span style="text-decoration: line-through" data-price>
                                         {{ item.Price }}
                                     </span>
@@ -83,6 +92,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell">@Html.Resource("SubTotal", "UcommerceResources"):</div>
                         <div class="money table-cell order-subtotal">
                             {{ model.SubTotal }}
@@ -94,6 +104,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell">@Html.Resource("VAT", "UcommerceResources"):</div>
                         <div class="table-cell money order-tax">
                             {{ model.TaxTotal }}
@@ -101,7 +112,8 @@
                         <div class="table-cell empty-cell">&nbsp;</div>
                         <div class="table-cell empty-cell">&nbsp;</div>
                     </div>
-                    <div class="table-row">
+                    <div v-if="model.DiscountTotal" class="table-row">
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
@@ -116,6 +128,7 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
+                        <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell" colspan="1"><strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></div>
                         <div class="table-cell money order-total">
                             {{ model.OrderTotal }}
@@ -125,12 +138,14 @@
                     </div>
                 </div>
             </div>
-
+            <div class="continue-shopping-wrapper">
+                <a id="continue-shopping-link" class="continue-shopping-link" href="/shop/e-shop">@Html.Resource("ContinueShopping", "UcommerceResources")</a>
+            </div>
             <checkout-navigation v-bind:model="model"
                                  continue-label="@Html.Resource("Continue", "UcommerceResources")"
                                  back-label="@Html.Resource("BackButton", "UcommerceResources")"
                                  classes="control-group margin-top"
-                                 back-link-classes="btn btn-next btn-transparent pull-left"
+                                 back-link-classes="btn btn-back btn-transparent pull-left"
                                  continue-btn-classes="btn btn-success btn-next pull-right"
                                  mode="Bootstrap">
             </checkout-navigation>

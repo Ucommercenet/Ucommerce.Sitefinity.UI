@@ -5,6 +5,7 @@ using System.Web;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using UCommerce.Api;
+using UCommerce.Content;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -18,14 +19,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public class CartModel : ICartModel
     {
         private Guid productDetailsPageId;
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private Guid nextStepId;
+        private Guid redirectPageId;
+        private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
-        public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null)
+        public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null, Guid? redirectPageId = null)
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             this.nextStepId = nextStepId ?? Guid.Empty;
             this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
+            this.redirectPageId = redirectPageId ?? Guid.Empty;
         }
 
         public virtual CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl)
@@ -41,6 +44,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             foreach (var orderLine in basket.OrderLines)
             {
+                var product = CatalogLibrary.GetProduct(orderLine.Sku);
+                var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
                 var orderLineViewModel = new OrderlineViewModel
                 {
                     Quantity = orderLine.Quantity,
@@ -53,17 +58,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     Price = new Money(orderLine.Price, basket.BillingCurrency).ToString(),
                     ProductUrl = GetProductUrl(CatalogLibrary.GetProduct(orderLine.Sku), this.productDetailsPageId),
                     PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), basket.BillingCurrency).ToString(),
-                    OrderLineId = orderLine.OrderLineId
+                    OrderLineId = orderLine.OrderLineId,
+                    ThumbnailName = imageService.GetImage(product.ThumbnailImageMediaId).Name,
+                    ThumbnailUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url
                 };
                 basketVM.OrderLines.Add(orderLineViewModel);
             }
 
             basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            basketVM.DiscountTotal = new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+            basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0 ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString() : "";
             basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.SubTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.NextStepUrl = GetNextStepUrl(nextStepId);
-
+            basketVM.RedirectUrl = GetRedirectUrl(redirectPageId);
             basketVM.RefreshUrl = refreshUrl;
             basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
 
@@ -152,6 +159,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
 
             return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+        }
+
+        private string GetRedirectUrl(Guid redirectPageId)
+        {
+            var redirectUrl = Pages.UrlResolver.GetPageNodeUrl(redirectPageId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(redirectUrl);
         }
 
         private string GetProductUrl(Product product, Guid detailPageId)
