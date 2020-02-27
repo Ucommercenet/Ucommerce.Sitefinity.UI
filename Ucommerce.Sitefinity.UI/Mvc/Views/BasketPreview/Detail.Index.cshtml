@@ -20,7 +20,7 @@
     <template v-if="model">
         <div>
             <div>
-                <h3>Billing address</h3>
+                <h3>@Html.Resource("BillingAddress", "UcommerceResources")</h3>
                 <br />
                 <address>
                     <span><strong>{{ model.BillingAddressDTO.FirstName }} {{ model.BillingAddressDTO.LastName }}</strong></span><br>
@@ -29,13 +29,13 @@
                     <span>{{ model.BillingAddressDTO.CountryName }}</span>
                     <span v-if="model.BillingAddressDTO.Attention"><text>att. </text> {{ model.BillingAddressDTO.Attention }}</span>
                     <br>
-                    <span><abbr title="Phone">P:</abbr>{{ model.BillingAddressDTO.PhoneNumber }}</span><br>
-                    <span><abbr title="Mobile">M:</abbr>{{ model.BillingAddressDTO.MobilePhoneNumber }} </span><br>
-                    <span><abbr title="Email">E:</abbr><a :href="'mailto:' + model.BillingAddressDTO.EmailAddress">{{ model.BillingAddressDTO.EmailAddress }}</a></span>
+                    <span><abbr title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.BillingAddressDTO.PhoneNumber }}</span><br>
+                    <span><abbr title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.BillingAddressDTO.MobilePhoneNumber }} </span><br>
+                    <span><abbr title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a :href="'mailto:' + model.BillingAddressDTO.EmailAddress">{{ model.BillingAddressDTO.EmailAddress }}</a></span>
                 </address>
             </div>
             <div>
-                <h3>Shipping address</h3>
+                <h3>@Html.Resource("ShippingAddress", "UcommerceResources")</h3>
                 <br />
                 <address>
                     <span><strong>{{ model.ShipmentAddressDTO.FirstName }} {{ model.ShipmentAddressDTO.LastName }}</strong></span><br>
@@ -45,21 +45,21 @@
                     <span>{{ model.ShipmentAddressDTO.Line1 }}</span><br>
                     <span>{{ model.ShipmentAddressDTO.PostalCode }} {{ model.ShipmentAddressDTO.City }}</span><br>
                     <span>{{ model.ShipmentAddressDTO.CountryName }}</span><br>
-                    <span><abbr title="Phone">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
-                    <span><abbr title="Mobile">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
-                    <span><abbr title="Email">E:</abbr><a href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
+                    <span><abbr title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
+                    <span><abbr title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
+                    <span><abbr title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
                 </address>
             </div>
         </div>
         <table>
             <thead>
                 <tr>
-                    <th>Item no. </th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>VAT</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
+                    <th>@Html.Resource("ItemNo", "UcommerceResources")</th>
+                    <th>@Html.Resource("Description", "UcommerceResources")</th>
+                    <th>@Html.Resource("Price", "UcommerceResources")</th>
+                    <th>@Html.Resource("VAT", "UcommerceResources")</th>
+                    <th>@Html.Resource("Quantity", "UcommerceResources")</th>
+                    <th>@Html.Resource("Total", "UcommerceResources")</th>
                 </tr>
             </thead>
             <tbody>
@@ -85,27 +85,27 @@
                 </template>
                 <tr>
                     <td rowspan="@ViewBag.RowSpan" colspan="2"></td>
-                    <td colspan="3">Sub total: </td>
+                    <td colspan="3">@Html.Resource("SubTotal", "UcommerceResources"): </td>
                     <td>
                         {{ model.SubTotal }}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3">VAT: </td>
+                    <td colspan="3">@Html.Resource("VAT", "UcommerceResources"): </td>
                     <td>
                         {{ model.TaxTotal }}
                     </td>
                 </tr>
                 <template v-if="model.DiscountAmount != 0">
                     <tr>
-                        <td colspan="3">Order discounts: </td>
+                        <td colspan="3">@Html.Resource("OrderDiscounts", "UcommerceResources"): </td>
                         <td>-{{ model.DiscountTotal }}</td>
                     </tr>
                 </template>
                 <template v-if="model.ShipmentAmount != 0">
                     <tr>
                         <td colspan="3">
-                            Shipping
+                            @Html.Resource("Shipping", "UcommerceResources")
                             <text> (via {{ model.ShipmentName }})</text>
                         </td>
                         <td>{{ model.ShippingTotal }}</td>
@@ -114,20 +114,20 @@
                 <template v-if="model.PaymentAmount != 0">
                     <tr>
                         <td colspan="3">
-                            Payment
+                            @Html.Resource("Payment", "UcommerceResources")
                             <text> ({{ model.PaymentName }})</text>
                         </td>
                         <td>{{ model.PaymentTotal }}</td>
                     </tr>
                 </template>
                 <tr>
-                    <td colspan="3">Order total: </td>
+                    <td colspan="3">@Html.Resource("OrderTotal", "UcommerceResources"): </td>
                     <td>{{ model.OrderTotal }}</td>
                 </tr>
             </tbody>
         </table>
         <checkout-navigation v-bind:model="model"
-                             continue-label="Complete Order"
+                             continue-label="@Html.Resource("CompleteOrder", "UcommerceResources")"
                              :continue-fn="continueFn" 
                              classes=""></checkout-navigation>
     </template>

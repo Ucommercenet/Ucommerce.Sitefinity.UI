@@ -20,7 +20,7 @@
 <div class="container my-4" data-component="shipping-widget" id="shipping-method">
     <div class="row">
         <div class="col-md-6">
-            <h3>Shipping method</h3>
+            <h3>@Html.Resource("ShippingMethod", "UcommerceResources")</h3>
             <hr />
         </div>
     </div>
@@ -38,11 +38,11 @@
                 </div>
             </template>
             <checkout-navigation v-bind:model="model"
-                                 continue-label="Continue to next step"
+                                 continue-label="@Html.Resource("ContinueToNextStep", "UcommerceResources")"
                                  mode="Bootstrap4"
-                                 :continue-fn="submit" 
-                                 back-link-classes="btn btn-light btn-lg float-md-left"
-                                 continue-btn-classes="btn btn-info btn-lg w-100 mt-3 mt-md-0 float-md-right"
+                                 :continue-fn="submit"
+                                 back-link-classes="btn btn-light text-info btn-lg float-right float-md-left"
+                                 continue-btn-classes="btn btn-info btn-lg mt-3 mt-md-0 float-right"
                                  classes="row my-4">
             </checkout-navigation>
         </template>

@@ -78,7 +78,7 @@
             },
             backWrapperClasses: function () {
                 if (this.showBackButton && (this.mode == 'Bootstrap' || this.mode == 'Bootstrap4')) {
-                    return 'col-md-6 padding-0';
+                    return 'col-md-6';
                 }
                 else {
                     return '';
@@ -87,26 +87,14 @@
             continueWrapperClasses: function () {
                 if (this.mode == 'Bootstrap' || this.mode == 'Bootstrap4') {
                     if (this.showContinueButton && this.showBackButton) {
-                        return 'col-md-6 padding-0';
+                        return 'col-md-6';
                     }
                     else if (this.showContinueButton) {
-                        return 'col-md-12 padding-0';
+                        return 'col-md-12 clear p-0';
                     }
                 }
                 else {
                     return '';
-                }
-            },
-            backLinkClasses: function () {
-                switch (this.mode) {
-                    case 'Bootstrap':
-                        return 'btn btn-next btn-transparent pull-left';
-
-                    case 'Bootstrap4':
-                        return '';
-
-                    default:
-                        return '';
                 }
             }
         },
