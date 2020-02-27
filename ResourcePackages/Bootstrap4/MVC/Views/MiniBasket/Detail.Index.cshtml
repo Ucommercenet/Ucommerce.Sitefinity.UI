@@ -19,7 +19,7 @@
             <li>
                 <div class="m-3">
                     <a class="text-black" :href="model.CartPageUrl">
-                        <span>&#128722;</span><span class="js-mini-basket-number-of-items">{{ model.NumberOfItems }}</span>
+                        <span>&#128722;</span><span class="js-mini-basket-number-of-items badge badge-info" v-if="model.NumberOfItems > 0">{{ model.NumberOfItems }}</span>
                     </a>
                 </div>
             </li>
