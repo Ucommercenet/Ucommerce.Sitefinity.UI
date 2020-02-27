@@ -162,12 +162,18 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return updatedBasket;
         }
 
-
         private string GetNextStepUrl(Guid nextStepId)
         {
             var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
 
             return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+        }
+
+        private string GetRedirectUrl(Guid redirectPageId)
+        {
+            var redirectUrl = Pages.UrlResolver.GetPageNodeUrl(redirectPageId);
+
+            return Pages.UrlResolver.GetAbsoluteUrl(redirectUrl);
         }
 
         private string GetProductUrl(Product product, Guid detailPageId)
