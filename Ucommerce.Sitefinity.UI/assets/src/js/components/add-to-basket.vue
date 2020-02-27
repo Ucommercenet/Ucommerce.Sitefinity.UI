@@ -25,6 +25,9 @@
         methods: {
             addToBasket: function () {
                 var store = this.$root.$store;
+                var addToBasketSuccessMessage = this.$root.$refs.addToBasket.value;
+                var addToBasketFailedMessage = this.$root.$refs.notAddToBasket.value;
+
                 var routesSelector = '#' + this.rootId + ' .addToBasketUrl';
                 var addToBasketUrlContainers = document.querySelectorAll(routesSelector);
                 if (addToBasketUrlContainers && addToBasketUrlContainers.length > 0) {

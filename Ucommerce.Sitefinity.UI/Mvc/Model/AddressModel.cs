@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
+using Telerik.Sitefinity.Localization;
 using UCommerce.EntitiesV2;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Resources;
 using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
@@ -197,9 +199,108 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 message = null;
                 return true;
             }
+        }
 
-            message = null;
-            return true;
+        public Dictionary<string, string> ErrorMessage(ModelStateDictionary status)
+        {
+            var errorList = status.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+            );
+            var errors = new Dictionary<string, string>();
+
+            foreach (var keyValuePair in errorList)
+            {
+                switch (keyValuePair.Key)
+                {
+                    case "BillingAddress.FirstName":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("BillingAddress.FirstName", Res.Get<UcommerceResources>().FirstNameValidation);
+                        }
+
+                        break;
+                    case "BillingAddress.LastName":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("BillingAddress.LastName", Res.Get<UcommerceResources>().LastNameValidation);
+                        }
+
+                        break;
+                    case "BillingAddress.EmailAddress":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("BillingAddress.EmailAddress", Res.Get<UcommerceResources>().EmailAddressValidation);
+                        }
+
+                        break;
+                    case "BillingAddress.Line1":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("BillingAddress.Line1", Res.Get<UcommerceResources>().Line1Validation);
+                        }
+
+                        break;
+                    case "BillingAddress.PostalCode":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("BillingAddress.PostalCode", Res.Get<UcommerceResources>().PostalCodeValidation);
+                        }
+
+                        break;
+                    case "BillingAddress.City":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("BillingAddress.City", Res.Get<UcommerceResources>().CityValidation);
+                        }
+
+                        break;
+                    case "ShippingAddress.FirstName":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("ShippingAddress.FirstName", Res.Get<UcommerceResources>().FirstNameValidation);
+                        }
+
+                        break;
+                    case "ShippingAddress.LastName":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("ShippingAddress.LastName", Res.Get<UcommerceResources>().LastNameValidation);
+                        }
+
+                        break;
+                    case "ShippingAddress.EmailAddress":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("ShippingAddress.EmailAddress", Res.Get<UcommerceResources>().EmailAddressValidation);
+                        }
+
+                        break;
+                    case "ShippingAddress.Line1":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("ShippingAddress.Line1", Res.Get<UcommerceResources>().Line1Validation);
+                        }
+
+                        break;
+                    case "ShippingAddress.PostalCode":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("ShippingAddress.PostalCode", Res.Get<UcommerceResources>().PostalCodeValidation);
+                        }
+
+                        break;
+                    case "ShippingAddress.City":
+                        if (keyValuePair.Value.Any())
+                        {
+                            errors.Add("ShippingAddress.City", Res.Get<UcommerceResources>().CityValidation);
+                        }
+
+                        break;
+                }
+            }
+
+            return errors;
         }
 
         private string GetNextStepUrl(Guid nextStepId)

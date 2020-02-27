@@ -31,6 +31,7 @@
             </template>
             <checkout-navigation v-bind:model="model"
                                  continue-label="@Html.Resource("ContinueToNextStep", "UcommerceResources")"
+                                 back-label="@Html.Resource("BackButton", "UcommerceResources")"
                                  mode="Bootstrap"
                                  :continue-fn="submit"
                                  back-link-classes="btn btn-back btn-transparent pull-left"
