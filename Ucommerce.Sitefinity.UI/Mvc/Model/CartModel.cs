@@ -41,7 +41,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
 
             PurchaseOrder basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-
             foreach (var orderLine in basket.OrderLines)
             {
                 var product = CatalogLibrary.GetProduct(orderLine.Sku);
@@ -65,6 +64,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 basketVM.OrderLines.Add(orderLineViewModel);
             }
 
+            basketVM.Discounts = basket.Discounts.Select(d => d.Description).ToList();
             basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0 ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString() : "";
             basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
@@ -99,7 +99,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                         {
                             message = string.Format("Quantity of {0} must be greater than 0", item.OrderLineId);
                             return false;
-
                         }
                     }
                 }
@@ -121,6 +120,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                 _transactionLibraryInternal.UpdateLineItemByOrderLineId(updateOrderline.OrderLineId, newQuantity);
             }
+
+            MarketingLibrary.AddVoucher(model.Voucher);
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
             var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
@@ -142,14 +143,21 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
 
             string orderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            string discountTotal = new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+            string discountTotal = basket.DiscountTotal.GetValueOrDefault() > 0 ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString() : "";
             string taxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             string subTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+            string voucher = "";
+
+            if (basket.Discounts.FirstOrDefault(d => d.Description == model.Voucher) != null)
+            {
+                voucher = model.Voucher;
+            }
 
             updatedBasket.OrderTotal = orderTotal;
             updatedBasket.DiscountTotal = discountTotal;
             updatedBasket.TaxTotal = taxTotal;
             updatedBasket.SubTotal = subTotal;
+            updatedBasket.Voucher = voucher;
 
             return updatedBasket;
         }

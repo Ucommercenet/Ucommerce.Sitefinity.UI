@@ -129,6 +129,35 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             });
         }
 
+        [HttpPost]
+        [RelativeRoute("uc/checkout/cart/add-voucher")]
+        public ActionResult AddVoucher(CartUpdateBasket updateModel)
+        {
+            var model = ResolveModel();
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            string message;
+
+            parameters.Add("submitModel", updateModel);
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
+                    JsonRequestBehavior.AllowGet);
+            }
+
+            var updatedVM = model.Update(updateModel);
+
+            return Json(new
+            {
+                updatedVM.OrderTotal,
+                updatedVM.DiscountTotal,
+                updatedVM.TaxTotal,
+                updatedVM.SubTotal,
+                updatedVM.Voucher,
+                updatedVM.OrderLines
+            });
+        }
+
         protected override void HandleUnknownAction(string actionName)
         {
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
