@@ -12,5 +12,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
         AddressRenderingViewModel GetViewModel();
         JsonResult Save(AddressSaveViewModel addressRendering);
+        Dictionary<string, string> ErrorMessage(ModelStateDictionary status);
     }
 }

@@ -542,9 +542,21 @@ ul.category-child .category-child.open {
         cursor: pointer;
     }
 
-.cb-wrap {
-    font-weight: normal;
+.sfReviewWrp {
+    padding-bottom: 12px;
 }
+.sfReviewWrp a {
+    color: #00b4c9;
+    font-size: 14px;
+}
+
+    .sfReviewWrp a, .sfReviewWrp a:visited, .sfReviewWrp a:link, .sfReviewWrp a:hover, .sfReviewWrp a:active{
+        text-decoration: none;
+    }
+
+    .cb-wrap {
+        font-weight: normal;
+    }
 
     .cb-wrap:hover {
         cursor: pointer;
@@ -647,24 +659,24 @@ ul.sfShopByFilterGroupList {
 
 
     .sfproductPrice.bottomPrice {
+        position: relative;
         bottom: 0px;
-        min-height: 210px;
     }
 
 .sfproductsList .sfproductListItem {
     vertical-align: top;
-    float: none;
+    float: left;
     list-style: none;
-    width: 30%;
+    width: 33.3333%;
     border-bottom: 1px solid #eee;
-    display: inline-block;
-    height: 100% !important;
     padding: 0px 0px 0px 10px;
     margin-bottom: 20px;
+    min-height: 360px;
 }
 
 .product-list-paging {
     margin-bottom: 20px;
+    clear: both;
 }
 
 .sfcurrenciesHorizontalList li a {
@@ -689,14 +701,13 @@ a.sflnkToggleCart .sflnkToggleCartLbl {
 }
 
 .sfproductTitle {
-    font-size: 24px !important;
-    margin-top: 20px !important;
-    margin-bottom: 10px !important;
+    font-size: 22px !important;
+    margin-top: 8px !important;
+    margin-bottom: 6px !important;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.2;
     color: #333;
-    min-height: 130px;
 }
 
 .sfproductDetailsWrp .sfproductTitle {
@@ -742,6 +753,17 @@ a.sflnkToggleCart .sflnkToggleCartLbl {
     color: #23527c;
 }
 
+.sfAddToCart {
+    position: absolute;
+    top: 0px;
+    right: 56px;
+}
+
+.sfproductsList .sfproductListItem .sfproductTmbWrp:hover img {
+    opacity: 1;
+    width: 215px;
+    height: 215px;
+}
 
 div.sfproductPrice {
     font-size: 14px;
@@ -762,9 +784,6 @@ div.sfproductPrice {
     margin-bottom: 12px;
 }
 
-.sfproductPrice.bottomPrice input {
-    margin-top: 12px;
-}
 
 label[for="productQuantityInput"] {
     margin-top: 12px;

@@ -1,4 +1,5 @@
 ﻿@model UCommerce.Sitefinity.UI.Mvc.ViewModels.ProductListViewModel
+@using System.Web.Mvc.Html
 @using Telerik.Sitefinity.Frontend.Mvc.Helpers
 @using Telerik.Sitefinity.Services
 @using UCommerce.Sitefinity.UI.Mvc.ViewModels
@@ -15,8 +16,9 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
     @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 }
-
 <div data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
+    <input type="hidden" ref="addToBasket" value="@Html.Resource("AddToBasket", "UcommerceResources")"/>
+    <input type="hidden" ref="notAddToBasket" value="@Html.Resource("NotAddToBasket", "UcommerceResources")"/>
     <div>
         <em>@Model.TotalCount @Html.Resource("Products", "UcommerceResources")</em>
     </div>
@@ -25,25 +27,25 @@
     {
         @Html.Action("Index", "ContentPager", new
         {
-           currentPage = Model.CurrentPage,
-           totalPagesCount = Model.TotalPagesCount.Value,
-           redirectUrlTemplate = Model.PagingUrlTemplate
+            currentPage = Model.CurrentPage,
+            totalPagesCount = Model.TotalPagesCount.Value,
+            redirectUrlTemplate = Model.PagingUrlTemplate
         })
     }
 
     @foreach (var route in Model.Routes)
     {
-        <input type="hidden" class="@route.Key" value="@route.Value" />
+        <input type="hidden" class="@route.Key" value="@route.Value"/>
     }
     <ul>
         @foreach (var product in Model.Products)
         {
             <li>
-                <a title="@Html.HtmlSanitize((string)product.DisplayName)" href="@product.ProductUrl">
-                    <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@Html.HtmlSanitize((string)product.DisplayName)">
+                <a title="@Html.HtmlSanitize((string) product.DisplayName)" href="@product.ProductUrl">
+                    <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@Html.HtmlSanitize((string) product.DisplayName)">
                 </a>
 
-                <a href="@product.ProductUrl">@Html.HtmlSanitize((string)product.DisplayName)</a>
+                <a href="@product.ProductUrl">@Html.HtmlSanitize((string) product.DisplayName)</a>
 
                 <div>
                     <span>@product.Price</span>
@@ -56,7 +58,9 @@
 
                 <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">
                 </add-to-basket>
-
+                <div>
+                    <a class="text-info" href="#">Write a review</a>
+                </div>
             </li>
         }
     </ul>
@@ -94,4 +98,3 @@
         <span v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
     </div>
 </script>
-

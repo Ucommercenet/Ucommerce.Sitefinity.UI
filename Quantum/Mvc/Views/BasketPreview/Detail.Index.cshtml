@@ -32,9 +32,9 @@
                         <span class="address-line"><text>att. </text> {{ model.BillingAddressDTO.Attention }}</span>
                     </template>
                     <br>
-                    <span class="address-line"><abbr title="Phone">P:</abbr>{{ model.BillingAddressDTO.PhoneNumber }}</span><br>
-                    <span class="address-line"><abbr title="Mobile">M:</abbr>{{ model.BillingAddressDTO.MobilePhoneNumber }} </span><br>
-                    <span class="address-line"><abbr title="Email">E:</abbr><a :href="'mailto:' + model.BillingAddressDTO.EmailAddress">{{ model.BillingAddressDTO.EmailAddress }}</a></span>
+                    <span class="address-line"><abbr title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.BillingAddressDTO.PhoneNumber }}</span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.BillingAddressDTO.MobilePhoneNumber }} </span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a :href="'mailto:' + model.BillingAddressDTO.EmailAddress">{{ model.BillingAddressDTO.EmailAddress }}</a></span>
                 </address>
             </div>
             <div class="col-md-6">
@@ -50,20 +50,20 @@
                     <span class="address-line">{{ model.ShipmentAddressDTO.Line1 }}</span><br>
                     <span class="address-line">{{ model.ShipmentAddressDTO.PostalCode }} {{ model.ShipmentAddressDTO.City }}</span><br>
                     <span class="address-line">{{ model.ShipmentAddressDTO.CountryName }}</span><br>
-                    <span class="address-line"><abbr title="Phone">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
-                    <span class="address-line"><abbr title="Mobile">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
-                    <span class="address-line"><abbr title="Email">E:</abbr><a href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
+                    <span class="address-line"><abbr title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
                 </address>
             </div>
         </div>
         <div class="table-wrapper">
             <div class="table-row t-heading">
-                <div class="span2 table-cell">Item no. </div>
-                <div class="span6 table-cell">Description</div>
-                <div class="span2 table-cell money">Price</div>
-                <div class="span2 table-cell money">VAT</div>
-                <div class="span2 table-cell number">Quantity</div>
-                <div class="span2 table-cell money">Total</div>
+                <div class="span2 table-cell">@Html.Resource("ItemNo", "UcommerceResources") </div>
+                <div class="span6 table-cell">@Html.Resource("Description", "UcommerceResources")</div>
+                <div class="span2 table-cell money">@Html.Resource("Price", "UcommerceResources")</div>
+                <div class="span2 table-cell money">@Html.Resource("VAT", "UcommerceResources")</div>
+                <div class="span2 table-cell number">@Html.Resource("Quantity", "UcommerceResources")</div>
+                <div class="span2 table-cell money">@Html.Resource("Total", "UcommerceResources")</div>
             </div>
             <div class="table-body">
                 <template v-for="lineItem in model.OrderLines">
@@ -89,7 +89,7 @@
                 <div class="table-row">
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                    <div class="table-cell">Sub total: </div>
+                    <div class="table-cell">@Html.Resource("SubTotal", "UcommerceResources"): </div>
                     <div class="table-cell empty-cell">&nbsp;</div>
                     <div class="table-cell empty-cell">&nbsp;</div>
                     <div class="table-cell money">
@@ -99,7 +99,7 @@
                 <div class="table-row">
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                    <div class="table-cell">VAT: </div>
+                    <div class="table-cell">@Html.Resource("VAT", "UcommerceResources"): </div>
                     <div class="table-cell empty-cell">&nbsp;</div>
                     <div class="table-cell empty-cell">&nbsp;</div>
                     <div class="table-cell money">
@@ -109,7 +109,7 @@
                 <div v-if="model.DiscountAmount != 0" class="table-row">
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                    <div class="table-cell">Order discounts: </div>
+                    <div class="table-cell">@Html.Resource("OrderDiscount", "UcommerceResources"): </div>
                     <div class="table-cell empty-cell">&nbsp;</div>
                     <div class="table-cell empty-cell">&nbsp;</div>
                     <div class="table-cell money">
@@ -120,7 +120,7 @@
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                     <div class="table-cell">
-                        Shipping
+                        @Html.Resource("Shipping", "UcommerceResources")
                         <span> (via {{ model.ShipmentName }})</span>
                     </div>
                     <div class="table-cell empty-cell">&nbsp;</div>
@@ -131,7 +131,7 @@
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                     <div class="table-cell">
-                        Payment
+                        @Html.Resource("Payment", "UcommerceResources")
                         <span> ({{ model.PaymentName }})</span>
                     </div>
                     <div class="table-cell empty-cell">&nbsp;</div>
@@ -141,7 +141,7 @@
                 <div class="table-row">
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                     <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                    <div class="table-cell">Order total: </div>
+                    <div class="table-cell">@Html.Resource("OrderTotal", "UcommerceResources"): </div>
                     <div class="table-cell empty-cell">&nbsp;</div>
                     <div class="table-cell empty-cell">&nbsp;</div>
                     <div class="table-cell money">{{ model.OrderTotal }}</div>
@@ -149,9 +149,10 @@
             </div>
         </div>
         <checkout-navigation v-bind:model="model" 
-                             continue-label="Complete Order" 
+                             continue-label="@Html.Resource("CompleteOrder", "UcommerceResources")" 
+                             back-label="@Html.Resource("BackButton", "UcommerceResources")"
                              mode="Bootstrap" 
-                             back-link-classes="btn btn-next btn-transparent pull-left" 
+                             back-link-classes="btn btn-back btn-transparent pull-left" 
                              continue-btn-classes="btn btn-success btn-next btn-complete pull-right"
                              :continue-fn="continueFn" 
                              classes="row control-group multistep-btn-a section-margin"></checkout-navigation>

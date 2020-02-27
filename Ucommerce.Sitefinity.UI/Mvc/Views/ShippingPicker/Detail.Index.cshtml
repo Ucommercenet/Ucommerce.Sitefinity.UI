@@ -30,6 +30,7 @@
             <checkout-navigation v-bind:model="model"
                                  :continue-fn="submit"
                                  continue-label="@Html.Resource("ContinueToNextStep", "UcommerceResources")"
+                                 back-label="@Html.Resource("BackButton", "UcommerceResources")"
                                  classes=""></checkout-navigation>
         </template>
         <template v-else>
