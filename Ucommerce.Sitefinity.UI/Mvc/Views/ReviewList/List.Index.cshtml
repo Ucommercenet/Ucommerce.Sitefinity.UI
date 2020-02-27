@@ -13,3 +13,15 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
+<div data-component="review-list" id="review-list" class="review-list">
+    <template v-if="Reviews">
+        <template v-for="review of Reviews">
+            <div style="margin: 20px;">
+                <p>{{ review.Name }}</p>
+                <p>{{ review.Email }}</p>
+                <p>{{ review.Comments }}</p>
+                <p>{{ review.Rating }}</p>
+            </div>
+        </template>
+    </template>
+</div>
