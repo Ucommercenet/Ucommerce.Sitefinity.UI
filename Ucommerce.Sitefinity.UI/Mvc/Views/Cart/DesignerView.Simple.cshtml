@@ -1,18 +1,24 @@
 ﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers
 
-<form name="cartProperties">
-    <label for="image-field" class="m-top-sm">Next Step Page</label>
-    <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
-                      sf-provider="properties.ProviderName.PropertyValue"
-                      sf-selected-item-id="properties.NextStepId.PropertyValue"
-                      sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+    <form name="cartProperties">
+        <label for="image-field" class="m-top-sm">Next Step Page</label>
+        <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
+                          sf-provider="properties.ProviderName.PropertyValue"
+                          sf-selected-item-id="properties.NextStepId.PropertyValue"
+                          sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
 
-    <label for="image-field" class="m-top-sm">Product Details Page</label>
-    <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
-                      sf-provider="properties.ProviderName.PropertyValue"
-                      sf-selected-item-id="properties.ProductDetailsPageId.PropertyValue"
-                      sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
-</form>
+        <label for="image-field" class="m-top-sm">Product Details Page</label>
+        <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
+                          sf-provider="properties.ProviderName.PropertyValue"
+                          sf-selected-item-id="properties.ProductDetailsPageId.PropertyValue"
+                          sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+
+        <label for="image-field" class="m-top-sm">Redirect Page</label>
+        <sf-list-selector sf-page-selector sf-multiselect="false" sf-sortable="true"
+                          sf-provider="properties.ProviderName.PropertyValue"
+                          sf-selected-item-id="properties.RedirectPageId.PropertyValue"
+                          sf-selected-item="properties.SelectedItem.PropertyValue"></sf-list-selector>
+    </form>
 
 
 <div class="form-group">
