@@ -17,9 +17,9 @@
     <div v-if="model" class="pull-xs-right navbar-collapse js-mini-basket">
         <ul class="nav navbar-nav">
             <li>
-                <div>
+                <div class="p-relative">
                     <a class="shopping-cart" :href="model.CartPageUrl">
-                        <i class="fa fa-shopping-cart margin-right-small" aria-hidden="true"></i><span>{{ model.NumberOfItems }}</span>
+                        <i class="fa fa-shopping-cart margin-right-small" aria-hidden="true"></i><span class="n-items" v-if="model.NumberOfItems > 0">{{ model.NumberOfItems }}</span>
                     </a>
                 </div>
             </li>
