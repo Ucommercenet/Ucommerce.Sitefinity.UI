@@ -759,6 +759,12 @@ a.sflnkToggleCart .sflnkToggleCartLbl {
     right: 56px;
 }
 
+.sfproductsList .sfproductListItem .sfproductTmbWrp:hover img {
+    opacity: 1;
+    width: 215px;
+    height: 215px;
+}
+
 div.sfproductPrice {
     font-size: 14px;
     line-height: 1.428571429;
