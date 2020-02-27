@@ -14,6 +14,12 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
         }
 
+        [ResourceEntry("UCommerceResource", Value = "UCommerce Resources", Description = "UCommerce Resources", LastModified = "2020/02/21")]
+        public string UCommerceResource
+        {
+            get { return this["UCommerceResource"]; }
+        }
+
         [ResourceEntry("WriteReview", Value = "Write a review", Description = "Write a review", LastModified = "2020/02/21")]
         public string WriteReview
         {
