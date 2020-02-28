@@ -12,6 +12,9 @@ if (process.env.NODE_ENV === "development") {
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
+import moment from 'moment';
+window.moment = moment;
+
 import "./js/widgets/facet-filter";
 import "./js/widgets/category-navigation";
 import "./js/widgets/products";

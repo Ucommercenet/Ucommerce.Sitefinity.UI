@@ -52,7 +52,6 @@ function initReviewForm(rootElement) {
         },
         created: function () {
             this.setRating(0);
-            console.log(this);
         }
     });
 }

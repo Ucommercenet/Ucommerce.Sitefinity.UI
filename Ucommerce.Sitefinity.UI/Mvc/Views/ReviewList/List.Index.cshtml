@@ -6,6 +6,7 @@
 }
 
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/products-review.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -15,12 +16,14 @@
 
 <div data-component="review-list" id="review-list" class="review-list">
     <template v-if="Reviews">
-        <template v-for="review of Reviews">
-            <div style="margin: 20px;">
-                <p>{{ review.Name }}</p>
-                <p>{{ review.Email }}</p>
-                <p>{{ review.Comments }}</p>
-                <p>{{ review.Rating }}</p>
+        <template v-for="(review, index) of Reviews">
+            <div class="review-list-inner">
+                <div>
+                <span>{{ index }}.</span>
+                <span>{{ review.Name }}</span> | <span><i>{{ formatDate(review.CreatedOn) }}</i></span>
+                    </div>
+                <show-rating :rating="review.Rating"></show-rating>
+                <div>{{ review.Comments }}</div>
             </div>
         </template>
     </template>
