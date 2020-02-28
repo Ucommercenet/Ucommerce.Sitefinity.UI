@@ -7,7 +7,41 @@ function initReviewList(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
         data: {
-            Reviews: null
+            Reviews: null,
+
+        },
+        computed: {
+            count: function () {
+                return this.Reviews.length;
+            },
+            displayRating: function () {
+                var reviewSum = 0;
+                var count = this.Reviews.length;
+
+                if (!count) {
+                    return;
+                }
+
+                for (var review of this.Reviews) {
+                    reviewSum += this.getRating(review.Rating);
+                }
+
+                return (reviewSum / count).toFixed(2);
+            },
+            averageRating: function () {
+                var reviewSum = 0;
+                var count = this.Reviews.length;
+
+                if (!count) {
+                    return;
+                }
+
+                for (var review of this.Reviews) {
+                    reviewSum += this.getRating(review.Rating);
+                }
+
+                return ((reviewSum / count) * 20);
+            },
         },
         components: {
             showRating
@@ -42,6 +76,13 @@ function initReviewList(rootElement) {
                 }
 
                 return dateLabel;
+            },
+            getRating: function (value) {
+                if (!value) {
+                    return null;
+                }
+
+                return Math.round(Math.abs(value) / 20);
             }
         },
         created: function () {

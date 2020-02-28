@@ -25,7 +25,7 @@
                     return;
                 }
 
-                var rating = Math.round(Math.abs(value) / 20);
+                var rating = this.$root.getRating(value);
 
                 for (var i = 1; i <= 5; i++) {
                     if (i <= rating) {
