@@ -21,7 +21,7 @@
     <template v-if="model">
         <div class="row well overflow-hidden">
             <div class="col-md-6">
-                <h3 class="heading-underline">Billing address</h3>
+                <h3 class="heading-underline">@Html.Resource("BillingAddress", "UcommerceResources")</h3>
                 <br />
                 <address>
                     <span class="address-line"><strong>{{ model.BillingAddressDTO.FirstName }} {{ model.BillingAddressDTO.LastName }}</strong></span><br>
@@ -38,7 +38,7 @@
                 </address>
             </div>
             <div class="col-md-6">
-                <h3 class="heading-underline">Shipping address</h3>
+                <h3 class="heading-underline">@Html.Resource("ShippingAddress", "UcommerceResources")</h3>
                 <br />
                 <address>
                     <span class="address-line"><strong>{{ model.ShipmentAddressDTO.FirstName }} {{ model.ShipmentAddressDTO.LastName }}</strong></span><br>
