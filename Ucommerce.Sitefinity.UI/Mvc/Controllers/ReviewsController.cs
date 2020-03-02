@@ -7,7 +7,7 @@ using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uReviews_MVC", Title = "Reviews", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucReviews sfMvcIcn")]
-    public class ReviewListController : Controller, IPersonalizable
+    public class ReviewsController : Controller, IPersonalizable
     {
         public string TemplateName { get; set; } = "Index";
 
@@ -28,12 +28,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpGet]
-        [RelativeRoute("review")]
-        [RelativeRoute("{parentCategory1?}/review")]
-        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/review")]
-        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/review")]
-        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/review")]
-        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/review")]
+        [RelativeRoute("reviews")]
+        [RelativeRoute("{parentCategory1?}/reviews")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/reviews")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews")]
         public ActionResult Data()
         {
             var model = ResolveModel();
@@ -59,10 +59,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             base.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        private IReviewListModel ResolveModel()
+        private IReviewsModel ResolveModel()
         {
             var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IReviewListModel>();
+            var model = container.Resolve<IReviewsModel>();
 
             return model;
         }

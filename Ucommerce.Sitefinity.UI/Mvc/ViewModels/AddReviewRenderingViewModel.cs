@@ -2,7 +2,7 @@
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
-    public class ReviewFormRenderingViewModel
+    public class AddReviewRenderingViewModel
     {
         public string SubmitReviewUrl { get; set; }
         public Guid ProductGuid { get; set; }

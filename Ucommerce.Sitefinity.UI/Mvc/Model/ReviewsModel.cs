@@ -6,7 +6,7 @@ using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-    public class ReviewListModel : IReviewListModel
+    public class ReviewsModel : IReviewsModel
     {
         public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
@@ -20,9 +20,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        public virtual ReviewListRenderingViewModel GetReviews()
+        public virtual ReviewsRenderingViewModel GetReviews()
         {
-            var reviewVm = new ReviewListRenderingViewModel();
+            var reviewVm = new ReviewsRenderingViewModel();
 
             var currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
 

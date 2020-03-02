@@ -96,14 +96,14 @@ namespace UCommerce.Sitefinity.UI.DI
 
             container.Register(
                 Component
-                    .For<IReviewListModel>()
-                    .ImplementedBy<ReviewListModel>()
+                    .For<IReviewsModel>()
+                    .ImplementedBy<ReviewsModel>()
                     .LifestyleTransient());
 
             container.Register(
                 Component
-                    .For<IReviewFormModel>()
-                    .ImplementedBy<ReviewFormModel>()
+                    .For<IAddReviewModel>()
+                    .ImplementedBy<AddReviewModel>()
                     .LifestyleTransient());
         }
     }

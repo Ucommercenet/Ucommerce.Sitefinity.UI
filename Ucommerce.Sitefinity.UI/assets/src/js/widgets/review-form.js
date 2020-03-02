@@ -30,7 +30,7 @@ function initReviewForm(rootElement) {
                     Comments: this.comments
                 };
 
-                this.$http.post(location.href + '/submit-review', requestData).then((response) => {
+                this.$http.post(location.href + '/reviews/add', requestData).then((response) => {
                     if (response.data) {
                         var data = response.data;
                         console.log(data);

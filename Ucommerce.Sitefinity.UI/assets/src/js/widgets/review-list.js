@@ -48,7 +48,7 @@ function initReviewList(rootElement) {
         },
         methods: {
             fetchData: function () {
-                this.$http.get(location.href + '/review', {}).then((response) => {
+                this.$http.get(location.href + '/reviews', {}).then((response) => {
                     if (response.data &&
                         response.data.Status &&
                         response.data.Status == 'success' &&
