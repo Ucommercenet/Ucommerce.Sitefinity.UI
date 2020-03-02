@@ -56,7 +56,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString(),
                     Price = new Money(orderLine.Price, basket.BillingCurrency).ToString(),
                     ProductUrl = GetProductUrl(CatalogLibrary.GetProduct(orderLine.Sku), this.productDetailsPageId),
-                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), basket.BillingCurrency).ToString(),
+                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(),
+                        basket.BillingCurrency).ToString(),
                     OrderLineId = orderLine.OrderLineId,
                     ThumbnailName = imageService.GetImage(product.ThumbnailImageMediaId).Name,
                     ThumbnailUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url
@@ -66,7 +67,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             basketVM.Discounts = basket.Discounts.Select(d => d.Description).ToList();
             basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0 ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString() : "";
+            basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
+                ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString()
+                : "";
             basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.SubTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.NextStepUrl = GetNextStepUrl(nextStepId);
@@ -121,11 +124,22 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 _transactionLibraryInternal.UpdateLineItemByOrderLineId(updateOrderline.OrderLineId, newQuantity);
             }
 
-            MarketingLibrary.AddVoucher(model.Voucher);
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
             var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
 
+            if (model.Vouchers.Any())
+            {
+                if (model.IsRemove)
+                {
+                    this.RemoveVoucher(basket, model.Vouchers);
+                }
+                else
+                {
+                    this.AddVoucher(model);
+                }
+            }
+            
             CartUpdateBasketViewModel updatedBasket = new CartUpdateBasketViewModel();
 
             foreach (var orderLine in basket.OrderLines)
@@ -133,24 +147,28 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 var orderLineViewModel = new CartUpdateOrderline();
                 orderLineViewModel.OrderlineId = orderLine.OrderLineId;
                 orderLineViewModel.Quantity = orderLine.Quantity;
-                orderLineViewModel.Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString();
+                orderLineViewModel.Total =
+                    new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString();
                 orderLineViewModel.Discount = orderLine.Discount;
                 orderLineViewModel.Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString();
                 orderLineViewModel.Price = new Money(orderLine.Price, basket.BillingCurrency).ToString();
-                orderLineViewModel.PriceWithDiscount = new Money(orderLine.Price - orderLine.Discount, basket.BillingCurrency).ToString();
+                orderLineViewModel.PriceWithDiscount =
+                    new Money(orderLine.Price - orderLine.Discount, basket.BillingCurrency).ToString();
 
                 updatedBasket.OrderLines.Add(orderLineViewModel);
             }
 
             string orderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            string discountTotal = basket.DiscountTotal.GetValueOrDefault() > 0 ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString() : "";
+            string discountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
+                ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString()
+                : "";
             string taxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             string subTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             string voucher = "";
 
-            if (basket.Discounts.FirstOrDefault(d => d.Description == model.Voucher) != null)
+            if (basket.Discounts.FirstOrDefault(d => d.Description == model.Vouchers.FirstOrDefault()) != null)
             {
-                voucher = model.Voucher;
+                voucher = model.Vouchers.FirstOrDefault();
             }
 
             updatedBasket.OrderTotal = orderTotal;
@@ -160,6 +178,39 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             updatedBasket.Voucher = voucher;
 
             return updatedBasket;
+        }
+
+        public void AddVoucher(CartUpdateBasket model)
+        {
+            if (model.Vouchers.Any())
+            {
+                foreach (var modelVoucher in model.Vouchers)
+                {
+                    MarketingLibrary.AddVoucher(modelVoucher);
+                }
+            }
+
+            _transactionLibraryInternal.ExecuteBasketPipeline();
+        }
+
+        public void RemoveVoucher(PurchaseOrder basket, List<string> vouchers)
+        {
+            var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
+
+            if (vouchers.Any())
+            {
+                foreach (var voucher in vouchers)
+                {
+                    if (prop != null)
+                    {
+                        prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
+                        prop.Save();
+                    }
+                }
+            }
+
+            basket.Save();
+            _transactionLibraryInternal.ExecuteBasketPipeline();
         }
 
         private string GetNextStepUrl(Guid nextStepId)
