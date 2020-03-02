@@ -512,7 +512,7 @@
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.json" />
-    <Content Include="Mvc\Views\BasketPreview\Detail.Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\BasketPreview\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\MiniBasket\DesignerView.Simple.cshtml" />

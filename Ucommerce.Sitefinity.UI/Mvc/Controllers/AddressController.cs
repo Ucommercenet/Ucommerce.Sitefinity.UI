@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
@@ -93,10 +92,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             }
             else
             {
-                var errorList = ModelState.ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
+                var errorList = model.ErrorMessage(ModelState);
 
                 var responseDTO = new OperationStatusDTO();
                 responseDTO.Status = "failed";

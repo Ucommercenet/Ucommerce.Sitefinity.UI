@@ -32,5 +32,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public string RemoveOrderlineUrl { get; set; }
         public string NextStepUrl { get; set; }
         public string ProductDetailsPageUrl { get; set; }
+        public List<string> Discounts { get; set; }
+        public string RedirectUrl { get; set; }
     }
 }

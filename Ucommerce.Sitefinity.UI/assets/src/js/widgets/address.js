@@ -60,7 +60,7 @@ function initCart(rootElement) {
                         if (data.Status) {
                             if (fieldName) {
                                 if (data.Data.errors && data.Data.errors[fieldName].length) {
-                                    callback(false, data.Data.errors[fieldName][0]);
+                                   callback(false, data.Data.errors[fieldName]);
                                 }
                                 else {
                                     callback(true, '');
@@ -95,7 +95,7 @@ function initCart(rootElement) {
                 for (var fieldName in errors) {
                     for (var input of this.$children) {
                         if (input.inputName == fieldName) {
-                            input.errorMessage = errors[fieldName][0];
+                            input.errorMessage = errors[fieldName];
                         }
                     }
                 }
