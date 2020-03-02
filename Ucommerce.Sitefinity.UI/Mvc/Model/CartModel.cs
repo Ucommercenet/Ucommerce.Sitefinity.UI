@@ -126,21 +126,57 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
+            var updatedBasket = MapCartUpdate(model);
+
+            return updatedBasket;
+        }
+
+        public virtual CartUpdateBasketViewModel RemoveVoucher(CartUpdateBasket model)
+        {
             var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
+            var vouchers = model.Vouchers;
+            var updatedBasket = MapCartUpdate(model);
+
+            if (vouchers.Any())
+            {
+                foreach (var voucher in vouchers)
+                {
+                    if (prop != null)
+                    {
+                        updatedBasket.Vouchers.Remove(voucher);
+                        prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
+                        prop.Save();
+                    }
+                }
+            }
+
+            basket.Save();
+            _transactionLibraryInternal.ExecuteBasketPipeline();
+
+            return updatedBasket;
+        }
+
+        public virtual CartUpdateBasketViewModel AddVoucher(CartUpdateBasket model)
+        {
+            var updatedBasket = MapCartUpdate(model);
 
             if (model.Vouchers.Any())
             {
-                if (model.IsRemove)
+                foreach (var modelVoucher in model.Vouchers)
                 {
-                    this.RemoveVoucher(basket, model.Vouchers);
-                }
-                else
-                {
-                    this.AddVoucher(model);
+                    MarketingLibrary.AddVoucher(modelVoucher);
                 }
             }
-            
-            CartUpdateBasketViewModel updatedBasket = new CartUpdateBasketViewModel();
+
+            _transactionLibraryInternal.ExecuteBasketPipeline();
+            updatedBasket.Vouchers = model.Vouchers;
+            return updatedBasket;
+        }
+
+        private static CartUpdateBasketViewModel MapOrderline(PurchaseOrder basket)
+        {
+            var updatedBasket = new CartUpdateBasketViewModel();
 
             foreach (var orderLine in basket.OrderLines)
             {
@@ -158,59 +194,28 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 updatedBasket.OrderLines.Add(orderLineViewModel);
             }
 
+            return updatedBasket;
+        }
+
+        private CartUpdateBasketViewModel MapCartUpdate(CartUpdateBasket model)
+        {
+            var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            var updatedBasket = MapOrderline(basket);
+
             string orderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             string discountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
                 ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString()
                 : "";
             string taxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             string subTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            string voucher = "";
-
-            if (basket.Discounts.FirstOrDefault(d => d.Description == model.Vouchers.FirstOrDefault()) != null)
-            {
-                voucher = model.Vouchers.FirstOrDefault();
-            }
 
             updatedBasket.OrderTotal = orderTotal;
             updatedBasket.DiscountTotal = discountTotal;
             updatedBasket.TaxTotal = taxTotal;
             updatedBasket.SubTotal = subTotal;
-            updatedBasket.Voucher = voucher;
+            updatedBasket.Vouchers.AddRange(model.Vouchers);
 
             return updatedBasket;
-        }
-
-        public void AddVoucher(CartUpdateBasket model)
-        {
-            if (model.Vouchers.Any())
-            {
-                foreach (var modelVoucher in model.Vouchers)
-                {
-                    MarketingLibrary.AddVoucher(modelVoucher);
-                }
-            }
-
-            _transactionLibraryInternal.ExecuteBasketPipeline();
-        }
-
-        public void RemoveVoucher(PurchaseOrder basket, List<string> vouchers)
-        {
-            var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
-
-            if (vouchers.Any())
-            {
-                foreach (var voucher in vouchers)
-                {
-                    if (prop != null)
-                    {
-                        prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
-                        prop.Save();
-                    }
-                }
-            }
-
-            basket.Save();
-            _transactionLibraryInternal.ExecuteBasketPipeline();
         }
 
         private string GetNextStepUrl(Guid nextStepId)

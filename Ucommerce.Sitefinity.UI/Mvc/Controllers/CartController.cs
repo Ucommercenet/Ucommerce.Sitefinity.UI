@@ -145,7 +145,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                     JsonRequestBehavior.AllowGet);
             }
 
-            var updatedVM = model.Update(updateModel);
+            var updatedVM = model.AddVoucher(updateModel);
 
             return Json(new
             {
@@ -153,7 +153,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 updatedVM.DiscountTotal,
                 updatedVM.TaxTotal,
                 updatedVM.SubTotal,
-                updatedVM.Voucher,
+                Voucher = updatedVM.Vouchers,
                 updatedVM.OrderLines
             });
         }
@@ -174,8 +174,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                     JsonRequestBehavior.AllowGet);
             }
 
-            updateModel.IsRemove = true;
-            var updatedVM = model.Update(updateModel);
+            var updatedVM = model.RemoveVoucher(updateModel);
 
             return Json(new
             {
@@ -183,7 +182,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 updatedVM.DiscountTotal,
                 updatedVM.TaxTotal,
                 updatedVM.SubTotal,
-                updatedVM.Voucher,
+                Voucher = updatedVM.Vouchers,
                 updatedVM.OrderLines
             });
         }
