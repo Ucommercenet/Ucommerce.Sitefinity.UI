@@ -421,5 +421,47 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["YourCartIsEmpty"]; }
         }
+
+        [ResourceEntry("Review", Value = "Review", Description = "Review", LastModified = "2020/03/02")]
+        public string Review
+        {
+            get { return this["Review"]; }
+        }
+
+        [ResourceEntry("Reviews", Value = "Reviews", Description = "Reviews", LastModified = "2020/03/02")]
+        public string Reviews
+        {
+            get { return this["Reviews"]; }
+        }
+
+        [ResourceEntry("AverageRating", Value = "Average Rating", Description = "Average Rating", LastModified = "2020/03/02")]
+        public string AverageRating
+        {
+            get { return this["AverageRating"]; }
+        }
+
+        [ResourceEntry("Rating", Value = "Rating", Description = "Rating", LastModified = "2020/03/02")]
+        public string Rating
+        {
+            get { return this["Rating"]; }
+        }
+
+        [ResourceEntry("YourName", Value = "Your name", Description = "Your name", LastModified = "2020/03/02")]
+        public string YourName
+        {
+            get { return this["YourName"]; }
+        }
+
+        [ResourceEntry("EmailOptional", Value = "Email (optional)", Description = "Email (optional)", LastModified = "2020/03/02")]
+        public string EmailOptional
+        {
+            get { return this["EmailOptional"]; }
+        }
+
+        [ResourceEntry("Submit", Value = "Submit", Description = "Submit", LastModified = "2020/03/02")]
+        public string Submit
+        {
+            get { return this["Submit"]; }
+        }
     }
 }

@@ -284,7 +284,8 @@
     <Compile Include="Mvc\Controllers\CartController.cs" />
     <Compile Include="Mvc\Controllers\AddressController.cs" />
     <Compile Include="Mvc\Controllers\CategoryNavigationController.cs" />
-    <Compile Include="Mvc\Controllers\CommentsController.cs" />
+    <Compile Include="Mvc\Controllers\AddReviewController.cs" />
+    <Compile Include="Mvc\Controllers\ReviewsController.cs" />
     <Compile Include="Mvc\Controllers\ConfirmationMessageController.cs" />
     <Compile Include="Mvc\Controllers\ConfirmationEmailController.cs" />
     <Compile Include="Mvc\Controllers\FacetsFilterController.cs" />
@@ -299,13 +300,15 @@
     <Compile Include="Mvc\Infrastructure\WindsorControllerFactory.cs" />
     <Compile Include="Mvc\Model\AddressModel.cs" />
     <Compile Include="Mvc\Model\BasketPreviewModel.cs" />
-    <Compile Include="Mvc\Model\CommentsModel.cs" />
+    <Compile Include="Mvc\Model\Contracts\IAddReviewModel.cs" />
+    <Compile Include="Mvc\Model\AddReviewModel.cs" />
+    <Compile Include="Mvc\Model\ReviewsModel.cs" />
     <Compile Include="Mvc\Model\Contracts\IBasketPreviewModel.cs" />
     <Compile Include="Mvc\Model\CartModel.cs" />
     <Compile Include="Mvc\Model\CategoryModel.cs" />
     <Compile Include="Mvc\Model\ConfirmationEmailModel.cs" />
     <Compile Include="Mvc\Model\ConfirmationMessageModel.cs" />
-    <Compile Include="Mvc\Model\Contracts\ICommentsModel.cs" />
+    <Compile Include="Mvc\Model\Contracts\IReviewsModel.cs" />
     <Compile Include="Mvc\Model\FacetsFilterModel.cs" />
     <Compile Include="Mvc\Model\Contracts\ICartModel.cs" />
     <Compile Include="Mvc\Model\Contracts\IAddressModel.cs" />
@@ -325,6 +328,7 @@
     <Compile Include="Mvc\ViewModels\AddressRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddressSave.cs" />
     <Compile Include="Mvc\ViewModels\AddressSaveViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\AddReviewDTO.cs" />
     <Compile Include="Mvc\ViewModels\BasketPreviewViewModel.cs" />
     <Compile Include="Mvc\ViewModels\OrderOverviewViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CartUpdateBasket.cs" />
@@ -347,6 +351,10 @@
     <Compile Include="Mvc\ViewModels\ProductDetailViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductListViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductDTO.cs" />
+    <Compile Include="Mvc\ViewModels\Review.cs" />
+    <Compile Include="Mvc\ViewModels\AddReviewRenderingViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\AddReviewSaveViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\ReviewsRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ShippingPickerViewModel.cs" />
     <Compile Include="Mvc\ViewModels\UpdateOrderLine.cs" />
     <Compile Include="Mvc\ViewModels\VariantTypeViewModel.cs" />
@@ -497,7 +505,9 @@
     <EmbeddedResource Include="Mvc\Views\Cart\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Cart\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\Cart\Detail.Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\Address\Detail.Index.cshtml" />
+    <EmbeddedResource Include="assets\src\js\widgets\review-form.js" />
+    <EmbeddedResource Include="assets\src\js\widgets\review-list.js" />
+    <Content Include="Mvc\Views\Address\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Address\DesignerView.Simple.json" />
     <EmbeddedResource Include="Mvc\Views\BasketPreview\DesignerView.Simple.cshtml" />
@@ -553,7 +563,8 @@
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
     <None Include="assets\src\js\components\checkout-navigation.vue" />
     <None Include="assets\src\js\components\input-field.vue" />
-    <EmbeddedResource Include="Mvc\Views\Comments\Detail.Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\Reviews\List.Index.cshtml" />
+    <EmbeddedResource Include="Mvc\Views\AddReview\Detail.Index.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />
     <None Include="node_modules\%40babel\cli\package.json" />
     <None Include="node_modules\%40babel\cli\README.md" />
