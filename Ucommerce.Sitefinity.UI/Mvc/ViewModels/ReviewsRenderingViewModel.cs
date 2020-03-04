@@ -2,11 +2,11 @@
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
-    public class ReviewListRenderingViewModel
+    public class ReviewsRenderingViewModel
     {
         public List<Review> Reviews { get; set; }
 
-        public ReviewListRenderingViewModel()
+        public ReviewsRenderingViewModel()
         {
             Reviews = new List<Review>();
         }

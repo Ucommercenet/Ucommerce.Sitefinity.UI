@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
@@ -66,11 +67,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 {
                     var option = new SelectListItem();
                     decimal feePercent = availablePaymentMethod.FeePercent;
+                    var localizedPaymentMethod = availablePaymentMethod.PaymentMethodDescriptions.FirstOrDefault(s =>
+                        s.CultureCode.Equals(CultureInfo.CurrentCulture.ToString()));
                     var fee = availablePaymentMethod.GetFeeForPriceGroup(priceGroup);
                     var formattedFee = new Money(fee == null ? 0 : fee.Fee, purchaseOrder.BillingCurrency);
 
-                    option.Text = String.Format(" {0} ({1} + {2}%)", availablePaymentMethod.Name, formattedFee,
-                        feePercent.ToString("0.00"));
+                    if (localizedPaymentMethod != null)
+                        option.Text = String.Format(" {0} ({1} + {2}%)", localizedPaymentMethod.DisplayName,
+                            formattedFee,
+                            feePercent.ToString("0.00"));
                     option.Value = availablePaymentMethod.PaymentMethodId.ToString();
                     option.Selected = availablePaymentMethod.PaymentMethodId ==
                                       paymentPickerViewModel.SelectedPaymentMethodId;

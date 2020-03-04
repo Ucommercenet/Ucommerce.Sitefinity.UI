@@ -2,7 +2,7 @@
     <div v-if="model" :class="classes">
         <div :class="backWrapperClasses">
             <template v-if="showBackButton">
-                <a :href="backUrl" :class="backLinkClasses">Back</a>
+                <a :href="backUrl" :class="backLinkClasses">{{ backLabel }}</a>
             </template>
         </div>
         <div :class="continueWrapperClasses">
@@ -26,6 +26,10 @@
             continueLabel: {
                 type: String,
                 default: 'Continue'
+            },
+            backLabel: {
+                type: String,
+                default: 'Back'
             },
             classes: {
                 type: String,
@@ -78,7 +82,7 @@
             },
             backWrapperClasses: function () {
                 if (this.showBackButton && (this.mode == 'Bootstrap' || this.mode == 'Bootstrap4')) {
-                    return 'col-md-6 padding-0';
+                    return 'col-md-6';
                 }
                 else {
                     return '';
@@ -87,26 +91,14 @@
             continueWrapperClasses: function () {
                 if (this.mode == 'Bootstrap' || this.mode == 'Bootstrap4') {
                     if (this.showContinueButton && this.showBackButton) {
-                        return 'col-md-6 padding-0';
+                        return 'col-md-6';
                     }
                     else if (this.showContinueButton) {
-                        return 'col-md-12 padding-0';
+                        return 'col-md-12 clear p-0';
                     }
                 }
                 else {
                     return '';
-                }
-            },
-            backLinkClasses: function () {
-                switch (this.mode) {
-                    case 'Bootstrap':
-                        return 'btn btn-next btn-transparent pull-left';
-
-                    case 'Bootstrap4':
-                        return '';
-
-                    default:
-                        return '';
                 }
             }
         },

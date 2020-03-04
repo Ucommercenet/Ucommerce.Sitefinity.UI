@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
+﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     /// <summary>
     /// ViewModel class used for visualizing the information assocaited with an item in an order.
@@ -22,5 +16,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public string ProductUrl { get; set; }
         public string Price { get; set; }
         public string PriceWithDiscount { get; set; }
+        public string ThumbnailUrl { get; set; }
+        public string ThumbnailName { get; set; }
     }
 }

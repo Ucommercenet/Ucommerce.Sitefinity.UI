@@ -7,16 +7,16 @@ using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uReviewForm_MVC", Title = "Review Form",
+    [ControllerToolboxItem(Name = "uAddReview_MVC", Title = "Add Review",
         SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
-        CssClass = "ucReviewForm sfMvcIcn")]
-    public class ReviewFormController : Controller, IPersonalizable
+        CssClass = "ucAddReview sfMvcIcn")]
+    public class AddReviewController : Controller, IPersonalizable
     {
         public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
         {
-            var viewModel = new ReviewFormRenderingViewModel();
+            var viewModel = new AddReviewRenderingViewModel();
             var model = ResolveModel();
             string message;
             var parameters = new System.Collections.Generic.Dictionary<string, object>();
@@ -32,13 +32,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpPost]
-        [RelativeRoute("submit-review")]
-        [RelativeRoute("{parentCategory1?}/submit-review")]
-        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/submit-review")]
-        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/submit-review")]
-        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/submit-review")]
-        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/submit-review")]
-        public ActionResult SubmitReview(ReviewFormSaveViewModel reviewModel)
+        [RelativeRoute("reviews/add")]
+        [RelativeRoute("{parentCategory1?}/reviews/add")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/reviews/add")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/add")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/add")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/add")]
+        public ActionResult SubmitReview(AddReviewSaveViewModel reviewModel)
         {
             var model = ResolveModel();
             var parameters = new System.Collections.Generic.Dictionary<string, object>();
@@ -54,16 +54,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             var viewModel = model.Add(reviewModel);
 
-            return Json(
-                new
-                {
-                    viewModel.Rating,
-                    viewModel.ReviewHeadline,
-                    viewModel.CreatedBy,
-                    CreatedOn = viewModel.CreatedOn.ToString("MMM dd, yyyy"),
-                    CreatedOnForMeta = viewModel.CreatedOn.ToString("yyyy-MM-dd"), 
-                    Comments = viewModel.ReviewText
-                }, JsonRequestBehavior.AllowGet);
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
         protected override void HandleUnknownAction(string actionName)
@@ -71,10 +62,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
-        private IReviewFormModel ResolveModel()
+        private IAddReviewModel ResolveModel()
         {
             var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IReviewFormModel>();
+            var model = container.Resolve<IAddReviewModel>();
 
             return model;
         }

@@ -8,13 +8,13 @@ using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-    public class ReviewFormModel : IReviewFormModel
+    public class AddReviewModel : IAddReviewModel
     {
         private readonly IRepository<ProductReviewStatus> _productReviewStatusRepository;
         private readonly IOrderContext _orderContext;
         private readonly IPipeline<ProductReview> _productReviewPipeline;
 
-        public ReviewFormModel()
+        public AddReviewModel()
         {
             _productReviewStatusRepository = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IRepository<ProductReviewStatus>>();
             _orderContext = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IOrderContext>();
@@ -32,7 +32,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        public virtual ProductReview Add(ReviewFormSaveViewModel viewModel)
+        public virtual AddReviewDTO Add(AddReviewSaveViewModel viewModel)
         {
             var product = SiteContext.Current.CatalogContext.CurrentProduct;
             var request = System.Web.HttpContext.Current.Request;
@@ -76,11 +76,21 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             review.ReviewText = reviewText;
             review.Ip = request.UserHostName;
 
+            var reviewDTO = new AddReviewDTO
+            {
+                Rating = rating,
+                Comments = reviewText,
+                ReviewHeadline = reviewHeadline,
+                CreatedBy = review.CreatedBy,
+                CreatedOn = review.CreatedOn.ToString("MMM dd, yyyy"),
+                CreatedOnForMeta = review.CreatedOn.ToString("yyyy-MM-dd")
+            };
+
             product.AddProductReview(review);
 
             _productReviewPipeline.Execute(review);
 
-            return review;
+            return reviewDTO;
         }
     }
 }

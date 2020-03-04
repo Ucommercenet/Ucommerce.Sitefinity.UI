@@ -18,32 +18,38 @@
     <template v-if="Reviews">
 
         <div id="" class="sfcommentsThreadRatingWrp sfcommentsThreadRatingFull sfRatingReadOnly">
-            <span class="sfRatingLabel">Average rating:</span>
+            <span class="sfRatingLabel">@Html.Resource("AverageRating", "UcommerceResources"):</span>
             <show-rating :rating="averageRating"></show-rating>
-            <span class="sfRatingAbsolute" itemprop="ratingValue">({{ displayRating }})</span><a class="sfRatingReviewCount" itemprop="reviewCount">
+            <span class="sfRatingAbsolute" itemprop="ratingValue">({{ displayRating }})</span>
+            <a class="sfRatingReviewCount" itemprop="reviewCount">
                 {{ count }}
                 <template v-if="count > 1">
-                    Reviews
+                    @Html.Resource("Reviews", "UcommerceResources")
                 </template>
                 <template v-else>
-                    Review
+                    @Html.Resource("Review", "UcommerceResources")
                 </template>
             </a>
         </div>
 
-        <h2>{{ count }}
-        <template v-if="count > 1">
-            Reviews
-        </template>
-        <template v-else>
-            Review
-        </template> </h2>
+        <h2>
+            {{ count }}
+            <template v-if="count > 1">
+                @Html.Resource("Reviews", "UcommerceResources")
+            </template>
+            <template v-else>
+                @Html.Resource("Review", "UcommerceResources")
+            </template>
+        </h2>
         <template v-for="(review, index) of Reviews">
             <div class="review-list-inner">
                 <div>
                     <span>{{ index }}.</span>
-                    <img class="sfcommentAuthorAvatar" src="/assets/dist/images/default_user.png" />
-                    <span>{{ review.Name }}</span> | <span><i>{{ formatDate(review.CreatedOn) }}</i></span>
+                    <img class="sfcommentAuthorAvatar" src="/assets/dist/images/default_user.png"/>
+                    <span>{{ review.Name }}</span> |
+                    <span>
+                        <i>{{ formatDate(review.CreatedOn) }}</i>
+                    </span>
                 </div>
                 <show-rating :rating="review.Rating"></show-rating>
                 <div>{{ review.Comments }}</div>

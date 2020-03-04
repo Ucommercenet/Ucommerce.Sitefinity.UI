@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using UCommerce.EntitiesV2;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model.Contracts
 {
-    public interface IReviewFormModel
+    public interface IAddReviewModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
-        ProductReview Add(ReviewFormSaveViewModel viewModel);
+        AddReviewDTO Add(AddReviewSaveViewModel viewModel);
     }
 }
