@@ -87,6 +87,7 @@ function initCart(rootElement) {
 
                         if (data.OrderLines.length == 0) {
                             model.OrderLines = [];
+                            store.commit('update');
                         } else {
                             // TODO: Set mapping fields in ViewModel
                             var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal'];
@@ -140,9 +141,9 @@ function initCart(rootElement) {
 
                             model.OrderLines = orderLineArray;
 
-                            if (response.data.Voucher) {
+                            if (response.data.Voucher && response.data.Voucher.length) {
                                 var vouchers = new Set(model.Discounts);
-                                vouchers.add(response.data.Voucher);
+                                vouchers.add(response.data.Voucher[0]);
                                 model.Discounts = vouchers;
                                 model.Voucher = null;
                             }
@@ -162,7 +163,7 @@ function initCart(rootElement) {
                         var data = response.data;
 
                         // TODO: Set mapping fields in ViewModel
-                        var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal', "Voucher"];
+                        var updatedFields = ['SubTotal', 'TaxTotal', 'DiscountTotal', 'OrderTotal'];
 
                         for (var field of updatedFields) {
                             model[field] = data[field];
@@ -172,7 +173,7 @@ function initCart(rootElement) {
 
                         // generate new set without the removed item
                         for (var item of model.Discounts) {
-                            if (item.Discounts != vouchersTitle) {
+                            if (item != vouchersTitle) {
                                 updatedDiscounts.push(item);
                             }
                         }
@@ -198,6 +199,8 @@ function initCart(rootElement) {
                     response.data.Data.data) {
 
                     this.model = response.data.Data.data;
+
+                    console.log(this);
 
                     if (this.model.Discounts.length) {
                         this.hasVoucher = true;

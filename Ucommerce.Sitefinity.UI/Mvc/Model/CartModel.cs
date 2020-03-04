@@ -65,7 +65,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 basketVM.OrderLines.Add(orderLineViewModel);
             }
 
-            basketVM.Discounts = basket.Discounts.Select(d => d.Description).ToList();
+            this.GetDiscounts(basketVM, basket);
             basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
             basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
                 ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString()
@@ -78,6 +78,24 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
 
             return basketVM;
+        }
+
+        private void GetDiscounts(CartRenderingViewModel basketVM, PurchaseOrder basket)
+        {
+            foreach (var item in basket.Discounts)
+            {
+                if (!string.IsNullOrWhiteSpace(item.Description))
+                {
+                    if (item.Description.Contains(","))
+                    {
+                        basketVM.Discounts = item.Description.Split(',').ToList();
+                    }
+                    else
+                    {
+                        basketVM.Discounts.Add(item.Description);
+                    }
+                }
+            }
         }
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
@@ -136,7 +154,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
             var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
             var vouchers = model.Vouchers;
-            var updatedBasket = MapCartUpdate(model);
 
             if (vouchers.Any())
             {
@@ -144,7 +161,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 {
                     if (prop != null)
                     {
-                        updatedBasket.Vouchers.Remove(voucher);
                         prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
                         prop.Save();
                     }
@@ -154,13 +170,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             basket.Save();
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
+            var updatedBasket = MapCartUpdate(model);
+            updatedBasket.Vouchers.Except(vouchers).ToList();
+
             return updatedBasket;
         }
 
         public virtual CartUpdateBasketViewModel AddVoucher(CartUpdateBasket model)
         {
-            var updatedBasket = MapCartUpdate(model);
-
             if (model.Vouchers.Any())
             {
                 foreach (var modelVoucher in model.Vouchers)
@@ -170,7 +187,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
 
             _transactionLibraryInternal.ExecuteBasketPipeline();
+            var updatedBasket = MapCartUpdate(model);
             updatedBasket.Vouchers = model.Vouchers;
+
             return updatedBasket;
         }
 
