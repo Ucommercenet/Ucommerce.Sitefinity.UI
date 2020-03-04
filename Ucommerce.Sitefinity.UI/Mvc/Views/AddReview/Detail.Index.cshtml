@@ -17,8 +17,10 @@
     <h2 class="sfcommentsTitle">
         @Html.Resource("WriteReview", "UcommerceResources")
     </h2>
-    <div class="review-textarea-wrapper">
-        <textarea v-model="comments"></textarea>
+    <div class="review-form-inner">
+        <div class="review-textarea-wrapper">
+            <textarea v-model="comments"></textarea>
+        </div>
     </div>
     <div class="review-form-inner">
         <span class="sfRatingLabel">@Html.Resource("Rating", "UcommerceResources"):</span>
