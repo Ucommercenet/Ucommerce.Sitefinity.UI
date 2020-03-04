@@ -33,6 +33,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 Title = review.ReviewHeadline,
                 CreatedOn = review.CreatedOn,
                 Comments = review.ReviewText,
+                Ip = review.Ip,
                 Rating = review.Rating
             }).ToList();
 
