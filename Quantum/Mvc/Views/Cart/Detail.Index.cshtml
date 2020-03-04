@@ -19,7 +19,7 @@
         <h1> @Html.Resource("ShoppingCart", "UcommerceResources")</h1>
     </hgroup>
     <div class="sfProductsInCart">
-        23&nbsp;items
+        {{ model.OrderLines.length }}&nbsp;items
     </div>
     <template v-if="model">
         <template v-if="model.OrderLines.length == 0">

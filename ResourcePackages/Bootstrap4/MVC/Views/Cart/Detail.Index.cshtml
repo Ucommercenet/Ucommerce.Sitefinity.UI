@@ -16,6 +16,7 @@
 <div class="container-fluid my-5 pb-5" data-component="cart" id="shopping-cart">
     <hgroup>
         <h1 class="mb-4">@Html.Resource("ShoppingCart", "UcommerceResources")</h1>
+            {{ model.OrderLines.length }}&nbsp;items
     </hgroup>
     <template v-if="model">
         <template v-if="model.OrderLines.length == 0">

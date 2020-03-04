@@ -77,7 +77,7 @@
                                     <br />
 
                                     <div class="sfproductDescription">
-                                        @Model.ShortDescription
+                                        @Html.HtmlSanitize(Model.LongDescription)
                                     </div>
 
                                     <div class="sfproductInventory">

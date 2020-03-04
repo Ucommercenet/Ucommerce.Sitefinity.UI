@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div>
-                @Model.ShortDescription
+                @Html.HtmlSanitize(Model.LongDescription)
             </div>
 
             <div>
