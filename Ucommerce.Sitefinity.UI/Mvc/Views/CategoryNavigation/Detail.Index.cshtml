@@ -17,9 +17,11 @@
 }
 
 <div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
+    <input type="hidden" value="@Model.Localizations"/>
+
     <script type="application/json" data-items="true">
-        { "items" : @Html.Raw(JsonConvert.SerializeObject(Model.Categories)) }
-    </script>
+            { "items" : @Html.Raw(JsonConvert.SerializeObject(Model.Categories)) }
+        </script>
     <header>
         <div>
             <nav>
@@ -41,14 +43,18 @@
                         </currency-selector>
                     }
 
-                    <li v-on:click="toggleSearchBar()"><a href="javascript:void(0)"><span>&#128269;</span></a></li>
+                    <li v-on:click="toggleSearchBar()">
+                        <a href="javascript:void(0)">
+                            <span>&#128269;</span>
+                        </a>
+                    </li>
 
                 </ul>
             </nav>
         </div>
         @foreach (var route in Model.Routes)
         {
-            <input type="hidden" class="@route.Key" value="@route.Value" />
+            <input type="hidden" class="@route.Key" value="@route.Value"/>
         }
 
         <search :search-page-url="'@UrlPath.ResolveAbsoluteUrl(Model.SearchPageUrl)'" :product-details-page-id="'@Model.ProductDetailsPageId'" :root-id="$el.id" ref="search">
@@ -158,7 +164,7 @@
                         </li>
                     </ul>
 
-                    <a v-show="searchPageUrl !== ''" v-bind:href="searchPageHref()">Show all results</a>
+                    <a v-show="searchPageUrl !== ''" v-bind:href="searchPageHref()">@Html.Resource("ShowAllResults", "UcommerceResources")</a>
 
                 </div>
             </div>
