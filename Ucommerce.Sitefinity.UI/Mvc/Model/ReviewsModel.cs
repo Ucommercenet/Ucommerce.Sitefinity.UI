@@ -23,7 +23,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         public virtual ReviewsRenderingViewModel GetReviews()
         {
             var reviewVm = new ReviewsRenderingViewModel();
-
+            var clientIp = System.Web.HttpContext.Current.Request.UserHostName;
             var currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
 
             reviewVm.Reviews = currentProduct.ProductReviews.Select(review => new Review
@@ -33,8 +33,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 Title = review.ReviewHeadline,
                 CreatedOn = review.CreatedOn,
                 Comments = review.ReviewText,
+                Ip = review.Ip,
                 Rating = review.Rating
             }).ToList();
+            reviewVm.Ip = clientIp;
 
             return reviewVm;
         }
