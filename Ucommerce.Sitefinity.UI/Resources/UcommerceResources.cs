@@ -463,5 +463,11 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["Submit"]; }
         }
+
+        [ResourceEntry("ShowAllResults", Value = "Show all results", Description = "Show all results", LastModified = "2020/03/02")]
+        public string ShowAllResults
+        {
+            get { return this["ShowAllResults"]; }
+        }
     }
 }
