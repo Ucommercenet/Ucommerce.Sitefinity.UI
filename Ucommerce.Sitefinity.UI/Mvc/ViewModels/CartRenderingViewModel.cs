@@ -11,6 +11,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public CartRenderingViewModel()
         {
             OrderLines = new List<OrderlineViewModel>();
+            Discounts = new List<string>();
         }
 
         public IList<OrderlineViewModel> OrderLines { get; set; }

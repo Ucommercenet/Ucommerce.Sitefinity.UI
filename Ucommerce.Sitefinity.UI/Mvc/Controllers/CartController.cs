@@ -130,7 +130,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpPost]
-        [RelativeRoute("uc/checkout/cart/add-voucher")]
+        [RelativeRoute("uc/checkout/cart/vouchers/add")]
         public ActionResult AddVoucher(CartUpdateBasket updateModel)
         {
             var model = ResolveModel();
@@ -145,7 +145,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                     JsonRequestBehavior.AllowGet);
             }
 
-            var updatedVM = model.Update(updateModel);
+            var updatedVM = model.AddVoucher(updateModel);
 
             return Json(new
             {
@@ -153,7 +153,36 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 updatedVM.DiscountTotal,
                 updatedVM.TaxTotal,
                 updatedVM.SubTotal,
-                updatedVM.Voucher,
+                Voucher = updatedVM.Vouchers,
+                updatedVM.OrderLines
+            });
+        }
+
+        [HttpPost]
+        [RelativeRoute("uc/checkout/cart/vouchers/remove")]
+        public ActionResult RemoveVoucher(CartUpdateBasket updateModel)
+        {
+            var model = ResolveModel();
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            string message;
+
+            parameters.Add("submitModel", updateModel);
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
+                    JsonRequestBehavior.AllowGet);
+            }
+
+            var updatedVM = model.RemoveVoucher(updateModel);
+
+            return Json(new
+            {
+                updatedVM.OrderTotal,
+                updatedVM.DiscountTotal,
+                updatedVM.TaxTotal,
+                updatedVM.SubTotal,
+                Voucher = updatedVM.Vouchers,
                 updatedVM.OrderLines
             });
         }

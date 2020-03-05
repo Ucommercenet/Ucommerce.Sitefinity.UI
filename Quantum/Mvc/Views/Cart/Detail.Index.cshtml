@@ -18,10 +18,10 @@
     <hgroup>
         <h1> @Html.Resource("ShoppingCart", "UcommerceResources")</h1>
     </hgroup>
-    <div class="sfProductsInCart">
-        {{ model.OrderLines.length }}&nbsp;items
-    </div>
     <template v-if="model">
+        <div class="sfProductsInCart">
+            {{ model.OrderLines.length }}&nbsp;items
+        </div>
         <template v-if="model.OrderLines.length == 0">
             <div class="alert alert-info section-margin">
                 <p>@Html.Resource("YourCartIsEmpty", "UcommerceResources") <a :href="model.RedirectUrl">@Html.Resource("ReturnToStore", "UcommerceResources")</a>.</p>
@@ -124,13 +124,18 @@
                     </div>
                     <template v-if="hasVoucher">
                         <template v-for="Voucher in model.Discounts">
-                            <div class="table-row">
+                            <div class="table-row" v-if="Voucher">
                                 <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                                 <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                                 <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                                 <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                                 <div class="table-cell">@Html.Resource("DiscountCode", "UcommerceResources"):</div>
                                 <div class="table-cell">{{ Voucher }}</div>
+                                <div class="table-cell">
+                                    <button type="button" class="close" aria-label="Close" v-on:click="removeVoucher(Voucher)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
                             </div>
                         </template>
                     </template>
@@ -159,7 +164,9 @@
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
                         <div class="table-cell border-cell-0 empty-cell">&nbsp;</div>
-                        <div class="table-cell" colspan="1"><strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></div>
+                        <div class="table-cell" colspan="1">
+                            <strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong>
+                        </div>
                         <div class="table-cell money order-total">
                             {{ model.OrderTotal }}
                         </div>
@@ -180,4 +187,3 @@
         </template>
     </template>
 </div>
-
