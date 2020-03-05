@@ -1,10 +1,12 @@
 ﻿import { initializeComponent } from "../functions/init";
+import store from '../store';
 
 initializeComponent("review-form", initReviewForm);
 
 function initReviewForm(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
+        store,
         data: {
             rating: null,
             comments: '',
@@ -33,7 +35,12 @@ function initReviewForm(rootElement) {
                 this.$http.post(location.href + '/reviews/add', requestData).then((response) => {
                     if (response.data) {
                         var data = response.data;
-                        console.log(data);
+                        this.$store.commit('update');
+
+                        this.rating = null;
+                        this.comments = '';
+                        this.userName = '';
+                        this.userEmail = '';
                     }
                 });
             }

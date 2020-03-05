@@ -15,7 +15,7 @@ function initCart(rootElement) {
         computed: {
             ...mapState([
                 'updateIteration'
-            ]),
+            ])
         },
         watch: {
             updateIteration: function() {
