@@ -2,7 +2,7 @@
     <div v-if="model">
         <template v-if="type == 'text'">
             <label :class="labelClasses" :for="inputId">{{ label }}</label>
-            <input :id="inputId" :name="inputName" :type="type" :class="inputClasses"  v-model.lazy="value" @input="handleInput" @change="handleChange">
+            <input :id="inputId" :name="inputName" type="text" :class="inputClasses" v-model="value" v-on:input="handleInput" v-on:change="handleChange">
             <span :class="errorClasses">{{ errorMessage }}</span>
         </template>
     </div>

@@ -469,5 +469,17 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["ShowAllResults"]; }
         }
+
+        [ResourceEntry("ClearFilter", Value = "Clear filter", Description = "Clear Filter", LastModified = "2020/03/02")]
+        public string ClearFilter
+        {
+            get { return this["ClearFilter"]; }
+        }
+
+        [ResourceEntry("FilterProducts", Value = "Filter products", Description = "Filter Products", LastModified = "2020/03/02")]
+        public string FilterProducts
+        {
+            get { return this["FilterProducts"]; }
+        }
     }
 }
