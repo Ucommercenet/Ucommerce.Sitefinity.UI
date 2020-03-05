@@ -86,7 +86,6 @@ function initReviewList(rootElement) {
             }
         },
         created: function () {
-            console.log(this);
             this.fetchData();
         }
     });
