@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Modules.Libraries;
-using Telerik.Sitefinity.Modules.Pages;
-using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using UCommerce.Api;
@@ -71,17 +68,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         private string GetCurrentCulture()
         {
-            var actualSitemapNode = SiteMapBase.GetActualCurrentNode();
+            var actualSiteMapNode = SiteMapBase.GetActualCurrentNode();
             var localization = new Dictionary<string, string>();
-            PageManager pageMgr = PageManager.GetManager();
+            var siteMapProvider = SiteMapBase.GetCurrentProvider();
+            var currentPageSiteNode = siteMapProvider.CurrentNode as PageSiteNode;
 
-            if (actualSitemapNode != null)
+            if (actualSiteMapNode != null)
             {
-                PageNode pageNode = pageMgr.GetPageNode(actualSitemapNode.Id);
-
-                foreach (CultureInfo culture in pageNode.AvailableCultures)
+                if (currentPageSiteNode != null)
                 {
-                    localization.Add(culture.Name, pageNode.GetUrl(culture));
+                    foreach (var availableLanguage in currentPageSiteNode.AvailableLanguages)
+                    {
+                        localization.Add(availableLanguage.Name, currentPageSiteNode.GetUrl(availableLanguage));
+                    }
                 }
             }
 
