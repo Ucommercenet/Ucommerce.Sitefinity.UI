@@ -25,7 +25,7 @@
             </div>
             <a class="sfRatingReviewCount" itemprop="reviewCount">
                 {{ count }}
-                <template v-if="count > 1">
+                <template v-if="count != 1">
                     @Html.Resource("Reviews", "UcommerceResources")
                 </template>
                 <template v-else>
@@ -34,7 +34,7 @@
             </a>
         </div>
 
-        <h2>
+        <h2 v-if="count">
             {{ count }}
             <template v-if="count > 1">
                 @Html.Resource("Reviews", "UcommerceResources")
