@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using UCommerce.EntitiesV2;
+using UCommerce.EntitiesV2.Definitions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     /// <summary>
-    /// ViewModel class used for visualizing the detailed information assocaited with a product.
+    /// ViewModel class used for visualizing the detailed information associated with a product.
     /// </summary>
     public class ProductDetailViewModel
     {
         public ProductDetailViewModel()
         {
-            this.VariantTypes = new List<VariantTypeViewModel>();
-            this.Routes = new Dictionary<string, string>();
+            VariantTypes = new List<VariantTypeViewModel>();
+            Routes = new Dictionary<string, string>();
+            ProductProperties = new List<IProperty>();
         }
 
         public string DisplayName { get; set; }
@@ -59,6 +61,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 
         public Dictionary<string, string> Routes { get; set; }
 
-        public ICollection<ProductProperty> ProductProperties { get; internal set; }
+        public IList<IProperty> ProductProperties { get; set; }
     }
 }

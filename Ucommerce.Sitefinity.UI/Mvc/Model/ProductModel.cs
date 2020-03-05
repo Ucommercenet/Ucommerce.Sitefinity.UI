@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
+using System.Windows.Forms;
 using Telerik.Sitefinity;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
@@ -14,7 +16,9 @@ using UCommerce;
 using UCommerce.Api;
 using UCommerce.Content;
 using UCommerce.EntitiesV2;
+using UCommerce.EntitiesV2.Definitions;
 using UCommerce.Extensions;
+using UCommerce.Infrastructure.Globalization;
 using UCommerce.Runtime;
 using UCommerce.Search;
 
@@ -147,22 +151,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     productDetailViewModel.ProductUrl = CatalogLibrary.GetNiceUrlForProduct(currentProduct, currentCategory);
                 }
 
+                var invariantFields = currentProduct.ProductProperties;
 
-                foreach (var pv in currentProduct.Variants)
-                {
-                    foreach (var v in pv.ProductProperties)
-                    {
-                        if (v.ProductDefinitionField != null && v.ProductDefinitionField.IsVariantProperty)
-                        {
-                            if (productDetailViewModel.VariantTypes.Any(t => t.Id == v.ProductDefinitionField.Id))
-                            {
-
-                            }
-                        }
-                    }
-                }
-
-
+                var localizationContext = Infrastructure.ObjectFactory.Instance.Resolve<ILocalizationContext>();
+                
+                var fieldsForCurrentLanguage = currentProduct.GetProperties(localizationContext.CurrentCultureCode).ToList();
+                
+                productDetailViewModel.ProductProperties = invariantFields.Concat(fieldsForCurrentLanguage).ToList();
+                
+                
                 var uniqueVariants = from v in currentProduct.Variants.SelectMany(p => p.ProductProperties)
                                      where v.ProductDefinitionField.DisplayOnSite
                                      group v by v.ProductDefinitionField into g

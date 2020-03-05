@@ -38,9 +38,9 @@
     <ul>
         @foreach (var product in Model.Products)
         {
-            <li>
+           <li>
                 <a title="@Html.HtmlSanitize((string)product.DisplayName)" href="@product.ProductUrl">
-                    <img title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@Html.HtmlSanitize((string)product.DisplayName)">
+                     <img width="200" height="200" title="Top 100 Digital Agencies" src="@product.ThumbnailImageMediaUrl" alt="@Html.HtmlSanitize((string)product.DisplayName)"> 
                 </a>
 
                 <a href="@product.ProductUrl">@Html.HtmlSanitize((string)product.DisplayName)</a>
@@ -50,11 +50,15 @@
                     <p>Discount:</p>
                     <span>@product.Discount</span>
                 </div>
-
-                <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">
-                </add-to-basket>
-
+                
+                @if (product.IsSellableProduct)
+                {
+                    <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">
+                    </add-to-basket>
+                }
             </li>
+            
+            
         }
     </ul>
 

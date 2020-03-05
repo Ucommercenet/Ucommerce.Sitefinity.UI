@@ -32,8 +32,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var paymentPickerViewModel = new PaymentPickerViewModel();
 
             var basket = _transactionLibraryInternal.GetBasket().PurchaseOrder;
-            var shippingCountry = UCommerce.Api.TransactionLibrary.GetCountries().SingleOrDefault(x => x.Name == "Germany");
 
+            var shippingAddress =
+                _transactionLibraryInternal.GetShippingInformation(UCommerce.Constants.DefaultShipmentAddressName);
+            
+            var shippingCountry = shippingAddress.Country;
+            
             paymentPickerViewModel.ShippingCountry = shippingCountry.Name;
 
             var availablePaymentMethods = _transactionLibraryInternal.GetPaymentMethods(shippingCountry);

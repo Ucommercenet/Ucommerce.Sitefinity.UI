@@ -51,7 +51,7 @@
                             this.showAddToBasketMessage = true;
 
 							var isEmpty = !(response.data.NumberOfItemsInBasket > 0);
-                            var miniBasketRefresh = { NumberOfItems: response.data.NumberOfItemsInBasket, Total: response.data.PaymentTotal, IsEmpty: isEmpty };
+                            var miniBasketRefresh = { NumberOfItems: response.data.NumberOfItemsInBasket, Total: response.data.OrderTotal, IsEmpty: isEmpty };
 
 							$(document).find('.js-mini-basket').each(function () {
 
