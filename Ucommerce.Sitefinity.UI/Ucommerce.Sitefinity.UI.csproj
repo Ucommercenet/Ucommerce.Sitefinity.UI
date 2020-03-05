@@ -547,6 +547,9 @@
     <EmbeddedResource Include="assets\src\images\icons\products.png" />
     <EmbeddedResource Include="assets\src\images\icons\shipping-picker.png" />
     <EmbeddedResource Include="Mvc\Scripts\Products\designerview-simple.js" />
+    <Content Include="..\release notes.txt">
+      <Link>docs\release notes.txt</Link>
+    </Content>
     <Content Include="Mvc\Views\Shared\readme.txt" />
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
     <None Include="node_modules\%40babel\cli\LICENSE" />

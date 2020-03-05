@@ -1,0 +1,8 @@
+Change log for vNext
+
+Fix: ProductViewModel now has access to product properties  
+Fix: "Add to basket" button only appears for parent products at the category level
+Fix: PaymentPicker widget only displays payment providers available for the selected shipping country
+Fix: Mini Basket now updates the price when adding new products
+Fix: Added "storeapi" route prefix to not clash with other CMS pages
+
