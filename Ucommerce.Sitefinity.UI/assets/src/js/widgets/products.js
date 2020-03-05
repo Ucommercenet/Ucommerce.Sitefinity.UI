@@ -25,9 +25,6 @@ function initProducts(rootElement) {
             price: 0,
             listPrice: 0
         },
-        created: function() {
-            console.log(this);
-        },
         methods: {
             onChange(event, variant) {
                 this.selectedVariants[variant.TypeName] = variant;

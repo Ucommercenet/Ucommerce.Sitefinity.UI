@@ -77,7 +77,6 @@ function initCart(rootElement) {
                             }
                         }
                         else {
-                            console.log("Unhandled exception");
                             callback(false, '');
                         }
                     }

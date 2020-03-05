@@ -30,7 +30,6 @@
 
                     this.$http.put(changePriceGroupUrl, { PriceGroupId: priceGroupId })
                         .then(function (response) {
-                            console.log("I'm here");
                             location.reload();
                         });
                 }

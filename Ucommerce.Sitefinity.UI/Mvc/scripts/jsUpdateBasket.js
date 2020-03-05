@@ -114,7 +114,6 @@
                     config.$triggerEventSelector.trigger("basket-changed", data.MiniBasketRefresh);
                 },
                 error: function (err) {
-                    console.log("Something went wrong...");
                 }
             });
         });

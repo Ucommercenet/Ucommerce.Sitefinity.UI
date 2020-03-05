@@ -115,8 +115,6 @@ function initCart(rootElement) {
                 var model = this.model;
                 var voucher = model.Voucher;
 
-                console.log(voucher)
-
                 this.$http.post(location.href + '/uc/checkout/cart/vouchers/add',
                     {
                         Vouchers: voucher
@@ -201,8 +199,6 @@ function initCart(rootElement) {
                     response.data.Data.data) {
 
                     this.model = response.data.Data.data;
-
-                    console.log(this);
 
                     if (this.model.Discounts.length) {
                         this.hasVoucher = true;

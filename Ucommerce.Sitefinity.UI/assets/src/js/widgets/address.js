@@ -80,7 +80,6 @@ function initCart(rootElement) {
                                 callback(false, data.Message);
                             }
                         } else {
-                            console.log("Unhandled exception");
                             callback(false, '');
                         }
                     }

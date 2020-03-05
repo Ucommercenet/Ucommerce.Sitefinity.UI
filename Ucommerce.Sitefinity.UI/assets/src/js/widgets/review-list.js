@@ -60,6 +60,7 @@ function initReviewList(rootElement) {
         },
         methods: {
             fetchData: function () {
+                // reset reviews before every call to prevent rendering issues
                 this.Reviews = null;
 
                 this.$http.get(location.href + '/reviews', {}).then((response) => {
