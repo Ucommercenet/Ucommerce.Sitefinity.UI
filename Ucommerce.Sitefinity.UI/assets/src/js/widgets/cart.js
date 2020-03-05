@@ -113,11 +113,13 @@ function initCart(rootElement) {
             },
             applyVoucher: function() {
                 var model = this.model;
-                var vouchers = model.Vouchers;
+                var voucher = model.Voucher;
+
+                console.log(voucher)
 
                 this.$http.post(location.href + '/uc/checkout/cart/vouchers/add',
                     {
-                        Vouchers: vouchers
+                        Vouchers: voucher
                     }).then(function(response) {
                     if (response.data) {
                         if (response.data.Status && response.data.Status == 'failed') {
