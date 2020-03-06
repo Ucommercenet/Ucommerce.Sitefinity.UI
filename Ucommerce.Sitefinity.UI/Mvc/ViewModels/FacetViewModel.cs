@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     /// <summary>
-    /// ViewModel class used for visualizing the information assocaited with facets.
+    /// ViewModel class used for visualizing the information associated with facets.
     /// </summary>
     public class FacetViewModel
     {

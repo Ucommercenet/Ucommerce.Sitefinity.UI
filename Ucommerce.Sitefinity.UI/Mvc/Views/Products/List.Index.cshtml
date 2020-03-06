@@ -55,13 +55,16 @@
                         <span>@product.Discount</span>
                     }
                 </div>
-
-                <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">
+                
+                @if (product.IsSellableProduct)
+                {
+                    <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">
                 </add-to-basket>
                 <div>
                     <a class="text-info" href="@product.ProductUrl">@Html.Resource("WriteReview", "UcommerceResources")</a>
                 </div>
-            </li>
+                }
+            </li>           
         }
     </ul>
 

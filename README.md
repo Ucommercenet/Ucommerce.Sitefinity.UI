@@ -6,6 +6,10 @@ To get started with using the Widgets for Ucommerce on Sitefinity you can watch 
 
 https://www.youtube.com/watch?v=vBS7qVVYJtg&t=131s
 
+## Setting up the Widgets in Sitefinity
+Each widget requires configuration to function properly. Please refer to the docs below to do so.
+https://docs.ucommerce.net/ucommerce/v8.1/sitefinity/setting-up-ucommerce-sitefinity-ui.html
+
 ## Vue Migration Notes
 
 The Vue app uses Webpack for build configuration. The main entry point is `index.js` located in the `assets\src` folder

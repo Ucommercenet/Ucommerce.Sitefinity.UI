@@ -1,7 +1,7 @@
 ﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     /// <summary>
-    /// ViewModel class used for visualizing the information assocaited with the mini basket after refresh.
+    /// ViewModel class used for visualizing the information associated with the mini basket after refresh.
     /// </summary>
     public class MiniBasketRefreshViewModel
     {

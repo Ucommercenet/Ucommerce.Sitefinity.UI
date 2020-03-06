@@ -49,7 +49,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return null;
             }
 
-            var shippingCountry = TransactionLibrary.GetCountries().SingleOrDefault(x => x.Name == "Germany");
+            var shippingAddress =
+                 _transactionLibraryInternal.GetShippingInformation(UCommerce.Constants.DefaultShipmentAddressName);
+
+            var shippingCountry = shippingAddress.Country;
 
             if (shippingCountry != null)
             {

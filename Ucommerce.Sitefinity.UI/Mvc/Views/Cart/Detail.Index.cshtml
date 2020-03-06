@@ -86,30 +86,28 @@
                 <tr>
                     <td rowspan="4" colspan="3"></td>
                     <td colspan="1">@Html.Resource("SubTotal", "UcommerceResources"):</td>
-                    <td>
+                    <td class="order-subtotal">
                         {{ model.SubTotal }}
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td colspan="1">@Html.Resource("VAT", "UcommerceResources"):</td>
-                    <td>
+                    <td class="order-tax">
                         {{ model.TaxTotal }}
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr v-if="model.DiscountTotal">
                     <td colspan="1">@Html.Resource("Discounts", "UcommerceResources"):</td>
-                    <td>
+                    <td class="order-discounts">
                         {{ model.DiscountTotal }}
                     </td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
-                    <td colspan="1">
-                        <strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong>
-                    </td>
-                    <td>
+                    <td colspan="1"><strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></td>
+                    <td class="order-total">
                         {{ model.OrderTotal }}
                     </td>
                     <td>&nbsp;</td>

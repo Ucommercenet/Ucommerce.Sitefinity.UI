@@ -107,13 +107,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         public IShippingPickerModel ResolveModel()
         {
+            var args = new Castle.MicroKernel.Arguments();
+
+            args.AddProperties(new
+            {
+                nextStepId = this.NextStepId,
+                previousStepId = this.PreviousStepId
+            });
+
             var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IShippingPickerModel>(
-                new
-                {
-                    nextStepId = this.NextStepId,
-                    previousStepId = this.PreviousStepId
-                });
+            var model = container.Resolve<IShippingPickerModel>(args);                
 
             return model;
         }

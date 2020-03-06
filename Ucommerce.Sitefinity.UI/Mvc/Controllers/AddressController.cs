@@ -109,13 +109,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         private IAddressModel ResolveModel()
         {
+            var args = new Castle.MicroKernel.Arguments();
+
+            args.AddProperties(new
+            {
+                nextStepId = this.NextStepId,
+                previousStepId = this.PreviousStepId
+            });
+
             var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IAddressModel>(
-                new
-                {
-                    nextStepId = this.NextStepId,
-                    previousStepId = this.PreviousStepId
-                });
+            var model = container.Resolve<IAddressModel>(args);
 
             return model;
         }

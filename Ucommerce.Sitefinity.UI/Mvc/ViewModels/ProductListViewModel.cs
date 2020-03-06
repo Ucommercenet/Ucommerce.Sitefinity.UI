@@ -3,7 +3,7 @@
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     /// <summary>
-    /// ViewModel class used for visualizing the information assocaited with list of products.
+    /// ViewModel class used for visualizing the information associated with list of products.
     /// </summary>
     public class ProductListViewModel
     {
