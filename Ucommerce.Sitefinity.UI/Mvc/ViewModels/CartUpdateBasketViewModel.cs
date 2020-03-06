@@ -10,6 +10,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public CartUpdateBasketViewModel()
         {
             OrderLines = new List<CartUpdateOrderline>();
+            Vouchers = new List<string>();
         }
 
         public IList<CartUpdateOrderline> OrderLines { get; set; }
@@ -17,5 +18,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public string DiscountTotal { get; set; }
         public string TaxTotal { get; set; }
         public string SubTotal { get; set; }
+        public List<string> Vouchers { get; set; }
     }
 }

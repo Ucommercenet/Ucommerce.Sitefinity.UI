@@ -1,5 +1,6 @@
 ﻿import { initializeComponent } from "../functions/init";
 import addToBasket from '../components/add-to-basket';
+import store from '../store';
 
 initializeComponent("products", initProducts);
 
@@ -8,8 +9,11 @@ function initProducts(rootElement) {
     const variants = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).variants;
     new Vue({
         el: '#' + rootElement.id,
+        store,
         data: {
             variants: variants,
+            addToBasket: null,
+            notAddToBasket: null,
             selectedVariants: {}
         },
         components: {

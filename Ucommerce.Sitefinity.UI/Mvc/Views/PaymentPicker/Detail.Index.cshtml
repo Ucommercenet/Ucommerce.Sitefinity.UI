@@ -4,68 +4,40 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-@model UCommerce.Sitefinity.UI.Mvc.ViewModels.PaymentPickerViewModel
+
 @{
     Layout = null;
 }
-
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
 {
-    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
+    @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
+    @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-    @using (Html.BeginFormSitefinity("CreatePayment", "PaymentPicker", FormMethod.Post))
-    {
-        <h3>Payment method</h3>
-        if (@Model.AvailablePaymentMethods.Count > 0)
-        {
-            foreach (var paymentMethod in @Model.AvailablePaymentMethods)
-            {
+    <h3 class="heading-underline">@Html.Resource("PaymentMethod", "UcommerceResources")</h3>
+
+<div data-component="payment-widget" id="payment-method">
+    <template v-if="model">
+        <template v-if="model.AvailablePaymentMethods.length">
+            <template v-for="method in model.AvailablePaymentMethods" :model="model">
                 <div>
                     <label>
-                        @if (paymentMethod.Selected)
-                        {
-                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
-                            @paymentMethod.Text
-                        }
-                        else
-                        {
-                            @Html.RadioButtonFor(x => x.SelectedPaymentMethodId, paymentMethod.Value, new { Checked = "checked" })
-                            @paymentMethod.Text
-                        }
+                        <input id="SelectedPaymentMethodId" name="SelectedPaymentMethodId" type="radio" :value="method.Value" :checked="method.Value == model.SelectedPaymentMethodId"> {{ method.Text }}
                     </label>
                 </div>
-            }
-            <div>
-                <div>
-                    @{
-                        var showBackButton = true;
-
-                        if (Model.NextStepUrl == "")
-                        {
-                            showBackButton = false;
-                        }
-                    }
-                    <a href="@Model.PreviousStepUrl" style="@(showBackButton ? "display:block" : "display:none")">Back</a>
-                </div>
-                <div>
-                    @{
-                        var showContinueButton = true;
-
-                        if (Model.NextStepUrl == "")
-                        {
-                            showContinueButton = false;
-                        }
-                    }
-                    <input type="submit" style="@(showContinueButton ? "display:block" : "display:none")" value="Continue to next step" />
-                </div>
-            </div>
-        }
-        else
-        {
+            </template>
+            <checkout-navigation v-bind:model="model"
+                                 :continue-fn="submit"
+                                 continue-label="@Html.Resource("ContinueToNextStep", "UcommerceResources")"
+                                 back-label="@Html.Resource("BackButton", "UcommerceResources")"
+                                 classes=""></checkout-navigation>
+        </template>
+        <template v-else>
             <p>
-                WARNING: No payment methods have been configured for @Model.ShippingCountry within <a href="http://ucommerce.dk">UCommerce</a> administration area.
+                WARNING: No payment methods have been configured for {{ model.ShippingCountry }} within <a href="http://ucommerce.dk">UCommerce</a> administration area.
             </p>
-        }
-    }
+        </template>
+    </template>
+</div>

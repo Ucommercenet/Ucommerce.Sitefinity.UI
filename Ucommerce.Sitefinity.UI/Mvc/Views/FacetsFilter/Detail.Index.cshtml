@@ -18,9 +18,9 @@
             { "facets" : @Html.Raw(JsonConvert.SerializeObject(Model)) }
         </script>
         <h2>
-            Filter products
+            @Html.Resource("FilterProducts", "UcommerceResources")
         </h2>
-        <a v-on:click="clearFilters">Clear filter</a>
+        <a v-on:click="clearFilters">@Html.Resource("ClearFilter", "UcommerceResources")</a>
 
         <ul v-cloak>
             <li v-for="facet in facets" v-bind:key="facet.DisplayName">

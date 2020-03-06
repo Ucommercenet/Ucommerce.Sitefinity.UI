@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
+using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -11,7 +11,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Address MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uAddressInformation_MVC", Title = "Address Information", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnAddressInformation sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uAddressInformation_MVC", Title = "Address Information",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnAddressInformation sfMvcIcn")]
     public class AddressController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
@@ -20,21 +22,52 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+            var model = ResolveModel();
+
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+
+            parameters.Add("mode", "index");
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
+            return View(detailTemplateName);
+        }
+
+        [HttpGet]
+        [RelativeRoute("uc/checkout/address")]
+        public ActionResult Data()
+        {
             var model = ResolveModel();
             string message;
 
             if (!model.CanProcessRequest(new System.Collections.Generic.Dictionary<string, object>(), out message))
             {
-                return this.PartialView("_Warning", message);
+                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                    JsonRequestBehavior.AllowGet);
             }
 
             var viewModel = model.GetViewModel();
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            return View(detailTemplateName, viewModel);
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "success";
+
+            if (viewModel == null)
+            {
+                responseDTO.Status = "failed";
+            }
+
+            responseDTO.Data.Add("data", viewModel);
+
+            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
+        [RelativeRoute("uc/checkout/address")]
         public ActionResult Save(AddressSaveViewModel addressRendering)
         {
             var model = ResolveModel();
@@ -48,24 +81,24 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                    JsonRequestBehavior.AllowGet);
             }
 
             if (ModelState.IsValid)
             {
                 model.Save(addressRendering);
-                if (viewModel.NextStepUrl?.Length == 0)
-                {
-                    return View(detailTemplateName, viewModel);
-                }
-                else
-                {
-                    return Redirect(viewModel.NextStepUrl);
-                }
+                return this.Json(new OperationStatusDTO() {Status = "success"}, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return View(detailTemplateName, viewModel);
+                var errorList = model.ErrorMessage(ModelState);
+
+                var responseDTO = new OperationStatusDTO();
+                responseDTO.Status = "failed";
+                responseDTO.Data.Add("errors", errorList);
+
+                return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
             }
         }
 

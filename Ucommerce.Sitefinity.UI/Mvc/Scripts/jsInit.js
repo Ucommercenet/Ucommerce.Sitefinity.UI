@@ -42,9 +42,9 @@ define('jsConfig', ['jquery'], function ($) {
     return jsConfig;
 });
 
-require(["jsAddress"], function (component) {
-    component.init();
-});
+//require(["jsAddress"], function (component) {
+//    component.init();
+//});
 
 require(["jsAddToBasketButton"], function (component) {
     component.init();
@@ -54,21 +54,21 @@ require(["jsMiniBasket"], function (component) {
     component.init();
 });
 
-require(["jsPaymentPicker"], function (component) {
-    component.init();
-});
+//require(["jsPaymentPicker"], function (component) {
+//    component.init();
+//});
 
 require(["jsQuantityPicker"], function (component) {
     component.init();
 });
 
-require(["jsShippingPicker"], function (component) {
-    component.init();
-});
+//require(["jsShippingPicker"], function (component) {
+//    component.init();
+//});
 
-require(["jsUpdateBasket"], function (component) {
-    component.init();
-});
+//require(["jsUpdateBasket"], function (component) {
+//    component.init();
+//});
 
 require(["jsVariantPicker"], function (component) {
     component.init();

@@ -11,6 +11,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public CartRenderingViewModel()
         {
             OrderLines = new List<OrderlineViewModel>();
+            Discounts = new List<string>();
         }
 
         public IList<OrderlineViewModel> OrderLines { get; set; }
@@ -32,5 +33,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public string RemoveOrderlineUrl { get; set; }
         public string NextStepUrl { get; set; }
         public string ProductDetailsPageUrl { get; set; }
+        public List<string> Discounts { get; set; }
+        public string RedirectUrl { get; set; }
     }
 }

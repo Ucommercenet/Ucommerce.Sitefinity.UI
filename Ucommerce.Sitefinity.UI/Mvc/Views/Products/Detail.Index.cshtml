@@ -5,7 +5,6 @@
 @using Telerik.Sitefinity.Services;
 
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
-
 @if (Model != null)
 {
     if (!SystemManager.IsDesignMode)
@@ -16,9 +15,11 @@
     }
 
     <div data-component="products" id="@Html.UniqueId("products")" v-cloak>
+        <input type="hidden" ref="addToBasket" value="@Html.Resource("AddToBasket", "UcommerceResources")"/>
+        <input type="hidden" ref="notAddToBasket" value="@Html.Resource("NotAddToBasket", "UcommerceResources")"/>
         <div>
             <a href="@Model.PrimaryImageMediaUrl" rel="fancybox">
-                <img src="@Model.PrimaryImageMediaUrl" />
+                <img src="@Model.PrimaryImageMediaUrl"/>
             </a>
         </div>
 
@@ -35,7 +36,7 @@
                             {
                                 <li>
                                     <a href="@variant.PrimaryImageMediaUrl" rel="fancybox">
-                                        <img src="@variant.PrimaryImageMediaUrl" />
+                                        <img src="@variant.PrimaryImageMediaUrl"/>
                                     </a>
                                 </li>
                             }
@@ -47,34 +48,37 @@
 
         <div>
             <h1>
-                @Html.HtmlSanitize((string)Model.DisplayName)
+                @Html.HtmlSanitize((string) Model.DisplayName)
             </h1>
             <div>
 
                 @*Beggining of Write review link section*@
                 <div>
-                    <a href="#" onclick="return false;">Write a review</a>
+                    <a href="#" onclick="return false;">@Html.Resource("WriteReview", "UcommerceResources")</a>
                 </div>
                 @*End of Write review link section*@
                 <div>
                     <span>@Model.Price</span>
-                    <p>Discount:</p>
-                    <span>@Model.Discount</span>
+                    @if (!string.IsNullOrWhiteSpace(@Model.Discount))
+                    {
+                        <p>@Html.Resource("Discount", "UcommerceResources"):</p>
+                        <span>@Model.Discount</span>
+                    }
                 </div>
             </div>
             <div>
-                @Model.ShortDescription
+                @Html.HtmlSanitize(Model.LongDescription)
             </div>
 
             <div>
-                Availability:
+                @Html.Resource("Availability", "UcommerceResources"):
                 @if (Model.AllowOrdering)
                 {
-                    <span>In stock</span>
+                    <span>@Html.Resource("InStock", "UcommerceResources")</span>
                 }
                 else
                 {
-                    <span>Out of stock</span>
+                    <span>@Html.Resource("OutOfStock", "UcommerceResources")</span>
                 }
             </div>
 
@@ -83,17 +87,17 @@
                     if (Model.VariantTypes.Any())
                     {
                         <script type="application/json" data-variants="true">
-                            {
-                            "variants": @Html.Raw(JsonConvert.SerializeObject(Model.VariantTypes.ToList()))
-                            }
-                        </script>
+                        {
+                        "variants": @Html.Raw(JsonConvert.SerializeObject(Model.VariantTypes.ToList()))
+                        }
+                    </script>
 
                         <fieldset v-for="v in variants">
                             <div>
                                 <label>{{v.DisplayName}}</label>
                                 <span>
                                     <select v-model="v" v-on:change="onChange($event, v)">
-                                        <option>Please select...</option>
+                                        <option>@Html.Resource("PleaseSelect", "UcommerceResources")</option>
                                         <option v-for="val in v.Values" v-bind:value="val">
                                             {{val.Value}}
                                         </option>
@@ -110,7 +114,7 @@
 
                 @foreach (var route in Model.Routes)
                 {
-                    <input type="hidden" class="@route.Key" value="@route.Value" />
+                    <input type="hidden" class="@route.Key" value="@route.Value"/>
                 }
 
                 <add-to-basket :product-sku="'@Model.Sku'" :root-id="$el.id" :selected-variants="selectedVariants">
@@ -123,9 +127,9 @@
 
 
             <div>
-                <a href="#" onclick="return false;">add to wish list</a>
+                <a href="#" onclick="return false;">@Html.Resource("AddToWishList", "UcommerceResources")</a>
             </div>
-            <div style="display: none; ">
+            <div style="display: none;">
 
             </div>
 
@@ -136,7 +140,7 @@
         @*Beggining of Write review section*@
 
         <div>
-            <a href="#" onclick="return false;">Write a review</a>
+            <a href="#" onclick="return false;">@Html.Resource("WriteReview", "UcommerceResources")</a>
         </div>
 
         @*End of Write review section*@
@@ -144,22 +148,21 @@
 
     <script type="text/x-template" id="add-to-basket-template">
         <div>
-            <span>Quantity:</span>
+            <span>@Html.Resource("Quantity", "UcommerceResources"):</span>
             <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" style="display:none;">
                 <span>
-                    When adding product to a cart you must specify the quantity
+                    @Html.Resource("SpecifyQuantity", "UcommerceResources")
                 </span>
             </span>
             <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityValidator" style="display:none;">
                 <span>
-                    The quantity must be greater than 0 and less than 9,999.
+                    @Html.Resource("QuantityValidation", "UcommerceResources")
                 </span>
             </span>
-            <input title="Product Quantity" id="productQuantityInput" v-model="quantity" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" />
+            <input title="@Html.Resource("ProductQuantity", "UcommerceResources")" id="productQuantityInput" v-model="quantity" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" />
 
-            <input type="button" title="Add to cart button" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="Add to cart" v-on:click="addToBasket()" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" />
+            <input type="button" title="Add to cart button" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="@Html.Resource("AddToCart", "UcommerceResources")" v-on:click="addToBasket()" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" />
             <span v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
         </div>
     </script>
-
 }

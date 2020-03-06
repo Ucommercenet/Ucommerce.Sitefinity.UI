@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce;
 using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
@@ -31,8 +29,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         {
             var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
             var basketPreviewViewModel = new BasketPreviewViewModel();
-            basketPreviewViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
-            basketPreviewViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) ?? new OrderAddress();
+            MapAddresses(purchaseOrder, basketPreviewViewModel);
 
             foreach (var orderLine in purchaseOrder.OrderLines)
             {
@@ -41,10 +38,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     ProductName = orderLine.ProductName,
                     Sku = orderLine.Sku,
                     VariantSku = orderLine.VariantSku,
-                    Total = new Money(orderLine.Total.GetValueOrDefault(), orderLine.PurchaseOrder.BillingCurrency).ToString(),
+                    Total = new Money(orderLine.Total.GetValueOrDefault(), orderLine.PurchaseOrder.BillingCurrency)
+                        .ToString(),
                     Tax = new Money(orderLine.VAT, purchaseOrder.BillingCurrency).ToString(),
                     Price = new Money(orderLine.Price, purchaseOrder.BillingCurrency).ToString(),
-                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString(),
+                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(),
+                        purchaseOrder.BillingCurrency).ToString(),
                     Quantity = orderLine.Quantity,
                     Discount = orderLine.Discount
                 };
@@ -52,13 +51,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 basketPreviewViewModel.OrderLines.Add(orderLineModel);
             }
 
-            basketPreviewViewModel.DiscountTotal = new Money(purchaseOrder.DiscountTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.DiscountTotal =
+                new Money(purchaseOrder.DiscountTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
             basketPreviewViewModel.DiscountAmount = purchaseOrder.DiscountTotal.GetValueOrDefault();
-            basketPreviewViewModel.SubTotal = new Money(purchaseOrder.SubTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            basketPreviewViewModel.OrderTotal = new Money(purchaseOrder.OrderTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            basketPreviewViewModel.TaxTotal = new Money(purchaseOrder.TaxTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            basketPreviewViewModel.ShippingTotal = new Money(purchaseOrder.ShippingTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            basketPreviewViewModel.PaymentTotal = new Money(purchaseOrder.PaymentTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.SubTotal =
+                new Money(purchaseOrder.SubTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.OrderTotal =
+                new Money(purchaseOrder.OrderTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.TaxTotal =
+                new Money(purchaseOrder.TaxTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.ShippingTotal =
+                new Money(purchaseOrder.ShippingTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            basketPreviewViewModel.PaymentTotal =
+                new Money(purchaseOrder.PaymentTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
 
             var shipment = purchaseOrder.Shipments.FirstOrDefault();
             if (shipment != null)
@@ -73,10 +78,148 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 basketPreviewViewModel.PaymentName = payment.PaymentMethodName;
                 basketPreviewViewModel.PaymentAmount = purchaseOrder.PaymentTotal.GetValueOrDefault();
             }
+
             basketPreviewViewModel.NextStepUrl = GetNextStepUrl(nextStepId, purchaseOrder.OrderGuid);
             basketPreviewViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
             return basketPreviewViewModel;
+        }
+
+        private static void MapAddresses(PurchaseOrder purchaseOrder, BasketPreviewViewModel basketPreviewViewModel)
+        {
+            if (!purchaseOrder.BillingAddress.FirstName.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.FirstName = purchaseOrder.BillingAddress.FirstName;
+            }
+
+            if (!purchaseOrder.BillingAddress.LastName.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.LastName = purchaseOrder.BillingAddress.LastName;
+            }
+
+            if (!purchaseOrder.BillingAddress.EmailAddress.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.EmailAddress = purchaseOrder.BillingAddress.EmailAddress;
+            }
+
+            if (!purchaseOrder.BillingAddress.PhoneNumber.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.PhoneNumber = purchaseOrder.BillingAddress.PhoneNumber;
+            }
+
+            if (!purchaseOrder.BillingAddress.MobilePhoneNumber.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.MobilePhoneNumber =
+                    purchaseOrder.BillingAddress.MobilePhoneNumber;
+            }
+
+            if (!purchaseOrder.BillingAddress.Line1.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.Line1 = purchaseOrder.BillingAddress.Line1;
+            }
+
+            if (!purchaseOrder.BillingAddress.Line2.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.Line2 = purchaseOrder.BillingAddress.Line2;
+            }
+
+            if (!purchaseOrder.BillingAddress.PostalCode.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.PostalCode = purchaseOrder.BillingAddress.PostalCode;
+            }
+
+            if (!purchaseOrder.BillingAddress.City.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.City = purchaseOrder.BillingAddress.City;
+            }
+
+            if (!purchaseOrder.BillingAddress.State.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.State = purchaseOrder.BillingAddress.State;
+            }
+
+            if (!purchaseOrder.BillingAddress.Attention.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.Attention = purchaseOrder.BillingAddress.Attention;
+            }
+
+            if (!purchaseOrder.BillingAddress.CompanyName.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.CompanyName = purchaseOrder.BillingAddress.CompanyName;
+            }
+
+            if (!purchaseOrder.BillingAddress.Country.Name.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.BillingAddressDTO.CountryName = purchaseOrder.BillingAddress.Country.Name;
+            }
+
+            OrderAddress ShipmentAddress =
+                purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName);
+
+            if (!ShipmentAddress.FirstName.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.FirstName = ShipmentAddress.FirstName;
+            }
+
+            if (!ShipmentAddress.LastName.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.LastName = ShipmentAddress.LastName;
+            }
+
+            if (!ShipmentAddress.EmailAddress.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.EmailAddress = ShipmentAddress.EmailAddress;
+            }
+
+            if (!ShipmentAddress.PhoneNumber.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.PhoneNumber = ShipmentAddress.PhoneNumber;
+            }
+
+            if (!ShipmentAddress.MobilePhoneNumber.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.MobilePhoneNumber = ShipmentAddress.MobilePhoneNumber;
+            }
+
+            if (!ShipmentAddress.Line1.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.Line1 = ShipmentAddress.Line1;
+            }
+
+            if (!ShipmentAddress.Line2.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.Line2 = ShipmentAddress.Line2;
+            }
+
+            if (!ShipmentAddress.PostalCode.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.PostalCode = ShipmentAddress.PostalCode;
+            }
+
+            if (!ShipmentAddress.City.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.City = ShipmentAddress.City;
+            }
+
+            if (!ShipmentAddress.State.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.State = ShipmentAddress.State;
+            }
+
+            if (!ShipmentAddress.Attention.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.Attention = ShipmentAddress.Attention;
+            }
+
+            if (!ShipmentAddress.CompanyName.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.CompanyName = ShipmentAddress.CompanyName;
+            }
+
+            if (!ShipmentAddress.Country.Name.IsNullOrWhitespace())
+            {
+                basketPreviewViewModel.ShipmentAddressDTO.CountryName = ShipmentAddress.Country.Name;
+            }
         }
 
         public virtual string GetPaymentUrl()
@@ -94,28 +237,50 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            object mode = null;
+
+            if (parameters.TryGetValue("mode", out mode) && mode != null)
             {
-                message = "The widget is in Page Edit mode.";
-                return false;
+                if (mode.ToString() == "index")
+                {
+                    if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+                    {
+                        message = "The widget is in Page Edit mode.";
+                        return false;
+                    }
+                }
+
+                message = null;
+                return true;
             }
-
-            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-
-            if (purchaseOrder.BillingAddress == null)
+            else
             {
-                message = "The Billing Address must be specified.";
-                return false;
-            }
+                PurchaseOrder purchaseOrder;
+                try
+                {
+                    purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+                }
+                catch
+                {
+                    message = "The checkout has not started yet";
+                    return false;
+                }
 
-            if (purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) == null)
-            {
-                message = "The Billing Address must be specified.";
-                return false;
-            }
+                if (purchaseOrder.BillingAddress == null)
+                {
+                    message = "The Billing Address must be specified.";
+                    return false;
+                }
 
-            message = null;
-            return true;
+                if (purchaseOrder.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) == null)
+                {
+                    message = "The Shipping Address must be specified.";
+                    return false;
+                }
+
+                message = null;
+                return true;
+            }
         }
 
         private string GetNextStepUrl(Guid nextStepId, Guid orderGuid)

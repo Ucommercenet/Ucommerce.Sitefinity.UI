@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
+using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Infrastructure;
-using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
     /// <summary>
     /// The controller class for the Basket Preview MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnBasketPreview sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uBasketPreview_MVC", Title = "Basket Preview",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnBasketPreview sfMvcIcn")]
     public class BasketPreviewController : Controller, IPersonalizable
     {
         public Guid? NextStepId { get; set; }
@@ -24,6 +21,24 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         public ActionResult Index()
         {
+            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+            string message;
+            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var model = ResolveModel();
+            parameters.Add("mode", "index");
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return this.PartialView("_Warning", message);
+            }
+
+            return View(detailTemplateName);
+        }
+
+        [HttpGet]
+        [RelativeRoute("uc/checkout/preview")]
+        public ActionResult Data()
+        {
             var model = ResolveModel();
 
             string message;
@@ -31,31 +46,21 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                    JsonRequestBehavior.AllowGet);
             }
 
             var basketPreviewViewModel = model.GetViewModel();
-            
-            ViewBag.RowSpan = 4;
-            if (basketPreviewViewModel.DiscountAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
-            if (basketPreviewViewModel.ShipmentAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
-            if (basketPreviewViewModel.PaymentAmount > 0)
-            {
-                ViewBag.RowSpan++;
-            }
 
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "success";
+            responseDTO.Data.Add("data", basketPreviewViewModel);
 
-            return View(detailTemplateName, basketPreviewViewModel);
+            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
+        [RelativeRoute("uc/checkout/complete-order")]
         public ActionResult RequestPayment()
         {
             var model = ResolveModel();
@@ -64,12 +69,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return this.Json(new OperationStatusDTO { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
             }
 
             var paymentUrl = model.GetPaymentUrl();
 
-            return Redirect(paymentUrl);
+            return this.Json(new OperationStatusDTO { Status = "success", Message = paymentUrl }, JsonRequestBehavior.AllowGet); ;
         }
 
         protected override void HandleUnknownAction(string actionName)
