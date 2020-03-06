@@ -17,6 +17,8 @@
     }
 
     <div class="container-fluid my-5" data-component="products" id="@Html.UniqueId("product-details")" v-cloak>
+    <input type="hidden" ref="addToBasket" value="@Html.Resource("AddToBasket", "UcommerceResources")"/>
+    <input type="hidden" ref="notAddToBasket" value="@Html.Resource("NotAddToBasket", "UcommerceResources")"/>
         <div class="row">
             <div class="col-sx-12 col-sm-5 col-md-5 col-lg-5 border-right">
                 <div class="img">
