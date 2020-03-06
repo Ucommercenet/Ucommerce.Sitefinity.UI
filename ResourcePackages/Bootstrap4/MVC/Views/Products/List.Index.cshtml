@@ -16,7 +16,7 @@
     @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 }
 
-<div class="container my-5" data-component="products" id="@Html.UniqueId("product-list")" v-cloak>+
+<div class="container my-5" data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
 <input type="hidden" ref="addToBasket" value="@Html.Resource("AddToBasket", "UcommerceResources")"/>
 <input type="hidden" ref="notAddToBasket" value="@Html.Resource("NotAddToBasket", "UcommerceResources")"/>
     <div class="row">
