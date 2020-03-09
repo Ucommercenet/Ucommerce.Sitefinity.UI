@@ -10,6 +10,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public CartUpdateBasket()
         {
             RefreshBasket = new List<UpdateOrderLine>();
+            Vouchers = new List<string>();
         }
 
         public IList<UpdateOrderLine> RefreshBasket { get; set; }
