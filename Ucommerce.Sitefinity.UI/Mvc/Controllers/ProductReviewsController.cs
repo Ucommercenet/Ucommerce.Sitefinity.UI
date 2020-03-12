@@ -6,8 +6,8 @@ using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uReviews_MVC", Title = "Reviews", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucReviews sfMvcIcn")]
-    public class ReviewsController : Controller, IPersonalizable
+    [ControllerToolboxItem(Name = "uProductReviews_MVC", Title = "Product Reviews", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnProductReviews sfMvcIcn")]
+    public class ProductReviewsController : Controller, IPersonalizable
     {
         public string TemplateName { get; set; } = "Index";
 

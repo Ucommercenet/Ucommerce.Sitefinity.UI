@@ -14,7 +14,7 @@
 <div data-component="cart" id="shopping-cart">
     <hgroup>
         <h1>@Html.Resource("ShoppingCart", "UcommerceResources")</h1>
-        <template v-if="model.OrderLines.length > 0">
+        <template v-if="(model && model.OrderLines && model.OrderLines.length > 0)">
             {{ model.OrderLines.length }}&nbsp;items
         </template>
     </hgroup>

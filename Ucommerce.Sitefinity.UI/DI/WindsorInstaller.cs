@@ -97,7 +97,7 @@ namespace UCommerce.Sitefinity.UI.DI
             container.Register(
                 Component
                     .For<IReviewsModel>()
-                    .ImplementedBy<ReviewsModel>()
+                    .ImplementedBy<ProductReviewsModel>()
                     .LifestyleTransient());
 
             container.Register(

@@ -12,13 +12,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     {
         private readonly IRepository<ProductReviewStatus> _productReviewStatusRepository;
         private readonly IOrderContext _orderContext;
-        private readonly IPipeline<ProductReview> _productReviewPipeline;
+        private readonly IPipeline<EntitiesV2.ProductReview> _productReviewPipeline;
 
         public AddReviewModel()
         {
             _productReviewStatusRepository = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IRepository<ProductReviewStatus>>();
             _orderContext = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IOrderContext>();
-            _productReviewPipeline = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IPipeline<ProductReview>>();
+            _productReviewPipeline = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IPipeline<EntitiesV2.ProductReview>>();
         }
         public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
@@ -64,7 +64,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             basket.PurchaseOrder.Customer.Save();
 
-            var review = new ProductReview();
+            var review = new EntitiesV2.ProductReview();
             review.ProductCatalogGroup = SiteContext.Current.CatalogContext.CurrentCatalogGroup;
             review.ProductReviewStatus = _productReviewStatusRepository.SingleOrDefault(s => s.Name == "New");
             review.CreatedOn = DateTime.Now;

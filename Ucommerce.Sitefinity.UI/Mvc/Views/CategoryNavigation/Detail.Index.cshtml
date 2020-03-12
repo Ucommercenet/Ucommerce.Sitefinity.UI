@@ -13,7 +13,6 @@
 {
     @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
-    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 }
 
 <div data-component="category-navigation" id="@Html.UniqueId("categories")" v-cloak>
@@ -25,9 +24,12 @@
     <header>
         <div>
             <nav>
-                <a href="/" alt="">
-                    <img src="@Model.ImageUrl" alt="Category Navigation Logo">
-                </a>
+                @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                {
+                    <a href="/" alt="">
+                        <img src="@Model.ImageUrl" alt="Category Navigation Logo">
+                    </a>
+                }
 
                 @if (Model.Categories.Count > 0)
                 {

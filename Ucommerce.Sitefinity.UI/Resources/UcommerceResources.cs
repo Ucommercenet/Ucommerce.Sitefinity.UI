@@ -356,7 +356,7 @@ namespace UCommerce.Sitefinity.UI.Resources
             get { return this["BackButton"]; }
         }
 
-        [ResourceEntry("ThankYou", Value = "Thank you for the order", Description = "Continue to next step", LastModified = "2020/02/27")]
+        [ResourceEntry("ThankYou", Value = "Thank you for the order", Description = "Thank you for the order", LastModified = "2020/02/27")]
         public string ThankYou
         {
             get { return this["ThankYou"]; }
@@ -480,6 +480,12 @@ namespace UCommerce.Sitefinity.UI.Resources
         public string FilterProducts
         {
             get { return this["FilterProducts"]; }
+        }
+
+        [ResourceEntry("OrderConfirmation", Value = "An order confirmation email has been sent to your email address", Description = "Order Confiramtion Message", LastModified = "2020/03/12")]
+        public string OrderConfirmation
+        {
+            get { return this["OrderConfirmation"]; }
         }
     }
 }
