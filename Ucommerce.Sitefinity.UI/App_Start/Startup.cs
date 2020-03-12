@@ -51,7 +51,6 @@ namespace UCommerce.Sitefinity.UI.App_Start
             //Custom resources
             Res.RegisterResource<UcommerceResources>();
 
-            //BundleConfig.RegisterBundles(BundleTable.Bundles);
             BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
             BundleTable.EnableOptimizations = true;
 
