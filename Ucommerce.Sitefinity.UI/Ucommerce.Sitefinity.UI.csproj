@@ -501,13 +501,6 @@
     <None Include="app.config" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Scripts\jquery.validate.min.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsAddress.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsAddToBasketButton.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsMiniBasket.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsPaymentPicker.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsQuantityPicker.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsShippingPicker.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsUpdateBasket.js" />
     <EmbeddedResource Include="Mvc\Views\Products\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\Products\List.Index.cshtml" />
     <EmbeddedResource Include="assets\src\js\components\add-to-basket.vue" />
@@ -536,11 +529,6 @@
     <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\DesignerView.Simple.json" />
-    <EmbeddedResource Include="Mvc\Scripts\jsVariantPicker.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsVoucher.js" />
-    <EmbeddedResource Include="Mvc\Scripts\require-2.3.2.js" />
-    <EmbeddedResource Include="Mvc\Scripts\require-2.3.2.min.js" />
-    <EmbeddedResource Include="Mvc\Scripts\jsInit.js" />
     <EmbeddedResource Include="Mvc\Scripts\bootstrap.min.js" />
     <EmbeddedResource Include="Mvc\Scripts\jquery-3.0.0.min.js" />
     <EmbeddedResource Include="Mvc\Scripts\popper.min.js" />
