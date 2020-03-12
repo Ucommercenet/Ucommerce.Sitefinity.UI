@@ -487,5 +487,11 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["OrderConfirmation"]; }
         }
+
+        [ResourceEntry("Items", Value = "Items", Description = "Items", LastModified = "2020/03/12")]
+        public string Items
+        {
+            get { return this["Items"]; }
+        }
     }
 }

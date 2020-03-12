@@ -15,7 +15,7 @@
     <hgroup>
         <h1>@Html.Resource("ShoppingCart", "UcommerceResources")</h1>
         <template v-if="(model && model.OrderLines && model.OrderLines.length > 0)">
-            {{ model.OrderLines.length }}&nbsp;items
+            {{ model.OrderLines.length }}&nbsp;@Html.Resource("Items", "UcommerceResources")
         </template>
     </hgroup>
     <template v-if="model">
