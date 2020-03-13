@@ -12,9 +12,7 @@
     {
         @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
         @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
-        @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
     }
-
 
     <div class="sf_colsIn container">
         <div class="sf_cols" data-component="products" id="@Html.UniqueId("products")" v-cloak>

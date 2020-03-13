@@ -6,7 +6,7 @@ using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-    public class ReviewsModel : IReviewsModel
+    public class ProductReviewsModel : IReviewsModel
     {
         public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
@@ -20,13 +20,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        public virtual ReviewsRenderingViewModel GetReviews()
+        public virtual ProductReviewsRenderingViewModel GetReviews()
         {
-            var reviewVm = new ReviewsRenderingViewModel();
+            var reviewVm = new ProductReviewsRenderingViewModel();
             var clientIp = System.Web.HttpContext.Current.Request.UserHostName;
             var currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
 
-            reviewVm.Reviews = currentProduct.ProductReviews.Select(review => new Review
+            reviewVm.Reviews = currentProduct.ProductReviews.Select(review => new ProductReview
             {
                 Name = review.Customer.FirstName + " " + review.Customer.LastName,
                 Email = review.Customer.EmailAddress,

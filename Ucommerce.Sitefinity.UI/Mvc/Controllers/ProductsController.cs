@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -16,7 +15,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     {
         public int ItemsPerPage { get; set; } = 10;
 
-        public bool OpenInSamePage { get; set; }
+        public bool OpenInSamePage { get; set; } = true;
 
         public Guid DetailsPageId { get; set; }
 

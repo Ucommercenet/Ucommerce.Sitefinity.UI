@@ -3,25 +3,17 @@
 @using Telerik.Sitefinity.Frontend.Mvc.Helpers;
 @using Telerik.Sitefinity.Services;
 @model UCommerce.Sitefinity.UI.Mvc.ViewModels.ConfirmationMessageViewModel
-@{
-    Layout = null;
-}
-
-@if (!SystemManager.IsDesignMode)
-{
-    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
-}
 
 <div>
     @if (string.IsNullOrEmpty(Model.Headline))
     {
-        Model.Headline = "Thank you for your order";
+        Model.Headline = Html.Resource("ThankYou", "UcommerceResources");
     }
     <h1>@Model.Headline</h1>
     <br />
     @if (string.IsNullOrEmpty(Model.Message))
     {
-        Model.Message = "An order confirmation email has been sent to your email address";
+        Model.Message = Html.Resource("OrderConfirmation", "UcommerceResources");
     }
     <p>@Model.Message</p>
 </div>

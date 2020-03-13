@@ -85,3 +85,19 @@
     -o-background-size: 50px !important;
     background-size: 50px !important;
 }
+
+.ucIcnAddReview {
+    background: url('/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/src/images/icons/add-review.png') no-repeat !important;
+    -ms-background-size: 50px !important;
+    -moz-background-size: 50px !important;
+    -o-background-size: 50px !important;
+    background-size: 50px !important;
+}
+
+.ucIcnProductReviews {
+    background: url('/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/src/images/icons/product-reviews.png') no-repeat !important;
+    -ms-background-size: 50px !important;
+    -moz-background-size: 50px !important;
+    -o-background-size: 50px !important;
+    background-size: 50px !important;
+}

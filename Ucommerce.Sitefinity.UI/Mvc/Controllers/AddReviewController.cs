@@ -9,7 +9,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
     [ControllerToolboxItem(Name = "uAddReview_MVC", Title = "Add Review",
         SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
-        CssClass = "ucAddReview sfMvcIcn")]
+        CssClass = "ucIcnAddReview sfMvcIcn")]
     public class AddReviewController : Controller, IPersonalizable
     {
         public string TemplateName { get; set; } = "Index";

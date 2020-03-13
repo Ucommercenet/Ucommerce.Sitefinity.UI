@@ -14,7 +14,6 @@
 {
     @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
-    @Html.Script(Url.Content("~/bundles/ucommerce-js"), "bottom")
 }
 <div data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
     <input type="hidden" ref="addToBasket" value="@Html.Resource("AddToBasket", "UcommerceResources")"/>

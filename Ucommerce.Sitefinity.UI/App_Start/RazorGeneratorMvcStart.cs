@@ -5,12 +5,15 @@ using RazorGenerator.Mvc;
 
 [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(UCommerce.Sitefinity.UI.RazorGeneratorMvcStart), "Start")]
 
-namespace UCommerce.Sitefinity.UI {
+namespace UCommerce.Sitefinity.UI
+{
     /// <summary>
     /// This class the handle the registration of the Razor View Engine. 
     /// </summary>
-    public static class RazorGeneratorMvcStart {
-        public static void Start() {
+    public static class RazorGeneratorMvcStart
+    {
+        public static void Start()
+        {
         }
     }
 }
