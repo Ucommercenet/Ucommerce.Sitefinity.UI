@@ -19,8 +19,7 @@
     string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
 }
 
-
-<h3>@Html.Resource("ShippingMethod", "UcommerceResources")</h3>
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/main.min.css"), "head")
 
 <div class="container my-4" data-component="shipping-widget" id="shipping-method">
     <script type="application/json" purl="true">

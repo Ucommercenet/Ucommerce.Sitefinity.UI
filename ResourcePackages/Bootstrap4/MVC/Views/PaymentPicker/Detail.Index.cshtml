@@ -21,6 +21,8 @@
     string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
 }
 
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/main.min.css"), "head")
+
 <div class="container my-4" data-component="payment-widget" id="payment-method">
     <script type="application/json" purl="true">
         { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }

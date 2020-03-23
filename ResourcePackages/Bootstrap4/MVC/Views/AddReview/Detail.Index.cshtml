@@ -18,6 +18,8 @@
     string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
 }
 
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/main.min.css"), "head")
+
 <div data-component="review-form" id="review-form" class="mx-3 mx-5 my-5">
     <script type="application/json" purl="true">
         { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
