@@ -7,6 +7,7 @@ function initReviewForm(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
         store,
+        props: ['purl'],
         data: {
             rating: null,
             comments: '',
@@ -32,7 +33,7 @@ function initReviewForm(rootElement) {
                     Comments: this.comments
                 };
 
-                this.$http.post(location.href + '/reviews/add', requestData).then((response) => {
+                this.$http.post(this.purl + '/reviews/add', requestData).then((response) => {
                     if (response.data) {
                         var data = response.data;
                         this.$store.commit('update');
@@ -58,6 +59,8 @@ function initReviewForm(rootElement) {
             }
         },
         created: function () {
+            var scriptElement = rootElement.querySelector('script[purl]');
+            this.purl = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).purl;
             this.setRating(0);
         }
     });

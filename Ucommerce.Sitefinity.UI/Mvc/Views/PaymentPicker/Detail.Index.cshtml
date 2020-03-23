@@ -4,6 +4,8 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
+@using Telerik.Sitefinity.Web;
+@using Newtonsoft.Json;
 
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
 
@@ -13,9 +15,18 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-    <h3 class="heading-underline">@Html.Resource("PaymentMethod", "UcommerceResources")</h3>
+@{
+    Layout = null;
+    string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+    string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+}
+
+<h3 class="heading-underline">@Html.Resource("PaymentMethod", "UcommerceResources")</h3>
 
 <div data-component="payment-widget" id="payment-method">
+    <script type="application/json" purl="true">
+        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+    </script>
     <template v-if="model">
         <template v-if="model.AvailablePaymentMethods.length">
             <template v-for="method in model.AvailablePaymentMethods" :model="model">

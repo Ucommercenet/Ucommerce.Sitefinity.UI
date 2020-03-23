@@ -4,12 +4,8 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-
-@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
-
-@{
-    Layout = null;
-}
+@using Newtonsoft.Json;
+@using Telerik.Sitefinity.Web;
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -17,7 +13,18 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
+@{
+    Layout = null;
+    string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+    string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+}
+
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
+
 <div data-component="address-widget" id="address-widget">
+    <script type="application/json" purl="true">
+        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+    </script>
     <template v-if="model">
         <div class="flex-contain">
             <div class="js-address-billing section-margin">
