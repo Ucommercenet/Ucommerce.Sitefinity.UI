@@ -4,12 +4,10 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
+@using Telerik.Sitefinity.Web;
+@using Newtonsoft.Json;
 
-@{
-    Layout = null;
-}
-
-@Html.StyleSheet(Url.WidgetContent("assets/dist/css/main.min.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -17,7 +15,16 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
+@{
+    Layout = null;
+    string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+    string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+}
+
 <div class="container my-4" data-component="payment-widget" id="payment-method">
+    <script type="application/json" purl="true">
+        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+    </script>
     <div class="row">
         <div class="col-md-6">
             <h3>@Html.Resource("PaymentMethod", "UcommerceResources")</h3>

@@ -4,6 +4,8 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
+@using Telerik.Sitefinity.Web;
+@using Newtonsoft.Json;
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -11,7 +13,16 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
+@{
+    Layout = null;
+    string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+    string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+}
+
 <div data-component="cart" id="shopping-cart">
+    <script type="application/json" purl="true">
+        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+    </script>
     <hgroup>
         <h1>@Html.Resource("ShoppingCart", "UcommerceResources")</h1>
         <template v-if="(model && model.OrderLines && model.OrderLines.length > 0)">
@@ -27,91 +38,91 @@
         <template v-else>
             <table>
                 <thead>
-                <tr>
-                    <th></th>
-                    <th>@Html.Resource("Description", "UcommerceResources")</th>
-                    <th>@Html.Resource("Price", "UcommerceResources")</th>
-                    <th>@Html.Resource("VAT", "UcommerceResources")</th>
-                    <th>@Html.Resource("Quantity", "UcommerceResources")</th>
-                    <th>@Html.Resource("Total", "UcommerceResources")</th>
-                    <th></th>
-                </tr>
+                    <tr>
+                        <th></th>
+                        <th>@Html.Resource("Description", "UcommerceResources")</th>
+                        <th>@Html.Resource("Price", "UcommerceResources")</th>
+                        <th>@Html.Resource("VAT", "UcommerceResources")</th>
+                        <th>@Html.Resource("Quantity", "UcommerceResources")</th>
+                        <th>@Html.Resource("Total", "UcommerceResources")</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <template v-for="(line, key) in model.OrderLines" :key="line.OrderLineId">
-                    <tr class="order-line">
-                        <input :id="'OrderLines_' + key + '__Sku'" :name="'OrderLines[' + key + '].Sku'" type="hidden" :value="line.Sku">
-                        <input :id="'OrderLines_' + key + '__VariantSku'" :name="'OrderLines[' + key + '].VariantSku'" type="hidden" :value="line.VariantSku">
-                        <input :id="'OrderLines_' + key + '__OrderLineId'" :name="'OrderLines[' + key + '].OrderLineId'" type="hidden" :value="line.OrderLineId">
-                        <td>
-                            <figure>
-                                <img :title="line.ProductName" :src="line.ThumbnailUrl" :alt="line.ProductName"/>
-                            </figure>
+                    <template v-for="(line, key) in model.OrderLines" :key="line.OrderLineId">
+                        <tr class="order-line">
+                            <input :id="'OrderLines_' + key + '__Sku'" :name="'OrderLines[' + key + '].Sku'" type="hidden" :value="line.Sku">
+                            <input :id="'OrderLines_' + key + '__VariantSku'" :name="'OrderLines[' + key + '].VariantSku'" type="hidden" :value="line.VariantSku">
+                            <input :id="'OrderLines_' + key + '__OrderLineId'" :name="'OrderLines[' + key + '].OrderLineId'" type="hidden" :value="line.OrderLineId">
+                            <td>
+                                <figure>
+                                    <img :title="line.ProductName" :src="line.ThumbnailUrl" :alt="line.ProductName" />
+                                </figure>
+                            </td>
+                            <td>
+                                <a :href="line.ProductUrl">{{ line.ProductName }}</a>
+                            </td>
+                            <td>
+                                <template v-if="line.Discount && line.Discount > 0">
+                                    <span>
+                                        {{ line.Price }}
+                                    </span>
+                                    <span>
+                                        {{ line.PriceWithDiscount }}
+                                    </span>
+                                </template>
+                                <template v-else>
+                                    <span>
+                                        {{ line.Price }}
+                                    </span>
+                                </template>
+                            </td>
+                            <td>
+                                {{ line.Tax }}
+                            </td>
+                            <td>
+                                <input class="qty form-control inline-block no-padding" type="number" v-model="line.Quantity">
+                                <button name="update-basket" class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="updateCartItems">
+                                    <span>&#10227;</span> <span>@Html.Resource("Update", "UcommerceResources")</span>
+                                </button>
+                            </td>
+                            <td class="item-total">
+                                {{ line.Total }}
+                            </td>
+                            <td>
+                                <button type="button" name="RemoveOrderlineId" class="line-remove" v-on:click="removeCartItem(line.OrderLineId)">@Html.Resource("Remove", "UcommerceResources")</button>
+                            </td>
+                        </tr>
+                    </template>
+                    <tr>
+                        <td rowspan="4" colspan="3"></td>
+                        <td colspan="1">@Html.Resource("SubTotal", "UcommerceResources"):</td>
+                        <td class="order-subtotal">
+                            {{ model.SubTotal }}
                         </td>
-                        <td>
-                            <a :href="line.ProductUrl">{{ line.ProductName }}</a>
-                        </td>
-                        <td>
-                            <template v-if="line.Discount && line.Discount > 0">
-                                <span>
-                                    {{ line.Price }}
-                                </span>
-                                <span>
-                                    {{ line.PriceWithDiscount }}
-                                </span>
-                            </template>
-                            <template v-else>
-                                <span>
-                                    {{ line.Price }}
-                                </span>
-                            </template>
-                        </td>
-                        <td>
-                            {{ line.Tax }}
-                        </td>
-                        <td>
-                            <input class="qty form-control inline-block no-padding" type="number" v-model="line.Quantity">
-                            <button name="update-basket" class="btn-none inline-block update-basket js-update-basket" type="button" v-on:click="updateCartItems">
-                                <span>&#10227;</span> <span>@Html.Resource("Update", "UcommerceResources")</span>
-                            </button>
-                        </td>
-                        <td class="item-total">
-                            {{ line.Total }}
-                        </td>
-                        <td>
-                            <button type="button" name="RemoveOrderlineId" class="line-remove" v-on:click="removeCartItem(line.OrderLineId)">@Html.Resource("Remove", "UcommerceResources")</button>
-                        </td>
+                        <td>&nbsp;</td>
                     </tr>
-                </template>
-                <tr>
-                    <td rowspan="4" colspan="3"></td>
-                    <td colspan="1">@Html.Resource("SubTotal", "UcommerceResources"):</td>
-                    <td class="order-subtotal">
-                        {{ model.SubTotal }}
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="1">@Html.Resource("VAT", "UcommerceResources"):</td>
-                    <td class="order-tax">
-                        {{ model.TaxTotal }}
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr v-if="model.DiscountTotal">
-                    <td colspan="1">@Html.Resource("Discounts", "UcommerceResources"):</td>
-                    <td class="order-discounts">
-                        {{ model.DiscountTotal }}
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="1"><strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></td>
-                    <td class="order-total">
-                        {{ model.OrderTotal }}
-                    </td>
-                    <td>&nbsp;</td>
-                </tr>
+                    <tr>
+                        <td colspan="1">@Html.Resource("VAT", "UcommerceResources"):</td>
+                        <td class="order-tax">
+                            {{ model.TaxTotal }}
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr v-if="model.DiscountTotal">
+                        <td colspan="1">@Html.Resource("Discounts", "UcommerceResources"):</td>
+                        <td class="order-discounts">
+                            {{ model.DiscountTotal }}
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"><strong>@Html.Resource("OrderTotal", "UcommerceResources"):</strong></td>
+                        <td class="order-total">
+                            {{ model.OrderTotal }}
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
                 </tbody>
             </table>
             <div>

@@ -10,6 +10,7 @@ function initReviewList(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
         store,
+        props: ['purl'],
         data: {
             Reviews: null
         },
@@ -63,7 +64,7 @@ function initReviewList(rootElement) {
                 // reset reviews before every call to prevent rendering issues
                 this.Reviews = null;
 
-                this.$http.get(location.href + '/reviews', {}).then((response) => {
+                this.$http.get(this.purl + '/reviews', {}).then((response) => {
                     if (response.data &&
                         response.data.Status &&
                         response.data.Status == 'success' &&
@@ -106,6 +107,8 @@ function initReviewList(rootElement) {
             }
         },
         created: function () {
+            var scriptElement = rootElement.querySelector('script[purl]');
+            this.purl = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).purl;
             this.fetchData();
         }
     });

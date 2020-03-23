@@ -4,8 +4,8 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-
-@Html.StyleSheet(Url.WidgetContent("assets/dist/css/main.min.css"), "head")
+@using Telerik.Sitefinity.Web;
+@using Newtonsoft.Json;
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -13,7 +13,16 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
+@{
+    Layout = null;
+    string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+    string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+}
+
 <div class="container-fluid my-5 pb-5" data-component="cart" id="shopping-cart">
+    <script type="application/json" purl="true">
+        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+    </script>
     <hgroup>
         <h1 class="mb-4">@Html.Resource("ShoppingCart", "UcommerceResources")</h1>
             <template v-if="(model && model.OrderLines && model.OrderLines.length > 0)">

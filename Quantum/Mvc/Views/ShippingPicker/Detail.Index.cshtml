@@ -4,12 +4,8 @@
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.UI.MVC;
 @using Telerik.Sitefinity.Services;
-
-@{
-    Layout = null;
-}
-
-@Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
+@using Telerik.Sitefinity.Web;
+@using Newtonsoft.Json;
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -17,7 +13,16 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
+@{
+    Layout = null;
+    string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+    string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+}
+
 <div data-component="shipping-widget" id="shipping-method">
+    <script type="application/json" purl="true">
+        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+    </script>
     <template v-if="model">
         <h3 class="heading-underline">@Html.Resource("ShippingMethod", "UcommerceResources")</h3>
 

@@ -1,5 +1,8 @@
 ﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
-@using Telerik.Sitefinity.Services
+@using Telerik.Sitefinity.Services;
+@using Newtonsoft.Json;
+@using Telerik.Sitefinity.Modules.Pages;
+@using Telerik.Sitefinity.Web;
 
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/products-review.css"), "head")
 
@@ -9,7 +12,16 @@
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
+@{
+    Layout = null;
+    string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+    string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+}
+
 <div data-component="review-form" id="review-form" class="review-form">
+    <script type="application/json" purl="true">
+        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+    </script>
     <h2 class="sfcommentsTitle">
         @Html.Resource("WriteReview", "UcommerceResources")
     </h2>

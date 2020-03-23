@@ -11,6 +11,7 @@ function initCart(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
         store,
+        props: ['purl'],
         data: {
             model: null
         },
@@ -52,7 +53,7 @@ function initCart(rootElement) {
                     }
                 }
 
-                this.$http.post(location.href + '/uc/checkout/address', requestData).then((response) => {
+                this.$http.post(this.purl + '/uc/checkout/address', requestData).then((response) => {
                     if (response.data) {
                         var data = response.data;
 
@@ -108,10 +109,12 @@ function initCart(rootElement) {
                     500);
             }
         },
-        created: function() {
+        created: function () {
+            var scriptElement = rootElement.querySelector('script[purl]');
+            this.purl = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).purl;
             this.$store.commit('vuecreated', 'address');
 
-            this.$http.get(location.href + '/uc/checkout/address', {}).then((response) => {
+            this.$http.get(this.purl + '/uc/checkout/address', {}).then((response) => {
                 if (response.data &&
                     response.data.Status &&
                     response.data.Status == 'success' &&

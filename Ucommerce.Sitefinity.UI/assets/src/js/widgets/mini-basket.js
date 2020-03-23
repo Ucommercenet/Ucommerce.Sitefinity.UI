@@ -9,6 +9,7 @@ function initCart(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
         store,
+        props: ['purl'],
         data: {
             model: null
         },
@@ -23,8 +24,8 @@ function initCart(rootElement) {
             }
         },
         methods: {
-            fetchData: function() {
-                this.$http.get(location.href + '/uc/checkout/mini-basket', {}).then((response) => {
+            fetchData: function () {
+                this.$http.get(this.purl + '/uc/checkout/mini-basket', {}).then((response) => {
                     if (response.data &&
                         response.data.Status &&
                         response.data.Status == 'success' &&
@@ -38,7 +39,9 @@ function initCart(rootElement) {
                 });
             }
         },
-        created: function() {
+        created: function () {
+            var scriptElement = rootElement.querySelector('script[purl]');
+            this.purl = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).purl;
             this.fetchData();
         }
     });

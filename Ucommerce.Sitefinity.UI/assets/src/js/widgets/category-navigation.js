@@ -14,6 +14,10 @@ function initCategories(rootElement) {
             showFilter: {
                 type: Boolean,
                 default: false
+            },
+            purl: {
+                type: String,
+                default: false
             }
         },
         data: {

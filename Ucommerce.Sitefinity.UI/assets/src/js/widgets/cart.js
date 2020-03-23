@@ -10,6 +10,7 @@ function initCart(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
         store,
+        props: ['purl'],
         data: {
             model: null,
             hasVoucher: false
@@ -44,7 +45,7 @@ function initCart(rootElement) {
                     orderlineKeyValue.push(currentKeyValue);
                 }
 
-                this.$http.post(location.href + '/uc/checkout/cart/update-basket',
+                this.$http.post(this.purl + '/uc/checkout/cart/update-basket',
                     {
                         RefreshBasket: orderlineKeyValue
                     }).then(function(response) {
@@ -78,7 +79,7 @@ function initCart(rootElement) {
                 var model = this.model;
                 var store = this.$store;
 
-                this.$http.post(location.href + '/uc/checkout/cart/remove-orderline',
+                this.$http.post(this.purl + '/uc/checkout/cart/remove-orderline',
                     {
                         orderlineId: itemId
                     }).then(function(response) {
@@ -115,7 +116,7 @@ function initCart(rootElement) {
                 var model = this.model;
                 var voucher = model.Voucher;
 
-                this.$http.post(location.href + '/uc/checkout/cart/vouchers/add',
+                this.$http.post(this.purl + '/uc/checkout/cart/vouchers/add',
                     {
                         Vouchers: voucher
                     }).then(function(response) {
@@ -155,7 +156,7 @@ function initCart(rootElement) {
                 var model = this.model;
                 var store = this.$store;
 
-                this.$http.post(location.href + '/uc/checkout/cart/vouchers/remove',
+                this.$http.post(this.purl + '/uc/checkout/cart/vouchers/remove',
                     {
                         vouchers: vouchersTitle
                     }).then(function(response) {
@@ -188,10 +189,12 @@ function initCart(rootElement) {
                 callback(true)
             }
         },
-        created: function() {
+        created: function () {
+            var scriptElement = rootElement.querySelector('script[purl]');
+            this.purl = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).purl;
             this.$store.commit('vuecreated', 'cart');
 
-            this.$http.get(location.href + '/uc/checkout/cart', {}).then((response) => {
+            this.$http.get(this.purl + '/uc/checkout/cart', {}).then((response) => {
                 if (response.data &&
                     response.data.Status &&
                     response.data.Status == 'success' &&
