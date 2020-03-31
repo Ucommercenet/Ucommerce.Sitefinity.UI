@@ -7,7 +7,7 @@ function initReviewForm(rootElement) {
     new Vue({
         el: '#' + rootElement.id,
         store,
-        props: ['purl'],
+        props: ['purl', 'pid', 'cid', 'cgid'],
         data: {
             rating: null,
             comments: '',
@@ -30,7 +30,10 @@ function initReviewForm(rootElement) {
                     Rating: this.rating,
                     Name: this.userName,
                     Email: this.userEmail,
-                    Comments: this.comments
+                    Comments: this.comments,
+                    ProductId: this.pid,
+                    CategoryId: this.cid,
+                    CatalogGroupId: this.cgid
                 };
 
                 this.$http.post(this.purl + '/reviews/add', requestData).then((response) => {
@@ -61,6 +64,9 @@ function initReviewForm(rootElement) {
         created: function () {
             var scriptElement = rootElement.querySelector('script[purl]');
             this.purl = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).purl;
+            this.pid = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).pid;
+            this.cid = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).cid;
+            this.cgid = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).cgid;
             this.setRating(0);
         }
     });

@@ -366,7 +366,7 @@
     <Compile Include="Mvc\ViewModels\ProductDTO.cs" />
     <Compile Include="Mvc\ViewModels\ProductReview.cs" />
     <Compile Include="Mvc\ViewModels\AddReviewRenderingViewModel.cs" />
-    <Compile Include="Mvc\ViewModels\AddReviewSaveViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\AddReviewSubmitModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductReviewsRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ShippingPickerViewModel.cs" />
     <Compile Include="Mvc\ViewModels\UpdateOrderLine.cs" />

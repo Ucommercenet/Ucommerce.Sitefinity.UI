@@ -32,9 +32,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        public virtual AddReviewDTO Add(AddReviewSaveViewModel viewModel)
+        public virtual AddReviewDTO Add(AddReviewSubmitModel viewModel)
         {
-            var product = SiteContext.Current.CatalogContext.CurrentProduct;
+            Product product;
+
+            if (viewModel.ProductId.HasValue)
+            {
+                product = UCommerce.EntitiesV2.Product.Get(viewModel.ProductId.Value);
+            }
+            else
+            {
+                product = SiteContext.Current.CatalogContext.CurrentProduct;
+            }
+
             var request = System.Web.HttpContext.Current.Request;
             var basket = _orderContext.GetBasket();
             var name = viewModel.Name;
@@ -64,8 +74,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             basket.PurchaseOrder.Customer.Save();
 
+            ProductCatalogGroup catalogGroup;
+
+            if (viewModel.CatalogGroupId.HasValue)
+            {
+                catalogGroup = UCommerce.EntitiesV2.ProductCatalogGroup.Get(viewModel.CatalogGroupId.Value);
+            }
+            else
+            {
+                catalogGroup = SiteContext.Current.CatalogContext.CurrentCatalogGroup;
+            }
+
             var review = new EntitiesV2.ProductReview();
-            review.ProductCatalogGroup = SiteContext.Current.CatalogContext.CurrentCatalogGroup;
+            review.ProductCatalogGroup = catalogGroup;
             review.ProductReviewStatus = _productReviewStatusRepository.SingleOrDefault(s => s.Name == "New");
             review.CreatedOn = DateTime.Now;
             review.CreatedBy = "System";

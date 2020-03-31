@@ -9,6 +9,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model.Contracts
     public interface IReviewsModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
-        ProductReviewsRenderingViewModel GetReviews();
+        ProductReviewsRenderingViewModel GetReviews(int? productId);
     }
 }

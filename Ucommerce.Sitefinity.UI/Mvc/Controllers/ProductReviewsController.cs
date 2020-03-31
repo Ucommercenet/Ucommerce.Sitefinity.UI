@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+﻿    using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using UCommerce.Sitefinity.UI.Api.Model;
@@ -28,13 +28,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         [HttpGet]
-        [RelativeRoute("reviews")]
-        [RelativeRoute("{parentCategory1?}/reviews")]
-        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/reviews")]
-        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews")]
-        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews")]
-        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews")]
-        public ActionResult Data()
+        [RelativeRoute("reviews/data")]
+        [RelativeRoute("{parentCategory1?}/reviews/data")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/reviews/data")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/data")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/data")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/data")]
+        public ActionResult Data(int? productId)
         {
             var model = ResolveModel();
             string message;
@@ -45,7 +45,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
             }
 
-            var vm = model.GetReviews();
+            var vm = model.GetReviews(productId);
 
             var responseDTO = new OperationStatusDTO();
             responseDTO.Status = "success";
