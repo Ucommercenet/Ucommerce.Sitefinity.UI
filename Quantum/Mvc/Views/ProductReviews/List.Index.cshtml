@@ -6,6 +6,7 @@
 @using Telerik.Sitefinity.Services;
 @using Telerik.Sitefinity.Web;
 @using Newtonsoft.Json;
+@using UCommerce.Runtime;
 
 @if (!SystemManager.IsDesignMode)
 {
@@ -17,6 +18,12 @@
     Layout = null;
     string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
     string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+    int productId = -1;
+
+    if (SiteContext.Current.CatalogContext.CurrentProduct != null)
+    {
+        productId = SiteContext.Current.CatalogContext.CurrentProduct.Id;
+    }
 }
 
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
@@ -24,7 +31,10 @@
 
 <div data-component="review-list" id="review-list" class="review-list">
     <script type="application/json" purl="true">
-        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+        {
+        "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)),
+        "pid" : @Html.Raw(JsonConvert.SerializeObject(productId))
+        }
     </script>
     <template v-if="Reviews">
         <div id="" class="sfcommentsThreadRatingWrp sfcommentsThreadRatingFull sfRatingReadOnly">

@@ -3,6 +3,7 @@
 @using Newtonsoft.Json;
 @using Telerik.Sitefinity.Modules.Pages;
 @using Telerik.Sitefinity.Web;
+@using UCommerce.Runtime;
 
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/products-review.css"), "head")
 
@@ -14,13 +15,38 @@
 
 @{
     Layout = null;
-    string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+    string pageNodeUrl = SiteMapBase.GetCurrentNode().Url.ToString();
     string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+    string productId = string.Empty;
+
+    if (SiteContext.Current.CatalogContext.CurrentProduct != null)
+    {
+        productId = SiteContext.Current.CatalogContext.CurrentProduct.Id.ToString();
+    }
+
+    string categoryId = string.Empty;
+
+    if (SiteContext.Current.CatalogContext.CurrentCategory != null)
+    {
+        categoryId = SiteContext.Current.CatalogContext.CurrentCategory.Id.ToString();
+    }
+
+    string catalogGroupId = string.Empty;
+
+    if (SiteContext.Current.CatalogContext.CurrentCatalogGroup != null)
+    {
+        catalogGroupId = SiteContext.Current.CatalogContext.CurrentCatalogGroup.Id.ToString();
+    }
 }
   
 <div data-component="review-form" id="review-form" class="review-form">
     <script type="application/json" purl="true">
-        { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
+        { 
+            "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)),
+            "pid" : @Html.Raw(JsonConvert.SerializeObject(productId)),
+            "cid" : @Html.Raw(JsonConvert.SerializeObject(categoryId)),
+            "cgid" : @Html.Raw(JsonConvert.SerializeObject(catalogGroupId))
+        }
     </script>
     <h2 class="sfcommentsTitle">
         @Html.Resource("WriteReview", "UcommerceResources")

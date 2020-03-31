@@ -38,7 +38,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/add")]
         [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/add")]
         [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/reviews/add")]
-        public ActionResult SubmitReview(AddReviewSaveViewModel reviewModel)
+        public ActionResult SubmitReview(AddReviewSubmitModel reviewModel)
         {
             var model = ResolveModel();
             var parameters = new System.Collections.Generic.Dictionary<string, object>();

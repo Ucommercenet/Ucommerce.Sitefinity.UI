@@ -1,9 +1,12 @@
 ﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
-    public class AddReviewSaveViewModel
+    public class AddReviewSubmitModel
     {
         public string ProductGuid { get; set; }
         public string CategoryGuid { get; set; }
+        public int? CatalogGroupId { get; set; }
+        public int? CategoryId { get; set; }
+        public int? ProductId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public int Rating { get; set; }

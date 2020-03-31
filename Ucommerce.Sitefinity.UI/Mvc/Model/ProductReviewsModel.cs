@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UCommerce.EntitiesV2;
 using UCommerce.Runtime;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -20,13 +21,23 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        public virtual ProductReviewsRenderingViewModel GetReviews()
+        public virtual ProductReviewsRenderingViewModel GetReviews(int? productId)
         {
             var reviewVm = new ProductReviewsRenderingViewModel();
             var clientIp = System.Web.HttpContext.Current.Request.UserHostName;
-            var currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
+            Product currentProduct;
 
-            reviewVm.Reviews = currentProduct.ProductReviews.Select(review => new ProductReview
+            if (productId.HasValue && productId >= 0)
+            {
+                currentProduct = UCommerce.EntitiesV2.Product.Get(productId.Value);
+            }
+            else
+            {
+                currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
+            }
+            
+
+            reviewVm.Reviews = currentProduct.ProductReviews.Select(review => new ViewModels.ProductReview
             {
                 Name = review.Customer.FirstName + " " + review.Customer.LastName,
                 Email = review.Customer.EmailAddress,
