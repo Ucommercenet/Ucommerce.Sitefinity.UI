@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using UCommerce.Api;
 using UCommerce.EntitiesV2;
+using UCommerce.Extensions;
 using UCommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
@@ -33,9 +35,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             foreach (var orderLine in purchaseOrder.OrderLines)
             {
+                var product = CatalogLibrary.GetProduct(orderLine.Sku);
+
                 var orderLineModel = new PreviewOrderLine
                 {
-                    ProductName = orderLine.ProductName,
+                    ProductName = product.DisplayName(),
                     Sku = orderLine.Sku,
                     VariantSku = orderLine.VariantSku,
                     Total = new Money(orderLine.Total.GetValueOrDefault(), orderLine.PurchaseOrder.BillingCurrency)

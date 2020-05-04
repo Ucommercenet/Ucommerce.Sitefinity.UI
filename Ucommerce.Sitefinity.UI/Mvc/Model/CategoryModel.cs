@@ -62,6 +62,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 RouteConstants.PRICE_GROUP_ROUTE_VALUE);
             categoryNavigationViewModel.Routes.Add(RouteConstants.GET_BASKET_ROUTE_NAME,
                 RouteConstants.GET_BASKET_ROUTE_VALUE);
+            
+            if (this.categoryPageId == Guid.Empty)
+            {
+                categoryNavigationViewModel.BaseUrl = UrlResolver.GetCurrentPageNodeUrl();
+            }
+            else
+            {
+                categoryNavigationViewModel.BaseUrl = UrlResolver.GetAbsoluteUrl(UrlResolver.GetPageNodeUrl(this.categoryPageId));
+            }
 
             return categoryNavigationViewModel;
         }

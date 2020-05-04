@@ -10,6 +10,7 @@ using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
+using UCommerce.Extensions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -41,29 +42,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
 
             PurchaseOrder basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-            foreach (var orderLine in basket.OrderLines)
-            {
-                var product = CatalogLibrary.GetProduct(orderLine.Sku);
-                var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
-                var orderLineViewModel = new OrderlineViewModel
-                {
-                    Quantity = orderLine.Quantity,
-                    ProductName = orderLine.ProductName,
-                    Sku = orderLine.Sku,
-                    VariantSku = orderLine.VariantSku,
-                    Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString(),
-                    Discount = orderLine.Discount,
-                    Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString(),
-                    Price = new Money(orderLine.Price, basket.BillingCurrency).ToString(),
-                    ProductUrl = GetProductUrl(CatalogLibrary.GetProduct(orderLine.Sku), this.productDetailsPageId),
-                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(),
-                        basket.BillingCurrency).ToString(),
-                    OrderLineId = orderLine.OrderLineId,
-                    ThumbnailName = imageService.GetImage(product.ThumbnailImageMediaId).Name,
-                    ThumbnailUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url
-                };
-                basketVM.OrderLines.Add(orderLineViewModel);
-            }
+            basketVM.OrderLines = CartModel.GetOrlerLineList(basket, this.productDetailsPageId);
 
             this.GetDiscounts(basketVM, basket);
             basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
@@ -78,6 +57,35 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
 
             return basketVM;
+        }
+
+        internal static IList<OrderlineViewModel> GetOrlerLineList(PurchaseOrder basket, Guid productDetailsPageId)
+        {
+            var result = new List<OrderlineViewModel>();
+            foreach (var orderLine in basket.OrderLines)
+            {
+                var product = CatalogLibrary.GetProduct(orderLine.Sku);
+                var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
+                var orderLineViewModel = new OrderlineViewModel
+                {
+                    Quantity = orderLine.Quantity,
+                    ProductName = product.DisplayName(),
+                    Sku = orderLine.Sku,
+                    VariantSku = orderLine.VariantSku,
+                    Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString(),
+                    Discount = orderLine.Discount,
+                    Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString(),
+                    Price = new Money(orderLine.Price, basket.BillingCurrency).ToString(),
+                    ProductUrl = GetProductUrl(CatalogLibrary.GetProduct(orderLine.Sku), productDetailsPageId),
+                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(),
+                        basket.BillingCurrency).ToString(),
+                    OrderLineId = orderLine.OrderLineId,
+                    ThumbnailName = imageService.GetImage(product.ThumbnailImageMediaId).Name,
+                    ThumbnailUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url
+                };
+                result.Add(orderLineViewModel);
+            }
+            return result;
         }
 
         private void GetDiscounts(CartRenderingViewModel basketVM, PurchaseOrder basket)
@@ -251,7 +259,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return Pages.UrlResolver.GetAbsoluteUrl(redirectUrl);
         }
 
-        private string GetProductUrl(Product product, Guid detailPageId)
+        private static string GetProductUrl(Product product, Guid detailPageId)
         {
             if (detailPageId == Guid.Empty)
             {

@@ -163,8 +163,14 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["Add"]; }
         }
-        
-        [ResourceEntry("HasAVoucher", Value = "Has a voucher", Description = "Has a voucher", LastModified = "2020/02/27")]
+
+        [ResourceEntry("Apply", Value = "Apply", Description = "Apply", LastModified = "2020/05/03")]
+        public string Apply
+        {
+            get { return this["Apply"]; }
+        }
+
+        [ResourceEntry("HasAVoucher", Value = "HAVE A COUPON CODE?", Description = "HAVE A COUPON CODE?", LastModified = "2020/02/27")]
         public string HasAVoucher
         {
             get { return this["HasAVoucher"]; }

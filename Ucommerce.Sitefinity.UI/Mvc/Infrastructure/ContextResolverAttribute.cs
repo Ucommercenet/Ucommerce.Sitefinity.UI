@@ -20,7 +20,9 @@ namespace UCommerce.Sitefinity.UI.Mvc
 
                 if (SystemManager.CurrentHttpContext.Request.Url != null)
                 {
-                    urlSegments = SystemManager.CurrentHttpContext.Request.Url.Segments.Select(i => i.Replace("/", string.Empty)).ToList();
+                    urlSegments = SystemManager.CurrentHttpContext.Request.Url.Segments
+                        .Select(i => System.Web.HttpUtility.UrlDecode(i.Replace("/", string.Empty)))
+                        .ToList();
                 }
                 else
                 {
@@ -28,7 +30,9 @@ namespace UCommerce.Sitefinity.UI.Mvc
 
                     if (currentNode != null)
                     {
-                        urlSegments = currentNode.Url.Split('/').ToList();
+                        urlSegments = currentNode.Url.Split('/')
+                            .Select(i => System.Web.HttpUtility.UrlDecode(i))
+                            .ToList();
                     }
                 }
 
@@ -74,7 +78,7 @@ namespace UCommerce.Sitefinity.UI.Mvc
         {
             if (SiteContext.Current.CatalogContext.CurrentCategory == null)
             {
-                var categories = UCommerce.EntitiesV2.Category.All().Where(p => urlSegments.Contains(p.Name.ToString())).ToList();
+                var categories = UCommerce.EntitiesV2.Category.All().Where(p => urlSegments.Contains(p.Name.ToString()) && p.ProductCatalog.ProductCatalogId == SiteContext.Current.CatalogContext.CurrentCatalog.ProductCatalogId).ToList();
 
                 if (categories != null && categories.Count > 0)
                 {
