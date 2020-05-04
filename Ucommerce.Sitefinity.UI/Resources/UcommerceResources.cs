@@ -547,5 +547,11 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["RatingDesc"]; }
         }
+
+        [ResourceEntry("SortBy", Value = "Sort By", Description = "Sort By", LastModified = "2020/05/04")]
+        public string SortBy
+        {
+            get { return this["SortBy"]; }
+        }
     }
 }

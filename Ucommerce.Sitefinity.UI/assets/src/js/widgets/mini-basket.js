@@ -11,7 +11,8 @@ function initCart(rootElement) {
         store,
         props: ['purl'],
         data: {
-            model: null
+            model: null,
+            isVisible: false
         },
         computed: {
             ...mapState([
@@ -37,6 +38,9 @@ function initCart(rootElement) {
                         this.model = null;
                     }
                 });
+            },
+            toggleVisibility: function () {
+                this.isVisible = !this.isVisible;
             }
         },
         created: function () {
