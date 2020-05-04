@@ -3,22 +3,29 @@
 @using Telerik.Sitefinity.Services
 @using UCommerce.Sitefinity.UI.Mvc.ViewModels
 
-
 @{
     ViewBag.Title = "Products";
 }
-
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-quantum.css"), "head")
-
 @if (!SystemManager.IsDesignMode)
 {
     @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
+
+<select onchange="sortProducts(this)">
+    @foreach (var item in Model.Sorting)
+    {
+        <option value="@item.Key" selected="@item.IsActive">@item.Title</option>
+    }
+</select>
+
 <div data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
-    <input type="hidden" ref="addToBasket" value="@Html.Resource("AddToBasket", "UcommerceResources")"/>
-    <input type="hidden" ref="notAddToBasket" value="@Html.Resource("NotAddToBasket", "UcommerceResources")"/>
+    <input type="hidden" ref="addToBasket" value="@Html.Resource("AddToBasket", "UcommerceResources")" />
+    <input type="hidden" ref="notAddToBasket" value="@Html.Resource("NotAddToBasket", "UcommerceResources")" />
+
+
     <div class="sfCatalogTotalCount">
         <div>
             <em>@Model.TotalCount @Html.Resource("Products", "UcommerceResources")</em>
@@ -33,12 +40,10 @@
            redirectUrlTemplate = Model.PagingUrlTemplate
         })
     }
-
     @foreach (var route in Model.Routes)
     {
         <input type="hidden" class="@route.Key" value="@route.Value" />
     }
-
     <ul class="sfproductsList">
         @foreach (var product in Model.Products)
         {
@@ -62,7 +67,6 @@
                                 <span class="sfDiscPrice">@product.Discount</span>
                             }
                         </div>
-
                         <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">
                         </add-to-basket>
                     </div>
@@ -90,24 +94,28 @@
         }
     </div>
 </div>
-
 <script type="text/x-template" id="add-to-basket-template">
     <div>
         <span class="sfTxtLbl">@Html.Resource("Quantity", "UcommerceResources"):</span>
-        <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityRequiredFieldValidator" class="sfErrorWrp" style="display:none;">
+        <span class="sfErrorWrp" style="display:none;">
             <span class="sfError">
                 @Html.Resource("SpecifyQuantity", "UcommerceResources")
             </span>
         </span>
-        <span id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_quantityValidator" class="sfErrorWrp" style="display:none;">
+        <span class="sfErrorWrp" style="display:none;">
             <span class="sfError">
                 @Html.Resource("QuantityValidation", "UcommerceResources")
             </span>
         </span>
-        <input title="Product Quantity" id="productQuantityInput" v-model="quantity" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$quantity" type="text" class="sfTxt sfQuantity" />
-
-        <input type="button" title="Add to cart button" name="ctl00$contentPlaceholder$C020$productsFrontendDetail$ctl00$ctl00$SingleItemContainer$ctrl0$addToCartWidget$ctl00$ctl00$addToCartButton" value="@Html.Resource("AddToCart", "UcommerceResources")" v-on:click="addToBasket()" id="ctl00_contentPlaceholder_C020_productsFrontendDetail_ctl00_ctl00_SingleItemContainer_ctrl0_addToCartWidget_ctl00_ctl00_addToCartButton" class="sfAddToCartBtn" />
+        <input title="Product Quantity" id="productQuantityInput" v-model="quantity" type="text" class="sfTxt sfQuantity" />
+        <input type="button" title="Add to cart button" value="@Html.Resource("AddToCart", "UcommerceResources")" v-on:click="addToBasket()" class="sfAddToCartBtn" />
         <span class="sfAddToCart" v-show="showAddToBasketMessage">{{addToBasketMessage}}</span>
     </div>
 </script>
-
+<script type="text/javascript">
+    function sortProducts(item){
+        var baseUrl = window.location.href.split('?')[0].replace(/\/$/, "") +"/?";
+        baseUrl += "sortBy=" + item.value;
+        window.location.href = baseUrl;
+    }
+</script>

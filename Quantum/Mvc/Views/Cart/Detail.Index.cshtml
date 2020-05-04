@@ -33,7 +33,7 @@
         <div class="sfProductsInCart">
             <template v-if="(model && model.OrderLines && model.OrderLines.length > 0)">
                 {{ model.OrderLines.length }}&nbsp;@Html.Resource("Items", "UcommerceResources")
-            </template>s
+            </template>
         </div>
         <template v-if="model.OrderLines.length == 0">
             <div class="alert alert-info section-margin">
@@ -107,7 +107,7 @@
                                 <input id="voucherCode" class="voucherCode qty form-control inline-block no-padding" type="text" v-model="model.Voucher">
                                 <button class="btn-none addVoucher inline-block" type="button" v-on:click="applyVoucher">
                                     <i class="fas fa-sync-alt fa-1x" aria-hidden="true"></i>
-                                    <span class="btn-text">@Html.Resource("Add", "UcommerceResources")</span>
+                                    <span class="btn-text">@Html.Resource("Apply", "UcommerceResources")</span>
                                 </button>
                             </div>
                             <div class="table-cell empty-cell">&nbsp;</div>
