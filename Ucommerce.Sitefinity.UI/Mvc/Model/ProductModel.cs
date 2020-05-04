@@ -21,6 +21,7 @@ using UCommerce.Extensions;
 using UCommerce.Infrastructure.Globalization;
 using UCommerce.Runtime;
 using UCommerce.Search;
+using UCommerce.Catalog.Models;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -63,9 +64,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var searchTerm = System.Web.HttpContext.Current.Request.QueryString["search"];
 
             var queryResult = this.GetProductsQuery(currentCategory, searchTerm);
+            this.ApplySorting(ref queryResult, ref viewModel);
 
             var itemsToSkip = (viewModel.CurrentPage > 1) ? this.itemsPerPage * (viewModel.CurrentPage - 1) : 0;
-
+            
             var products = queryResult
                             .Skip(itemsToSkip)
                             .Take(this.itemsPerPage)
@@ -77,8 +79,68 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             viewModel.ShowPager = viewModel.TotalPagesCount > 1;
             viewModel.PagingUrlTemplate = this.GetPagingUrlTemplate(currentCategory);
             viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
-
+            
             return viewModel;
+        }
+
+        public virtual void ApplySorting(ref IQueryable<Product> productsQuery, ref ProductListViewModel listVm)
+        {
+            var sortingOptions = new List<SortOption>();
+
+            sortingOptions.Add(new SortOption() { Title = "Price low to high", Key = "PriceAsc" });
+            sortingOptions.Add(new SortOption() { Title = "Price high to low", Key = "PriceDesc" });
+            sortingOptions.Add(new SortOption() { Title = "Name (A - Z)", Key = "NameAsc" });
+            sortingOptions.Add(new SortOption() { Title = "Name (Z - A)", Key = "NameDesc" });
+            sortingOptions.Add(new SortOption() { Title = "Created date", Key = "DateDesc" });
+            sortingOptions.Add(new SortOption() { Title = "Rating", Key = "RatingDesc" });
+            
+            SortOption activeSortOption;
+            var sortExpression = System.Web.HttpContext.Current.Request.QueryString["sortBy"];
+            if (!string.IsNullOrWhiteSpace(sortExpression))
+            {
+                activeSortOption = sortingOptions.FirstOrDefault(s => s.Key == sortExpression);
+                if (activeSortOption != null)
+                {
+                    activeSortOption.IsActive = true;
+
+                    if (sortExpression == "PriceAsc")
+                    {
+                        productsQuery = productsQuery.OrderBy(p => CatalogLibrary.CalculatePrice(new List<Product>() { p }, null).Items.First().ListPriceExclTax );
+                    }
+                    else if (sortExpression == "PriceDesc")
+                    {
+                        productsQuery = productsQuery.OrderByDescending(p => CatalogLibrary.CalculatePrice(new List<Product>() { p }, null).Items.First().ListPriceExclTax);
+                    }
+                    else if (sortExpression == "NameAsc")
+                    {
+                        productsQuery = productsQuery.OrderBy(p => p.DisplayName());
+                    }
+                    else if (sortExpression == "NameDesc")
+                    {
+                        productsQuery = productsQuery.OrderByDescending(p => p.DisplayName());
+                    }
+                    else if (sortExpression == "DateDesc")
+                    {
+                        productsQuery = productsQuery.OrderByDescending(p => p.CreatedOn);
+                    }
+                    else if (sortExpression == "RatingDesc")
+                    {
+                        productsQuery = productsQuery.OrderByDescending(p => p.Rating);
+                    }
+                }
+                else
+                {
+                    sortingOptions.Single(s => s.Key == "DateDesc").IsActive = true;
+                    productsQuery = productsQuery.OrderByDescending(p => p.ModifiedOn);
+                }
+            }
+            else
+            {
+                sortingOptions.Single(s => s.Key == "DateDesc").IsActive = true;
+                productsQuery = productsQuery.OrderByDescending(p => p.ModifiedOn);
+            }
+
+            listVm.Sorting = sortingOptions;
         }
 
         public virtual ProductDetailViewModel CreateDetailsViewModel()

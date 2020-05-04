@@ -10,6 +10,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public ProductListViewModel()
         {
             this.Routes = new Dictionary<string, string>();
+            this.Sorting = new List<SortOption>();
         }
 
         public string CssClass { get; set; }
@@ -27,5 +28,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public string PagingUrlTemplate { get; set; }
 
         public Dictionary<string, string> Routes { get; set; }
+
+        public IList<SortOption> Sorting { get; set; }
     }
 }

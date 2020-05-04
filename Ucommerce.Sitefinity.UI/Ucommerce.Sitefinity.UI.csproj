@@ -368,6 +368,7 @@
     <Compile Include="Mvc\ViewModels\AddReviewSubmitModel.cs" />
     <Compile Include="Mvc\ViewModels\ProductReviewsRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\ShippingPickerViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\SortOption.cs" />
     <Compile Include="Mvc\ViewModels\UpdateOrderLine.cs" />
     <Compile Include="Mvc\ViewModels\VariantTypeViewModel.cs" />
     <Compile Include="Mvc\ViewModels\VariantViewModel.cs" />

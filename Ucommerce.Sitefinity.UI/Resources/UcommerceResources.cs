@@ -499,5 +499,17 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["Items"]; }
         }
+        
+        [ResourceEntry("ViewShoppingCart", Value = "View shopping cart", Description = "View shopping cart", LastModified = "2020/05/04")]
+        public string ViewShoppingCart
+        {
+            get { return this["ViewShoppingCart"]; }
+        }
+
+        [ResourceEntry("Checkout", Value = "Checkout", Description = "Checkout", LastModified = "2020/05/04")]
+        public string Checkout
+        {
+            get { return this["Checkout"]; }
+        }
     }
 }
