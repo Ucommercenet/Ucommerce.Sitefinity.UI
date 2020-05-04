@@ -22,6 +22,7 @@ using UCommerce.Infrastructure.Globalization;
 using UCommerce.Runtime;
 using UCommerce.Search;
 using UCommerce.Catalog.Models;
+using Telerik.Sitefinity.Localization;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -87,12 +88,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         {
             var sortingOptions = new List<SortOption>();
 
-            sortingOptions.Add(new SortOption() { Title = "Price low to high", Key = "PriceAsc" });
-            sortingOptions.Add(new SortOption() { Title = "Price high to low", Key = "PriceDesc" });
-            sortingOptions.Add(new SortOption() { Title = "Name (A - Z)", Key = "NameAsc" });
-            sortingOptions.Add(new SortOption() { Title = "Name (Z - A)", Key = "NameDesc" });
-            sortingOptions.Add(new SortOption() { Title = "Created date", Key = "DateDesc" });
-            sortingOptions.Add(new SortOption() { Title = "Rating", Key = "RatingDesc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "PriceAsc"), Key = "PriceAsc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "PriceDesc"), Key = "PriceDesc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "NameAsc"), Key = "NameAsc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "NameDesc"), Key = "NameDesc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "DateDesc"), Key = "DateDesc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "RatingDesc"), Key = "RatingDesc" });
             
             SortOption activeSortOption;
             var sortExpression = System.Web.HttpContext.Current.Request.QueryString["sortBy"];

@@ -511,5 +511,41 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["Checkout"]; }
         }
+        
+        [ResourceEntry("PriceAsc", Value = "Price low to high", Description = "Price low to high", LastModified = "2020/05/04")]
+        public string PriceAsc
+        {
+            get { return this["PriceAsc"]; }
+        }
+
+        [ResourceEntry("PriceDesc", Value = "Price high to low", Description = "Price high to low", LastModified = "2020/05/04")]
+        public string PriceDesc
+        {
+            get { return this["PriceDesc"]; }
+        }
+
+        [ResourceEntry("NameAsc", Value = "Name (A - Z)", Description = "Name (A - Z)", LastModified = "2020/05/04")]
+        public string NameAsc
+        {
+            get { return this["NameAsc"]; }
+        }
+
+        [ResourceEntry("NameDesc", Value = "Name (Z - A)", Description = "Name (Z - A)", LastModified = "2020/05/04")]
+        public string NameDesc
+        {
+            get { return this["NameDesc"]; }
+        }
+
+        [ResourceEntry("DateDesc", Value = "Created date", Description = "Created date", LastModified = "2020/05/04")]
+        public string DateDesc
+        {
+            get { return this["DateDesc"]; }
+        }
+        
+        [ResourceEntry("RatingDesc", Value = "Rating", Description = "Rating", LastModified = "2020/05/04")]
+        public string RatingDesc
+        {
+            get { return this["RatingDesc"]; }
+        }
     }
 }
