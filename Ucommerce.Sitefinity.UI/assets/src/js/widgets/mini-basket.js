@@ -39,7 +39,8 @@ function initCart(rootElement) {
                     }
                 });
             },
-            toggleVisibility: function () {
+            toggleVisibility: function (e) {
+                e.preventDefault();
                 this.isVisible = !this.isVisible;
             }
         },
@@ -47,6 +48,11 @@ function initCart(rootElement) {
             var scriptElement = rootElement.querySelector('script[purl]');
             this.purl = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).purl;
             this.fetchData();
+        },
+        filters: {
+            removeSpace: function (value) {
+                return value.split(" ").join("");
+            }
         }
     });
 }

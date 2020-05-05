@@ -553,5 +553,29 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["SortBy"]; }
         }
+
+        [ResourceEntry("ProductsByCategory", Value = "Products by Category", Description = "Products by Category", LastModified = "2020/05/05")]
+        public string ProductsByCategory
+        {
+            get { return this["ProductsByCategory"]; }
+        }
+
+        [ResourceEntry("ClearCategory", Value = "Clear Category", Description = "Clear Category", LastModified = "2020/05/05")]
+        public string ClearCategory
+        {
+            get { return this["ClearCategory"]; }
+        }
+
+        [ResourceEntry("NoProductsMessage", Value = "There are no products.", Description = "There are no products.", LastModified = "2020/05/05")]
+        public string NoProductsMessage
+        {
+            get { return this["NoProductsMessage"]; }
+        }
+
+        [ResourceEntry("NoProductsMessageLong", Value = "There are no products in your cart.", Description = "There are no products in your cart.", LastModified = "2020/05/05")]
+        public string NoProductsMessageLong
+        {
+            get { return this["NoProductsMessageLong"]; }
+        }
     }
 }
