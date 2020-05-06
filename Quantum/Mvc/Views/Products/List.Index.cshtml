@@ -7,19 +7,26 @@
     ViewBag.Title = "Products";
 }
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
-@Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-quantum.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/uc-quantum.css"), "head")
 @if (!SystemManager.IsDesignMode)
 {
     @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
     @Html.Script(Url.WidgetContent("assets/build/js/main.js"), "bottom", false)
 }
 
-<select onchange="sortProducts(this)">
-    @foreach (var item in Model.Sorting)
-    {
-        <option value="@item.Key" selected="@item.IsActive">@item.Title</option>
-    }
-</select>
+<div class="sfProductsSortByWrp">
+    <div>
+        <div class="sfSortByWrp">
+            <label>@Html.Resource("SortBy", "UcommerceResources")</label>:
+            <select onchange="sortProducts(this)">
+                @foreach (var item in Model.Sorting)
+                {
+                    <option value="@item.Key" selected="@item.IsActive">@item.Title</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>
 
 <div data-component="products" id="@Html.UniqueId("product-list")" v-cloak>
     <input type="hidden" ref="addToBasket" value="@Html.Resource("AddToBasket", "UcommerceResources")" />
@@ -114,8 +121,18 @@
 </script>
 <script type="text/javascript">
     function sortProducts(item){
-        var baseUrl = window.location.href.split('?')[0].replace(/\/$/, "") +"/?";
-        baseUrl += "sortBy=" + item.value;
-        window.location.href = baseUrl;
+        var updatetUrl = updateQueryStringParameter(window.location.href, "sortBy", item.value);
+        window.location.href = updatetUrl;
+    }
+
+    function updateQueryStringParameter(uri, key, value) {
+      var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+          var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+          if (uri.match(re)) {
+            return uri.replace(re, '$1' + key + "=" + value + '$2');
+          }
+          else {
+            return uri + separator + key + "=" + value;
+          }
     }
 </script>

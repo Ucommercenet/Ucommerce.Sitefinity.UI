@@ -21,7 +21,7 @@
     string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
 }
 
-<div data-component="payment-widget" id="payment-method">
+<div data-component="payment-widget" id="payment-method" v-cloak>
     <script type="application/json" purl="true">
         { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
     </script>

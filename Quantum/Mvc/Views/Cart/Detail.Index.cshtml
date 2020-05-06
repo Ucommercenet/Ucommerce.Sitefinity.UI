@@ -22,7 +22,7 @@
     string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
 }
 
-<div data-component="cart" class="cart-table" id="shopping-cart">
+<div data-component="cart" class="cart-table" id="shopping-cart" v-cloak>
     <script type="application/json" purl="true">
         { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
     </script>
@@ -101,7 +101,10 @@
                     </template>
                     <template v-if="hasVoucher">
                         <div class="table-row">
-                            <div class="table-cell empty-cell">&nbsp;</div>
+                            <div class="table-cell empty-cell">
+                                <input id="hasVoucher-enabled" type="checkbox" v-model="hasVoucher" />
+                                <label for="hasVoucher-enabled" class="has-voucher-label">@Html.Resource("HasAVoucher", "UcommerceResources")</label>
+                            </div>
                             <div class="table-cell">
                                 <label for="voucherCode">@Html.Resource("DiscountCode", "UcommerceResources"):</label>
                                 <input id="voucherCode" class="voucherCode qty form-control inline-block no-padding" type="text" v-model="model.Voucher">
@@ -120,8 +123,8 @@
                     <template v-else>
                         <div class="table-row">
                             <div class="table-cell border-cell-0 empty-cell">
-                                <input id="hasVoucher" type="checkbox" v-model="hasVoucher" />
-                                <label for="hasVoucher" class="has-voucher-label">@Html.Resource("HasAVoucher", "UcommerceResources")</label>
+                                <input id="hasVoucher-disabled" type="checkbox" v-model="hasVoucher" />
+                                <label for="hasVoucher-disabled" class="has-voucher-label">@Html.Resource("HasAVoucher", "UcommerceResources")</label>
                             </div>
                         </div>
                     </template>

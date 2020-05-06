@@ -15,24 +15,25 @@
     string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
 }
 @Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
-@Html.StyleSheet("/Sitefinity/WebsiteTemplates/Quantum/App_Themes/Quantum/global/qShop.css", "head")
 
-<div data-component="mini-basket" id="mb2">
+<div data-component="mini-basket" id="mb2" v-cloak>
     <script type="application/json" purl="true">
         { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
     </script>
 
-    <div v-if="model" class="sfcartSummaryExpandableWrp">
-        <div>
-            <div class="sfcartSummaryWrp!">
-                <a href="#" onclick="return false;" class="sflnkToggleCart!">
-                    <span class="sflnkToggleCartLbl!">@Html.Resource("ShoppingCart", "UcommerceResources")</span>
+    <div v-if="model" class="sfcartSummaryWrp sfcartSummaryExpandableWrp">
+        <div class="sflnkToggleCartWrp">
+            <div class="sflnkToggleCartWrpIn">
+                <a v-on:click="toggleVisibility" class="sflnkToggleCart">
+                    <span class="sflnkToggleCartLbl">@Html.Resource("ShoppingCart", "UcommerceResources")</span>
 
-                    <strong class="sfcartSummaryItemsCount">{{ model.NumberOfItems }} &nbsp;@Html.Resource("Products", "UcommerceResources")&nbsp;/&nbsp;{{ model.Total }}</strong>
+                    <strong v-show="model.NumberOfItems > 0" class="sfcartSummaryItemsCount">{{ model.NumberOfItems }} &nbsp;@Html.Resource("Products", "UcommerceResources")&nbsp;/&nbsp;{{ model.Total }}</strong>
+                    <strong v-show="model.NumberOfItems < 1" class="sfcartSummaryItemsCount">@Html.Resource("NoProductsMessage", "UcommerceResources")</strong>
                 </a>
             </div>
         </div>
-        <div class="sfcartSummaryDetailsWrp" style="">
+
+        <div v-if="isVisible" class="sfcartSummaryDetailsWrp">
             <table class="sfminiShoppingCart">
                 <tbody>
                     <tr v-for="prod in model.OrderLines">
@@ -46,12 +47,12 @@
 
                         </td>
                         <td class="sfItmPriceCol">
-                            <span><span>{{prod.Quantity}} @Html.Resource("Items", "UcommerceResources")</span> ×</span>
+                            <span><span>{{prod.Quantity}}</span> ×</span>
                             <div>
                                 <div class="sfTxtContent"></div>
 
                                 <div>
-                                    <span class="sfRegPrice">{{prod.Price}}</span>
+                                    <span class="sfRegPrice">{{prod.Price | removeSpace}}</span>
                                 </div>
                             </div>
                         </td>
@@ -59,12 +60,16 @@
                 </tbody>
             </table>
 
-            <div class="sfPriceTotal">
+            <div class="sfPriceTotal" v-show="model.NumberOfItems > 0">
                 {{ model.NumberOfItems }}&nbsp;@Html.Resource("Products", "UcommerceResources")&nbsp;@Html.Resource("SubTotal", "UcommerceResources"): <strong class="sfPrice">{{ model.Total }}</strong>
             </div>
-            <div class="sfcartSummaryBtnsWrp sfClearfix">
+            <div class="sfPriceTotal" v-show="model.NumberOfItems < 1">
+                <span class="sfcartSummaryNoItems">@Html.Resource("NoProductsMessageLong", "UcommerceResources")</span>
+            </div>
+            <div class="sfcartSummaryBtnsWrp sfClearfix" v-show="model.NumberOfItems > 0">
                 <a class="sflnkToCart" :href="model.CartPageUrl">@Html.Resource("ViewShoppingCart", "UcommerceResources")</a> <a class="sfCheckoutBtn" :href="model.CheckoutPageUrl">@Html.Resource("Checkout", "UcommerceResources")</a>
             </div>
         </div>
+
     </div>
 </div>

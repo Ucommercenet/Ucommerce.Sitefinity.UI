@@ -21,7 +21,7 @@
 
   @Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
   
-<div class="section-margin " data-component="checkout-overview" id="checkout-overview">
+<div class="section-margin " data-component="checkout-overview" id="checkout-overview" v-cloak>
     <script type="application/json" purl="true">
         { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
     </script>

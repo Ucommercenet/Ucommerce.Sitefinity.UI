@@ -6,7 +6,7 @@
 @using UCommerce.Sitefinity.UI.Mvc.Model;
 @using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 @Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-vue-styles.css"), "head")
-@Html.StyleSheet(Url.WidgetContent("assets/src/css/uc-quantum.css"), "head")
+@Html.StyleSheet(Url.WidgetContent("assets/dist/css/uc-quantum.css"), "head")
 @if (!SystemManager.IsDesignMode)
 {
     @Html.Script(Url.WidgetContent("assets/build/js/vendor.bundle.js"), "bottom", false)
@@ -15,11 +15,10 @@
 
 <div>
     <h2 class="sffilterTitle">
-        Categories
+        @Html.Resource("ProductsByCategory", "UcommerceResources")
     </h2>
-    <a class="sffilterClearLnk" href="@Model.BaseUrl">@Html.Resource("ClearFilter", "UcommerceResources")</a>
+    <a class="sffilterClearLnk" href="@Model.BaseUrl">@Html.Resource("ClearCategory", "UcommerceResources")</a>
     
-
     <ul class="sfShopByFilterGroupList sfVerticalList">
         <h3 class="sfGroupTitle"></h3>
         @foreach (var cat in Model.Categories)
