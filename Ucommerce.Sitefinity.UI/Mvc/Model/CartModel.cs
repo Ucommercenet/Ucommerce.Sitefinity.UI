@@ -55,6 +55,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             basketVM.RedirectUrl = GetRedirectUrl(redirectPageId);
             basketVM.RefreshUrl = refreshUrl;
             basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
+            basketVM.Discounts = basket.Discounts.Select(d => d.CampaignItemName).ToList();
 
             return basketVM;
         }
@@ -160,26 +161,37 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         public virtual CartUpdateBasketViewModel RemoveVoucher(CartUpdateBasket model)
         {
             var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-            var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
-            var vouchers = model.Vouchers;
 
-            if (vouchers.Any())
+            foreach (var item in model.Vouchers)
             {
-                foreach (var voucher in vouchers)
+                var itemForDeletion = basket.Discounts.FirstOrDefault(d => d.CampaignItemName == item);
+
+                if (itemForDeletion != null)
                 {
+                    basket.RemoveDiscount(itemForDeletion);
+                    var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
                     if (prop != null)
                     {
-                        prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
+                        prop.Value = prop.Value.Replace(item + ",", string.Empty);
                         prop.Save();
                     }
                 }
             }
+            string voucherPropValue = string.Empty;
 
+            if (basket.Discounts.Count > 0)
+            {
+                var discountCodesList = basket.Discounts.Select(d => d.CampaignItemName).ToList();
+                voucherPropValue = string.Join(",", discountCodesList);
+            }
+
+            _transactionLibraryInternal.SetOrderProperty("voucherCodes", voucherPropValue);
+            
             basket.Save();
             _transactionLibraryInternal.ExecuteBasketPipeline();
 
             var updatedBasket = MapCartUpdate(model);
-            updatedBasket.Vouchers.Except(vouchers).ToList();
+            updatedBasket.Vouchers.Except(model.Vouchers).ToList();
 
             return updatedBasket;
         }

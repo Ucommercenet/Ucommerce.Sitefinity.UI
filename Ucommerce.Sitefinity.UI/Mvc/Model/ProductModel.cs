@@ -346,26 +346,28 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         private IQueryable<Product> ApplyManualSelection(List<int> productIds, List<int> categoryIds)
         {
-            var productsQuery = SearchLibrary.FacetedQuery();
-
             var products = new List<Product>();
             products.AddRange(this.GetProductsFromSelectedCategoryIds(categoryIds));
             products.AddRange(this.GetProductsFromSelectedProductIds(productIds));
 
             var facetsResolver = new FacetResolver(this.queryStringBlackList);
+            var facets = facetsResolver.GetFacetsFromQueryString();
 
-            List<UCommerce.Documents.Product> productsFromFacets = SearchLibrary.FacetedQuery()
-                .Where(x => x.CategoryIds.In(categoryIds) || x.Id.In(productIds))
-                .WithFacets(facetsResolver.GetFacetsFromQueryString())
-                .ToList();
-
-            if (!productsFromFacets.Any())
+            if (facets != null && facets.Any())
+            {
+                List<UCommerce.Documents.Product> productsFromFacets = SearchLibrary.FacetedQuery()
+                    .Where(x => x.CategoryIds.In(categoryIds) || x.Id.In(productIds))
+                    .WithFacets(facets)
+                    .ToList();
+        
+                return products.Where(x => productsFromFacets.Any(y => x.Sku == y.Sku)).AsQueryable();
+            }
+            else
+            {
                 return products.AsQueryable();
-
-            return products.Where(x => productsFromFacets.Any(y => x.Sku == y.Sku)).AsQueryable();
+            }
         }
-
-
+        
         private IList<Product> GetProductsFromSelectedCategoryIds(List<int> categoryIds)
         {
             List<Product> result = new List<Product>();
@@ -428,14 +430,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 products = SearchLibrary.GetProductsFor(currentCategory, facetsForQuerying);
             }
 
+            
             ICollection<Product> productsInCategory = null;
             productsInCategory = CatalogLibrary.GetProducts(currentCategory).ToList();
-
-            if (!products.Any())
-            {
-                return productsInCategory.AsQueryable();
-            }
-
+            
             var listOfProducts = new List<Product>();
 
             foreach (var product in products)
@@ -532,7 +530,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         public const string PAGER_QUERY_STRING_KEY = "page";
         private const string NO_CATALOG_ERROR_MESSAGE = "There is no product catalog configured.";
         private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
-        private IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog", "page" };
+        private IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog", "page", "sortBy" };
         private int itemsPerPage;
         private bool openInSamePage;
         private Guid detailsPageId;
