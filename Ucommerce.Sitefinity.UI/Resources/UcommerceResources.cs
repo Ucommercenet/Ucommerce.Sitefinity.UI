@@ -554,6 +554,18 @@ namespace UCommerce.Sitefinity.UI.Resources
             get { return this["SortBy"]; }
         }
 
+        [ResourceEntry("SelectedCurrency", Value = "Currency", Description = "Currency", LastModified = "2020/05/11")]
+        public string SelectedCurrency
+        {
+            get { return this["SelectedCurrency"]; }
+        }
+
+        [ResourceEntry("FilterByCategory", Value = "Filter By Category", Description = "Filter By Category", LastModified = "2020/05/11")]
+        public string FilterByCategory
+        {
+            get { return this["FilterByCategory"]; }
+        }
+
         [ResourceEntry("ProductsByCategory", Value = "Products by Category", Description = "Products by Category", LastModified = "2020/05/05")]
         public string ProductsByCategory
         {
