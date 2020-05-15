@@ -336,12 +336,13 @@
     <Compile Include="Mvc\Model\PaymentPickerModel.cs" />
     <Compile Include="Mvc\Model\ProductModel.cs" />
     <Compile Include="Mvc\Model\ShippingPickerModel.cs" />
-    <Compile Include="Mvc\ViewModels\Address.cs" />
+    <Compile Include="Mvc\ViewModels\AddressViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddressRenderingViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddressSave.cs" />
     <Compile Include="Mvc\ViewModels\AddressSaveViewModel.cs" />
     <Compile Include="Mvc\ViewModels\AddReviewDTO.cs" />
     <Compile Include="Mvc\ViewModels\BasketPreviewViewModel.cs" />
+    <Compile Include="Mvc\ViewModels\CountryViewModel.cs" />
     <Compile Include="Mvc\ViewModels\OrderOverviewViewModel.cs" />
     <Compile Include="Mvc\ViewModels\CartUpdateBasket.cs" />
     <Compile Include="Mvc\ViewModels\CategoryNavigationCategoryViewModel.cs" />
