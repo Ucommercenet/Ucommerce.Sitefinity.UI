@@ -33,11 +33,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			foreach (var orderLine in purchaseOrder.OrderLines)
 			{
-                var product = CatalogLibrary.GetProduct(orderLine.Sku);
-
 				var orderLineModel = new PreviewOrderLine
 				{
-                    ProductName = product.DisplayName(),
+					ProductName = orderLine.ProductName,
 					Sku = orderLine.Sku,
 					VariantSku = orderLine.VariantSku,
 					Total = new Money(orderLine.Total.GetValueOrDefault(), orderLine.PurchaseOrder.BillingCurrency)
