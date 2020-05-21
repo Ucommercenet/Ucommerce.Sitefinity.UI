@@ -7,7 +7,7 @@ initializeComponent("products", initProducts);
 function initProducts(rootElement) {
     const scriptElement = rootElement.querySelector('script[data-variants=true]');
     var variants = [];
-    if (scriptElement) {variants
+    if (scriptElement) {
         var prodVariants = JSON.parse(scriptElement.innerHTML).variants;
 
         for (var i = 0; i < prodVariants.length; i++) {
