@@ -49,7 +49,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             var responseDTO = new OperationStatusDTO();
             responseDTO.Status = "success";
-            responseDTO.Data.Add("data", vm);
+            responseDTO.Data.Add("Reviews", vm.Reviews);
 
             return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
