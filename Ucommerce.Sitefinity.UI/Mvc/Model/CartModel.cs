@@ -176,15 +176,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 					}
 				}
 			}
-			string voucherPropValue = string.Empty;
-
-			if (basket.Discounts.Count > 0)
-			{
-				var discountCodesList = basket.Discounts.Select(d => d.CampaignItemName).ToList();
-				voucherPropValue = string.Join(",", discountCodesList);
-			}
-
-			_transactionLibraryInternal.SetOrderProperty("voucherCodes", voucherPropValue);
 
 			basket.Save();
 			_transactionLibraryInternal.ExecuteBasketPipeline();
