@@ -44,8 +44,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             viewModel.IsEmpty = IsBasketEmpty(viewModel);
             viewModel.Total = GetBasketTotal();
             viewModel.RefreshUrl = refreshUrl;
-            viewModel.CartPageUrl = GettPageAbsoluteUrl(this.cartPageId);
-            viewModel.CheckoutPageUrl = GettPageAbsoluteUrl(this.checkoutPageId);
+            viewModel.CartPageUrl = GetPageAbsoluteUrl(this.cartPageId);
+            viewModel.CheckoutPageUrl = GetPageAbsoluteUrl(this.checkoutPageId);
 
             return viewModel;
         }
@@ -75,8 +75,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             viewModel.NumberOfItems = quantity.ToString();
             viewModel.IsEmpty = quantity == 0;
             viewModel.Total = total.ToString();
-            viewModel.CartPageUrl = GettPageAbsoluteUrl(cartPageId);
-            viewModel.CheckoutPageUrl = GettPageAbsoluteUrl(this.checkoutPageId);
+            viewModel.CartPageUrl = GetPageAbsoluteUrl(cartPageId);
+            viewModel.CheckoutPageUrl = GetPageAbsoluteUrl(this.checkoutPageId);
 
             return viewModel;
         }
@@ -105,7 +105,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
         }
 
-        private string GettPageAbsoluteUrl(Guid pageId)
+        private string GetPageAbsoluteUrl(Guid pageId)
         {
             var pageUrl = Pages.UrlResolver.GetPageNodeUrl(pageId);
 
