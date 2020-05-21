@@ -70,7 +70,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 var orderLineViewModel = new OrderlineViewModel
                 {
                     Quantity = orderLine.Quantity,
-                    ProductName = product.DisplayName(),
+                    ProductName = orderLine.ProductName,
                     Sku = orderLine.Sku,
                     VariantSku = orderLine.VariantSku,
                     Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString(),
