@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UCommerce.Api;
+using UCommerce.Content;
+using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
@@ -14,22 +17,35 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     {
         private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private Guid cartPageId;
+        private Guid productDetailsPageId;
+        private Guid checkoutPageId;
 
-        public MiniBasketModel(Guid? cartPageId = null)
+        public MiniBasketModel(Guid? cartPageId = null, Guid? productDetailsPageId = null, Guid? checkoutPageId = null)
         {
             _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             this.cartPageId = cartPageId ?? Guid.Empty;
+            this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
+            this.checkoutPageId = checkoutPageId ?? Guid.Empty;
         }
 
         public virtual MiniBasketRenderingViewModel CreateViewModel(string refreshUrl)
         {
             var viewModel = new MiniBasketRenderingViewModel();
 
+            if (!_transactionLibraryInternal.HasBasket())
+            {
+                return viewModel;
+            }
+
+            PurchaseOrder basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            viewModel.OrderLines = CartModel.GetOrlerLineList(basket, this.productDetailsPageId);
+
             viewModel.NumberOfItems = GetNumberOfItemsInBasket();
             viewModel.IsEmpty = IsBasketEmpty(viewModel);
             viewModel.Total = GetBasketTotal();
             viewModel.RefreshUrl = refreshUrl;
-            viewModel.CartPageUrl = GetCartPageAbsoluteUrl(cartPageId);
+            viewModel.CartPageUrl = GetPageAbsoluteUrl(this.cartPageId);
+            viewModel.CheckoutPageUrl = GetPageAbsoluteUrl(this.checkoutPageId);
 
             return viewModel;
         }
@@ -47,6 +63,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
 
             var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            
+            viewModel.OrderLines = CartModel.GetOrlerLineList(purchaseOrder, this.productDetailsPageId);
 
             var quantity = purchaseOrder.OrderLines.Sum(x => x.Quantity);
 
@@ -57,7 +75,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             viewModel.NumberOfItems = quantity.ToString();
             viewModel.IsEmpty = quantity == 0;
             viewModel.Total = total.ToString();
-            viewModel.CartPageUrl = GetCartPageAbsoluteUrl(cartPageId);
+            viewModel.CartPageUrl = GetPageAbsoluteUrl(cartPageId);
+            viewModel.CheckoutPageUrl = GetPageAbsoluteUrl(this.checkoutPageId);
 
             return viewModel;
         }
@@ -86,11 +105,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
         }
 
-        private string GetCartPageAbsoluteUrl(Guid cartPageId)
+        private string GetPageAbsoluteUrl(Guid pageId)
         {
-            var cartPageUrl = Pages.UrlResolver.GetPageNodeUrl(cartPageId);
+            var pageUrl = Pages.UrlResolver.GetPageNodeUrl(pageId);
 
-            return Pages.UrlResolver.GetAbsoluteUrl(cartPageUrl);
+            return Pages.UrlResolver.GetAbsoluteUrl(pageUrl);
         }
 
         private bool IsBasketEmpty(MiniBasketRenderingViewModel model)

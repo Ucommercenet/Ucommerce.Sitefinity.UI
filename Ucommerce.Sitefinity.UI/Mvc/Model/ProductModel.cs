@@ -21,6 +21,8 @@ using UCommerce.Extensions;
 using UCommerce.Infrastructure.Globalization;
 using UCommerce.Runtime;
 using UCommerce.Search;
+using UCommerce.Catalog.Models;
+using Telerik.Sitefinity.Localization;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -63,9 +65,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var searchTerm = System.Web.HttpContext.Current.Request.QueryString["search"];
 
             var queryResult = this.GetProductsQuery(currentCategory, searchTerm);
+            this.ApplySorting(ref queryResult, ref viewModel);
 
             var itemsToSkip = (viewModel.CurrentPage > 1) ? this.itemsPerPage * (viewModel.CurrentPage - 1) : 0;
-
+            
             var products = queryResult
                             .Skip(itemsToSkip)
                             .Take(this.itemsPerPage)
@@ -77,8 +80,68 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             viewModel.ShowPager = viewModel.TotalPagesCount > 1;
             viewModel.PagingUrlTemplate = this.GetPagingUrlTemplate(currentCategory);
             viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
-
+            
             return viewModel;
+        }
+
+        public virtual void ApplySorting(ref IQueryable<Product> productsQuery, ref ProductListViewModel listVm)
+        {
+            var sortingOptions = new List<SortOption>();
+
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "PriceAsc"), Key = "PriceAsc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "PriceDesc"), Key = "PriceDesc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "NameAsc"), Key = "NameAsc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "NameDesc"), Key = "NameDesc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "DateDesc"), Key = "DateDesc" });
+            sortingOptions.Add(new SortOption() { Title = Res.Get("UcommerceResources", "RatingDesc"), Key = "RatingDesc" });
+            
+            SortOption activeSortOption;
+            var sortExpression = System.Web.HttpContext.Current.Request.QueryString["sortBy"];
+            if (!string.IsNullOrWhiteSpace(sortExpression))
+            {
+                activeSortOption = sortingOptions.FirstOrDefault(s => s.Key == sortExpression);
+                if (activeSortOption != null)
+                {
+                    activeSortOption.IsActive = true;
+
+                    if (sortExpression == "PriceAsc")
+                    {
+                        productsQuery = productsQuery.OrderBy(p => CatalogLibrary.CalculatePrice(new List<Product>() { p }, null).Items.First().ListPriceExclTax );
+                    }
+                    else if (sortExpression == "PriceDesc")
+                    {
+                        productsQuery = productsQuery.OrderByDescending(p => CatalogLibrary.CalculatePrice(new List<Product>() { p }, null).Items.First().ListPriceExclTax);
+                    }
+                    else if (sortExpression == "NameAsc")
+                    {
+                        productsQuery = productsQuery.OrderBy(p => p.DisplayName());
+                    }
+                    else if (sortExpression == "NameDesc")
+                    {
+                        productsQuery = productsQuery.OrderByDescending(p => p.DisplayName());
+                    }
+                    else if (sortExpression == "DateDesc")
+                    {
+                        productsQuery = productsQuery.OrderByDescending(p => p.CreatedOn);
+                    }
+                    else if (sortExpression == "RatingDesc")
+                    {
+                        productsQuery = productsQuery.OrderByDescending(p => p.Rating);
+                    }
+                }
+                else
+                {
+                    sortingOptions.Single(s => s.Key == "DateDesc").IsActive = true;
+                    productsQuery = productsQuery.OrderByDescending(p => p.ModifiedOn);
+                }
+            }
+            else
+            {
+                sortingOptions.Single(s => s.Key == "DateDesc").IsActive = true;
+                productsQuery = productsQuery.OrderByDescending(p => p.ModifiedOn);
+            }
+
+            listVm.Sorting = sortingOptions;
         }
 
         public virtual ProductDetailViewModel CreateDetailsViewModel()
@@ -283,26 +346,28 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         private IQueryable<Product> ApplyManualSelection(List<int> productIds, List<int> categoryIds)
         {
-            var productsQuery = SearchLibrary.FacetedQuery();
-
             var products = new List<Product>();
             products.AddRange(this.GetProductsFromSelectedCategoryIds(categoryIds));
             products.AddRange(this.GetProductsFromSelectedProductIds(productIds));
 
             var facetsResolver = new FacetResolver(this.queryStringBlackList);
+            var facets = facetsResolver.GetFacetsFromQueryString();
 
-            List<UCommerce.Documents.Product> productsFromFacets = SearchLibrary.FacetedQuery()
-                .Where(x => x.CategoryIds.In(categoryIds) || x.Id.In(productIds))
-                .WithFacets(facetsResolver.GetFacetsFromQueryString())
-                .ToList();
-
-            if (!productsFromFacets.Any())
+            if (facets != null && facets.Any())
+            {
+                List<UCommerce.Documents.Product> productsFromFacets = SearchLibrary.FacetedQuery()
+                    .Where(x => x.CategoryIds.In(categoryIds) || x.Id.In(productIds))
+                    .WithFacets(facets)
+                    .ToList();
+        
+                return products.Where(x => productsFromFacets.Any(y => x.Sku == y.Sku)).AsQueryable();
+            }
+            else
+            {
                 return products.AsQueryable();
-
-            return products.Where(x => productsFromFacets.Any(y => x.Sku == y.Sku)).AsQueryable();
+            }
         }
-
-
+        
         private IList<Product> GetProductsFromSelectedCategoryIds(List<int> categoryIds)
         {
             List<Product> result = new List<Product>();
@@ -365,14 +430,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 products = SearchLibrary.GetProductsFor(currentCategory, facetsForQuerying);
             }
 
+            
             ICollection<Product> productsInCategory = null;
             productsInCategory = CatalogLibrary.GetProducts(currentCategory).ToList();
-
-            if (!products.Any())
-            {
-                return productsInCategory.AsQueryable();
-            }
-
+            
             var listOfProducts = new List<Product>();
 
             foreach (var product in products)
@@ -469,7 +530,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         public const string PAGER_QUERY_STRING_KEY = "page";
         private const string NO_CATALOG_ERROR_MESSAGE = "There is no product catalog configured.";
         private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
-        private IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog", "page" };
+        private IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog", "page", "sortBy" };
         private int itemsPerPage;
         private bool openInSamePage;
         private Guid detailsPageId;

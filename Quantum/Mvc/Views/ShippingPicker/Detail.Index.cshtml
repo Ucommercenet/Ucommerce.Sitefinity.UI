@@ -21,7 +21,7 @@
 
   @Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
   
-<div data-component="shipping-widget" id="shipping-method">
+<div data-component="shipping-widget" id="shipping-method" v-cloak>
     <script type="application/json" purl="true">
         { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
     </script>

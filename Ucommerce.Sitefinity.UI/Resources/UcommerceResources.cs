@@ -163,8 +163,14 @@ namespace UCommerce.Sitefinity.UI.Resources
         {
             get { return this["Add"]; }
         }
-        
-        [ResourceEntry("HasAVoucher", Value = "Has a voucher", Description = "Has a voucher", LastModified = "2020/02/27")]
+
+        [ResourceEntry("Apply", Value = "Apply", Description = "Apply", LastModified = "2020/05/03")]
+        public string Apply
+        {
+            get { return this["Apply"]; }
+        }
+
+        [ResourceEntry("HasAVoucher", Value = "HAVE A COUPON CODE?", Description = "HAVE A COUPON CODE?", LastModified = "2020/02/27")]
         public string HasAVoucher
         {
             get { return this["HasAVoucher"]; }
@@ -492,6 +498,96 @@ namespace UCommerce.Sitefinity.UI.Resources
         public string Items
         {
             get { return this["Items"]; }
+        }
+        
+        [ResourceEntry("ViewShoppingCart", Value = "View shopping cart", Description = "View shopping cart", LastModified = "2020/05/04")]
+        public string ViewShoppingCart
+        {
+            get { return this["ViewShoppingCart"]; }
+        }
+
+        [ResourceEntry("Checkout", Value = "Checkout", Description = "Checkout", LastModified = "2020/05/04")]
+        public string Checkout
+        {
+            get { return this["Checkout"]; }
+        }
+        
+        [ResourceEntry("PriceAsc", Value = "Price low to high", Description = "Price low to high", LastModified = "2020/05/04")]
+        public string PriceAsc
+        {
+            get { return this["PriceAsc"]; }
+        }
+
+        [ResourceEntry("PriceDesc", Value = "Price high to low", Description = "Price high to low", LastModified = "2020/05/04")]
+        public string PriceDesc
+        {
+            get { return this["PriceDesc"]; }
+        }
+
+        [ResourceEntry("NameAsc", Value = "Name (A - Z)", Description = "Name (A - Z)", LastModified = "2020/05/04")]
+        public string NameAsc
+        {
+            get { return this["NameAsc"]; }
+        }
+
+        [ResourceEntry("NameDesc", Value = "Name (Z - A)", Description = "Name (Z - A)", LastModified = "2020/05/04")]
+        public string NameDesc
+        {
+            get { return this["NameDesc"]; }
+        }
+
+        [ResourceEntry("DateDesc", Value = "Created date", Description = "Created date", LastModified = "2020/05/04")]
+        public string DateDesc
+        {
+            get { return this["DateDesc"]; }
+        }
+        
+        [ResourceEntry("RatingDesc", Value = "Rating", Description = "Rating", LastModified = "2020/05/04")]
+        public string RatingDesc
+        {
+            get { return this["RatingDesc"]; }
+        }
+
+        [ResourceEntry("SortBy", Value = "Sort By", Description = "Sort By", LastModified = "2020/05/04")]
+        public string SortBy
+        {
+            get { return this["SortBy"]; }
+        }
+
+        [ResourceEntry("SelectedCurrency", Value = "Currency", Description = "Currency", LastModified = "2020/05/11")]
+        public string SelectedCurrency
+        {
+            get { return this["SelectedCurrency"]; }
+        }
+
+        [ResourceEntry("FilterByCategory", Value = "Filter By Category", Description = "Filter By Category", LastModified = "2020/05/11")]
+        public string FilterByCategory
+        {
+            get { return this["FilterByCategory"]; }
+        }
+
+        [ResourceEntry("ProductsByCategory", Value = "Products by Category", Description = "Products by Category", LastModified = "2020/05/05")]
+        public string ProductsByCategory
+        {
+            get { return this["ProductsByCategory"]; }
+        }
+
+        [ResourceEntry("ClearCategory", Value = "Clear Category", Description = "Clear Category", LastModified = "2020/05/05")]
+        public string ClearCategory
+        {
+            get { return this["ClearCategory"]; }
+        }
+
+        [ResourceEntry("NoProductsMessage", Value = "There are no products.", Description = "There are no products.", LastModified = "2020/05/05")]
+        public string NoProductsMessage
+        {
+            get { return this["NoProductsMessage"]; }
+        }
+
+        [ResourceEntry("NoProductsMessageLong", Value = "There are no products in your cart.", Description = "There are no products in your cart.", LastModified = "2020/05/05")]
+        public string NoProductsMessageLong
+        {
+            get { return this["NoProductsMessageLong"]; }
         }
     }
 }

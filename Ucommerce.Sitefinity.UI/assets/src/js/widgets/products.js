@@ -6,9 +6,17 @@ initializeComponent("products", initProducts);
 
 function initProducts(rootElement) {
     const scriptElement = rootElement.querySelector('script[data-variants=true]');
-    const variants = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).variants;
+    var variants = [];
+    if (scriptElement) {
+        var prodVariants = JSON.parse(scriptElement.innerHTML).variants;
+
+        for (var i = 0; i < prodVariants.length; i++) {
+            variants.push({ Item: prodVariants[i], Current: prodVariants[i].Values[0] });
+        }
+    }
+    
     new Vue({
-        el: '#' + rootElement.id,
+        el: '#' + rootElement.id, 
         store,
         data: {
             variants: variants,

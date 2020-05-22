@@ -32,5 +32,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public Guid ProductDetailsPageId { get; set; }
 
         public string Localizations { get; set; }
+
+        public string BaseUrl { get; set; }
     }
 }

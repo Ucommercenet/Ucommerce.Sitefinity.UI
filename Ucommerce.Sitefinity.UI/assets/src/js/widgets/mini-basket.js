@@ -11,7 +11,8 @@ function initCart(rootElement) {
         store,
         props: ['purl'],
         data: {
-            model: null
+            model: null,
+            isVisible: false
         },
         computed: {
             ...mapState([
@@ -37,12 +38,21 @@ function initCart(rootElement) {
                         this.model = null;
                     }
                 });
+            },
+            toggleVisibility: function (e) {
+                e.preventDefault();
+                this.isVisible = !this.isVisible;
             }
         },
         created: function () {
             var scriptElement = rootElement.querySelector('script[purl]');
             this.purl = scriptElement === null ? [] : JSON.parse(scriptElement.innerHTML).purl;
             this.fetchData();
+        },
+        filters: {
+            removeSpace: function (value) {
+                return value.split(" ").join("");
+            }
         }
     });
 }

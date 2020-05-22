@@ -38,14 +38,14 @@
         catalogGroupId = SiteContext.Current.CatalogContext.CurrentCatalogGroup.Id.ToString();
     }
 }
-  
+
 <div data-component="review-form" id="review-form" class="review-form">
     <script type="application/json" purl="true">
-        { 
-            "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)),
-            "pid" : @Html.Raw(JsonConvert.SerializeObject(productId)),
-            "cid" : @Html.Raw(JsonConvert.SerializeObject(categoryId)),
-            "cgid" : @Html.Raw(JsonConvert.SerializeObject(catalogGroupId))
+        {
+        "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)),
+        "pid" : @Html.Raw(JsonConvert.SerializeObject(productId)),
+        "cid" : @Html.Raw(JsonConvert.SerializeObject(categoryId)),
+        "cgid" : @Html.Raw(JsonConvert.SerializeObject(catalogGroupId))
         }
     </script>
     <h2 class="sfcommentsTitle">
@@ -77,6 +77,6 @@
         </div>
     </div>
     <div>
-        <input type="submit" v-on:click="submit" value="@Html.Resource("Submit", "UcommerceResources")" class="sfcommentsSubmitBtn">
+        <input type="submit" v-on:click="submit" value="@Html.Resource("Submit", "UcommerceResources" )" class="sfcommentsSubmitBtn">
     </div>
 </div>

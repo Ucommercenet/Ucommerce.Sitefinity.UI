@@ -60,19 +60,27 @@ function initReviewList(rootElement) {
             showRating
         },
         methods: {
+            hasValue: function (x) {
+                if (typeof (x) !== 'undefined' && x !== null) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            },
             fetchData: function () {
                 // reset reviews before every call to prevent rendering issues
                 this.Reviews = null;
 
                 this.$http.get(this.purl + '/reviews/data?productId=' + this.pid, {}).then((response) => {
-                    if (response.data &&
-                        response.data.Status &&
-                        response.data.Status == 'success' &&
-                        response.data.Data &&
-                        response.data.Data.data &&
-                        response.data.Data.data.Reviews) {
+                    var data = response.data;
+                    if (this.hasValue(data) &&
+                        this.hasValue(data.Status) &&
+                        data.Status == 'success' &&
+                        this.hasValue(data.Data) &&
+                        this.hasValue(data.Data.Reviews)) {
 
-                        this.Reviews = response.data.Data.data.Reviews;
+                        this.Reviews = data.Data.Reviews;
                     }
                     else {
                         this.Reviews = null;

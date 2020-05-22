@@ -10,282 +10,290 @@ using UCommerce.EntitiesV2;
 using UCommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Transactions;
+using UCommerce.Extensions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-    /// <summary>
-    /// The Model class of the Cart MVC widget.
-    /// </summary>
-    public class CartModel : ICartModel
-    {
-        private Guid productDetailsPageId;
-        private Guid nextStepId;
-        private Guid redirectPageId;
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
+	/// <summary>
+	/// The Model class of the Cart MVC widget.
+	/// </summary>
+	public class CartModel : ICartModel
+	{
+		private Guid productDetailsPageId;
+		private Guid nextStepId;
+		private Guid redirectPageId;
+		private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
-        public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null, Guid? redirectPageId = null)
-        {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-            this.nextStepId = nextStepId ?? Guid.Empty;
-            this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
-            this.redirectPageId = redirectPageId ?? Guid.Empty;
-        }
+		public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null, Guid? redirectPageId = null)
+		{
+			_transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
+			this.nextStepId = nextStepId ?? Guid.Empty;
+			this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
+			this.redirectPageId = redirectPageId ?? Guid.Empty;
+		}
 
-        public virtual CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl)
-        {
-            var basketVM = new CartRenderingViewModel();
+		public virtual CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl)
+		{
+			var basketVM = new CartRenderingViewModel();
 
-            if (!_transactionLibraryInternal.HasBasket())
-            {
-                return basketVM;
-            }
+			if (!_transactionLibraryInternal.HasBasket())
+			{
+				return basketVM;
+			}
 
-            PurchaseOrder basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-            foreach (var orderLine in basket.OrderLines)
-            {
-                var product = CatalogLibrary.GetProduct(orderLine.Sku);
-                var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
-                var orderLineViewModel = new OrderlineViewModel
-                {
-                    Quantity = orderLine.Quantity,
-                    ProductName = orderLine.ProductName,
-                    Sku = orderLine.Sku,
-                    VariantSku = orderLine.VariantSku,
-                    Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString(),
-                    Discount = orderLine.Discount,
-                    Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString(),
-                    Price = new Money(orderLine.Price, basket.BillingCurrency).ToString(),
-                    ProductUrl = GetProductUrl(CatalogLibrary.GetProduct(orderLine.Sku), this.productDetailsPageId),
-                    PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(),
-                        basket.BillingCurrency).ToString(),
-                    OrderLineId = orderLine.OrderLineId,
-                    ThumbnailName = imageService.GetImage(product.ThumbnailImageMediaId).Name,
-                    ThumbnailUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url
-                };
-                basketVM.OrderLines.Add(orderLineViewModel);
-            }
+			PurchaseOrder basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+			basketVM.OrderLines = CartModel.GetOrlerLineList(basket, this.productDetailsPageId);
 
-            this.GetDiscounts(basketVM, basket);
-            basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
-                ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString()
-                : "";
-            basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            basketVM.SubTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            basketVM.NextStepUrl = GetNextStepUrl(nextStepId);
-            basketVM.RedirectUrl = GetRedirectUrl(redirectPageId);
-            basketVM.RefreshUrl = refreshUrl;
-            basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
+			this.GetDiscounts(basketVM, basket);
+			basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+			basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
+				? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString()
+				: "";
+			basketVM.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+			basketVM.SubTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+			basketVM.NextStepUrl = GetNextStepUrl(nextStepId);
+			basketVM.RedirectUrl = GetRedirectUrl(redirectPageId);
+			basketVM.RefreshUrl = refreshUrl;
+			basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
+			basketVM.Discounts = basket.Discounts.Select(d => d.CampaignItemName).ToList();
 
-            return basketVM;
-        }
+			return basketVM;
+		}
 
-        private void GetDiscounts(CartRenderingViewModel basketVM, PurchaseOrder basket)
-        {
-            foreach (var item in basket.Discounts)
-            {
-                if (!string.IsNullOrWhiteSpace(item.Description))
-                {
-                    if (item.Description.Contains(","))
-                    {
-                        basketVM.Discounts = item.Description.Split(',').ToList();
-                    }
-                    else
-                    {
-                        basketVM.Discounts.Add(item.Description);
-                    }
-                }
-            }
-        }
+		internal static IList<OrderlineViewModel> GetOrlerLineList(PurchaseOrder basket, Guid productDetailsPageId)
+		{
+			var result = new List<OrderlineViewModel>();
+			foreach (var orderLine in basket.OrderLines)
+			{
+				var product = CatalogLibrary.GetProduct(orderLine.Sku);
+				var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
+				var orderLineViewModel = new OrderlineViewModel
+				{
+					Quantity = orderLine.Quantity,
+					ProductName = orderLine.ProductName,
+					Sku = orderLine.Sku,
+					VariantSku = orderLine.VariantSku,
+					Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString(),
+					Discount = orderLine.Discount,
+					Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString(),
+					Price = new Money(orderLine.Price, basket.BillingCurrency).ToString(),
+					ProductUrl = GetProductUrl(CatalogLibrary.GetProduct(orderLine.Sku), productDetailsPageId),
+					PriceWithDiscount = new Money(orderLine.Price - orderLine.UnitDiscount.GetValueOrDefault(), basket.BillingCurrency).ToString(),
+					OrderLineId = orderLine.OrderLineId,
+					ThumbnailName = imageService.GetImage(product.ThumbnailImageMediaId).Name,
+					ThumbnailUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url
+				};
+				result.Add(orderLineViewModel);
+			}
+			return result;
+		}
 
-        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
-        {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-            {
-                message = "The widget is in Page Edit mode.";
-                return false;
-            }
+		private void GetDiscounts(CartRenderingViewModel basketVM, PurchaseOrder basket)
+		{
+			foreach (var item in basket.Discounts)
+			{
+				if (!string.IsNullOrWhiteSpace(item.Description))
+				{
+					if (item.Description.Contains(","))
+					{
+						basketVM.Discounts = item.Description.Split(',').ToList();
+					}
+					else
+					{
+						basketVM.Discounts.Add(item.Description);
+					}
+				}
+			}
+		}
 
-            object submitModel = null;
+		public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+		{
+			if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+			{
+				message = "The widget is in Page Edit mode.";
+				return false;
+			}
 
-            if (parameters.TryGetValue("submitModel", out submitModel))
-            {
-                var updateModel = submitModel as CartUpdateBasket;
+			object submitModel = null;
 
-                if (updateModel != null)
-                {
-                    foreach (var item in updateModel.RefreshBasket)
-                    {
-                        if (item.OrderLineQty < 1)
-                        {
-                            message = string.Format("Quantity of {0} must be greater than 0", item.OrderLineId);
-                            return false;
-                        }
-                    }
-                }
-            }
+			if (parameters.TryGetValue("submitModel", out submitModel))
+			{
+				var updateModel = submitModel as CartUpdateBasket;
 
-            message = null;
-            return true;
-        }
+				if (updateModel != null)
+				{
+					foreach (var item in updateModel.RefreshBasket)
+					{
+						if (item.OrderLineQty < 1)
+						{
+							message = string.Format("Quantity of {0} must be greater than 0", item.OrderLineId);
+							return false;
+						}
+					}
+				}
+			}
 
-        public virtual CartUpdateBasketViewModel Update(CartUpdateBasket model)
-        {
-            foreach (var updateOrderline in model.RefreshBasket)
-            {
-                var newQuantity = updateOrderline.OrderLineQty;
-                if (newQuantity <= 0)
-                {
-                    newQuantity = 0;
-                }
+			message = null;
+			return true;
+		}
 
-                _transactionLibraryInternal.UpdateLineItemByOrderLineId(updateOrderline.OrderLineId, newQuantity);
-            }
+		public virtual CartUpdateBasketViewModel Update(CartUpdateBasket model)
+		{
+			foreach (var updateOrderline in model.RefreshBasket)
+			{
+				var newQuantity = updateOrderline.OrderLineQty;
+				if (newQuantity <= 0)
+				{
+					newQuantity = 0;
+				}
 
-            _transactionLibraryInternal.ExecuteBasketPipeline();
+				_transactionLibraryInternal.UpdateLineItemByOrderLineId(updateOrderline.OrderLineId, newQuantity);
+			}
 
-            var updatedBasket = MapCartUpdate(model);
+			_transactionLibraryInternal.ExecuteBasketPipeline();
 
-            return updatedBasket;
-        }
+			var updatedBasket = MapCartUpdate(model);
 
-        public virtual CartUpdateBasketViewModel RemoveVoucher(CartUpdateBasket model)
-        {
-            var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-            var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
-            var vouchers = model.Vouchers;
+			return updatedBasket;
+		}
 
-            if (vouchers.Any())
-            {
-                foreach (var voucher in vouchers)
-                {
-                    if (prop != null)
-                    {
-                        prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
-                        prop.Save();
-                    }
-                }
-            }
+		public virtual CartUpdateBasketViewModel RemoveVoucher(CartUpdateBasket model)
+		{
+			var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
 
-            basket.Save();
-            _transactionLibraryInternal.ExecuteBasketPipeline();
+			foreach (var item in model.Vouchers)
+			{
+				var itemForDeletion = basket.Discounts.FirstOrDefault(d => d.CampaignItemName == item);
 
-            var updatedBasket = MapCartUpdate(model);
-            updatedBasket.Vouchers.Except(vouchers).ToList();
+				if (itemForDeletion != null)
+				{
+					basket.RemoveDiscount(itemForDeletion);
+					var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
+					if (prop != null)
+					{
+						prop.Value = prop.Value.Replace(item + ",", string.Empty);
+						prop.Save();
+					}
+				}
+			}
 
-            return updatedBasket;
-        }
+			basket.Save();
+			_transactionLibraryInternal.ExecuteBasketPipeline();
 
-        public virtual CartUpdateBasketViewModel AddVoucher(CartUpdateBasket model)
-        {
-            if (model.Vouchers.Any())
-            {
-                foreach (var modelVoucher in model.Vouchers)
-                {
-                    MarketingLibrary.AddVoucher(modelVoucher);
-                }
-            }
+			var updatedBasket = MapCartUpdate(model);
+			updatedBasket.Vouchers.Except(model.Vouchers).ToList();
 
-            _transactionLibraryInternal.ExecuteBasketPipeline();
-            var updatedBasket = MapCartUpdate(model);
-            updatedBasket.Vouchers = model.Vouchers;
+			return updatedBasket;
+		}
 
-            return updatedBasket;
-        }
+		public virtual CartUpdateBasketViewModel AddVoucher(CartUpdateBasket model)
+		{
+			if (model.Vouchers.Any())
+			{
+				foreach (var modelVoucher in model.Vouchers)
+				{
+					MarketingLibrary.AddVoucher(modelVoucher);
+				}
+			}
 
-        private static CartUpdateBasketViewModel MapOrderline(PurchaseOrder basket)
-        {
-            var updatedBasket = new CartUpdateBasketViewModel();
+			_transactionLibraryInternal.ExecuteBasketPipeline();
+			var updatedBasket = MapCartUpdate(model);
+			updatedBasket.Vouchers = model.Vouchers;
 
-            foreach (var orderLine in basket.OrderLines)
-            {
-                var orderLineViewModel = new CartUpdateOrderline();
-                orderLineViewModel.OrderlineId = orderLine.OrderLineId;
-                orderLineViewModel.Quantity = orderLine.Quantity;
-                orderLineViewModel.Total =
-                    new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString();
-                orderLineViewModel.Discount = orderLine.Discount;
-                orderLineViewModel.Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString();
-                orderLineViewModel.Price = new Money(orderLine.Price, basket.BillingCurrency).ToString();
-                orderLineViewModel.PriceWithDiscount =
-                    new Money(orderLine.Price - orderLine.Discount, basket.BillingCurrency).ToString();
+			return updatedBasket;
+		}
 
-                updatedBasket.OrderLines.Add(orderLineViewModel);
-            }
+		private static CartUpdateBasketViewModel MapOrderline(PurchaseOrder basket)
+		{
+			var updatedBasket = new CartUpdateBasketViewModel();
 
-            return updatedBasket;
-        }
+			foreach (var orderLine in basket.OrderLines)
+			{
+				var orderLineViewModel = new CartUpdateOrderline();
+				orderLineViewModel.OrderlineId = orderLine.OrderLineId;
+				orderLineViewModel.Quantity = orderLine.Quantity;
+				orderLineViewModel.Total = new Money(orderLine.Total.GetValueOrDefault(), basket.BillingCurrency).ToString();
+				orderLineViewModel.Discount = orderLine.Discount;
+				orderLineViewModel.Tax = new Money(orderLine.VAT, basket.BillingCurrency).ToString();
+				orderLineViewModel.Price = new Money(orderLine.Price, basket.BillingCurrency).ToString();
+				orderLineViewModel.PriceWithDiscount = new Money(orderLine.Price - orderLine.Discount, basket.BillingCurrency).ToString();
 
-        private CartUpdateBasketViewModel MapCartUpdate(CartUpdateBasket model)
-        {
-            var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-            var updatedBasket = MapOrderline(basket);
+				updatedBasket.OrderLines.Add(orderLineViewModel);
+			}
 
-            string orderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            string discountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
-                ? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString()
-                : "";
-            string taxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            string subTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+			return updatedBasket;
+		}
 
-            updatedBasket.OrderTotal = orderTotal;
-            updatedBasket.DiscountTotal = discountTotal;
-            updatedBasket.TaxTotal = taxTotal;
-            updatedBasket.SubTotal = subTotal;
-            updatedBasket.Vouchers.AddRange(model.Vouchers);
+		private CartUpdateBasketViewModel MapCartUpdate(CartUpdateBasket model)
+		{
+			var basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+			var updatedBasket = MapOrderline(basket);
 
-            return updatedBasket;
-        }
+			string orderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+			string discountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
+										? new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString()
+										: "";
+			string taxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+			string subTotal = new Money(basket.SubTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
 
-        private string GetNextStepUrl(Guid nextStepId)
-        {
-            var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
+			updatedBasket.OrderTotal = orderTotal;
+			updatedBasket.DiscountTotal = discountTotal;
+			updatedBasket.TaxTotal = taxTotal;
+			updatedBasket.SubTotal = subTotal;
+			updatedBasket.Vouchers.AddRange(model.Vouchers);
 
-            return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
-        }
+			return updatedBasket;
+		}
 
-        private string GetRedirectUrl(Guid redirectPageId)
-        {
-            var redirectUrl = Pages.UrlResolver.GetPageNodeUrl(redirectPageId);
+		private string GetNextStepUrl(Guid nextStepId)
+		{
+			var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
 
-            return Pages.UrlResolver.GetAbsoluteUrl(redirectUrl);
-        }
+			return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
+		}
 
-        private string GetProductUrl(Product product, Guid detailPageId)
-        {
-            if (detailPageId == Guid.Empty)
-            {
-                return CatalogLibrary.GetNiceUrlForProduct(product);
-            }
+		private string GetRedirectUrl(Guid redirectPageId)
+		{
+			var redirectUrl = Pages.UrlResolver.GetPageNodeUrl(redirectPageId);
 
-            var baseUrl = UCommerce.Sitefinity.UI.Pages.UrlResolver.GetPageNodeUrl(detailPageId);
+			return Pages.UrlResolver.GetAbsoluteUrl(redirectUrl);
+		}
 
-            string catUrl;
-            var productCategory = product.GetCategories().FirstOrDefault();
-            if (productCategory == null)
-            {
-                catUrl = CategoryModel.DefaultCategoryName;
-            }
-            else
-            {
-                catUrl = CategoryModel.GetCategoryPath(productCategory);
-            }
+		private static string GetProductUrl(Product product, Guid detailPageId)
+		{
+			if (detailPageId == Guid.Empty)
+			{
+				return CatalogLibrary.GetNiceUrlForProduct(product);
+			}
 
-            var rawtUrl = string.Format("{0}/{1}", catUrl, product.ProductId);
-            string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", rawtUrl);
+			var baseUrl = UCommerce.Sitefinity.UI.Pages.UrlResolver.GetPageNodeUrl(detailPageId);
 
-            string url;
+			string catUrl;
+			var productCategory = product.GetCategories().FirstOrDefault();
+			if (productCategory == null)
+			{
+				catUrl = CategoryModel.DefaultCategoryName;
+			}
+			else
+			{
+				catUrl = CategoryModel.GetCategoryPath(productCategory);
+			}
 
-            if (SystemManager.CurrentHttpContext.Request.Url != null)
-            {
-                url = UrlPath.ResolveUrl(relativeUrl, true);
-            }
-            else
-            {
-                url = UCommerce.Sitefinity.UI.Pages.UrlResolver.GetAbsoluteUrl(relativeUrl);
-            }
+			var rawtUrl = string.Format("{0}/{1}", catUrl, product.ProductId);
+			string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", rawtUrl);
 
-            return url;
-        }
-    }
+			string url;
+
+			if (SystemManager.CurrentHttpContext.Request.Url != null)
+			{
+				url = UrlPath.ResolveUrl(relativeUrl, true);
+			}
+			else
+			{
+				url = UCommerce.Sitefinity.UI.Pages.UrlResolver.GetAbsoluteUrl(relativeUrl);
+			}
+
+			return url;
+		}
+	}
 }
