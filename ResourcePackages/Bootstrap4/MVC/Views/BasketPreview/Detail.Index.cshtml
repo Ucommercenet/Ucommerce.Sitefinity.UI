@@ -33,17 +33,17 @@
                     <hr />
                     <br />
                     <address>
-                        <span><strong>{{ model.BillingAddressDTO.FirstName }} {{ model.BillingAddressDTO.LastName }}</strong></span><br>
-                        <span>{{ model.BillingAddressDTO.Line1 }}<br></span>
-                        <span>{{ model.BillingAddressDTO.PostalCode }} {{ model.BillingAddressDTO.City }}</span><br>
-                        <span>{{ model.BillingAddressDTO.CountryName }}</span>
-                        <template v-if="model.BillingAddressDTO.Attention">
-                            <span><text>att. </text> {{ model.BillingAddressDTO.Attention }}</span>
+                        <span><strong>{{ model.BillingAddress.FirstName }} {{ model.BillingAddress.LastName }}</strong></span><br>
+                        <span>{{ model.BillingAddress.Line1 }}<br></span>
+                        <span>{{ model.BillingAddress.PostalCode }} {{ model.BillingAddress.City }}</span><br>
+                        <span>{{ model.BillingAddress.CountryName }}</span>
+                        <template v-if="model.BillingAddress.Attention">
+                            <span><text>att. </text> {{ model.BillingAddress.Attention }}</span>
                         </template>
                         <br>
-                        <span><abbr class="pr-2" title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.BillingAddressDTO.PhoneNumber }}</span><br>
-                        <span><abbr class="pr-2" title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.BillingAddressDTO.MobilePhoneNumber }} </span><br>
-                        <span><abbr class="pr-2" title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a :href="'mailto:' + model.BillingAddressDTO.EmailAddress">{{ model.BillingAddressDTO.EmailAddress }}</a></span>
+                        <span><abbr class="pr-2" title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.BillingAddress.PhoneNumber }}</span><br>
+                        <span><abbr class="pr-2" title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.BillingAddress.MobilePhoneNumber }} </span><br>
+                        <span><abbr class="pr-2" title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a :href="'mailto:' + model.BillingAddress.EmailAddress">{{ model.BillingAddress.EmailAddress }}</a></span>
                     </address>
                 </div>
                 <div class="col-md-6">
@@ -51,18 +51,18 @@
                     <hr />
                     <br />
                     <address>
-                        <span><strong>{{ model.ShipmentAddressDTO.FirstName }} {{ model.ShipmentAddressDTO.LastName }}</strong></span><br>
-                        <span>{{ model.ShipmentAddressDTO.CompanyName }}</span>
-                        <template v-if="model.ShipmentAddressDTO.Attention">
-                            <span><text>att. </text> {{ model.ShipmentAddressDTO.Attention }} </span>
+                        <span><strong>{{ model.ShipmentAddress.FirstName }} {{ model.ShipmentAddress.LastName }}</strong></span><br>
+                        <span>{{ model.ShipmentAddress.CompanyName }}</span>
+                        <template v-if="model.ShipmentAddress.Attention">
+                            <span><text>att. </text> {{ model.ShipmentAddress.Attention }} </span>
                         </template>
                         <br />
-                        <span>{{ model.ShipmentAddressDTO.Line1 }} </span><br>
-                        <span>{{ model.ShipmentAddressDTO.PostalCode }} {{ model.ShipmentAddressDTO.City }}</span><br>
-                        <span>{{ model.ShipmentAddressDTO.CountryName }}</span><br>
-                        <span><abbr class="pr-2" title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
-                        <span><abbr class="pr-2" title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
-                        <span><abbr class="pr-2" title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a :href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
+                        <span>{{ model.ShipmentAddress.Line1 }} </span><br>
+                        <span>{{ model.ShipmentAddress.PostalCode }} {{ model.ShipmentAddress.City }}</span><br>
+                        <span>{{ model.ShipmentAddress.CountryName }}</span><br>
+                        <span><abbr class="pr-2" title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.ShipmentAddress.PhoneNumber }}</span><br>
+                        <span><abbr class="pr-2" title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.ShipmentAddress.MobilePhoneNumber }}</span><br>
+                        <span><abbr class="pr-2" title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a :href="'mailto:' + model.ShipmentAddress.EmailAddress">{{ model.ShipmentAddress.EmailAddress }}</a></span>
                     </address>
                 </div>
             </div>

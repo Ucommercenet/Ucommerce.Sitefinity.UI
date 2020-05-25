@@ -16,8 +16,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     public class MiniBasketController : Controller, IPersonalizable
     {
         public Guid? CartPageId { get; set; }
+        public Guid? ProductDetailsPageId { get; set; }
+        public Guid? CheckoutPageId { get; set; }
         public string TemplateName { get; set; } = "Index";
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
 
         public MiniBasketController()
         {
@@ -83,7 +84,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             args.AddProperties(new
             {
-                cartPageId = this.CartPageId
+                cartPageId = this.CartPageId,
+                productDetailsPageId = this.ProductDetailsPageId,
+                checkoutPageId = this.CheckoutPageId
+
             });
 
             var container = UCommerceUIModule.Container;
@@ -93,5 +97,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         }
 
         private string detailTemplateNamePrefix = "Detail.";
+        private readonly TransactionLibraryInternal _transactionLibraryInternal;
     }
 }

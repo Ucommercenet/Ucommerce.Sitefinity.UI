@@ -17,6 +17,7 @@ window.moment = moment;
 
 import "./js/widgets/facet-filter";
 import "./js/widgets/category-navigation";
+import "./js/widgets/currency-picker"; 
 import "./js/widgets/products";
 import "./js/widgets/cart";
 import "./js/widgets/address";

@@ -21,7 +21,7 @@
 
   @Html.StyleSheet(Url.WidgetContent("assets/dist/css/checkout.css"), "head")
   
-<div class="section-margin " data-component="checkout-overview" id="checkout-overview">
+<div class="section-margin " data-component="checkout-overview" id="checkout-overview" v-cloak>
     <script type="application/json" purl="true">
         { "purl" : @Html.Raw(JsonConvert.SerializeObject(currentPageUrl)) }
     </script>
@@ -31,35 +31,35 @@
                 <h3 class="heading-underline">@Html.Resource("BillingAddress", "UcommerceResources")</h3>
                 <br />
                 <address>
-                    <span class="address-line"><strong>{{ model.BillingAddressDTO.FirstName }} {{ model.BillingAddressDTO.LastName }}</strong></span><br>
-                    <span class="address-line">{{ model.BillingAddressDTO.Line1 }}<br></span>
-                    <span class="address-line">{{ model.BillingAddressDTO.PostalCode }} {{ model.BillingAddressDTO.City }}</span><br>
-                    <span class="address-line">{{ model.BillingAddressDTO.CountryName }}</span>
-                    <template v-if="model.BillingAddressDTO.Attention">
-                        <span class="address-line"><text>att. </text> {{ model.BillingAddressDTO.Attention }}</span>
+                    <span class="address-line"><strong>{{ model.BillingAddress.FirstName }} {{ model.BillingAddress.LastName }}</strong></span><br>
+                    <span class="address-line">{{ model.BillingAddress.Line1 }}<br></span>
+                    <span class="address-line">{{ model.BillingAddress.PostalCode }} {{ model.BillingAddress.City }}</span><br>
+                    <span class="address-line">{{ model.BillingAddress.CountryName }}</span>
+                    <template v-if="model.BillingAddress.Attention">
+                        <span class="address-line"><text>att. </text> {{ model.BillingAddress.Attention }}</span>
                     </template>
                     <br>
-                    <span class="address-line"><abbr title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.BillingAddressDTO.PhoneNumber }}</span><br>
-                    <span class="address-line"><abbr title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.BillingAddressDTO.MobilePhoneNumber }} </span><br>
-                    <span class="address-line"><abbr title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a :href="'mailto:' + model.BillingAddressDTO.EmailAddress">{{ model.BillingAddressDTO.EmailAddress }}</a></span>
+                    <span class="address-line"><abbr title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.BillingAddress.PhoneNumber }}</span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.BillingAddress.MobilePhoneNumber }} </span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a :href="'mailto:' + model.BillingAddress.EmailAddress">{{ model.BillingAddress.EmailAddress }}</a></span>
                 </address>
             </div>
             <div class="col-md-6">
                 <h3 class="heading-underline">@Html.Resource("ShippingAddress", "UcommerceResources")</h3>
                 <br />
                 <address>
-                    <span class="address-line"><strong>{{ model.ShipmentAddressDTO.FirstName }} {{ model.ShipmentAddressDTO.LastName }}</strong></span><br>
-                    <span class="address-line">{{ model.ShipmentAddressDTO.CompanyName }}</span>
-                    <template v-if="model.ShipmentAddressDTO.Attention">
-                        <span class="address-line"><text>att. </text> {{ model.ShipmentAddressDTO.Attention }}</span>
+                    <span class="address-line"><strong>{{ model.ShipmentAddress.FirstName }} {{ model.ShipmentAddress.LastName }}</strong></span><br>
+                    <span class="address-line">{{ model.ShipmentAddress.CompanyName }}</span>
+                    <template v-if="model.ShipmentAddress.Attention">
+                        <span class="address-line"><text>att. </text> {{ model.ShipmentAddress.Attention }}</span>
                     </template>
                     <br>
-                    <span class="address-line">{{ model.ShipmentAddressDTO.Line1 }}</span><br>
-                    <span class="address-line">{{ model.ShipmentAddressDTO.PostalCode }} {{ model.ShipmentAddressDTO.City }}</span><br>
-                    <span class="address-line">{{ model.ShipmentAddressDTO.CountryName }}</span><br>
-                    <span class="address-line"><abbr title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.ShipmentAddressDTO.PhoneNumber }}</span><br>
-                    <span class="address-line"><abbr title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.ShipmentAddressDTO.MobilePhoneNumber }}</span><br>
-                    <span class="address-line"><abbr title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a href="'mailto:' + model.ShipmentAddressDTO.EmailAddress">{{ model.ShipmentAddressDTO.EmailAddress }}</a></span>
+                    <span class="address-line">{{ model.ShipmentAddress.Line1 }}</span><br>
+                    <span class="address-line">{{ model.ShipmentAddress.PostalCode }} {{ model.ShipmentAddress.City }}</span><br>
+                    <span class="address-line">{{ model.ShipmentAddress.CountryName }}</span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Phone", "UcommerceResources")">P:</abbr>{{ model.ShipmentAddress.PhoneNumber }}</span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Mobile", "UcommerceResources")">M:</abbr>{{ model.ShipmentAddress.MobilePhoneNumber }}</span><br>
+                    <span class="address-line"><abbr title="@Html.Resource("Email", "UcommerceResources")">E:</abbr><a href="'mailto:' + model.ShipmentAddress.EmailAddress">{{ model.ShipmentAddress.EmailAddress }}</a></span>
                 </address>
             </div>
         </div>
