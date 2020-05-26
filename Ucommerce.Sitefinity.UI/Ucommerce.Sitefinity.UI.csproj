@@ -576,6 +576,7 @@
     <None Include="assets\src\js\components\input-field.vue" />
     <EmbeddedResource Include="Mvc\Views\ProductReviews\List.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\AddReview\Detail.Index.cshtml" />
+    <None Include="Mvc\Views\CategoryNavigation\StoreNavigation.cshtml" />
     <None Include="packages.config" />
     <None Include="node_modules\**" />
   </ItemGroup>
