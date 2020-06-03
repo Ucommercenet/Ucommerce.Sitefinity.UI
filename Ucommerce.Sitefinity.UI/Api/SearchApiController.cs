@@ -30,6 +30,8 @@ namespace UCommerce.Sitefinity.UI.Api
 		[HttpPost]
 		public IHttpActionResult FullText(FullTextDTO model)
 		{
+			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
+
 			var searchResult = UCommerce.Api.SearchLibrary.GetProductsByName(model.SearchQuery);
 
 			return Ok(this.ConvertToFullTextSearchResultModel(searchResult, model.ProductDetailsPageId));
@@ -39,6 +41,8 @@ namespace UCommerce.Sitefinity.UI.Api
 		[HttpPost]
 		public IHttpActionResult Suggestions(FullTextDTO model)
 		{
+			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
+
 			var searchResult = UCommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
 
 			return Ok(searchResult);
