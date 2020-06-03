@@ -47,6 +47,7 @@
                 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg mb-0">
                     <div class="navbar-collapse" id="navbarNavDropdown">
                         <ul class="navbar-nav">
+                            <li class="nav-item mr-4" v-on:click="toggleSearchBar()"><a class="nav-link" href="javascript:void(0)"><span>&#128269;</span></a></li>
                             @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
                             {
                                 var currencies = JsonConvert.SerializeObject(Model.Currencies);
@@ -54,8 +55,6 @@
                                 <currency-selector :serialized-currencies="'@currencies'" :serialized-current-currency="'@currentCurrency'" :root-id="$el.id">
                                 </currency-selector>
                             }
-
-                            <li class="nav-item ml-4 mr-4" v-on:click="toggleSearchBar()"><a class="nav-link" href="javascript:void(0)"><span>&#128269;</span></a></li>
                         </ul>
                     </div>
                 </nav>
