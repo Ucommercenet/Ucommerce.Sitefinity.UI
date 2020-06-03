@@ -564,7 +564,21 @@
     <EmbeddedResource Include="assets\dist\images\star.png" />
     <EmbeddedResource Include="assets\src\images\icons\product-reviews.png" />
     <EmbeddedResource Include="assets\src\images\icons\add-review.png" />
-    <Content Include="assets\src\js\store\index.js" />
+    <EmbeddedResource Include="assets\build\js\main.js" />
+    <EmbeddedResource Include="assets\build\js\vendor.bundle.js" />
+    <EmbeddedResource Include="assets\src\css\b4-category-navigation.css" />
+    <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
+    <EmbeddedResource Include="assets\src\images\icons\icon-fb.png" />
+    <EmbeddedResource Include="assets\src\images\icons\icon-git.png" />
+    <EmbeddedResource Include="assets\src\images\icons\icon-in.png" />
+    <EmbeddedResource Include="assets\src\images\icons\icon-rss.png" />
+    <EmbeddedResource Include="assets\src\images\icons\icon-twitter.png" />
+    <EmbeddedResource Include="assets\src\images\icons\icon-youtube.png" />
+    <EmbeddedResource Include="assets\src\images\icons\logo_quantum.png" />
+    <EmbeddedResource Include="assets\src\images\star.png" />
+    <EmbeddedResource Include="assets\src\index.js" />
+    <EmbeddedResource Include="assets\src\js\functions\init.js" />
+    <EmbeddedResource Include="assets\src\js\store\index.js" />
     <EmbeddedResource Include="assets\src\js\widgets\shipping-method.js" />
     <Content Include="..\release notes.txt">
       <Link>docs\release notes.txt</Link>
@@ -572,10 +586,11 @@
     <EmbeddedResource Include="assets\src\js\widgets\currency-picker.js" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
-    <None Include="assets\src\js\components\checkout-navigation.vue" />
-    <None Include="assets\src\js\components\input-field.vue" />
+    <EmbeddedResource Include="assets\src\js\components\checkout-navigation.vue" />
+    <EmbeddedResource Include="assets\src\js\components\input-field.vue" />
     <EmbeddedResource Include="Mvc\Views\ProductReviews\List.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\AddReview\Detail.Index.cshtml" />
+    <EmbeddedResource Include="assets\src\js\components\show-rating.vue" />
     <None Include="Mvc\Views\CategoryNavigation\StoreNavigation.cshtml" />
     <None Include="packages.config" />
     <None Include="node_modules\**" />
