@@ -158,23 +158,22 @@
                 <div class="bg-white shadow-lg p-3 rounded">
 
                     <form v-if="searchPageUrl !== ''" v-bind:action="searchPageUrl" class="input-group" _lpchecked="1">
-                        <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
+                        <input type="text" autocomplete="off" v-model="searchQuery" focus v-on:input="search(searchQuery)" v-on:keyup.escape="closeSearch" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
                         <span class="input-group-append">
-                            <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                            <button class="btn btn-outline-secondary border-left-0 border" type="submit" v-on:click="search(searchQuery)">
                                 <span>&#128269;</span>
                             </button>
                         </span>
                     </form>
 
                     <form v-if="searchPageUrl === ''" v-on:submit.prevent class="input-group" _lpchecked="1">
-                        <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search()" v-on:keyup.escape="closeSearch" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
+                        <input type="text" autocomplete="off" v-model="searchQuery" autofocus v-on:input="search(searchQuery)" v-on:keyup.escape="closeSearch" required="" name="search" class="form-control form-control-lg py-2 border-right-0 border" placeholder="Search for products">
                         <span class="input-group-append">
-                            <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                            <button class="btn btn-outline-secondary border-left-0 border" type="submit" v-on:click="search(searchQuery)">
                                 <span>&#128269;</span>
                             </button>
                         </span>
                     </form>
-
                     <div>
                         <ul class="list-group" v-show="searchResult.length !== 0 || suggestions.length !== 0">
                             <li v-for="suggestion in suggestions" class="list-group-item" v-on:click="searchQuery = suggestion;search()">

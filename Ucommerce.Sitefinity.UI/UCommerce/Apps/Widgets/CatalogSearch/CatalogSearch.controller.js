@@ -45,7 +45,8 @@
         UCommerceClientMgr.contentFrame(url);
     }
 
-    $scope.search = function (input) {
+    $scope.search = function (form) {
+        var input = $scope.searchQuery;
         if (input != null && input != '' && input.trim() != '') {
             localStorageService.set($scope.widget.userWidgetSettings.userWidgetSettingId + "-selectedSearchTerm", input);
             $scope.$emit('reloading');
