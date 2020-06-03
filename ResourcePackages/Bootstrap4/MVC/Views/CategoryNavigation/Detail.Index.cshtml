@@ -34,6 +34,18 @@
 					}
                     <div class="navbar-collapse" id="navbarNavDropdown">
                         <dropdown-menu :nodes="items"></dropdown-menu>
+                    </div>
+                </nav>
+            </div>
+            @foreach (var route in Model.Routes)
+            {
+                <input type="hidden" class="@route.Key" value="@route.Value" />
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg mb-0">
+                    <div class="navbar-collapse" id="navbarNavDropdown">
                         <ul class="navbar-nav">
                             @if (Model.AllowChangingCurrency && Model.Currencies.Count > 0)
                             {
@@ -140,7 +152,7 @@
 <script type="text/x-template" id="search-template">
     <div class="container mb-5" v-show="showSearchBar">
         <div class="row">
-            <div class="offset-md-3 col-md-6">
+            <div class="col-md-12">
                 <button class="close" aria-label="Close" v-on:click="closeSearch"><span class="m-1">&#215;</span></button>
 
                 <div class="bg-white shadow-lg p-3 rounded">
@@ -188,9 +200,6 @@
 
                     </div>
                 </div>
-
-            </div>
-            <div class="offset-md-3">
 
             </div>
         </div>
