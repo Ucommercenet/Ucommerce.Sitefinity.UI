@@ -14,97 +14,101 @@ using Product = UCommerce.Documents.Product;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
-    /// <summary>
-    /// API Controller exposing endpoints related to search.
-    /// </summary>
-    public class SearchApiController : ApiController
-    {
-        private readonly IRepository<UCommerce.EntitiesV2.Product> productRepository;
+	/// <summary>
+	/// API Controller exposing endpoints related to search.
+	/// </summary>
+	public class SearchApiController : ApiController
+	{
+		private readonly IRepository<UCommerce.EntitiesV2.Product> productRepository;
 
-        public SearchApiController()
-        {
-            this.productRepository = ObjectFactory.Instance.Resolve<IRepository<UCommerce.EntitiesV2.Product>>();
-        }
+		public SearchApiController()
+		{
+			this.productRepository = ObjectFactory.Instance.Resolve<IRepository<UCommerce.EntitiesV2.Product>>();
+		}
 
-        [Route(RouteConstants.SEARCH_ROUTE_VALUE)]
-        [HttpPost]
-        public IHttpActionResult FullText(FullTextDTO model)
-        {
-            var searchResult = UCommerce.Api.SearchLibrary.GetProductsByName(model.SearchQuery);
+		[Route(RouteConstants.SEARCH_ROUTE_VALUE)]
+		[HttpPost]
+		public IHttpActionResult FullText(FullTextDTO model)
+		{
+			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
 
-            return Ok(this.ConvertToFullTextSearchResultModel(searchResult, model.ProductDetailsPageId));
-        }
+			var searchResult = UCommerce.Api.SearchLibrary.GetProductsByName(model.SearchQuery);
 
-        [Route(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE)]
-        [HttpPost]
-        public IHttpActionResult Suggestions(FullTextDTO model)
-        {
-            var searchResult = UCommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
+			return Ok(this.ConvertToFullTextSearchResultModel(searchResult, model.ProductDetailsPageId));
+		}
 
-            return Ok(searchResult);
-        }
+		[Route(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE)]
+		[HttpPost]
+		public IHttpActionResult Suggestions(FullTextDTO model)
+		{
+			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
 
-        private IList<FullTextSearchResultDTO> ConvertToFullTextSearchResultModel(IList<Product> products, Guid? productDetailsPageId)
-        {
-            var fullTextSearchResultModels = new List<FullTextSearchResultDTO>();
+			var searchResult = UCommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
 
-            var currency = UCommerce.Runtime.SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency;
-            var productsPrices = UCommerce.Api.CatalogLibrary.CalculatePrice(products.Select(x => x.Guid).ToList()).Items;
-            ProductCatalog catalog = UCommerce.Api.CatalogLibrary.GetCatalog();
+			return Ok(searchResult);
+		}
 
+		private IList<FullTextSearchResultDTO> ConvertToFullTextSearchResultModel(IList<Product> products, Guid? productDetailsPageId)
+		{
+			var fullTextSearchResultModels = new List<FullTextSearchResultDTO>();
 
+			if (products == null || !products.Any()) return fullTextSearchResultModels;
 
-            var culture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+			var currency = UCommerce.Runtime.SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency;
+			var productsPrices = UCommerce.Api.CatalogLibrary.CalculatePrice(products.Select(x => x.Guid).ToList()).Items;
+			ProductCatalog catalog = UCommerce.Api.CatalogLibrary.GetCatalog();
 
-            foreach (var product in products)
-            {
-                string catUrl =  CategoryModel.DefaultCategoryName;
+			var culture = System.Threading.Thread.CurrentThread.CurrentUICulture;
 
-                if (product.CategoryIds != null && product.CategoryIds.Any())
-                {
-                    var productCategory = catalog.Categories
-                                                 .Where(c => c.CategoryId == product.CategoryIds.FirstOrDefault())
-                                                 .FirstOrDefault();
+			foreach (var product in products)
+			{
+				string catUrl = CategoryModel.DefaultCategoryName;
 
-                    if (productCategory != null)
-                    {
-                        catUrl = CategoryModel.GetCategoryPath(productCategory);
-                    }
-                }
+				if (product.CategoryIds != null && product.CategoryIds.Any())
+				{
+					var productCategory = catalog.Categories
+												 .Where(c => c.CategoryId == product.CategoryIds.FirstOrDefault())
+												 .FirstOrDefault();
 
-                string detailsPageUrl = string.Empty;
+					if (productCategory != null)
+					{
+						catUrl = CategoryModel.GetCategoryPath(productCategory);
+					}
+				}
 
-                if (productDetailsPageId != null && productDetailsPageId.Value != Guid.Empty)
-                {
-                    detailsPageUrl = Pages.UrlResolver.GetPageNodeUrl(productDetailsPageId.Value);
+				string detailsPageUrl = string.Empty;
 
-                    if (!detailsPageUrl.EndsWith("/"))
-                    {
-                        detailsPageUrl += "/";
-                    }
+				if (productDetailsPageId != null && productDetailsPageId.Value != Guid.Empty)
+				{
+					detailsPageUrl = Pages.UrlResolver.GetPageNodeUrl(productDetailsPageId.Value);
 
-                    detailsPageUrl += catUrl + "/" + product.Id.ToString();
-                    detailsPageUrl = Pages.UrlResolver.GetAbsoluteUrl(detailsPageUrl);
-                }
+					if (!detailsPageUrl.EndsWith("/"))
+					{
+						detailsPageUrl += "/";
+					}
 
-                if (string.IsNullOrWhiteSpace(detailsPageUrl))
-                {
-                    var entityProduct = this.productRepository.Get(product.Id);
-                    detailsPageUrl = CatalogLibrary.GetNiceUrlForProduct(entityProduct);
-                }
+					detailsPageUrl += catUrl + "/" + product.Id.ToString();
+					detailsPageUrl = Pages.UrlResolver.GetAbsoluteUrl(detailsPageUrl);
+				}
 
-                var fullTestSearchResultModel = new FullTextSearchResultDTO()
-                {
-                    ThumbnailImageUrl = product.ThumbnailImageUrl,
-                    Name = product.Name,
-                    Url = detailsPageUrl,
-                    Price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currency).ToString(),
-                };
+				if (string.IsNullOrWhiteSpace(detailsPageUrl))
+				{
+					var entityProduct = this.productRepository.Get(product.Id);
+					detailsPageUrl = CatalogLibrary.GetNiceUrlForProduct(entityProduct);
+				}
 
-                fullTextSearchResultModels.Add(fullTestSearchResultModel);
-            }
+				var fullTestSearchResultModel = new FullTextSearchResultDTO()
+				{
+					ThumbnailImageUrl = product.ThumbnailImageUrl,
+					Name = product.Name,
+					Url = detailsPageUrl,
+					Price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currency).ToString(),
+				};
 
-            return fullTextSearchResultModels;
-        }
-    }
+				fullTextSearchResultModels.Add(fullTestSearchResultModel);
+			}
+
+			return fullTextSearchResultModels;
+		}
+	}
 }
