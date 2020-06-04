@@ -97,12 +97,18 @@ namespace UCommerce.Sitefinity.UI.Api
 					detailsPageUrl = CatalogLibrary.GetNiceUrlForProduct(entityProduct);
 				}
 
+				var price = string.Empty;
+				if (productsPrices?.FirstOrDefault(x => x.ProductGuid == product.Guid)?.PriceInclTax != null)
+				{
+					price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currency).ToString();
+				}
+
 				var fullTestSearchResultModel = new FullTextSearchResultDTO()
 				{
 					ThumbnailImageUrl = product.ThumbnailImageUrl,
 					Name = product.Name,
 					Url = detailsPageUrl,
-					Price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currency).ToString(),
+					Price = price,
 				};
 
 				fullTextSearchResultModels.Add(fullTestSearchResultModel);
