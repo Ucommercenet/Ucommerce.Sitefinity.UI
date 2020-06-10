@@ -7,6 +7,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
     /// </summary>
     public class CategoryNavigationCategoryViewModel
     {
+        public int CategoryId { get; set; }
         public string DisplayName { get; set; }
 
         public string Url { get; set; }
