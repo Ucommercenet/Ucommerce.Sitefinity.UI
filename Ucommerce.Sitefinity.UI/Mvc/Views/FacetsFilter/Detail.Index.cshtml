@@ -29,7 +29,7 @@
                         <label v-bind:class="filter.Checked && 'active'">
                             <input type="checkbox" v-model="filter.Checked" v-on:change="filterProducts(filter)" v-bind:key="filter.FacetValueName" />
                             <span></span>
-                            {{ filter.FacetValueName }}
+                            <span :inner-html.prop="filter.FacetValueName | starRating(facet.Name)"></span>
                         </label>
                         <span> ({{ filter.FacetValueHits }})</span>
                     </li>
