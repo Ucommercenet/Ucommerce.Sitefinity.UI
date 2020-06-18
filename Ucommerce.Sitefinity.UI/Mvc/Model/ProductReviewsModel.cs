@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using UCommerce.Catalog.Status;
 using UCommerce.EntitiesV2;
 using UCommerce.Runtime;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
@@ -35,12 +37,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             {
                 currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
             }
-            
 
-            reviewVm.Reviews = currentProduct.ProductReviews.Select(review => new ViewModels.ProductReview
+            reviewVm.Reviews = currentProduct.ProductReviews.Where(pr => pr.ProductReviewStatus.ProductReviewStatusId == (int)ProductReviewStatusCode.Approved
+                                                                         && (pr.CultureCode == null || pr.CultureCode == string.Empty || pr.CultureCode == Thread.CurrentThread.CurrentUICulture.Name))
+	            .OrderByDescending(pr => pr.CreatedOn)
+                .Select(review => new ViewModels.ProductReview
             {
-                Name = review.Customer.FirstName + " " + review.Customer.LastName,
-                Email = review.Customer.EmailAddress,
+                Name = review.Customer == null ? "(anonymous)" : review.Customer.FirstName + " " + review.Customer.LastName,
+                Email = review.Customer?.EmailAddress,
                 Title = review.ReviewHeadline,
                 CreatedOn = review.CreatedOn,
                 Comments = review.ReviewText,

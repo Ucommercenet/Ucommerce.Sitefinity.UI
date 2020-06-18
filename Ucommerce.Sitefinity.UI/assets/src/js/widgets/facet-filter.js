@@ -10,6 +10,18 @@ function initFacetFilter(rootElement) {
         data: {
             facets: facets
         },
+        filters: {
+            starRating: function (facetValue, facetName) {
+                console.log('starRating', facetName, facetValue);
+                if (facetName === "Rating_Range") {
+                    var stars = parseInt(facetValue.split('-')[1].trim())/20;
+                    var starText = '<span class="review-list">' + '<span class="star on"></span>'.repeat(stars) + '</span>';
+                    return starText;
+                } else {
+                    return facetValue;
+                }
+            }
+        },
         created: function () {
             var result = {},
                 queryString = location.search.slice(1),

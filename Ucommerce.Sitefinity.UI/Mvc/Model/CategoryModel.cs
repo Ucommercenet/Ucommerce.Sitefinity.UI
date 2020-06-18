@@ -17,217 +17,218 @@ using UCommerce.Sitefinity.UI.Pages;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-    /// <summary>
-    /// The Model class of the Category MVC widget.
-    /// </summary>
-    internal class CategoryModel : ICategoryModel
-    {
-        public CategoryModel(bool hideMiniBasket, bool allowChangingCurrency, Guid? imageId = null,
-            Guid? categoryPageId = null, Guid? searchPageId = null, Guid? productDetailsPageId = null)
-        {
-            this.hideMiniBasket = hideMiniBasket;
-            this.allowChangingCurrency = allowChangingCurrency;
-            this.imageId = imageId ?? Guid.Empty;
-            this.categoryPageId = categoryPageId ?? Guid.Empty;
-            this.searchPageId = searchPageId ?? Guid.Empty;
-            this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
-        }
+	/// <summary>
+	/// The Model class of the Category MVC widget.
+	/// </summary>
+	internal class CategoryModel : ICategoryModel
+	{
+		public CategoryModel(bool hideMiniBasket, bool allowChangingCurrency, Guid? imageId = null,
+			Guid? categoryPageId = null, Guid? searchPageId = null, Guid? productDetailsPageId = null)
+		{
+			this.hideMiniBasket = hideMiniBasket;
+			this.allowChangingCurrency = allowChangingCurrency;
+			this.imageId = imageId ?? Guid.Empty;
+			this.categoryPageId = categoryPageId ?? Guid.Empty;
+			this.searchPageId = searchPageId ?? Guid.Empty;
+			this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
+		}
 
-        public virtual CategoryNavigationViewModel CreateViewModel()
-        {
-            var categoryNavigationViewModel = new CategoryNavigationViewModel();
-            var rootCategories = CatalogLibrary.GetRootCategories().Where(x => x.DisplayOnSite).ToList();
-            var currentPriceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
-            categoryNavigationViewModel.Categories =
-                this.MapCategories(rootCategories, SiteContext.Current.CatalogContext.CurrentCategory);
-            categoryNavigationViewModel.Currencies =
-                this.MapCurrencies(SiteContext.Current.CatalogContext.CurrentCatalog.AllowedPriceGroups,
-                    currentPriceGroup);
-            categoryNavigationViewModel.Localizations = this.GetCurrentCulture();
-            categoryNavigationViewModel.CurrentCurrency = new CategoryNavigationCurrencyViewModel()
-            {
-                DisplayName = currentPriceGroup.Name,
-                PriceGroupId = currentPriceGroup.PriceGroupId,
-            };
-            GetCurrentCulture();
+		public virtual CategoryNavigationViewModel CreateViewModel()
+		{
+			var categoryNavigationViewModel = new CategoryNavigationViewModel();
+			var rootCategories = CatalogLibrary.GetRootCategories().Where(x => x.DisplayOnSite).ToList();
+			var currentPriceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
+			categoryNavigationViewModel.Categories =
+				this.MapCategories(rootCategories, SiteContext.Current.CatalogContext.CurrentCategory);
+			categoryNavigationViewModel.Currencies =
+				this.MapCurrencies(SiteContext.Current.CatalogContext.CurrentCatalog.AllowedPriceGroups,
+					currentPriceGroup);
+			categoryNavigationViewModel.Localizations = this.GetCurrentCulture();
+			categoryNavigationViewModel.CurrentCurrency = new CategoryNavigationCurrencyViewModel()
+			{
+				DisplayName = currentPriceGroup.Name,
+				PriceGroupId = currentPriceGroup.PriceGroupId,
+			};
+			GetCurrentCulture();
 
-            categoryNavigationViewModel.ProductDetailsPageId = this.productDetailsPageId;
+			categoryNavigationViewModel.ProductDetailsPageId = this.productDetailsPageId;
 
-            this.MapConfigurationFields(categoryNavigationViewModel);
+			this.MapConfigurationFields(categoryNavigationViewModel);
 
-            categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_ROUTE_NAME, RouteConstants.SEARCH_ROUTE_VALUE);
-            categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_NAME,
-                RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE);
-            categoryNavigationViewModel.Routes.Add(RouteConstants.PRICE_GROUP_ROUTE_NAME,
-                RouteConstants.PRICE_GROUP_ROUTE_VALUE);
-            categoryNavigationViewModel.Routes.Add(RouteConstants.GET_BASKET_ROUTE_NAME,
-                RouteConstants.GET_BASKET_ROUTE_VALUE);
-            
-            if (this.categoryPageId == Guid.Empty)
-            {
-                categoryNavigationViewModel.BaseUrl = UrlResolver.GetCurrentPageNodeUrl();
-            }
-            else
-            {
-                categoryNavigationViewModel.BaseUrl = UrlResolver.GetAbsoluteUrl(UrlResolver.GetPageNodeUrl(this.categoryPageId));
-            }
+			categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_ROUTE_NAME, RouteConstants.SEARCH_ROUTE_VALUE);
+			categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_NAME,
+				RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE);
+			categoryNavigationViewModel.Routes.Add(RouteConstants.PRICE_GROUP_ROUTE_NAME,
+				RouteConstants.PRICE_GROUP_ROUTE_VALUE);
+			categoryNavigationViewModel.Routes.Add(RouteConstants.GET_BASKET_ROUTE_NAME,
+				RouteConstants.GET_BASKET_ROUTE_VALUE);
 
-            return categoryNavigationViewModel;
-        }
+			if (this.categoryPageId == Guid.Empty)
+			{
+				categoryNavigationViewModel.BaseUrl = UrlResolver.GetCurrentPageNodeUrl();
+			}
+			else
+			{
+				categoryNavigationViewModel.BaseUrl = UrlResolver.GetAbsoluteUrl(UrlResolver.GetPageNodeUrl(this.categoryPageId));
+			}
 
-        private string GetCurrentCulture()
-        {
-            var actualSiteMapNode = SiteMapBase.GetActualCurrentNode();
-            var localization = new Dictionary<string, string>();
-            var siteMapProvider = SiteMapBase.GetCurrentProvider();
-            var currentPageSiteNode = siteMapProvider.CurrentNode as PageSiteNode;
+			return categoryNavigationViewModel;
+		}
 
-            if (actualSiteMapNode != null)
-            {
-                if (currentPageSiteNode != null)
-                {
-                    foreach (var availableLanguage in currentPageSiteNode.AvailableLanguages)
-                    {
-                        localization.Add(availableLanguage.Name, currentPageSiteNode.GetUrl(availableLanguage));
-                    }
-                }
-            }
+		private string GetCurrentCulture()
+		{
+			var actualSiteMapNode = SiteMapBase.GetActualCurrentNode();
+			var localization = new Dictionary<string, string>();
+			var siteMapProvider = SiteMapBase.GetCurrentProvider();
+			var currentPageSiteNode = siteMapProvider.CurrentNode as PageSiteNode;
 
-            return JsonConvert.SerializeObject(localization, Formatting.Indented);
-        }
+			if (actualSiteMapNode != null)
+			{
+				if (currentPageSiteNode != null)
+				{
+					foreach (var availableLanguage in currentPageSiteNode.AvailableLanguages)
+					{
+						localization.Add(availableLanguage.Name, currentPageSiteNode.GetUrl(availableLanguage));
+					}
+				}
+			}
 
-        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
-        {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-            {
-                message = "The widget is in Page Edit mode.";
-                return false;
-            }
+			return JsonConvert.SerializeObject(localization, Formatting.Indented);
+		}
 
-            message = null;
-            return true;
-        }
+		public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+		{
+			if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+			{
+				message = "The widget is in Page Edit mode.";
+				return false;
+			}
 
-        protected virtual void MapConfigurationFields(CategoryNavigationViewModel categoryNavigationViewModel)
-        {
-            categoryNavigationViewModel.HideMiniBasket = this.hideMiniBasket;
-            categoryNavigationViewModel.AllowChangingCurrency = this.allowChangingCurrency;
+			message = null;
+			return true;
+		}
 
-            if (this.imageId != Guid.Empty)
-            {
-                try
-                {
-                    var manager = LibrariesManager.GetManager();
-                    var image = manager.GetImage(this.imageId);
-                    categoryNavigationViewModel.ImageUrl = MediaContentExtensions.ResolveMediaUrl(image, false);
-                }
-                catch (Exception ex)
-                {
-                    Log.Write(
-                        $"Categories Model: Image cannot be retrieved. Cannot resolve image with Id: {this.imageId} due to the following exception: {Environment.NewLine} {ex}",
-                        ConfigurationPolicy.ErrorLog);
-                }
-            }
+		protected virtual void MapConfigurationFields(CategoryNavigationViewModel categoryNavigationViewModel)
+		{
+			categoryNavigationViewModel.HideMiniBasket = this.hideMiniBasket;
+			categoryNavigationViewModel.AllowChangingCurrency = this.allowChangingCurrency;
 
-            if (this.searchPageId != Guid.Empty)
-            {
-                var nextSearchUrl = UrlResolver.GetPageNodeUrl(this.searchPageId);
+			if (this.imageId != Guid.Empty)
+			{
+				try
+				{
+					var manager = LibrariesManager.GetManager();
+					var image = manager.GetImage(this.imageId);
+					categoryNavigationViewModel.ImageUrl = MediaContentExtensions.ResolveMediaUrl(image, false);
+				}
+				catch (Exception ex)
+				{
+					Log.Write(
+						$"Categories Model: Image cannot be retrieved. Cannot resolve image with Id: {this.imageId} due to the following exception: {Environment.NewLine} {ex}",
+						ConfigurationPolicy.ErrorLog);
+				}
+			}
 
-                if (nextSearchUrl != null)
-                    categoryNavigationViewModel.SearchPageUrl = nextSearchUrl;
-            }
-        }
+			if (this.searchPageId != Guid.Empty)
+			{
+				var nextSearchUrl = UrlResolver.GetPageNodeUrl(this.searchPageId);
 
-        protected virtual IList<CategoryNavigationCategoryViewModel> MapCategories(ICollection<Category> rootCategories,
-            Category currentCategory)
-        {
-            var result = new List<CategoryNavigationCategoryViewModel>();
+				if (nextSearchUrl != null)
+					categoryNavigationViewModel.SearchPageUrl = nextSearchUrl;
+			}
+		}
 
-            foreach (var category in rootCategories)
-            {
-                result.Add(new CategoryNavigationCategoryViewModel()
-                {
-                    DisplayName = category.DisplayName(),
-                    Url = this.GetCategoryUrl(category),
-                    Categories = this.MapCategories(category.Categories.Where(x => x.DisplayOnSite).ToList(),
-                        currentCategory),
-                    IsActive = currentCategory != null && currentCategory.Guid == category.Guid,
-                });
-            }
+		protected virtual IList<CategoryNavigationCategoryViewModel> MapCategories(ICollection<Category> rootCategories,
+			Category currentCategory)
+		{
+			var result = new List<CategoryNavigationCategoryViewModel>();
 
-            return result;
-        }
+			foreach (var category in rootCategories)
+			{
+				result.Add(new CategoryNavigationCategoryViewModel()
+				{
+					CategoryId = category.CategoryId,
+					DisplayName = category.DisplayName(),
+					Url = this.GetCategoryUrl(category),
+					Categories = this.MapCategories(category.Categories.Where(x => x.DisplayOnSite).ToList(),
+						currentCategory),
+					IsActive = currentCategory != null && currentCategory.Guid == category.Guid,
+				});
+			}
 
-        protected virtual IList<CategoryNavigationCurrencyViewModel> MapCurrencies(
-            ICollection<PriceGroup> currentCatalogAllowedPriceGroups, PriceGroup currentPriceGroup)
-        {
-            var categoryNavigationCurrencyViewModels = new List<CategoryNavigationCurrencyViewModel>();
+			return result;
+		}
 
-            foreach (var currentCatalogAllowedPriceGroup in currentCatalogAllowedPriceGroups)
-            {
-                if (currentPriceGroup == currentCatalogAllowedPriceGroup) continue;
-                var categoryNavigationCurrencyViewModel = new CategoryNavigationCurrencyViewModel();
+		protected virtual IList<CategoryNavigationCurrencyViewModel> MapCurrencies(
+			ICollection<PriceGroup> currentCatalogAllowedPriceGroups, PriceGroup currentPriceGroup)
+		{
+			var categoryNavigationCurrencyViewModels = new List<CategoryNavigationCurrencyViewModel>();
 
-                categoryNavigationCurrencyViewModel.DisplayName = currentCatalogAllowedPriceGroup.Name;
-                categoryNavigationCurrencyViewModel.PriceGroupId = currentCatalogAllowedPriceGroup.PriceGroupId;
+			foreach (var currentCatalogAllowedPriceGroup in currentCatalogAllowedPriceGroups)
+			{
+				if (currentPriceGroup == currentCatalogAllowedPriceGroup) continue;
+				var categoryNavigationCurrencyViewModel = new CategoryNavigationCurrencyViewModel();
 
-                categoryNavigationCurrencyViewModels.Add(categoryNavigationCurrencyViewModel);
-            }
+				categoryNavigationCurrencyViewModel.DisplayName = currentCatalogAllowedPriceGroup.Name;
+				categoryNavigationCurrencyViewModel.PriceGroupId = currentCatalogAllowedPriceGroup.PriceGroupId;
 
-            return categoryNavigationCurrencyViewModels;
-        }
+				categoryNavigationCurrencyViewModels.Add(categoryNavigationCurrencyViewModel);
+			}
 
-        private string GetCategoryUrl(Category category)
-        {
-            var baseUrl = string.Empty;
-            if (this.categoryPageId == Guid.Empty)
-            {
-                baseUrl = UrlResolver.GetCurrentPageNodeUrl();
-            }
-            else
-            {
-                baseUrl = UrlResolver.GetPageNodeUrl(this.categoryPageId);
-            }
+			return categoryNavigationCurrencyViewModels;
+		}
 
-            var catUrl = GetCategoryPath(category);
-            string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", catUrl);
-            string url;
+		private string GetCategoryUrl(Category category)
+		{
+			var baseUrl = string.Empty;
+			if (this.categoryPageId == Guid.Empty)
+			{
+				baseUrl = UrlResolver.GetCurrentPageNodeUrl();
+			}
+			else
+			{
+				baseUrl = UrlResolver.GetPageNodeUrl(this.categoryPageId);
+			}
 
-            if (SystemManager.CurrentHttpContext.Request.Url != null)
-            {
-                url = UrlPath.ResolveUrl(relativeUrl, true);
-            }
-            else
-            {
-                url = UrlResolver.GetAbsoluteUrl(SiteMapBase.GetActualCurrentNode().Url);
-            }
+			var catUrl = GetCategoryPath(category);
+			string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", catUrl);
+			string url;
 
-            return url;
-        }
+			if (SystemManager.CurrentHttpContext.Request.Url != null)
+			{
+				url = UrlPath.ResolveUrl(relativeUrl, true);
+			}
+			else
+			{
+				url = UrlResolver.GetAbsoluteUrl(SiteMapBase.GetActualCurrentNode().Url);
+			}
 
-        internal static string GetCategoryPath(Category category)
-        {
-            var catNames = new List<string>();
-            var cat = category;
+			return url;
+		}
 
-            while (cat != null)
-            {
-                catNames.Add(cat.Name);
-                cat = cat.ParentCategory;
-            }
+		internal static string GetCategoryPath(Category category)
+		{
+			var catNames = new List<string>();
+			var cat = category;
 
-            catNames.Reverse();
-            var catUrl = String.Join("/", catNames.ToArray());
+			while (cat != null)
+			{
+				catNames.Add(cat.Name);
+				cat = cat.ParentCategory;
+			}
 
-            return catUrl;
-        }
+			catNames.Reverse();
+			var catUrl = String.Join("/", catNames.ToArray());
 
-        private Guid imageId;
-        private bool hideMiniBasket;
-        private bool allowChangingCurrency;
-        private Guid categoryPageId;
-        private Guid searchPageId;
-        private Guid productDetailsPageId;
-        internal static string DefaultCategoryName = "Tops";
-    }
+			return catUrl;
+		}
+
+		private Guid imageId;
+		private bool hideMiniBasket;
+		private bool allowChangingCurrency;
+		private Guid categoryPageId;
+		private Guid searchPageId;
+		private Guid productDetailsPageId;
+		internal static string DefaultCategoryName = "Tops";
+	}
 }
