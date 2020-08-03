@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using UCommerce.Sitefinity.UI.Api.Model;
-using UCommerce;
-using UCommerce.Api;
-using UCommerce.Catalog.Models;
-using UCommerce.EntitiesV2;
-using UCommerce.Pipelines;
-using UCommerce.Runtime;
+using Ucommerce;
+using Ucommerce.Api;
+using Ucommerce.Catalog.Models;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Pipelines;
+//using Ucommerce.Runtime;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -18,14 +18,26 @@ namespace UCommerce.Sitefinity.UI.Api
     [RoutePrefix("ProductApi")]
     public class ProductController : ApiController
     {
+
+        private readonly ICatalogContext _catalogContext;
+        private readonly ITransactionLibrary _transactionLibrary;
+
+        public ProductController(
+            ICatalogContext catalogContext,
+            ITransactionLibrary transactionLibrary)
+        {
+            _catalogContext = catalogContext;
+            _transactionLibrary = transactionLibrary;
+        }
+
         [Route("productPrices")]
         [HttpPost]
         public IHttpActionResult ProductPrices(ProductDTO productPricesModel)
         {
-            var currentPriceGroupCurrency = SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency;
+            var currentPriceGroupCurrency = _catalogContext.CurrentPriceGroup.CurrencyISOCode;
             var productGuidsToGetPricesFor = ProductGuidsToGetPricesFor(productPricesModel);
 
-            var productsPrices = CatalogLibrary.CalculatePrice(productGuidsToGetPricesFor);
+            var productsPrices = new CatalogLibrary().CalculatePrices(productGuidsToGetPricesFor);
 
             return Json(MapToProductPricesViewModels(productsPrices, currentPriceGroupCurrency));
         }
@@ -53,25 +65,26 @@ namespace UCommerce.Sitefinity.UI.Api
         {
             var product = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku == null);
             var request = System.Web.HttpContext.Current.Request;
-            var basket = TransactionLibrary.HasBasket() ? TransactionLibrary.GetBasket(false) : null;
+            var basket = _transactionLibrary.HasBasket() ? _transactionLibrary.GetBasket(false) : null;
 
             if (basket != null)
             {
-                if (basket.PurchaseOrder.Customer == null)
+                if (basket.Customer == null)
                 {
-                    basket.PurchaseOrder.Customer = new Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
+                    basket.Customer = new Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
                     basket.Save();
                 }
             }
 
             var review = new ProductReview()
             {
-                ProductCatalogGroup = SiteContext.Current.CatalogContext.CurrentCatalogGroup,
+                // TODO: Do we need to transform the catalog groups
+                //ProductCatalogGroup = _catalogContext.CurrentCatalogGroup,
                 ProductReviewStatus = ProductReviewStatus.SingleOrDefault(s => s.Name == "New"),
                 CreatedOn = DateTime.Now,
                 CreatedBy = model.Name,
                 Product = product,
-                Customer = basket?.PurchaseOrder?.Customer,
+                Customer = basket?.Customer,
                 Rating = model.Rating,
                 ReviewHeadline = model.Title,
                 ReviewText = model.Comments,
@@ -85,7 +98,7 @@ namespace UCommerce.Sitefinity.UI.Api
             return Ok();
         }
 
-        private IList<ProductPricesDTO> MapToProductPricesViewModels(ProductPriceCalculationResult productsPrices, Currency currency)
+        private IList<ProductPricesDTO> MapToProductPricesViewModels(ProductPriceCalculationResult productsPrices, string currency)
         {
             var prices = new List<ProductPricesDTO>();
 
