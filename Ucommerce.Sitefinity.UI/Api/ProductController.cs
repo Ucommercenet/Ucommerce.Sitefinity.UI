@@ -8,7 +8,7 @@ using Ucommerce.Api;
 using Ucommerce.Catalog.Models;
 using Ucommerce.EntitiesV2;
 using Ucommerce.Pipelines;
-//using Ucommerce.Runtime;
+using Ucommerce.Infrastructure;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -18,28 +18,19 @@ namespace UCommerce.Sitefinity.UI.Api
     [RoutePrefix("ProductApi")]
     public class ProductController : ApiController
     {
-
-        private readonly ICatalogContext _catalogContext;
-        private readonly ITransactionLibrary _transactionLibrary;
-
-        public ProductController(
-            ICatalogContext catalogContext,
-            ITransactionLibrary transactionLibrary)
-        {
-            _catalogContext = catalogContext;
-            _transactionLibrary = transactionLibrary;
-        }
+        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
         [Route("productPrices")]
         [HttpPost]
         public IHttpActionResult ProductPrices(ProductDTO productPricesModel)
         {
-            var currentPriceGroupCurrency = _catalogContext.CurrentPriceGroup.CurrencyISOCode;
+            var currencyIsoCode = CatalogContext.CurrentPriceGroup.CurrencyISOCode;
             var productGuidsToGetPricesFor = ProductGuidsToGetPricesFor(productPricesModel);
+            var productsPrices = CatalogLibrary.CalculatePrices(productGuidsToGetPricesFor);
 
-            var productsPrices = new CatalogLibrary().CalculatePrices(productGuidsToGetPricesFor);
-
-            return Json(MapToProductPricesViewModels(productsPrices, currentPriceGroupCurrency));
+            return Json(MapToProductPricesViewModels(productsPrices, currencyIsoCode));
         }
 
         [Route("productReviews")]
@@ -64,8 +55,10 @@ namespace UCommerce.Sitefinity.UI.Api
         public IHttpActionResult PutProductReview([FromBody] ProductReviewDTO model)
         {
             var product = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku == null);
+            var productCatalogGroup = ProductCatalogGroup
+                .FirstOrDefault(x => x.ProductCatalogGroupId == CatalogContext.CurrentCatalogGroup.ProductCatalogGroupId);
             var request = System.Web.HttpContext.Current.Request;
-            var basket = _transactionLibrary.HasBasket() ? _transactionLibrary.GetBasket(false) : null;
+            var basket = TransactionLibrary.HasBasket() ? TransactionLibrary.GetBasket(false) : null;
 
             if (basket != null)
             {
@@ -78,8 +71,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
             var review = new ProductReview()
             {
-                // TODO: Do we need to transform the catalog groups
-                //ProductCatalogGroup = _catalogContext.CurrentCatalogGroup,
+                ProductCatalogGroup = productCatalogGroup,
                 ProductReviewStatus = ProductReviewStatus.SingleOrDefault(s => s.Name == "New"),
                 CreatedOn = DateTime.Now,
                 CreatedBy = model.Name,
@@ -98,17 +90,18 @@ namespace UCommerce.Sitefinity.UI.Api
             return Ok();
         }
 
-        private IList<ProductPricesDTO> MapToProductPricesViewModels(ProductPriceCalculationResult productsPrices, string currency)
+        private IList<ProductPricesDTO> MapToProductPricesViewModels(ProductPriceCalculationResult productsPrices, string currencyIsoCode)
         {
             var prices = new List<ProductPricesDTO>();
 
             foreach (var productsPricesItem in productsPrices.Items)
             {
-                var productPricesViewModel = new ProductPricesDTO();
-
-                productPricesViewModel.ProductGuid = productsPricesItem.ProductGuid;
-                productPricesViewModel.Price = new Money(productsPricesItem.PriceInclTax, currency).ToString();
-                productPricesViewModel.ListPrice = new Money(productsPricesItem.ListPriceInclTax, currency).ToString();
+                var productPricesViewModel = new ProductPricesDTO
+                {
+                    ProductGuid = productsPricesItem.ProductGuid,
+                    Price = new Money(productsPricesItem.PriceInclTax, currencyIsoCode).ToString(),
+                    ListPrice = new Money(productsPricesItem.ListPriceInclTax, currencyIsoCode).ToString()
+                };
 
                 prices.Add(productPricesViewModel);
             }

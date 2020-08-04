@@ -7,10 +7,9 @@ using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
-using UCommerce.Api;
-using UCommerce.EntitiesV2;
-using UCommerce.Extensions;
-using UCommerce.Runtime;
+using Ucommerce.Api;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Extensions;
 using UCommerce.Sitefinity.UI.Constants;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
@@ -35,13 +34,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual CategoryNavigationViewModel CreateViewModel()
         {
+
+            var catalogLibrary = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+            var catalogContext = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
+
             var categoryNavigationViewModel = new CategoryNavigationViewModel();
-            var rootCategories = CatalogLibrary.GetRootCategories().Where(x => x.DisplayOnSite).ToList();
-            var currentPriceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
+            var rootCategories = catalogLibrary.GetRootCategories().Where(x => x.DisplayOnSite).ToList();
+            var currentPriceGroup = catalogContext.CurrentPriceGroup;
             categoryNavigationViewModel.Categories =
-                this.MapCategories(rootCategories, SiteContext.Current.CatalogContext.CurrentCategory);
+                this.MapCategories(rootCategories, catalogContext.CurrentCategory);
             categoryNavigationViewModel.Currencies =
-                this.MapCurrencies(SiteContext.Current.CatalogContext.CurrentCatalog.AllowedPriceGroups,
+                this.MapCurrencies(catalogContext.CurrentCatalog.AllowedPriceGroups,
                     currentPriceGroup);
             categoryNavigationViewModel.Localizations = this.GetCurrentCulture();
             categoryNavigationViewModel.CurrentCurrency = new CategoryNavigationCurrencyViewModel()
@@ -205,15 +208,20 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return url;
         }
 
-        internal static string GetCategoryPath(Category category)
+        internal static string GetCategoryPath(Ucommerce.Search.Models.Category category)
         {
+            var catalogLibrary = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+
             var catNames = new List<string>();
             var cat = category;
 
             while (cat != null)
             {
                 catNames.Add(cat.Name);
-                cat = cat.ParentCategory;
+                if (cat.ParentCategory.HasValue)
+                    cat = catalogLibrary.GetCategories(new List<Guid> { cat.ParentCategory.Value }).FirstOrDefault();
+                else
+                    cat = null;
             }
 
             catNames.Reverse();
