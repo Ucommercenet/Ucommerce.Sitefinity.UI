@@ -4,27 +4,25 @@ using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Localization;
-using UCommerce.EntitiesV2;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Resources;
-using UCommerce.Transactions;
+using Ucommerce.Api;
+using Ucommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-	/// <summary>
-	/// The Model class of the Address MVC widget.
-	/// </summary>
-	public class AddressModel : IAddressModel
+    /// <summary>
+    /// The Model class of the Address MVC widget.
+    /// </summary>
+    public class AddressModel : IAddressModel
 	{
 		private Guid nextStepId;
 		private Guid previousStepId;
-		private readonly TransactionLibraryInternal _transactionLibraryInternal;
-		private readonly IQueryable<Country> _countries;
+        public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+        private readonly IQueryable<Country> _countries;
 
 		public AddressModel(Guid? nextStepId = null, Guid? previousStepId = null)
 		{
-			_transactionLibraryInternal =
-				UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
 			_countries = Country.All();
 			this.nextStepId = nextStepId ?? Guid.Empty;
 			this.previousStepId = previousStepId ?? Guid.Empty;
@@ -38,11 +36,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			PurchaseOrder purchaseOrder;
 			try
 			{
-				purchaseOrder = _transactionLibraryInternal.GetBasket().PurchaseOrder;
+				purchaseOrder = TransactionLibrary.GetBasket();
 				shippingInformation =
-					_transactionLibraryInternal.GetBasket().PurchaseOrder
-						.GetShippingAddress(UCommerce.Constants.DefaultShipmentAddressName) ?? new OrderAddress();
-				billingInformation = _transactionLibraryInternal.GetBasket().PurchaseOrder.BillingAddress ??
+                    TransactionLibrary.GetBasket()
+						.GetShippingAddress(Ucommerce.Constants.DefaultShipmentAddressName) ?? new OrderAddress();
+				billingInformation = TransactionLibrary.GetBasket().BillingAddress ??
 									 new OrderAddress();
 			}
 			catch (Exception ex)
@@ -108,7 +106,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				EditShippingInformation(addressRendering.BillingAddress);
 			}
 
-			_transactionLibraryInternal.ExecuteBasketPipeline();
+            TransactionLibrary.ExecuteBasketPipeline();
 
 			result.Data = new { ShippingUrl = GetNextStepUrl(nextStepId) };
 			return result;
@@ -118,8 +116,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			try
 			{
-				_transactionLibraryInternal.EditShipmentInformation(
-					UCommerce.Constants.DefaultShipmentAddressName,
+                TransactionLibrary.EditShipmentInformation(
+					Ucommerce.Constants.DefaultShipmentAddressName,
 					shippingAddress.FirstName,
 					shippingAddress.LastName,
 					shippingAddress.EmailAddress,
@@ -142,7 +140,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 		private void EditBillingInformation(AddressSave billingAddress)
 		{
-			_transactionLibraryInternal.EditBillingInformation(
+            TransactionLibrary.EditBillingInformation(
 				billingAddress.FirstName,
 				billingAddress.LastName,
 				billingAddress.EmailAddress,

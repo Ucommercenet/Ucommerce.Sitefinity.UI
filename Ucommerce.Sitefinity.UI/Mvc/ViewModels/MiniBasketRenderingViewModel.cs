@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using UCommerce;
+using Ucommerce;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {

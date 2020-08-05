@@ -12,16 +12,15 @@ using UCommerce.Sitefinity.UI.Constants;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
 using UCommerce.Sitefinity.UI.Search;
-using UCommerce;
-using UCommerce.Api;
-using UCommerce.Content;
-using UCommerce.EntitiesV2;
-using UCommerce.EntitiesV2.Definitions;
-using UCommerce.Extensions;
-using UCommerce.Infrastructure.Globalization;
-using UCommerce.Runtime;
-using UCommerce.Search;
-using UCommerce.Catalog.Models;
+using Ucommerce;
+using Ucommerce.Api;
+using Ucommerce.Content;
+using Ucommerce.EntitiesV2;
+using Ucommerce.EntitiesV2.Definitions;
+using Ucommerce.Extensions;
+using Ucommerce.Infrastructure.Globalization;
+using Ucommerce.Search;
+using Ucommerce.Catalog.Models;
 using Telerik.Sitefinity.Localization;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model

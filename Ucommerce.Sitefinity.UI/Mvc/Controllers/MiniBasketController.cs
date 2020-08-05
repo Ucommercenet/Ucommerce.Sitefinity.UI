@@ -2,10 +2,10 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using UCommerce.Infrastructure;
+using Ucommerce.Api;
+using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -15,15 +15,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     [ControllerToolboxItem(Name = "uMiniBasket_MVC", Title = "Mini Basket", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnMiniBasket sfMvcIcn")]
     public class MiniBasketController : Controller, IPersonalizable
     {
+        private string detailTemplateNamePrefix = "Detail.";
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+
         public Guid? CartPageId { get; set; }
         public Guid? ProductDetailsPageId { get; set; }
         public Guid? CheckoutPageId { get; set; }
         public string TemplateName { get; set; } = "Index";
-
-        public MiniBasketController()
-        {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-        }
 
         public ActionResult Index()
         {
@@ -40,7 +38,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var miniBasketRenderingViewModel = miniBasketModel.CreateViewModel(Url.Action("Refresh"));
             var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            if (!_transactionLibraryInternal.HasBasket())
+            if (!TransactionLibrary.HasBasket())
             {
                 return View(detailTemplateName, miniBasketRenderingViewModel);
             }
@@ -96,7 +94,5 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             return model;
         }
 
-        private string detailTemplateNamePrefix = "Detail.";
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
     }
 }

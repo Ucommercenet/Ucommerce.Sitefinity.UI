@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UCommerce.EntitiesV2;
-using UCommerce.EntitiesV2.Definitions;
+using Ucommerce.EntitiesV2;
+using Ucommerce.EntitiesV2.Definitions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {

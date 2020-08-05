@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UCommerce.EntitiesV2;
-using UCommerce.Runtime;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Runtime;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 

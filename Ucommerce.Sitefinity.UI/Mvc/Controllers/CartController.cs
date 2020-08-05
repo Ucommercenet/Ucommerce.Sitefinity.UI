@@ -2,11 +2,11 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using UCommerce.Infrastructure;
+using Ucommerce.Api;
+using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Transactions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
@@ -21,12 +21,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         public Guid? RedirectPageId { get; set; }
         public string TemplateName { get; set; } = "Index";
 
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
-
-        public CartController()
-        {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
-        }
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
         public ActionResult Index()
         {
@@ -79,8 +74,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 return this.PartialView("_Warning", message);
             }
 
-            _transactionLibraryInternal.UpdateLineItemByOrderLineId(orderlineId, 0);
-            _transactionLibraryInternal.ExecuteBasketPipeline();
+            TransactionLibrary.UpdateLineItemByOrderLineId(orderlineId, 0);
+            TransactionLibrary.ExecuteBasketPipeline();
             var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
             var miniBasketModel = ResolveMiniBasketModel();

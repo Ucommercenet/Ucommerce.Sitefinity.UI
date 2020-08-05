@@ -1,5 +1,5 @@
 ﻿using System;
-using UCommerce.EntitiesV2;
+using Ucommerce.EntitiesV2;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using System.Collections.Generic;
 

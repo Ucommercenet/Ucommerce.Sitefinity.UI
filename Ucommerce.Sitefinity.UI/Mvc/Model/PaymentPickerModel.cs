@@ -4,12 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
-using UCommerce.Api;
-using UCommerce.EntitiesV2;
-using UCommerce.Runtime;
+using Ucommerce.Api;
+using Ucommerce.EntitiesV2;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Transactions;
-using ObjectFactory = UCommerce.Infrastructure.ObjectFactory;
+using ObjectFactory = Ucommerce.Infrastructure.ObjectFactory;
+using Ucommerce;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -20,11 +19,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     {
         private Guid nextStepId;
         private Guid previousStepId;
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
 
         public PaymentPickerModel(Guid? nextStepId = null, Guid? previousStepId = null)
         {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             this.nextStepId = nextStepId ?? Guid.Empty;
             this.previousStepId = previousStepId ?? Guid.Empty;
         }
@@ -36,7 +35,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             try
             {
-                purchaseOrder = _transactionLibraryInternal.GetBasket().PurchaseOrder;
+                purchaseOrder = TransactionLibrary.GetBasket();
             }
             catch (Exception ex)
             {
@@ -50,7 +49,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
 
             var shippingAddress =
-                 _transactionLibraryInternal.GetShippingInformation(UCommerce.Constants.DefaultShipmentAddressName);
+                 TransactionLibrary.GetShippingInformation(Ucommerce.Constants.DefaultShipmentAddressName);
 
             var shippingCountry = shippingAddress.Country;
 
@@ -58,13 +57,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             {
                 paymentPickerViewModel.ShippingCountry = shippingCountry.Name;
 
-                var availablePaymentMethods = _transactionLibraryInternal.GetPaymentMethods(shippingCountry);
+                var availablePaymentMethods = TransactionLibrary.GetPaymentMethods(shippingCountry);
 
                 var existingPayment = purchaseOrder.Payments.FirstOrDefault();
                 paymentPickerViewModel.SelectedPaymentMethodId = existingPayment != null
                     ? existingPayment.PaymentMethod.PaymentMethodId
                     : -1;
-                var priceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
+                var priceGroupRepository = ObjectFactory.Instance.Resolve<IRepository<PriceGroup>>();
+                var priceGroup = priceGroupRepository.Get(CatalogContext.CurrentPriceGroup.Guid);
 
                 foreach (var availablePaymentMethod in availablePaymentMethods)
                 {
@@ -73,7 +73,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     var localizedPaymentMethod = availablePaymentMethod.PaymentMethodDescriptions.FirstOrDefault(s =>
                         s.CultureCode.Equals(CultureInfo.CurrentCulture.ToString()));
                     var fee = availablePaymentMethod.GetFeeForPriceGroup(priceGroup);
-                    var formattedFee = new Money(fee == null ? 0 : fee.Fee, purchaseOrder.BillingCurrency);
+                    var formattedFee = new Money(fee == null ? 0 : fee.Fee, purchaseOrder.BillingCurrency.ISOCode);
 
                     if (localizedPaymentMethod != null)
                         option.Text = String.Format(" {0} ({1} + {2}%)", localizedPaymentMethod.DisplayName,
@@ -87,7 +87,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 }
             }
 
-            _transactionLibraryInternal.ExecuteBasketPipeline();
+            TransactionLibrary.ExecuteBasketPipeline();
 
             paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
             paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
@@ -120,8 +120,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual void CreatePayment(PaymentPickerViewModel createPaymentViewModel)
         {
-            _transactionLibraryInternal.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
-            _transactionLibraryInternal.ExecuteBasketPipeline();
+            TransactionLibrary.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
+            TransactionLibrary.ExecuteBasketPipeline();
         }
 
         private string GetNextStepUrl(Guid nextStepId)

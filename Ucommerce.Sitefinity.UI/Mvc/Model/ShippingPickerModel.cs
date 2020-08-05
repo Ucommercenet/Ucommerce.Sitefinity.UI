@@ -4,11 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
-using UCommerce.EntitiesV2;
-using UCommerce.Runtime;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Runtime;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Transactions;
-using ObjectFactory = UCommerce.Infrastructure.ObjectFactory;
+using Ucommerce.Transactions;
+using ObjectFactory = Ucommerce.Infrastructure.ObjectFactory;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {

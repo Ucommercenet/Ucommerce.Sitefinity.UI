@@ -19,7 +19,7 @@ namespace UCommerce.Sitefinity.UI.Api
     /// </summary>
     public class SearchApiController : ApiController
     {
-        public IIndex<Ucommerce.Search.Models.Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Ucommerce.Search.Models.Product>>();
+        public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Ucommerce.Search.Models.Product>>();
         public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
         public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
@@ -39,7 +39,7 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPost]
         public IHttpActionResult Suggestions(FullTextDTO model)
         {
-            // TODO: sugestion searching not supported in Ucommerce v9.0
+            // TODO: suggestion searching not supported in Ucommerce v9.0
             //var searchResult = Ucommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
 
             return FullText(model);
@@ -83,7 +83,7 @@ namespace UCommerce.Sitefinity.UI.Api
                         detailsPageUrl += "/";
                     }
 
-                    detailsPageUrl += catUrl + "/" + product.Guid.ToString();
+                    detailsPageUrl += catUrl + "/" + product.Slug;
                     detailsPageUrl = Pages.UrlResolver.GetAbsoluteUrl(detailsPageUrl);
                 }
 

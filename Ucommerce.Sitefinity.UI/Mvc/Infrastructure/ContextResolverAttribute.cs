@@ -3,7 +3,10 @@ using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
-using UCommerce.Runtime;
+using Ucommerce.Api;
+using Ucommerce.Infrastructure;
+using Ucommerce.Search;
+using Ucommerce.Search.Models;
 
 namespace UCommerce.Sitefinity.UI.Mvc
 {
@@ -12,6 +15,10 @@ namespace UCommerce.Sitefinity.UI.Mvc
     /// </summary>
     public class ContextResolverAttribute : ActionFilterAttribute, IActionFilter
     {
+        public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
+        public IIndex<Category> CategoryIndex => ObjectFactory.Instance.Resolve<IIndex<Category>>();
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] == null || (bool)SystemManager.CurrentHttpContext.Items[contextInitializedKey] == false)
@@ -55,18 +62,20 @@ namespace UCommerce.Sitefinity.UI.Mvc
 
         private void ResolveCurrentProduct(List<string> urlSegments)
         {
-            if (SiteContext.Current.CatalogContext.CurrentProduct == null)
+            if (CatalogContext.CurrentProduct == null)
             {
-                var products = UCommerce.EntitiesV2.Product.All().Where(p => urlSegments.Contains(p.ProductId.ToString())).ToList();
+                var products = ProductIndex.Find()
+                    .Where(p => urlSegments.Contains(p.Slug.ToString()))
+                    .ToList();
 
-                if (products != null && products.Count > 0)
+                if (products != null)
                 {
                     for (int i = urlSegments.Count - 1; i >= 0; i--)
                     {
-                        var product = products.FirstOrDefault(p => urlSegments.Contains(p.Id.ToString()));
+                        var product = products.FirstOrDefault(p => urlSegments.Contains(p.Slug));
                         if (product != null)
                         {
-                            SiteContext.Current.CatalogContext.CurrentProduct = product;
+                            CatalogContext.CurrentProduct = product;
                             break;
                         }
                     }
@@ -76,11 +85,13 @@ namespace UCommerce.Sitefinity.UI.Mvc
 
         private void ResolveCurrentCategory(List<string> urlSegments)
         {
-            if (SiteContext.Current.CatalogContext.CurrentCategory == null)
+            if (CatalogContext.CurrentCategory == null)
             {
-                var categories = UCommerce.EntitiesV2.Category.All().Where(p => urlSegments.Contains(p.Name.ToString()) && p.ProductCatalog.ProductCatalogId == SiteContext.Current.CatalogContext.CurrentCatalog.ProductCatalogId).ToList();
+                var categories = CategoryIndex.Find()
+                    .Where(c => urlSegments.Contains(c.Name.ToString()) && c.ProductCatalog == CatalogContext.CurrentCatalog.Guid)
+                    .ToList();
 
-                if (categories != null && categories.Count > 0)
+                if (categories != null)
                 {
                     for (int i = urlSegments.Count - 1; i >= 0; i--)
                     {
@@ -88,7 +99,7 @@ namespace UCommerce.Sitefinity.UI.Mvc
 
                         if (cat != null)
                         {
-                            SiteContext.Current.CatalogContext.CurrentCategory = cat;
+                            CatalogContext.CurrentCategory = cat;
                             break;
                         }
                     }
