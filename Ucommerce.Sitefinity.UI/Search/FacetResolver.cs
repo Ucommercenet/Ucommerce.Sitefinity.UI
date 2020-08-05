@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using UCommerce.Sitefinity.UI.Pages;
-using UCommerce.Search.Facets;
+using Ucommerce.Search.Facets;
 
 namespace UCommerce.Sitefinity.UI.Search
 {
@@ -23,15 +23,15 @@ namespace UCommerce.Sitefinity.UI.Search
 
             foreach (var queryString in queryStringParameter)
             {
-                var facet = new UCommerce.Search.Facets.Facet
+                var facet = new Facet
                 {
                     Name = queryString.Key,
-                    FacetValues = new List<UCommerce.Search.Facets.FacetValue>(),
+                    FacetValues = new List<FacetValue>(),
                 };
 
                 foreach (var value in queryString.Value.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    facet.FacetValues.Add(new UCommerce.Search.Facets.FacetValue() { Value = HttpUtility.UrlDecode(value) });
+                    facet.FacetValues.Add(new FacetValue() { Value = HttpUtility.UrlDecode(value) });
                 }
 
                 facetsForQuerying.Add(facet);
