@@ -11,6 +11,8 @@ using Ucommerce.EntitiesV2;
 using Ucommerce.Search;
 using UCommerce.Sitefinity.UI.Search;
 using Ucommerce.Infrastructure;
+using Ucommerce.Search.Extensions;
+using System.Web;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -20,6 +22,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public class FacetsFilterModel : IFacetsFilterModel
     {
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 
         public virtual IList<FacetViewModel> CreateViewModel()
         {
@@ -55,20 +58,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         private IList<FacetViewModel> GetAllFacets(Category category)
         {
-            var facetsResolver = new FacetResolver(this.queryStringBlackList);
-            var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
+            var facets = HttpContext.Current.Request.QueryString.ToFacets();
             IList<Ucommerce.Search.Facets.Facet> allFacets;
 
             if (category != null)
             {
-                allFacets = SearchLibrary.GetFacetsFor(category, facetsForQuerying);
+                allFacets = CatalogLibrary.GetFacets(category.Guid, facets.ToFacetDictionary());
             }
             else
             {
-                allFacets = SearchLibrary.FacetedQuery()
-                      .WithFacets(facetsForQuerying)
-                      .ToFacets()
-                      .ToList();
+                allFacets = CatalogLibrary.GetFacets(CatalogContext.CurrentCatalog.Categories, facets.ToFacetDictionary());
             }
 
             return this.MapToFacetsViewModel(allFacets);
@@ -78,11 +77,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         {
             var categoryIds = categoryIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
             var productIds = productIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
+            var facets = HttpContext.Current.Request.QueryString.ToFacets();
+            var categories = Category.Find(x => categoryIds.Any(y => y == x.Id));
 
-            var facetsResolver = new FacetResolver(this.queryStringBlackList);
-            var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
-            return this.MapToFacetsViewModel(SearchLibrary.FacetedQuery()
-                .Where(x => x.CategoryIds.In(categoryIds) || x.Id.In(productIds)).WithFacets(facetsForQuerying).ToFacets().ToList());
+            return this.MapToFacetsViewModel(
+                CatalogLibrary.GetFacets(categories.Select(x => x.Guid).ToList(), facets.ToFacetDictionary()));
         }
 
         private IList<FacetViewModel> MapToFacetsViewModel(IList<Ucommerce.Search.Facets.Facet> facets)

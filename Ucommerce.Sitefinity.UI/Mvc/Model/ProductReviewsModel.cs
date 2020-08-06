@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Ucommerce.EntitiesV2;
-using Ucommerce.Runtime;
+using Ucommerce.Api;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using Ucommerce.Infrastructure;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     public class ProductReviewsModel : IReviewsModel
     {
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+
         public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
             if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
@@ -29,11 +32,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             if (productId.HasValue && productId >= 0)
             {
-                currentProduct = UCommerce.EntitiesV2.Product.Get(productId.Value);
+                currentProduct = Product.Get(productId.Value);
             }
             else
             {
-                currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
+                currentProduct = Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
             }
             
 

@@ -5,10 +5,11 @@ using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
 using Ucommerce.EntitiesV2;
-using Ucommerce.Runtime;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce.Transactions;
 using ObjectFactory = Ucommerce.Infrastructure.ObjectFactory;
+using Ucommerce.Api;
+using Ucommerce;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -19,13 +20,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     {
         private Guid nextStepId;
         private Guid previousStepId;
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
 
         public ShippingPickerModel(Guid? nextStepId = null, Guid? previousStepId = null)
         {
             this.nextStepId = nextStepId ?? Guid.Empty;
             this.previousStepId = previousStepId ?? Guid.Empty;
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
         }
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
@@ -51,8 +52,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 PurchaseOrder basketPurchaseOrder = null;
                 try
                 {
-                    var basket = _transactionLibraryInternal.GetBasket();
-                    basketPurchaseOrder = basket.PurchaseOrder;
+                    basketPurchaseOrder = TransactionLibrary.GetBasket();
                 }
                 catch (Exception ex)
                 {
@@ -61,7 +61,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                 if (basketPurchaseOrder != null)
                 {
-                    var address = basketPurchaseOrder.GetAddress(UCommerce.Constants.DefaultShipmentAddressName);
+                    var address = basketPurchaseOrder.GetAddress(Ucommerce.Constants.DefaultShipmentAddressName);
 
                     if (address == null)
                     {
@@ -87,8 +87,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             try
             {
-                var basket = _transactionLibraryInternal.GetBasket();
-                basketPurchaseOrder = basket.PurchaseOrder;
+                basketPurchaseOrder = TransactionLibrary.GetBasket();
             }
             catch (Exception ex)
             {
@@ -101,14 +100,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return null;
             }
 
-            if (_transactionLibraryInternal.HasBasket())
+            if (TransactionLibrary.HasBasket())
             {
-                var shippingCountry = basketPurchaseOrder.GetAddress(UCommerce.Constants.DefaultShipmentAddressName)?
+                var shippingCountry = basketPurchaseOrder.GetAddress(Ucommerce.Constants.DefaultShipmentAddressName)?
                     .Country;
                 if (shippingCountry != null)
                 {
                     shipmentPickerViewModel.ShippingCountry = shippingCountry.Name;
-                    var availableShippingMethods = _transactionLibraryInternal.GetShippingMethods(shippingCountry);
+                    var availableShippingMethods = TransactionLibrary.GetShippingMethods(shippingCountry);
 
                     if (basketPurchaseOrder.Shipments.Count > 0)
                     {
@@ -122,12 +121,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                     foreach (var availableShippingMethod in availableShippingMethods)
                     {
-                        var priceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
+                        var priceGroup = PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
                         var localizedShippingMethod = availableShippingMethod.ShippingMethodDescriptions.FirstOrDefault(s =>
                             s.CultureCode.Equals(CultureInfo.CurrentCulture.ToString()));
+
                         var price = availableShippingMethod.GetPriceForPriceGroup(priceGroup);
                         var formattedPrice = new Money((price == null ? 0 : price.Price),
-                            basketPurchaseOrder.BillingCurrency);
+                            basketPurchaseOrder.BillingCurrency.ISOCode);
 
                         if (localizedShippingMethod != null)
                             shipmentPickerViewModel.AvailableShippingMethods.Add(new SelectListItem()
@@ -141,7 +141,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 }
             }
 
-            _transactionLibraryInternal.ExecuteBasketPipeline();
+            TransactionLibrary.ExecuteBasketPipeline();
 
             shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
             shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
@@ -151,9 +151,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public virtual void CreateShipment(ShippingPickerViewModel createShipmentViewModel)
         {
-            _transactionLibraryInternal.CreateShipment(createShipmentViewModel.SelectedShippingMethodId,
-                UCommerce.Constants.DefaultShipmentAddressName, true);
-            _transactionLibraryInternal.ExecuteBasketPipeline();
+            TransactionLibrary.CreateShipment(createShipmentViewModel.SelectedShippingMethodId,
+                Ucommerce.Constants.DefaultShipmentAddressName, true);
+            TransactionLibrary.ExecuteBasketPipeline();
         }
 
         private string GetNextStepUrl(Guid nextStepId)

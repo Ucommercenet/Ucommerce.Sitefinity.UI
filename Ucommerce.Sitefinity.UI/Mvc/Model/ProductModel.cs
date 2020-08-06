@@ -22,6 +22,10 @@ using Ucommerce.Infrastructure.Globalization;
 using Ucommerce.Search;
 using Ucommerce.Catalog.Models;
 using Telerik.Sitefinity.Localization;
+using Ucommerce.Infrastructure;
+using Ucommerce.Search.Slugs;
+using Ucommerce.Search.Facets;
+using Ucommerce.Search.Extensions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -30,6 +34,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     /// </summary>
     internal class ProductModel : IProductModel
     {
+        public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+        public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
+
         public ProductModel(int itemsPerPage, bool openInSamePage, bool isManualSelectionMode, bool enableCategoryFallback, 
             Guid? detailsPageId = null, string productIds = null, string categoryIds = null, string fallbackCategoryIds = null)
         {
@@ -60,7 +69,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var viewModel = new ProductListViewModel();
             viewModel.CurrentPage = this.GetRequestedPage();
 
-            var currentCategory = SiteContext.Current.CatalogContext.CurrentCategory;
+            var currentCategory = Category.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCategory.Guid);
             var searchTerm = System.Web.HttpContext.Current.Request.QueryString["search"];
 
             var queryResult = this.GetProductsQuery(currentCategory, searchTerm);
@@ -105,11 +114,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                     if (sortExpression == "PriceAsc")
                     {
-                        productsQuery = productsQuery.OrderBy(p => CatalogLibrary.CalculatePrice(new List<Product>() { p }, null).Items.First().ListPriceExclTax );
+                        productsQuery = productsQuery.OrderBy(p => CatalogLibrary.CalculatePrices(new List<Guid>() { p.Guid }, null).Items.First().ListPriceExclTax );
                     }
                     else if (sortExpression == "PriceDesc")
                     {
-                        productsQuery = productsQuery.OrderByDescending(p => CatalogLibrary.CalculatePrice(new List<Product>() { p }, null).Items.First().ListPriceExclTax);
+                        productsQuery = productsQuery.OrderByDescending(p => CatalogLibrary.CalculatePrices(new List<Guid>() { p.Guid }, null).Items.First().ListPriceExclTax);
                     }
                     else if (sortExpression == "NameAsc")
                     {
@@ -147,12 +156,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         {
             ProductDetailViewModel productDetailViewModel = null;
 
-            var currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
+            var currentProduct = Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
 
             if (currentProduct != null)
             {
-                var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
-                var currentCategory = SiteContext.Current.CatalogContext.CurrentCategory;
+                var imageService = ObjectFactory.Instance.Resolve<IImageService>();
+                var currentCategory = CatalogContext.CurrentCategory;
                 string displayName = string.Empty;
                 if (currentProduct.ParentProduct != null)
                 {
@@ -161,7 +170,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                 displayName += currentProduct.DisplayName();
 
-                var productPrice = CatalogLibrary.CalculatePrice(new List<Product>() { currentProduct }).Items.FirstOrDefault();
+                var productPrice = CatalogLibrary.CalculatePrices(new List<Guid>() { currentProduct.Guid }).Items.FirstOrDefault();
 
                 decimal price = 0;
                 decimal discount = 0;
@@ -170,8 +179,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 {
                     price = productPrice.PriceExclTax;
                     discount = productPrice.DiscountExclTax;
-                    var currentCatalog = SiteContext.Current.CatalogContext.CurrentCatalog;
-                    if (currentCatalog != null && currentCatalog.ShowPricesIncludingVAT)
+                    var currentCatalog = CatalogContext.CurrentCatalog;
+                    if (currentCatalog != null && currentCatalog.ShowPricesIncludingTax)
                     {
                         price = productPrice.PriceInclTax;
                         discount = productPrice.DiscountInclTax;
@@ -188,9 +197,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     PrimaryImageMediaUrl = absoluteImageUrl,
                     LongDescription = currentProduct.LongDescription(),
                     ShortDescription = currentProduct.ShortDescription(),
-                    ProductUrl = CatalogLibrary.GetNiceUrlForProduct(currentProduct, currentCategory),
-                    Price = new Money(price, SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency).ToString(),
-                    Discount = discount > 0 ? new Money(discount, SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency).ToString() : "",
+                    ProductUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct),
+                    Price = new Money(price, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString(),
+                    Discount = discount > 0 ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString() : "",
                     Sku = currentProduct.Sku,
                     Rating = Convert.ToInt32(Math.Round(currentProduct.Rating.GetValueOrDefault())),
                     VariantSku = currentProduct.VariantSku,
@@ -201,21 +210,22 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                 if (currentProduct.ParentProduct != null)
                 {
-                    productDetailViewModel.ParentProductUrl =
-                        CatalogLibrary.GetNiceUrlForProduct(currentProduct.ParentProduct, currentCategory);
+                    var parentProduct = CatalogLibrary.GetProduct(currentProduct.ParentProduct.Sku);
+                    productDetailViewModel.ParentProductUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, parentProduct);
                     productDetailViewModel.ParentProductDisplayName = currentProduct.ParentProduct.DisplayName();
                 }
 
                 if (currentCategory != null)
                 {
-                    productDetailViewModel.CategoryDisplayName = currentCategory.DisplayName();
-                    productDetailViewModel.CategoryUrl = CatalogLibrary.GetNiceUrlForCategory(currentCategory);
-                    productDetailViewModel.ProductUrl = CatalogLibrary.GetNiceUrlForProduct(currentProduct, currentCategory);
+                    productDetailViewModel.CategoryDisplayName = currentCategory.DisplayName;
+                    productDetailViewModel.CategoryUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog,
+                        CatalogContext.CurrentCategories.Append(CatalogContext.CurrentCategory).Compact(), CatalogContext.CurrentProduct);
+                    productDetailViewModel.ProductUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct);
                 }
 
                 var invariantFields = currentProduct.ProductProperties;
 
-                var localizationContext = Infrastructure.ObjectFactory.Instance.Resolve<ILocalizationContext>();
+                var localizationContext = ObjectFactory.Instance.Resolve<ILocalizationContext>();
                 
                 var fieldsForCurrentLanguage = currentProduct.GetProperties(localizationContext.CurrentCultureCode).ToList();
                 
@@ -298,7 +308,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
             else
             {
-                catUrl = CategoryModel.GetCategoryPath(productCategory);
+                catUrl = CategoryModel.GetCategoryPath(CatalogLibrary.GetCategory(productCategory.Guid));
             }
 
             var rawtUrl = string.Format("{0}/{1}", catUrl, product.ProductId);
@@ -349,16 +359,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             products.AddRange(this.GetProductsFromSelectedCategoryIds(categoryIds));
             products.AddRange(this.GetProductsFromSelectedProductIds(productIds));
 
-            var facetsResolver = new FacetResolver(this.queryStringBlackList);
-            var facets = facetsResolver.GetFacetsFromQueryString();
+            var facets = HttpContext.Current.Request.QueryString.ToFacets();
 
             if (facets != null && facets.Any())
             {
-                List<UCommerce.Documents.Product> productsFromFacets = SearchLibrary.FacetedQuery()
+                var productsFromFacets = ProductIndex
+                    .Find<Ucommerce.Documents.Product>()
                     .Where(x => x.CategoryIds.In(categoryIds) || x.Id.In(productIds))
-                    .WithFacets(facets)
-                    .ToList();
-        
+                    .Where(facets.ToFacetDictionary()).ToFacets();
+
                 return products.Where(x => productsFromFacets.Any(y => x.Sku == y.Sku)).AsQueryable();
             }
             else
@@ -366,7 +375,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return products.AsQueryable();
             }
         }
-        
+
+
         private IList<Product> GetProductsFromSelectedCategoryIds(List<int> categoryIds)
         {
             List<Product> result = new List<Product>();
@@ -389,9 +399,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         private IQueryable<Product> ApplyAutoSelection(Category currentCategory, string searchTerm)
         {
-            IList<UCommerce.Documents.Product> products = null;
-            var facetsResolver = new FacetResolver(this.queryStringBlackList);
-            var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
+            IList<Ucommerce.Search.Models.Product> products = null;
+            var facets = HttpContext.Current.Request.QueryString.ToFacets();
 
             if (currentCategory == null)
             {
@@ -408,12 +417,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 }
                 else
                 {
-                    var catalog = CatalogLibrary.GetAllCatalogs().FirstOrDefault();
+                    var catalog = CatalogLibrary.GetCatalog();
                     if (catalog != null)
                     {
-                        currentCategory = CatalogLibrary.GetRootCategories(catalog.Id).FirstOrDefault();
-                        products = SearchLibrary.GetProductsFor(currentCategory, facetsForQuerying);
-                        if (currentCategory == null)
+                        var category = CatalogLibrary.GetRootCategories(catalog.Guid).FirstOrDefault();
+                        products = CatalogLibrary.GetProducts(category.Guid, facets.ToFacetDictionary()).ToList();
+
+                        if (category == null)
                         {
                             throw new InvalidOperationException(NO_CATEGORIES_ERROR_MESSAGE);
                         }
@@ -426,12 +436,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
             else
             {
-                products = SearchLibrary.GetProductsFor(currentCategory, facetsForQuerying);
+                products = CatalogLibrary.GetProducts(currentCategory.Guid, facets.ToFacetDictionary()).ToList();
             }
 
             
             ICollection<Product> productsInCategory = null;
-            productsInCategory = CatalogLibrary.GetProducts(currentCategory).ToList();
+            productsInCategory = Product.Find(x => x.GetCategories().Any(y => y.Guid == currentCategory.Guid)).ToList();
             
             var listOfProducts = new List<Product>();
 
@@ -450,9 +460,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         private IList<ProductDTO> MapProducts(IList<Product> products, Category category, bool openInSamePage, Guid detailPageId)
         {
             var result = new List<ProductDTO>();
-            var imageService = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IImageService>();
-            var currentCatalog = SiteContext.Current.CatalogContext.CurrentCatalog;
-            var productsPrices = CatalogLibrary.CalculatePrice(products.Select(x => x.Guid).ToList());
+            var imageService = ObjectFactory.Instance.Resolve<IImageService>();
+            var currentCatalog = CatalogContext.CurrentCatalog;
+            var productsPrices = CatalogLibrary.CalculatePrices(products.Select(x => x.Guid).ToList());
 
             foreach (var product in products)
             {
@@ -465,7 +475,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 {
                     price = singleProductPrice.PriceExclTax;
                     discount = singleProductPrice.DiscountExclTax;
-                    if (currentCatalog.ShowPricesIncludingVAT)
+                    if (currentCatalog.ShowPricesIncludingTax)
                     {
                         price = singleProductPrice.PriceInclTax;
                         discount = singleProductPrice.DiscountInclTax;
@@ -477,8 +487,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 {
                     Sku = product.Sku,
                     VariantSku = product.VariantSku,
-                    Price = new Money(price, SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency).ToString(),
-                    Discount = discount > 0 ? new Money(discount, SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency).ToString() : "",
+                    Price = new Money(price, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString(),
+                    Discount = discount > 0 ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString() : "",
                     DisplayName = product.DisplayName(),
                     ThumbnailImageMediaUrl = imageService.GetImage(product.ThumbnailImageMediaId).Url,
                     ProductUrl = this.GetProductUrl(category, product, openInSamePage, detailPageId),
@@ -529,7 +539,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         public const string PAGER_QUERY_STRING_KEY = "page";
         private const string NO_CATALOG_ERROR_MESSAGE = "There is no product catalog configured.";
         private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
-        private IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog", "page", "sortBy" };
         private int itemsPerPage;
         private bool openInSamePage;
         private Guid detailsPageId;

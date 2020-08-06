@@ -19,7 +19,7 @@ namespace UCommerce.Sitefinity.UI.Api
     /// </summary>
     public class SearchApiController : ApiController
     {
-        public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Ucommerce.Search.Models.Product>>();
+        public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
         public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
         public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
