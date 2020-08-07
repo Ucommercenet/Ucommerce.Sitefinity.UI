@@ -153,6 +153,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             {
                 result.Add(new CategoryNavigationCategoryViewModel()
                 {
+					CategoryId = category.CategoryId,
                     DisplayName = category.DisplayName(),
                     Url = this.GetCategoryUrl(category),
                     Categories = this.MapCategories(category.Categories.Where(x => x.DisplayOnSite).ToList(),

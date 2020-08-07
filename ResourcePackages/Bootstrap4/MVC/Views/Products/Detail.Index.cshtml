@@ -99,11 +99,11 @@
 
 									<fieldset v-for="v in variants" class="options">
 										<div class="general">
-											<label>{{v.DisplayName}}</label>
+											<label>{{v.Item.DisplayName}}</label>
 											<span class="wrap">
 												<select v-model="v" v-on:change="onChange($event, v)" class="variant float-right">
 													<option>@Html.Resource("PleaseSelect", "UcommerceResources")</option>
-													<option v-for="val in v.Values" v-bind:value="val">
+													<option v-for="val in v.Item.Values" v-bind:value="val">
 														{{val.Value}}
 													</option>
 												</select>

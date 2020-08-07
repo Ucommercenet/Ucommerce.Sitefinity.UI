@@ -26,13 +26,22 @@
         },
         methods: {
             search: function () {
-
                 var searchRoutesSelector = '#' + this.rootId + ' .productSearchUrl';
                 var searchUrlContainers = document.querySelectorAll(searchRoutesSelector);
                 if (searchUrlContainers && searchUrlContainers.length > 0) {
                     var searchUrl = '/' + searchUrlContainers[0].value;
+                    this.$http.post(searchUrl, { 
+                        SearchQuery: this.searchQuery, 
+                        ProductDetailsPageId: this.productDetailsPageId,
+                        before(request) {
+                            // abort previous request, if exists
+                            if (this.previousRequest) {
+                                this.previousRequest.abort();
+                            }
 
-                    this.$http.post(searchUrl, { SearchQuery: this.searchQuery, ProductDetailsPageId: this.productDetailsPageId})
+                            // set previous request on Vue instance
+                            this.previousRequest = request;
+                        }})
                         .then(function (response) {
                             if (response.data)
                                 this.searchResult = response.data;
@@ -44,7 +53,19 @@
                 if (suggestionsUrlContainers && suggestionsUrlContainers.length > 0) {
                     var searchSuggestionsUrl = '/' + suggestionsUrlContainers[0].value;
 
-                    this.$http.post(searchSuggestionsUrl, { SearchQuery: this.searchQuery, ProductDetailsPageId: this.productDetailsPageId })
+                    this.$http.post(searchSuggestionsUrl, { 
+                        SearchQuery: this.searchQuery, 
+                        ProductDetailsPageId: this.productDetailsPageId,
+                        before(request) {
+                            // abort previous request, if exists
+                            if (this.previousRequest) {
+                                this.previousRequest.abort();
+                            }
+
+                            // set previous request on Vue instance
+                            this.previousRequest = request;
+                        }
+                        })
                         .then(function (response) {
                             if (response.data)
                                 this.suggestions = response.data;

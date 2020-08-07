@@ -37,10 +37,14 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPost]
         public IHttpActionResult GetProductReviews([FromBody] GetProductReviewsDTO model)
         {
-            var productReviews = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku == null).ProductReviews
-                .Where(x => x.ProductReviewStatus.ProductReviewStatusId == 2000);
+			var productReviews = ProductReview.Find(pr =>
+							pr.Product.Sku == model.Sku
+							&& pr.Product.VariantSku == null
+							&& pr.ProductReviewStatus.ProductReviewStatusId == (int)ProductReviewStatusCode.Approved
+							&& (pr.CultureCode == null || pr.CultureCode == string.Empty || pr.CultureCode == Thread.CurrentThread.CurrentUICulture.Name)
+						);
 
-            return Json(productReviews.Select(x => new ProductReviewDTO()
+			return Json(productReviews.OrderByDescending(pr => pr.CreatedOn).Select(x => new ProductReviewDTO()
             {
                 Name = x.CreatedBy,
                 Rating = x.Rating.GetValueOrDefault(),
@@ -62,17 +66,17 @@ namespace UCommerce.Sitefinity.UI.Api
 
             if (basket != null)
             {
-                if (basket.Customer == null)
+				if (basket.PurchaseOrder.Customer == null)
                 {
-                    basket.Customer = new Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
+					basket.PurchaseOrder.Customer = new Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
                     basket.Save();
                 }
             }
 
             var review = new ProductReview()
             {
-                ProductCatalogGroup = productCatalogGroup,
-                ProductReviewStatus = ProductReviewStatus.SingleOrDefault(s => s.Name == "New"),
+				ProductCatalogGroup = productCatalogGroup,
+				ProductReviewStatus = ProductReviewStatus.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
                 CreatedOn = DateTime.Now,
                 CreatedBy = model.Name,
                 Product = product,
@@ -98,9 +102,9 @@ namespace UCommerce.Sitefinity.UI.Api
             {
                 var productPricesViewModel = new ProductPricesDTO
                 {
-                    ProductGuid = productsPricesItem.ProductGuid,
-                    Price = new Money(productsPricesItem.PriceInclTax, currencyIsoCode).ToString(),
-                    ListPrice = new Money(productsPricesItem.ListPriceInclTax, currencyIsoCode).ToString()
+                    ProductGuid = productPricesViewModel.ProductGuid,
+                    Price = new Money(productPricesViewModel.PriceInclTax, currencyIsoCode).ToString(),
+                    ListPrice = new Money(productPricesViewModel.ListPriceInclTax, currencyIsoCode).ToString()
                 };
 
                 prices.Add(productPricesViewModel);

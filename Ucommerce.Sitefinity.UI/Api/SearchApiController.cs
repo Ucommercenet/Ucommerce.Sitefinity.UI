@@ -28,28 +28,33 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPost]
         public IHttpActionResult FullText(FullTextDTO model)
         {
-            var products = ProductIndex.Find()
-                .Where(p => p.Name.Contains(model.SearchQuery) || p.DisplayName == Match.FullText(model.SearchQuery))
-                .ToList();
+			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
 
-            return Ok(ConvertToFullTextSearchResultModel(products, model.ProductDetailsPageId));
+			var searchResult = UCommerce.Api.SearchLibrary.GetProductsByName(model.SearchQuery);
+
+			return Ok(this.ConvertToFullTextSearchResultModel(searchResult, model.ProductDetailsPageId));
         }
 
         [Route(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE)]
         [HttpPost]
         public IHttpActionResult Suggestions(FullTextDTO model)
         {
+			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
+
+			var searchResult = UCommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
             // TODO: suggestion searching not supported in Ucommerce v9.0
             //var searchResult = Ucommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
 
-            return FullText(model);
+			return Ok(searchResult);
         }
 
         private IList<FullTextSearchResultDTO> ConvertToFullTextSearchResultModel(ResultSet<Product> products, Guid? productDetailsPageId)
         {
             var fullTextSearchResultModels = new List<FullTextSearchResultDTO>();
 
-            var currencyIsoCode = CatalogContext.CurrentPriceGroup.CurrencyISOCode;
+			if (products == null || !products.Any()) return fullTextSearchResultModels;
+
+			 var currencyIsoCode = CatalogContext.CurrentPriceGroup.CurrencyISOCode;
             var productsPrices = CatalogLibrary.CalculatePrices(products.Select(x => x.Guid).ToList()).Items;
             var catalog = CatalogLibrary.GetCatalog(products.First().Guid);
 
@@ -91,6 +96,14 @@ namespace UCommerce.Sitefinity.UI.Api
                 {
                     //var entityProduct = this.productRepository.Get(product.Id);
                     detailsPageUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, product);
+					var entityProduct = this.productRepository.Get(product.Id);
+					detailsPageUrl = CatalogLibrary.GetNiceUrlForProduct(entityProduct);
+				}
+
+				var price = string.Empty;
+				if (productsPrices?.FirstOrDefault(x => x.ProductGuid == product.Guid)?.PriceInclTax != null)
+				{
+					price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currency).ToString();
                 }
 
                 var fullTestSearchResultModel = new FullTextSearchResultDTO()

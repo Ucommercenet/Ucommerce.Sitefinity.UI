@@ -15,6 +15,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         public IOrderContext OrderContext => ObjectFactory.Instance.Resolve<IOrderContext>();
         public IRepository<ProductReviewStatus> ProductReviewStatusRepository => ObjectFactory.Instance.Resolve<IRepository<ProductReviewStatus>>();
         public IPipeline<Ucommerce.EntitiesV2.ProductReview> ProductReviewPipeline => ObjectFactory.Instance.Resolve<IPipeline<Ucommerce.EntitiesV2.ProductReview>>();
+		private readonly IRepository<ProductReviewStatus> _productReviewStatusRepository;
+		private readonly IOrderContext _orderContext;
+		private readonly IPipeline<Ucommerce.EntitiesV2.ProductReview> _productReviewPipeline;
+
+		public AddReviewModel()
+		{
+			_productReviewStatusRepository = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IRepository<ProductReviewStatus>>();
+			_orderContext = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IOrderContext>();
+			_productReviewPipeline = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IPipeline<EntitiesV2.ProductReview>>();
+		}
 
         public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
@@ -34,11 +44,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             if (viewModel.ProductId.HasValue)
             {
-                product = Product.Get(viewModel.ProductId.Value);
+				product = UCommerce.EntitiesV2.Product.Get(viewModel.ProductId.Value);
             }
             else
             {
-                product = Product.FirstOrDefault(p => p.Guid == CatalogContext.CurrentProduct.Guid);
+				product = SiteContext.Current.CatalogContext.CurrentProduct;
             }
 
             var request = System.Web.HttpContext.Current.Request;
@@ -84,7 +94,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var review = new Ucommerce.EntitiesV2.ProductReview
             {
                 ProductCatalogGroup = catalogGroup,
-                ProductReviewStatus = ProductReviewStatusRepository.SingleOrDefault(s => s.Name == "New"),
+				ProductReviewStatus = _productReviewStatusRepository.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
                 CreatedOn = DateTime.Now,
                 CreatedBy = "System",
                 Product = product,
@@ -108,6 +118,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 CreatedOnForMeta = review.CreatedOn.ToString("yyyy-MM-dd")
             };
 
+			product.AddProductReview(review);
+
+			_productReviewPipeline.Execute(review);
             return reviewDTO;
         }
     }
