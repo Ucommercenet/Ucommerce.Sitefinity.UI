@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web.Http;
 using UCommerce.Sitefinity.UI.Api.Model;
 using Ucommerce;
 using Ucommerce.Api;
 using Ucommerce.Catalog.Models;
+using Ucommerce.Catalog.Status;
 using Ucommerce.EntitiesV2;
 using Ucommerce.Pipelines;
 using Ucommerce.Infrastructure;
@@ -66,9 +68,9 @@ namespace UCommerce.Sitefinity.UI.Api
 
             if (basket != null)
             {
-				if (basket.PurchaseOrder.Customer == null)
+				if (basket.Customer == null)
                 {
-					basket.PurchaseOrder.Customer = new Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
+					basket.Customer = new Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
                     basket.Save();
                 }
             }
@@ -102,9 +104,9 @@ namespace UCommerce.Sitefinity.UI.Api
             {
                 var productPricesViewModel = new ProductPricesDTO
                 {
-                    ProductGuid = productPricesViewModel.ProductGuid,
-                    Price = new Money(productPricesViewModel.PriceInclTax, currencyIsoCode).ToString(),
-                    ListPrice = new Money(productPricesViewModel.ListPriceInclTax, currencyIsoCode).ToString()
+	                ProductGuid = productsPricesItem.ProductGuid,
+	                Price = new Money(productsPricesItem.PriceInclTax, currencyIsoCode).ToString(),
+	                ListPrice = new Money(productsPricesItem.ListPriceInclTax, currencyIsoCode).ToString()
                 };
 
                 prices.Add(productPricesViewModel);

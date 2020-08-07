@@ -582,14 +582,10 @@
     <EmbeddedResource Include="assets\dist\css\products-review.css" />
     <EmbeddedResource Include="assets\dist\images\default_user.png" />
     <EmbeddedResource Include="assets\dist\images\star.png" />
-    <EmbeddedResource Include="assets\src\images\icons\product-reviews.png" />
-    <EmbeddedResource Include="assets\src\images\icons\add-review.png" />
     <Content Include="assets\src\js\store\index.js" />
-    <EmbeddedResource Include="assets\src\js\widgets\shipping-method.js" />
     <Content Include="..\release notes.txt">
       <Link>docs\release notes.txt</Link>
     </Content>
-    <EmbeddedResource Include="assets\src\js\widgets\currency-picker.js" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
     <EmbeddedResource Include="assets\src\images\icons\product-reviews.png" />
@@ -615,11 +611,8 @@
     </Content>
     <EmbeddedResource Include="assets\src\js\widgets\currency-picker.js" />
     <Content Include="Mvc\Views\Shared\readme.txt" />
-    <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
     <EmbeddedResource Include="assets\src\js\components\checkout-navigation.vue" />
     <EmbeddedResource Include="assets\src\js\components\input-field.vue" />
-    <EmbeddedResource Include="Mvc\Views\ProductReviews\List.Index.cshtml" />
-    <EmbeddedResource Include="Mvc\Views\AddReview\Detail.Index.cshtml" />
     <EmbeddedResource Include="assets\src\js\components\show-rating.vue" />
     <None Include="Mvc\Views\CategoryNavigation\StoreNavigation.cshtml" />
     <None Include="packages.config" />
