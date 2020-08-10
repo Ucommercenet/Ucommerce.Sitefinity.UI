@@ -78,7 +78,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var categoryIds = categoryIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
             var productIds = productIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
             var facets = HttpContext.Current.Request.QueryString.ToFacets();
-            var categories = Category.Find(x => categoryIds.Any(y => y == x.Id));
+            var categories = Category.Find(x => categoryIds.Contains(x.CategoryId));
 
             return this.MapToFacetsViewModel(
                 CatalogLibrary.GetFacets(categories.Select(x => x.Guid).ToList(), facets.ToFacetDictionary()));

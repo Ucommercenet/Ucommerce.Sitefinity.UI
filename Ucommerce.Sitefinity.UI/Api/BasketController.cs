@@ -91,7 +91,7 @@ namespace UCommerce.Sitefinity.UI.Api
             }
             else
             {
-                var variant = variants.Where(x => model.Variants.Any(y => y.Value == x.VariantSku)).FirstOrDefault();
+                var variant = variants.FirstOrDefault(x => model.Variants.Any(y => y.Value == x.VariantSku));
                 if (variant != null)
                 {
                     variantSku = variant.VariantSku;
