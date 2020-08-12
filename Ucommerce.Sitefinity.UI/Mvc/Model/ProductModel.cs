@@ -362,8 +362,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		private IQueryable<Ucommerce.Search.Models.Product> ApplyManualSelection(List<Guid> productIds, List<Guid> categoryIds)
 		{
 			var facets = HttpContext.Current.Request.QueryString.ToFacets();
+
+			if (categoryIds.Any())
+			{
+				// HACK: We need to find a way around this as it uses EntitiesV2
+				productIds.AddRange(GetProductsFromSelectedCategoryIds(categoryIds).Select(p => p.Guid).ToList());
+			}
+
 			var products = ProductIndex.Find<Ucommerce.Search.Models.Product>()
-									   .Where(x => x.Categories.Any(categoryIds.Contains) || productIds.Contains(x.Guid));
+									   .Where(x => productIds.Contains(x.Guid));
 
 			if (facets != null && facets.Any())
 			{
