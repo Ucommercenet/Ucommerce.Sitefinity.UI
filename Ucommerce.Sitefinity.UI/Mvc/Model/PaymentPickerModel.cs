@@ -76,12 +76,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 					var formattedFee = new Money(fee == null ? 0 : fee.Fee, purchaseOrder.BillingCurrency.ISOCode);
 
 					if (localizedPaymentMethod != null)
-						option.Text = String.Format(" {0} ({1} + {2}%)", localizedPaymentMethod.DisplayName,
-							formattedFee,
-							feePercent.ToString("0.00"));
-					option.Value = availablePaymentMethod.PaymentMethodId.ToString();
-					option.Selected = availablePaymentMethod.PaymentMethodId ==
-									  paymentPickerViewModel.SelectedPaymentMethodId;
+					{
+						var displayName = localizedPaymentMethod.DisplayName;
+						if(string.IsNullOrWhiteSpace(displayName)) displayName = availablePaymentMethod.Name;
+
+						option.Text = String.Format(" {0} ({1} + {2}%)", displayName, formattedFee, feePercent.ToString("0.00"));
+						option.Value = availablePaymentMethod.PaymentMethodId.ToString();
+						option.Selected = availablePaymentMethod.PaymentMethodId == paymentPickerViewModel.SelectedPaymentMethodId;						
+					}
 
 					paymentPickerViewModel.AvailablePaymentMethods.Add(option);
 				}

@@ -122,21 +122,23 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     foreach (var availableShippingMethod in availableShippingMethods)
                     {
                         var priceGroup = PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
-                        var localizedShippingMethod = availableShippingMethod.ShippingMethodDescriptions.FirstOrDefault(s =>
-                            s.CultureCode.Equals(CultureInfo.CurrentCulture.ToString()));
+                        var localizedShippingMethod = availableShippingMethod.ShippingMethodDescriptions.FirstOrDefault(s => s.CultureCode.Equals(CultureInfo.CurrentCulture.ToString()));
 
                         var price = availableShippingMethod.GetPriceForPriceGroup(priceGroup);
-                        var formattedPrice = new Money((price == null ? 0 : price.Price),
-                            basketPurchaseOrder.BillingCurrency.ISOCode);
+                        var formattedPrice = new Money((price == null ? 0 : price.Price), basketPurchaseOrder.BillingCurrency.ISOCode);
 
                         if (localizedShippingMethod != null)
+                        {
+                            var displayName = localizedShippingMethod.DisplayName;
+                            if(string.IsNullOrWhiteSpace(displayName)) displayName = availableShippingMethod.Name;
+
                             shipmentPickerViewModel.AvailableShippingMethods.Add(new SelectListItem()
                             {
-                                Selected = shipmentPickerViewModel.SelectedShippingMethodId ==
-                                           availableShippingMethod.ShippingMethodId,
-                                Text = String.Format(" {0} ({1})", localizedShippingMethod.DisplayName, formattedPrice),
+                                Selected = shipmentPickerViewModel.SelectedShippingMethodId == availableShippingMethod.ShippingMethodId,
+                                Text = String.Format(" {0} ({1})", displayName, formattedPrice),
                                 Value = availableShippingMethod.ShippingMethodId.ToString()
                             });
+                        }                    
                     }
                 }
             }
