@@ -339,16 +339,21 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			if (this.isManualSelectionMode)
 			{
-				var productIds = this.productIds?.Split(',').Select(Guid.Parse).ToList() ?? new List<Guid>();
-				var categoryIds = this.categoryIds?.Split(',').Select(Guid.Parse).ToList() ?? new List<Guid>();
+				// NOTE: The int values will go away soon but the picker still saves as ints at the moment so we need to convert them
+				var productIds = this.productIds?.Split(',').Select(Int32.Parse).ToList() ?? new List<int>();
+				var categoryIds = this.categoryIds?.Split(',').Select(Int32.Parse).ToList() ?? new List<int>();
 
-				return ApplyManualSelection(productIds, categoryIds);
+				var productGuids = Ucommerce.EntitiesV2.Product.Find(p => productIds.Contains(p.ProductId)).Select(p => p.Guid).ToList();
+				var categoryGuids = Ucommerce.EntitiesV2.Category.Find(c => categoryIds.Contains(c.CategoryId)).Select(c => c.Guid).ToList();
+
+				return ApplyManualSelection(productGuids, categoryGuids);
 			}
 
 			if (string.IsNullOrWhiteSpace(searchTerm) && category == null && this.enableCategoryFallback == true)
 			{
-				var categoryIds = this.fallbackCategoryIds?.Split(',').Select(x => Guid.Parse(x)).ToList() ?? new List<Guid>();
-				return ApplyManualSelection(new List<Guid>(), categoryIds);
+				var categoryIds = this.fallbackCategoryIds?.Split(',').Select(Int32.Parse).ToList() ?? new List<int>();
+				var categoryGuids = Ucommerce.EntitiesV2.Category.Find(c => categoryIds.Contains(c.CategoryId)).Select(c => c.Guid).ToList();
+				return ApplyManualSelection(new List<Guid>(), categoryGuids);
 			}
 
 			return ApplyAutoSelection(category, searchTerm);
