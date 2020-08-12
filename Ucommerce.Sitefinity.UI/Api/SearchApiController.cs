@@ -31,7 +31,12 @@ namespace UCommerce.Sitefinity.UI.Api
 			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
 			var searchResult = ProductIndex
 										.Find<Ucommerce.Search.Models.Product>()
-										.Where(x => x.Name == Match.Fuzzy(model.SearchQuery, 1))
+										.Where(x =>
+											x.Name == Match.Fuzzy(model.SearchQuery, 1)
+											|| x.DisplayName == Match.Fuzzy(model.SearchQuery, 1)
+											|| x.Name.Contains(model.SearchQuery)
+											|| x.DisplayName.Contains(model.SearchQuery)
+											)
 										.ToList();
 			return Ok(this.ConvertToFullTextSearchResultModel(searchResult, model.ProductDetailsPageId));
 		}
@@ -57,7 +62,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
 			var currencyIsoCode = CatalogContext.CurrentPriceGroup.CurrencyISOCode;
 			var productsPrices = CatalogLibrary.CalculatePrices(products.Select(x => x.Guid).ToList()).Items;
-			var catalog = CatalogLibrary.GetCatalog(products.First().Guid);
+			var catalog = CatalogContext.CurrentCatalog;
 
 			foreach (var product in products)
 			{
@@ -87,7 +92,7 @@ namespace UCommerce.Sitefinity.UI.Api
 						detailsPageUrl += "/";
 					}
 
-					detailsPageUrl += catUrl + "/" + product.Slug;
+					detailsPageUrl += $"{catUrl}/{product.Slug}";
 					detailsPageUrl = Pages.UrlResolver.GetAbsoluteUrl(detailsPageUrl);
 				}
 
