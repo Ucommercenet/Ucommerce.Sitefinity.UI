@@ -5,12 +5,12 @@ using System.Web.Http;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Constants;
 using UCommerce.Sitefinity.UI.Mvc.Model;
-using UCommerce;
-using UCommerce.Api;
-using UCommerce.EntitiesV2;
-using UCommerce.Infrastructure;
-using UCommerce.Search;
-using Product = UCommerce.Documents.Product;
+using Ucommerce;
+using Ucommerce.Api;
+using Ucommerce.Infrastructure;
+using Ucommerce.Search;
+using Product = Ucommerce.Search.Models.Product;
+using Ucommerce.Search.Slugs;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -19,21 +19,25 @@ namespace UCommerce.Sitefinity.UI.Api
 	/// </summary>
 	public class SearchApiController : ApiController
 	{
-		private readonly IRepository<UCommerce.EntitiesV2.Product> productRepository;
-
-		public SearchApiController()
-		{
-			this.productRepository = ObjectFactory.Instance.Resolve<IRepository<UCommerce.EntitiesV2.Product>>();
-		}
+		public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
+		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+		public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
 
 		[Route(RouteConstants.SEARCH_ROUTE_VALUE)]
 		[HttpPost]
 		public IHttpActionResult FullText(FullTextDTO model)
 		{
 			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
-
-			var searchResult = UCommerce.Api.SearchLibrary.GetProductsByName(model.SearchQuery);
-
+			var searchResult = ProductIndex
+										.Find<Ucommerce.Search.Models.Product>()
+										.Where(x =>
+											x.Name == Match.Fuzzy(model.SearchQuery, 1)
+											|| x.DisplayName == Match.Fuzzy(model.SearchQuery, 1)
+											|| x.Name.Contains(model.SearchQuery)
+											|| x.DisplayName.Contains(model.SearchQuery)
+											)
+										.ToList();
 			return Ok(this.ConvertToFullTextSearchResultModel(searchResult, model.ProductDetailsPageId));
 		}
 
@@ -43,36 +47,37 @@ namespace UCommerce.Sitefinity.UI.Api
 		{
 			if (string.IsNullOrWhiteSpace(model?.SearchQuery)) return BadRequest("A search query is required");
 
-			var searchResult = UCommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
-
-			return Ok(searchResult);
+			// NOTE: Unfortunately Suggestions have been removed in v 9.0 in favor of a faster release date. This is on the road map and will arrive in a later version.
+			// See: https://docs.ucommerce.net/ucommerce/v9.2/Migration/Migrating-to-v9/Migrate-Search-Library.html#suggestions
+			// var searchResult = Ucommerce.Api.SearchLibrary.GetProductNameSuggestions(model.SearchQuery);
+			// return Ok(searchResult);
+			return Ok();
 		}
 
-		private IList<FullTextSearchResultDTO> ConvertToFullTextSearchResultModel(IList<Product> products, Guid? productDetailsPageId)
+		private IList<FullTextSearchResultDTO> ConvertToFullTextSearchResultModel(ResultSet<Product> products, Guid? productDetailsPageId)
 		{
 			var fullTextSearchResultModels = new List<FullTextSearchResultDTO>();
 
 			if (products == null || !products.Any()) return fullTextSearchResultModels;
 
-			var currency = UCommerce.Runtime.SiteContext.Current.CatalogContext.CurrentPriceGroup.Currency;
-			var productsPrices = UCommerce.Api.CatalogLibrary.CalculatePrice(products.Select(x => x.Guid).ToList()).Items;
-			ProductCatalog catalog = UCommerce.Api.CatalogLibrary.GetCatalog();
-
-			var culture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+			var currencyIsoCode = CatalogContext.CurrentPriceGroup.CurrencyISOCode;
+			var productsPrices = CatalogLibrary.CalculatePrices(products.Select(x => x.Guid).ToList()).Items;
+			var catalog = CatalogContext.CurrentCatalog;
 
 			foreach (var product in products)
 			{
 				string catUrl = CategoryModel.DefaultCategoryName;
 
-				if (product.CategoryIds != null && product.CategoryIds.Any())
+				if (product.Categories != null && product.Categories.Any())
 				{
-					var productCategory = catalog.Categories
-												 .Where(c => c.CategoryId == product.CategoryIds.FirstOrDefault())
+					var productCategoryId = catalog.Categories
+												 .Where(x => x == product.Categories.FirstOrDefault())
 												 .FirstOrDefault();
 
-					if (productCategory != null)
+					if (productCategoryId != null)
 					{
-						catUrl = CategoryModel.GetCategoryPath(productCategory);
+						var category = CatalogContext.CurrentCategories.FirstOrDefault(x => x.Guid == productCategoryId);
+						catUrl = CategoryModel.GetCategoryPath(category);
 					}
 				}
 
@@ -87,20 +92,19 @@ namespace UCommerce.Sitefinity.UI.Api
 						detailsPageUrl += "/";
 					}
 
-					detailsPageUrl += catUrl + "/" + product.Id.ToString();
+					detailsPageUrl += $"{catUrl}/{product.Slug}";
 					detailsPageUrl = Pages.UrlResolver.GetAbsoluteUrl(detailsPageUrl);
 				}
 
 				if (string.IsNullOrWhiteSpace(detailsPageUrl))
 				{
-					var entityProduct = this.productRepository.Get(product.Id);
-					detailsPageUrl = CatalogLibrary.GetNiceUrlForProduct(entityProduct);
+					detailsPageUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, product);
 				}
 
 				var price = string.Empty;
 				if (productsPrices?.FirstOrDefault(x => x.ProductGuid == product.Guid)?.PriceInclTax != null)
 				{
-					price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currency).ToString();
+					price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currencyIsoCode).ToString();
 				}
 
 				var fullTestSearchResultModel = new FullTextSearchResultDTO()
@@ -108,7 +112,7 @@ namespace UCommerce.Sitefinity.UI.Api
 					ThumbnailImageUrl = product.ThumbnailImageUrl,
 					Name = product.Name,
 					Url = detailsPageUrl,
-					Price = price,
+					Price = new Money(productsPrices.First(x => x.ProductGuid == product.Guid).PriceInclTax, currencyIsoCode).ToString(),
 				};
 
 				fullTextSearchResultModels.Add(fullTestSearchResultModel);

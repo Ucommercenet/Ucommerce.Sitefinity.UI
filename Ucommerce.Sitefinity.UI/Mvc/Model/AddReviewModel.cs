@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using UCommerce.Catalog.Status;
-using UCommerce.EntitiesV2;
-using UCommerce.Pipelines;
-using UCommerce.Runtime;
+using Telerik.Sitefinity.Multisite;
+using Ucommerce.Api;
+using Ucommerce.Catalog.Status;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Infrastructure;
+using Ucommerce.Pipelines;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -11,16 +13,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
 	public class AddReviewModel : IAddReviewModel
 	{
-		private readonly IRepository<ProductReviewStatus> _productReviewStatusRepository;
-		private readonly IOrderContext _orderContext;
-		private readonly IPipeline<EntitiesV2.ProductReview> _productReviewPipeline;
+		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+		public IOrderContext OrderContext => ObjectFactory.Instance.Resolve<IOrderContext>();
+		public IRepository<ProductReviewStatus> ProductReviewStatusRepository => ObjectFactory.Instance.Resolve<IRepository<ProductReviewStatus>>();
+		public IPipeline<Ucommerce.EntitiesV2.ProductReview> ProductReviewPipeline => ObjectFactory.Instance.Resolve<IPipeline<Ucommerce.EntitiesV2.ProductReview>>();
 
-		public AddReviewModel()
-		{
-			_productReviewStatusRepository = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IRepository<ProductReviewStatus>>();
-			_orderContext = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IOrderContext>();
-			_productReviewPipeline = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IPipeline<EntitiesV2.ProductReview>>();
-		}
 		public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
 		{
 			if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
@@ -39,15 +36,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			if (viewModel.ProductId.HasValue)
 			{
-				product = UCommerce.EntitiesV2.Product.Get(viewModel.ProductId.Value);
+				product = Product.Get(viewModel.ProductId.Value);
 			}
 			else
 			{
-				product = SiteContext.Current.CatalogContext.CurrentProduct;
+				product = Product.FirstOrDefault(p => p.Guid == CatalogContext.CurrentProduct.Guid);
 			}
 
 			var request = System.Web.HttpContext.Current.Request;
-			var basket = _orderContext.GetBasket();
+			var basket = OrderContext.GetBasket();
 			var name = viewModel.Name;
 			var email = viewModel.Email;
 			var rating = viewModel.Rating * 20;
@@ -79,17 +76,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			if (viewModel.CatalogGroupId.HasValue)
 			{
-				catalogGroup = UCommerce.EntitiesV2.ProductCatalogGroup.Get(viewModel.CatalogGroupId.Value);
+				catalogGroup = ProductCatalogGroup.Get(viewModel.CatalogGroupId.Value);
 			}
 			else
 			{
-				catalogGroup = SiteContext.Current.CatalogContext.CurrentCatalogGroup;
+				catalogGroup = ProductCatalogGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCatalogGroup.Guid);
 			}
 
-			var review = new EntitiesV2.ProductReview
+			var review = new Ucommerce.EntitiesV2.ProductReview
 			{
 				ProductCatalogGroup = catalogGroup,
-				ProductReviewStatus = _productReviewStatusRepository.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
+				ProductReviewStatus = ProductReviewStatusRepository.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
 				CreatedOn = DateTime.Now,
 				CreatedBy = "System",
 				Product = product,
@@ -97,9 +94,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				Rating = rating,
 				ReviewHeadline = reviewHeadline,
 				ReviewText = reviewText,
-				Ip = request.UserHostName,
-				CultureCode = System.Threading.Thread.CurrentThread.CurrentUICulture.Name
+				Ip = request.UserHostName
 			};
+
+			product.AddProductReview(review);
+			ProductReviewPipeline.Execute(review);
 
 			var reviewDTO = new AddReviewDTO
 			{
@@ -113,8 +112,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			product.AddProductReview(review);
 
-			_productReviewPipeline.Execute(review);
-
+			ProductReviewPipeline.Execute(review);
 			return reviewDTO;
 		}
 	}

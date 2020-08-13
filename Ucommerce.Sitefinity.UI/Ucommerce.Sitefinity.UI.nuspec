@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>Ucommerce.Sitefinity.UI</id>
-    <version>1.0.2.20055</version>
+    <version>3.0.1.20225</version>
 		<authors>Ucommerce</authors>
 		<owners>Ucommerce</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,7 +10,7 @@
 		<description>Ucommerce for Sitefinity website widgets to implement a full e-commerce store on Sitefinity. Catalog browse, faceted navigation, and full checkout.</description>
 		<tags>Ucommerce Sitefinity ecommerce commerce</tags>
 		<dependencies>
-			<dependency id="uCommerce.Sitefinity" version="[8.4.0.20052, 8.4.9.9999]" />
+			<dependency id="uCommerce.Sitefinity" version="[9.2.0.20195, 9.2.9999]" />
 			<dependency id="Telerik.DataAccess.Core" version="2018.0.1127.1" />
 			<dependency id="Telerik.Sitefinity.Core" version="[12.2.7200, 12.9.9999]" />
 			<dependency id="Telerik.Sitefinity.Feather.Core" version="[12.2.7200, 12.9.9999]" />

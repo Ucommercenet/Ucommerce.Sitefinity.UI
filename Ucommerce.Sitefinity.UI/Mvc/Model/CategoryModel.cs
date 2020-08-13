@@ -7,10 +7,9 @@ using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
-using UCommerce.Api;
-using UCommerce.EntitiesV2;
-using UCommerce.Extensions;
-using UCommerce.Runtime;
+using Ucommerce.Api;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Extensions;
 using UCommerce.Sitefinity.UI.Constants;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
@@ -22,6 +21,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	/// </summary>
 	internal class CategoryModel : ICategoryModel
 	{
+		public ICatalogLibrary CatalogLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
+
 		public CategoryModel(bool hideMiniBasket, bool allowChangingCurrency, Guid? imageId = null,
 			Guid? categoryPageId = null, Guid? searchPageId = null, Guid? productDetailsPageId = null)
 		{
@@ -36,13 +38,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		public virtual CategoryNavigationViewModel CreateViewModel()
 		{
 			var categoryNavigationViewModel = new CategoryNavigationViewModel();
-			var rootCategories = CatalogLibrary.GetRootCategories().Where(x => x.DisplayOnSite).ToList();
-			var currentPriceGroup = SiteContext.Current.CatalogContext.CurrentPriceGroup;
-			categoryNavigationViewModel.Categories =
-				this.MapCategories(rootCategories, SiteContext.Current.CatalogContext.CurrentCategory);
-			categoryNavigationViewModel.Currencies =
-				this.MapCurrencies(SiteContext.Current.CatalogContext.CurrentCatalog.AllowedPriceGroups,
-					currentPriceGroup);
+			// HACK: This is a temporary work around while we dig into the best way to do this with the new API
+			var rootCategoryGuids = CatalogLibrary.GetRootCategories().Select(c => c.Guid);
+			var rootCategories = Ucommerce.EntitiesV2.Category.Find(c => rootCategoryGuids.Contains(c.Guid));
+			var currentCategory = CatalogContext.CurrentCategory != null ? Ucommerce.EntitiesV2.Category.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCategory.Guid) : null;
+			categoryNavigationViewModel.Categories = this.MapCategories(rootCategories, currentCategory);
+
+			var priceGroups = PriceGroup.Find(x => CatalogContext.CurrentCatalog.PriceGroups.Contains(x.Guid));
+			var currentPriceGroup = PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
+			categoryNavigationViewModel.Currencies = this.MapCurrencies(priceGroups, currentPriceGroup);
 			categoryNavigationViewModel.Localizations = this.GetCurrentCulture();
 			categoryNavigationViewModel.CurrentCurrency = new CategoryNavigationCurrencyViewModel()
 			{
@@ -190,7 +194,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				baseUrl = UrlResolver.GetPageNodeUrl(this.categoryPageId);
 			}
 
-			var catUrl = GetCategoryPath(category);
+			var searchCategory = CatalogLibrary.GetCategory(category.Guid);
+			var catUrl = GetCategoryPath(searchCategory);
 			string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", catUrl);
 			string url;
 
@@ -206,15 +211,20 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			return url;
 		}
 
-		internal static string GetCategoryPath(Category category)
+		internal static string GetCategoryPath(Ucommerce.Search.Models.Category category)
 		{
+			var catalogLibrary = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+
 			var catNames = new List<string>();
 			var cat = category;
 
 			while (cat != null)
 			{
 				catNames.Add(cat.Name);
-				cat = cat.ParentCategory;
+				if (cat.ParentCategory.HasValue)
+					cat = catalogLibrary.GetCategories(new List<Guid> { cat.ParentCategory.Value }).FirstOrDefault();
+				else
+					cat = null;
 			}
 
 			catNames.Reverse();

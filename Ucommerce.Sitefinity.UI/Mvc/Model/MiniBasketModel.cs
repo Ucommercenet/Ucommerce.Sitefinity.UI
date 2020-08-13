@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UCommerce.Api;
-using UCommerce.Content;
-using UCommerce.EntitiesV2;
-using UCommerce.Infrastructure;
+using Ucommerce.Api;
+using Ucommerce.Content;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Transactions;
+using Ucommerce.Transactions;
+using Ucommerce;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -15,14 +16,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     /// </summary>
     public class MiniBasketModel : IMiniBasketModel
     {
-        private readonly TransactionLibraryInternal _transactionLibraryInternal;
         private Guid cartPageId;
         private Guid productDetailsPageId;
         private Guid checkoutPageId;
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
         public MiniBasketModel(Guid? cartPageId = null, Guid? productDetailsPageId = null, Guid? checkoutPageId = null)
         {
-            _transactionLibraryInternal = ObjectFactory.Instance.Resolve<TransactionLibraryInternal>();
             this.cartPageId = cartPageId ?? Guid.Empty;
             this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
             this.checkoutPageId = checkoutPageId ?? Guid.Empty;
@@ -32,13 +32,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         {
             var viewModel = new MiniBasketRenderingViewModel();
 
-            if (!_transactionLibraryInternal.HasBasket())
+            if (!TransactionLibrary.HasBasket())
             {
                 return viewModel;
             }
 
-            PurchaseOrder basket = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
-            viewModel.OrderLines = CartModel.GetOrlerLineList(basket, this.productDetailsPageId);
+            PurchaseOrder basket = TransactionLibrary.GetBasket(false);
+            viewModel.OrderLines = CartModel.GetOrderLineList(basket, this.productDetailsPageId);
 
             viewModel.NumberOfItems = GetNumberOfItemsInBasket();
             viewModel.IsEmpty = IsBasketEmpty(viewModel);
@@ -57,20 +57,20 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 IsEmpty = true
             };
 
-            if (!_transactionLibraryInternal.HasBasket())
+            if (!TransactionLibrary.HasBasket())
             {
                 return viewModel;
             }
 
-            var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+            var purchaseOrder = TransactionLibrary.GetBasket(false);
             
-            viewModel.OrderLines = CartModel.GetOrlerLineList(purchaseOrder, this.productDetailsPageId);
+            viewModel.OrderLines = CartModel.GetOrderLineList(purchaseOrder, this.productDetailsPageId);
 
             var quantity = purchaseOrder.OrderLines.Sum(x => x.Quantity);
 
             var total = purchaseOrder.OrderTotal.HasValue
-                ? new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency)
-                : new Money(0, purchaseOrder.BillingCurrency);
+                ? new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency.ISOCode)
+                : new Money(0, purchaseOrder.BillingCurrency.ISOCode);
 
             viewModel.NumberOfItems = quantity.ToString();
             viewModel.IsEmpty = quantity == 0;
@@ -95,9 +95,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         private int GetNumberOfItemsInBasket()
         {
-            if (_transactionLibraryInternal.HasBasket())
+            if (TransactionLibrary.HasBasket())
             {
-                return _transactionLibraryInternal.GetBasket(false).PurchaseOrder.OrderLines.Sum(x => x.Quantity);
+                return TransactionLibrary.GetBasket(false).OrderLines.Sum(x => x.Quantity);
             }
             else
             {
@@ -120,17 +120,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         private Money GetBasketTotal()
         {
 
-            if (_transactionLibraryInternal.HasBasket())
+            if (TransactionLibrary.HasBasket())
             {
-                var purchaseOrder = _transactionLibraryInternal.GetBasket(false).PurchaseOrder;
+                var purchaseOrder = TransactionLibrary.GetBasket(false);
 
                 if (purchaseOrder.OrderTotal.HasValue)
                 {
-                    return new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency);
+                    return new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency.ISOCode);
                 }
-                else return new Money(0, purchaseOrder.BillingCurrency);
+                else return new Money(0, purchaseOrder.BillingCurrency.ISOCode);
             }
-            else return new Money(0, _transactionLibraryInternal.GetBasket(true).PurchaseOrder.BillingCurrency);
+            else return new Money(0, TransactionLibrary.GetBasket(true).BillingCurrency.ISOCode);
         }
     }
 }

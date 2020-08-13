@@ -2,37 +2,45 @@
 using System.Collections.Generic;
 using System.Web;
 using UCommerce.Sitefinity.UI.Pages;
-using UCommerce.Search.Facets;
+using Ucommerce.Search.Facets;
+using Ucommerce.Infrastructure;
+using Ucommerce.Api;
+using System.Linq;
+using System.Collections.Specialized;
 
 namespace UCommerce.Sitefinity.UI.Search
 {
-    /// <summary>
-    /// Class that contains functionality for <see cref="Facet"/> retrieval.
-    /// </summary>
-    internal class FacetResolver
+    public static class FacetedQueryStringExtensions
     {
-        public FacetResolver(IList<string> queryStringBlackList)
+        public static IList<Facet> ToFacets(this NameValueCollection target)
         {
-            this.queryStringBlackList = queryStringBlackList ?? new List<string>();
-        }
+            // TODO: revist this to identify if the indexdefinition is correct
+            var productDefinition = new Ucommerce.Search.Definitions.DefaultProductsIndexDefinition();
 
-        public IList<Facet> GetFacetsFromQueryString()
-        {
-            var facetsForQuerying = new List<Facet>();
-            var queryStringParameter = UrlResolver.GetQueryStringParameters(this.queryStringBlackList);
+            var facets = productDefinition.Facets.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToDictionary(x => x.Key, x => x.Value);
+            string[] facetsKeys = new string[facets.Keys.Count];
 
-            foreach (var queryString in queryStringParameter)
+            facets.Keys.CopyTo(facetsKeys, 0);
+
+            var parameters = new Dictionary<string, string>();
+
+            foreach (var queryString in HttpContext.Current.Request.QueryString.AllKeys)
             {
-                var facet = new UCommerce.Search.Facets.Facet
-                {
-                    Name = queryString.Key,
-                    FacetValues = new List<UCommerce.Search.Facets.FacetValue>(),
-                };
+                parameters[queryString] = HttpContext.Current.Request.QueryString[queryString];
+            }
 
-                foreach (var value in queryString.Value.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+            parameters.RemoveAll(p => !facetsKeys.Contains(p.Key));
+
+            var facetsForQuerying = new List<Facet>();
+
+            foreach (var parameter in parameters)
+            {
+                var facet = new Facet { FacetValues = new List<FacetValue>(), Name = parameter.Key };
+                foreach (var value in parameter.Value.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    facet.FacetValues.Add(new UCommerce.Search.Facets.FacetValue() { Value = HttpUtility.UrlDecode(value) });
+                    facet.FacetValues.Add(new FacetValue() { Value = value });
                 }
+
 
                 facetsForQuerying.Add(facet);
             }
@@ -40,6 +48,13 @@ namespace UCommerce.Sitefinity.UI.Search
             return facetsForQuerying;
         }
 
-        private readonly IList<string> queryStringBlackList;
+        public static void RemoveAll<T>(this ICollection<T> list, Func<T, bool> predicate)
+        {
+            var matches = list.Where(predicate).ToArray();
+            foreach (var match in matches)
+            {
+                list.Remove(match);
+            }
+        }
     }
 }

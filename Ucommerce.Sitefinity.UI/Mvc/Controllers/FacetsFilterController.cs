@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers

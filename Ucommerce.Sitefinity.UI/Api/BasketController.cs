@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Web.Http;
-using UCommerce.Api;
-using UCommerce.Catalog;
-using UCommerce.Content;
-using UCommerce.EntitiesV2;
-using UCommerce.Infrastructure;
-using UCommerce.Runtime;
+using Ucommerce;
+using Ucommerce.Api;
+using Ucommerce.Content;
+using Ucommerce.Search.Slugs;
+using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Constants;
+using Ucommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -16,6 +16,12 @@ namespace UCommerce.Sitefinity.UI.Api
     /// </summary>
     public class BasketController : ApiController
     {
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+        public IMarketingLibrary MarketingLibrary => ObjectFactory.Instance.Resolve<IMarketingLibrary>();
+        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
+
         [Route(RouteConstants.GET_BASKET_ROUTE_VALUE)]
         [HttpGet]
         public IHttpActionResult GetBasket()
@@ -42,7 +48,7 @@ namespace UCommerce.Sitefinity.UI.Api
         public IHttpActionResult ChangePriceGroup(ChangePriceGroupDTO model)
         {
             var priceGroupRepository = ObjectFactory.Instance.Resolve<IRepository<PriceGroup>>();
-            CatalogLibrary.ChangePriceGroup(priceGroupRepository.Get(model.PriceGroupId));
+            CatalogLibrary.ChangePriceGroup(priceGroupRepository.Get(model.PriceGroupId).Guid);
 
             return Ok();
         }
@@ -72,10 +78,11 @@ namespace UCommerce.Sitefinity.UI.Api
 
             string variantSku = null;
             var product = CatalogLibrary.GetProduct(model.Sku);
+            var variants = CatalogLibrary.GetVariants(product);
 
             if (model.Variants == null || !model.Variants.Any())
             {
-                var variant = product.Variants.FirstOrDefault();
+                var variant = variants.FirstOrDefault();
 
                 if (variant != null)
                 {
@@ -84,14 +91,7 @@ namespace UCommerce.Sitefinity.UI.Api
             }
             else
             {
-                var variants = product.Variants.AsEnumerable();
-
-                foreach (var v in model.Variants)
-                {
-                    variants = variants.Where(pv => pv.ProductProperties.Any(pp => pp.Value == v.Value));
-                }
-
-                var variant = variants.FirstOrDefault();
+                var variant = variants.FirstOrDefault(x => model.Variants.Any(y => y.Value == x.VariantSku));
                 if (variant != null)
                 {
                     variantSku = variant.VariantSku;
@@ -105,19 +105,30 @@ namespace UCommerce.Sitefinity.UI.Api
         private BasketDTO GetBasketModel()
         {
             var model = new BasketDTO();
-            var basket = TransactionLibrary.GetBasket(false).PurchaseOrder;
+            var basket = TransactionLibrary.GetBasket(false);
+            var currencyIsoCode = CatalogContext.CurrentPriceGroup.CurrencyISOCode;
             var imageService = ObjectFactory.Instance.Resolve<IImageService>();
             var urlService = ObjectFactory.Instance.Resolve<IUrlService>();
 
             foreach (var orderLine in basket.OrderLines)
             {
-                var orderLineModel = this.MapOrderLine(orderLine);
-                var currentCatalog = SiteContext.Current.CatalogContext.CurrentCatalog;
-                orderLineModel.ProductUrl = urlService.GetUrl(currentCatalog, Product.FirstOrDefault(x => x.Sku == orderLine.Sku));
 
-                orderLineModel.ThumbnailImageMediaUrl = imageService
-                    .GetImage(Product.FirstOrDefault(x => x.Sku == orderLine.Sku).ThumbnailImageMediaId).Url;
+                var product = CatalogLibrary.GetProduct(orderLine.Sku);
+                var url = UrlService.GetUrl(CatalogContext.CurrentCatalog, product);
+                var thumbnailImageUrl = product.ThumbnailImageUrl;
+                var lineTotal = new Money(orderLine.Total.Value, currencyIsoCode);
 
+                var orderLineModel = new OrderLineDTO
+                {
+                    ProductName = orderLine.ProductName,
+                    Quantity = orderLine.Quantity,
+                    UnitPrice = new Money(orderLine.Price, currencyIsoCode).ToString(),
+                    Total = new Money(orderLine.Total.GetValueOrDefault(), currencyIsoCode).ToString(),
+                    OrderlineId = orderLine.OrderLineId,
+                    HasDiscount = orderLine.Discounts.Any(),
+                    ProductUrl = url,
+                    ThumbnailImageMediaUrl = thumbnailImageUrl,
+                };
                 model.OrderLines.Add(orderLineModel);
             }
 
@@ -126,35 +137,20 @@ namespace UCommerce.Sitefinity.UI.Api
                 model.Discounts.Add(new DiscountDTO
                 {
                     Name = discount.CampaignItemName,
-                    Value = new Money(discount.AmountOffTotal, basket.BillingCurrency).ToString(),
+                    Value = new Money(discount.AmountOffTotal, currencyIsoCode).ToString(),
                 });
             }
 
-            model.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            model.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            model.DiscountTotal = new Money(basket.DiscountTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+            model.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+            model.TaxTotal = new Money(basket.TaxTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+            model.DiscountTotal = new Money(basket.DiscountTotal.GetValueOrDefault(), currencyIsoCode).ToString();
             model.HasDiscount = basket.Discount.GetValueOrDefault() > 0;
             model.NumberOfItemsInBasket = basket.OrderLines.Sum(x => x.Quantity);
             model.ShippingTotal =
-                new Money(basket.ShippingTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
-            model.PaymentTotal = new Money(basket.PaymentTotal.GetValueOrDefault(), basket.BillingCurrency).ToString();
+                new Money(basket.ShippingTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+            model.PaymentTotal = new Money(basket.PaymentTotal.GetValueOrDefault(), currencyIsoCode).ToString();
 
             return model;
-        }
-
-        private OrderLineDTO MapOrderLine(OrderLine orderLine)
-        {
-            var orderLineViewModel = new OrderLineDTO
-            {
-                ProductName = orderLine.ProductName,
-                Quantity = orderLine.Quantity,
-                UnitPrice = new Money(orderLine.Price, orderLine.PurchaseOrder.BillingCurrency).ToString(),
-                Total = new Money(orderLine.Total.GetValueOrDefault(), orderLine.PurchaseOrder.BillingCurrency).ToString(),
-                OrderlineId = orderLine.OrderLineId,
-                HasDiscount = orderLine.Discounts.Any(),
-            };
-
-            return orderLineViewModel;
         }
     }
 }

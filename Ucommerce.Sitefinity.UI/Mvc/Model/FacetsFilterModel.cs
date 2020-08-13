@@ -6,11 +6,13 @@ using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Mvc.Controllers;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
-using UCommerce.Api;
-using UCommerce.EntitiesV2;
-using UCommerce.Runtime;
-using UCommerce.Search;
+using Ucommerce.Api;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Search;
 using UCommerce.Sitefinity.UI.Search;
+using Ucommerce.Infrastructure;
+using Ucommerce.Search.Extensions;
+using System.Web;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -19,6 +21,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     /// </summary>
     public class FacetsFilterModel : IFacetsFilterModel
     {
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+
         public virtual IList<FacetViewModel> CreateViewModel()
         {
             var pageContext = SystemManager.CurrentHttpContext.GetProductsContext();
@@ -31,9 +36,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             Category currentCategory = null;
 
-            if (SiteContext.Current.CatalogContext.CurrentCategory != null)
+            if (CatalogContext.CurrentCategory != null)
             {
-                currentCategory = Category.FirstOrDefault(c => c.Name == SiteContext.Current.CatalogContext.CurrentCategory.Name);
+                currentCategory = Category.FirstOrDefault(c => c.Name == CatalogContext.CurrentCategory.Name);
             }
 
             return this.GetAllFacets(currentCategory);
@@ -53,20 +58,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         private IList<FacetViewModel> GetAllFacets(Category category)
         {
-            var facetsResolver = new FacetResolver(this.queryStringBlackList);
-            var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
-            IList<UCommerce.Search.Facets.Facet> allFacets;
+            var facets = HttpContext.Current.Request.QueryString.ToFacets();
+            IList<Ucommerce.Search.Facets.Facet> allFacets;
 
             if (category != null)
             {
-                allFacets = SearchLibrary.GetFacetsFor(category, facetsForQuerying);
+                allFacets = CatalogLibrary.GetFacets(category.Guid, facets.ToFacetDictionary());
             }
             else
             {
-                allFacets = SearchLibrary.FacetedQuery()
-                      .WithFacets(facetsForQuerying)
-                      .ToFacets()
-                      .ToList();
+                allFacets = CatalogLibrary.GetFacets(CatalogContext.CurrentCatalog.Categories, facets.ToFacetDictionary());
             }
 
             return this.MapToFacetsViewModel(allFacets);
@@ -76,21 +77,21 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         {
             var categoryIds = categoryIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
             var productIds = productIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
+            var facets = HttpContext.Current.Request.QueryString.ToFacets();
+            var categories = Category.Find(x => categoryIds.Contains(x.CategoryId));
 
-            var facetsResolver = new FacetResolver(this.queryStringBlackList);
-            var facetsForQuerying = facetsResolver.GetFacetsFromQueryString();
-            return this.MapToFacetsViewModel(SearchLibrary.FacetedQuery()
-                .Where(x => x.CategoryIds.In(categoryIds) || x.Id.In(productIds)).WithFacets(facetsForQuerying).ToFacets().ToList());
+            return this.MapToFacetsViewModel(
+                CatalogLibrary.GetFacets(categories.Select(x => x.Guid).ToList(), facets.ToFacetDictionary()));
         }
 
-        private IList<FacetViewModel> MapToFacetsViewModel(IList<UCommerce.Search.Facets.Facet> facets)
+        private IList<FacetViewModel> MapToFacetsViewModel(IList<Ucommerce.Search.Facets.Facet> facets)
         {
             return facets.Select(x => new FacetViewModel()
             {
                 DisplayName = x.DisplayName,
                 Name = x.Name,
                 FacetValues = x.FacetValues
-                    .Select(y => new FacetValue(y.Value, y.Hits))
+                    .Select(y => new FacetValue(y.Value, (int) y.Count))
                     .ToList(),
             }).ToList();
         }

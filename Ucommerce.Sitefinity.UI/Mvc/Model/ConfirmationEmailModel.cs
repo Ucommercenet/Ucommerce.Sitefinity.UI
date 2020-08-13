@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Telerik.Sitefinity.Abstractions;
-using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce;
-using UCommerce.EntitiesV2;
-using UCommerce.Infrastructure;
+using Ucommerce;
+using Ucommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -19,7 +16,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
         public ConfirmationEmailModel()
         {
-            _purchaseOrderRepository = UCommerce.Infrastructure.ObjectFactory.Instance.Resolve<IRepository<PurchaseOrder>>();
+            _purchaseOrderRepository = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<IRepository<PurchaseOrder>>();
         }
 
         public virtual ConfirmationEmailViewModel GetViewModel(string orderGuid)
@@ -63,28 +60,30 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             
             foreach (var orderLine in purchaseOrder.OrderLines)
             {
+                var orderLineCurrencyIsoCode = orderLine.PurchaseOrder.BillingCurrency.ISOCode;
                 var orderLineModel = new ConfirmationEmailOrderLine
                 {
                     ProductName = orderLine.ProductName,
                     Sku = orderLine.Sku,
                     VariantSku = orderLine.VariantSku,
-                    Total = new Money(orderLine.Total.GetValueOrDefault(), orderLine.PurchaseOrder.BillingCurrency).ToString(),
-                    Tax = new Money(orderLine.VAT, purchaseOrder.BillingCurrency).ToString(),
-                    Price = new Money(orderLine.Price, purchaseOrder.BillingCurrency).ToString(),
-                    PriceWithDiscount = new Money(orderLine.Price - orderLine.Discount, purchaseOrder.BillingCurrency).ToString(),
+                    Total = new Money(orderLine.Total.GetValueOrDefault(), orderLineCurrencyIsoCode).ToString(),
+                    Tax = new Money(orderLine.VAT, orderLineCurrencyIsoCode).ToString(),
+                    Price = new Money(orderLine.Price, orderLineCurrencyIsoCode).ToString(),
+                    PriceWithDiscount = new Money(orderLine.Price - orderLine.Discount, orderLineCurrencyIsoCode).ToString(),
                     Quantity = orderLine.Quantity,
                     Discount = orderLine.Discount
                 };
                 confirmationEmailViewModel.OrderLines.Add(orderLineModel);
             }
 
-            confirmationEmailViewModel.DiscountTotal = new Money(purchaseOrder.DiscountTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            var currencyIsoCode = purchaseOrder.BillingCurrency.ISOCode;
+            confirmationEmailViewModel.DiscountTotal = new Money(purchaseOrder.DiscountTotal.GetValueOrDefault(), currencyIsoCode).ToString();
             confirmationEmailViewModel.DiscountAmount = purchaseOrder.DiscountTotal.GetValueOrDefault();
-            confirmationEmailViewModel.SubTotal = new Money(purchaseOrder.SubTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            confirmationEmailViewModel.OrderTotal = new Money(purchaseOrder.OrderTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            confirmationEmailViewModel.TaxTotal = new Money(purchaseOrder.TaxTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            confirmationEmailViewModel.ShippingTotal = new Money(purchaseOrder.ShippingTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
-            confirmationEmailViewModel.PaymentTotal = new Money(purchaseOrder.PaymentTotal.GetValueOrDefault(), purchaseOrder.BillingCurrency).ToString();
+            confirmationEmailViewModel.SubTotal = new Money(purchaseOrder.SubTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+            confirmationEmailViewModel.OrderTotal = new Money(purchaseOrder.OrderTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+            confirmationEmailViewModel.TaxTotal = new Money(purchaseOrder.TaxTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+            confirmationEmailViewModel.ShippingTotal = new Money(purchaseOrder.ShippingTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+            confirmationEmailViewModel.PaymentTotal = new Money(purchaseOrder.PaymentTotal.GetValueOrDefault(), currencyIsoCode).ToString();
 
             confirmationEmailViewModel.OrderNumber = purchaseOrder.OrderNumber;
             confirmationEmailViewModel.CustomerName = purchaseOrder.Customer.FirstName;

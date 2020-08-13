@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using UCommerce.Catalog.Status;
-using UCommerce.EntitiesV2;
-using UCommerce.Runtime;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Api;
+using Ucommerce.Catalog.Status;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using Ucommerce.Infrastructure;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     public class ProductReviewsModel : IReviewsModel
     {
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+
         public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
             if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
@@ -31,14 +34,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             if (productId.HasValue && productId >= 0)
             {
-                currentProduct = UCommerce.EntitiesV2.Product.Get(productId.Value);
+                currentProduct = Product.Get(productId.Value);
             }
             else
             {
-                currentProduct = SiteContext.Current.CatalogContext.CurrentProduct;
+                currentProduct = Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
             }
+            
 
-            reviewVm.Reviews = currentProduct.ProductReviews.Where(pr => pr.ProductReviewStatus.ProductReviewStatusId == (int)ProductReviewStatusCode.Approved
+            reviewVm.Reviews = currentProduct.ProductReviews.Where(pr => pr.ProductReviewStatus.ProductReviewStatusId == (int)Ucommerce.Catalog.Status.ProductReviewStatusCode.Approved
                                                                          && (pr.CultureCode == null || pr.CultureCode == string.Empty || pr.CultureCode == Thread.CurrentThread.CurrentUICulture.Name))
 	            .OrderByDescending(pr => pr.CreatedOn)
                 .Select(review => new ViewModels.ProductReview
