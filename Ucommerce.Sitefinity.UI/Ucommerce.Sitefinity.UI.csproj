@@ -624,6 +624,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="node_modules\node-gyp\lib\" />
+    <Folder Include="UCommerce\Apps\Ucommerce.Search.Widgets\Configuration" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
