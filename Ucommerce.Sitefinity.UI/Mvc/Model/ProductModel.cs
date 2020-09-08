@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Web;
-using System.Windows.Forms;
 using Telerik.Sitefinity;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
@@ -14,16 +12,12 @@ using UCommerce.Sitefinity.UI.Search;
 using Ucommerce;
 using Ucommerce.Api;
 using Ucommerce.Content;
-using Ucommerce.EntitiesV2;
-using Ucommerce.EntitiesV2.Definitions;
 using Ucommerce.Extensions;
 using Ucommerce.Infrastructure.Globalization;
 using Ucommerce.Search;
-using Ucommerce.Catalog.Models;
 using Telerik.Sitefinity.Localization;
 using Ucommerce.Infrastructure;
 using Ucommerce.Search.Slugs;
-using Ucommerce.Search.Facets;
 using Ucommerce.Search.Extensions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
@@ -162,7 +156,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			ProductDetailViewModel productDetailViewModel = null;
 
-			var currentProduct = Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
+			var currentProduct = Ucommerce.EntitiesV2.Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
 
 			if (currentProduct != null)
 			{
@@ -380,10 +374,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		}
 
 
-		private IList<Product> GetProductsFromSelectedCategoryIds(List<Guid> categoryIds)
+		private IList<Ucommerce.EntitiesV2.Product> GetProductsFromSelectedCategoryIds(List<Guid> categoryIds)
 		{
-			List<Product> result = new List<Product>();
-			var productsFromCategories = CategoryProductRelation.All()
+			List<Ucommerce.EntitiesV2.Product> result = new List<Ucommerce.EntitiesV2.Product>();
+			var productsFromCategories = Ucommerce.EntitiesV2.CategoryProductRelation.All()
 					.Where(x => categoryIds.Contains(x.Category.Guid))
 					.ToList().GroupBy(x => x.Category);
 

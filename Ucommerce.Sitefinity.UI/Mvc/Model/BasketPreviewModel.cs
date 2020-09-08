@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Ucommerce.EntitiesV2;
 using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce.Api;
@@ -87,7 +86,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			return basketPreviewViewModel;
 		}
 
-		private static void MapAddresses(PurchaseOrder purchaseOrder, BasketPreviewViewModel basketPreviewViewModel)
+		private static void MapAddresses(Ucommerce.EntitiesV2.PurchaseOrder purchaseOrder, BasketPreviewViewModel basketPreviewViewModel)
 		{
 			if (purchaseOrder.BillingAddress != null)
 			{
@@ -162,7 +161,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				}
 			}
 
-			OrderAddress shipmentAddress = purchaseOrder.GetShippingAddress(Ucommerce.Constants.DefaultShipmentAddressName);
+			var shipmentAddress = purchaseOrder.GetShippingAddress(Ucommerce.Constants.DefaultShipmentAddressName);
 
 			if (shipmentAddress != null)
 			{
@@ -272,7 +271,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			}
 			else
 			{
-				PurchaseOrder purchaseOrder;
+				Ucommerce.EntitiesV2.PurchaseOrder purchaseOrder;
 				try
 				{
 					purchaseOrder = TransactionLibrary.GetBasket(false);

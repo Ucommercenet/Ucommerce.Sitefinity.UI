@@ -7,7 +7,6 @@ using Ucommerce.Search.Slugs;
 using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Constants;
-using Ucommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -47,7 +46,7 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPut]
         public IHttpActionResult ChangePriceGroup(ChangePriceGroupDTO model)
         {
-            var priceGroupRepository = ObjectFactory.Instance.Resolve<IRepository<PriceGroup>>();
+            var priceGroupRepository = ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup>>();
             CatalogLibrary.ChangePriceGroup(priceGroupRepository.Get(model.PriceGroupId).Guid);
 
             return Ok();

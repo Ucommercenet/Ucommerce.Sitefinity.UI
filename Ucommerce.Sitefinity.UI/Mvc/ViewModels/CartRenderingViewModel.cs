@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Ucommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
@@ -27,8 +26,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         public decimal ShipmentAmount { get; set; }
         public decimal PaymentAmount { get; set; }
         public decimal DiscountAmount { get; set; }
-        public OrderAddress ShipmentAddress { get; set; }
-        public OrderAddress BillingAddress { get; set; }
+        public Ucommerce.EntitiesV2.OrderAddress ShipmentAddress { get; set; }
+        public Ucommerce.EntitiesV2.OrderAddress BillingAddress { get; set; }
         public string RefreshUrl { get; set; }
         public string RemoveOrderlineUrl { get; set; }
         public string NextStepUrl { get; set; }

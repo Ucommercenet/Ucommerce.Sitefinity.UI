@@ -6,7 +6,6 @@ using UCommerce.Sitefinity.UI.Mvc.Controllers;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
 using Ucommerce.Api;
-using Ucommerce.EntitiesV2;
 using Ucommerce.Search;
 using UCommerce.Sitefinity.UI.Search;
 using Ucommerce.Infrastructure;
@@ -33,11 +32,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return this.MapFacetsByManualSelection(categoryIds, productIds);
             }
 
-            Category currentCategory = null;
+            Ucommerce.EntitiesV2.Category currentCategory = null;
 
             if (CatalogContext.CurrentCategory != null)
             {
-                currentCategory = Category.FirstOrDefault(c => c.Name == CatalogContext.CurrentCategory.Name);
+                currentCategory = Ucommerce.EntitiesV2.Category.FirstOrDefault(c => c.Name == CatalogContext.CurrentCategory.Name);
             }
 
             return this.GetAllFacets(currentCategory);
@@ -55,7 +54,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        private IList<FacetViewModel> GetAllFacets(Category category)
+        private IList<FacetViewModel> GetAllFacets(Ucommerce.EntitiesV2.Category category)
         {
             var facets = HttpContext.Current.Request.QueryString.ToFacets();
             IList<Ucommerce.Search.Facets.Facet> allFacets;
@@ -77,7 +76,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var categoryIds = categoryIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
             var productIds = productIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
             var facets = HttpContext.Current.Request.QueryString.ToFacets();
-            var categories = Category.Find(x => categoryIds.Contains(x.CategoryId));
+            var categories = Ucommerce.EntitiesV2.Category.Find(x => categoryIds.Contains(x.CategoryId));
 
             return this.MapToFacetsViewModel(
                 CatalogLibrary.GetFacets(categories.Select(x => x.Guid).ToList(), facets.ToFacetDictionary()));

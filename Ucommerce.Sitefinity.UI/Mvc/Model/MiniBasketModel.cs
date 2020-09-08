@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ucommerce.Api;
-using Ucommerce.Content;
-using Ucommerce.EntitiesV2;
 using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using Ucommerce.Transactions;
 using Ucommerce;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
@@ -37,7 +34,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 return viewModel;
             }
 
-            PurchaseOrder basket = TransactionLibrary.GetBasket(false);
+            Ucommerce.EntitiesV2.PurchaseOrder basket = TransactionLibrary.GetBasket(false);
             viewModel.OrderLines = CartModel.GetOrderLineList(basket, this.productDetailsPageId);
 
             viewModel.NumberOfItems = GetNumberOfItemsInBasket();
