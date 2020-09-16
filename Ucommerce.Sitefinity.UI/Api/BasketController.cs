@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using Telerik.Sitefinity.Data.Linq.Dynamic;
 using Ucommerce;
 using Ucommerce.Api;
 using Ucommerce.Content;
@@ -87,7 +88,7 @@ namespace UCommerce.Sitefinity.UI.Api
                 return this.Json(responseDTO);
             } 
             
-            if (model.Variants == null || !model.Variants.Any())
+            if (product.ProductDefinition.IsProductFamily() && (model.Variants == null || !model.Variants.Any()))
             {
                 var variant = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku != null);
 
@@ -99,26 +100,27 @@ namespace UCommerce.Sitefinity.UI.Api
 
                     return this.Json(responseDTO);
                 }
-                
-                variantSku = variant.VariantSku;
             }
-            else
             {
                 var productQuery = Product.All().Where(x => x.Sku == model.Sku);
-                foreach (var variant in model.Variants)
-                {
-                    productQuery = productQuery.Where(x =>
-                        x.ProductProperties.Any(y => y.Value == variant.Value && y.ProductDefinitionField.Name == variant.TypeName));
+                if (productQuery.FirstOrDefault().ProductDefinition.IsProductFamily()) { 
+                    foreach (var variant in model.Variants) 
+                    { 
+                        productQuery = productQuery.Where(x =>
+                        x.ProductProperties.Any(y => y.Value == variant.Value && y.ProductDefinitionField.Name == variant.TypeName)); 
+                    }
                 }
                 var result = productQuery.FirstOrDefault();
-                
-                if (result != null)
+
+                if (productQuery.FirstOrDefault().ProductDefinition.IsProductFamily() && result != null)
                 {
-                    variantSku = result.VariantSku;
+                    var variant = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku != null);
+                    variantSku = variant.VariantSku;
+                    TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku, variantSku);
+                    return Json(this.GetBasketModel());
                 }
             }
-
-            TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku, variantSku);
+            TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku);
             return Json(this.GetBasketModel());
         }
 
