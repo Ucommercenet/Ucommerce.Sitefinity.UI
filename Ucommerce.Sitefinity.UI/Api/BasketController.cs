@@ -83,10 +83,16 @@ namespace UCommerce.Sitefinity.UI.Api
             {
                 var variant = variants.FirstOrDefault();
 
-                if (variant != null)
+                if (variant == null)
                 {
-                    variantSku = variant.VariantSku;
+                    var responseDTO = new OperationStatusDTO();
+                    responseDTO.Status = "failed";
+                    responseDTO.Message = $"No Variant with '{ model.Sku}' exists.";
+
+                    return this.Json(responseDTO);
                 }
+
+                variantSku = variant.VariantSku;
             }
             else
             {

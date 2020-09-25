@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>Ucommerce.Sitefinity.UI</id>
-    <version>3.0.1.20225</version>
+    	<version>3.0.1.20232</version>
 		<authors>Ucommerce</authors>
 		<owners>Ucommerce</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,11 +10,13 @@
 		<description>Ucommerce for Sitefinity website widgets to implement a full e-commerce store on Sitefinity. Catalog browse, faceted navigation, and full checkout.</description>
 		<tags>Ucommerce Sitefinity ecommerce commerce</tags>
 		<dependencies>
-			<dependency id="uCommerce.Sitefinity" version="[9.2.0.20195, 9.2.9999]" />
+			<dependency id="uCommerce.Sitefinity" version="[9.1.0.20154, 9.9.9999]" />
 			<dependency id="Telerik.DataAccess.Core" version="2018.0.1127.1" />
-			<dependency id="Telerik.Sitefinity.Core" version="[12.2.7200, 12.9.9999]" />
-			<dependency id="Telerik.Sitefinity.Feather.Core" version="[12.2.7200, 12.9.9999]" />
+			<dependency id="Telerik.Sitefinity.Core" version="[12.2.7200, 13.9.9999]" />
+			<dependency id="Telerik.Sitefinity.Feather.Core" version="[12.2.7200, 13.9.9999]" />
 			<dependency id="Microsoft.AspNet.Web.Optimization" version="1.1.3" />
+			<dependency id="Antlr" version="3.5.0.2" />
+			<dependency id="Antlr3.runtime" version="3.5.1.0" />
 		</dependencies>
 	</metadata>
 	<files>

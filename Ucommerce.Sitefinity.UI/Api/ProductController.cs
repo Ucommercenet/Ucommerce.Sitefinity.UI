@@ -15,9 +15,10 @@ namespace UCommerce.Sitefinity.UI.Api
 {
     /// <summary>
     /// API Controller exposing endpoints for working with <see cref="Product"/> items.
+    /// Was renamed To 'WidgetProductController' as it clashes with ProductController shipped in Ucommerce 9 and breaks it.
     /// </summary>
     [RoutePrefix("ProductApi")]
-    public class ProductController : ApiController
+    public class WidgetProductController : ApiController
     {
         public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
