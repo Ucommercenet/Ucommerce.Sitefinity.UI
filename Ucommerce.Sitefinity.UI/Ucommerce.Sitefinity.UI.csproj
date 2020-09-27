@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <HintPath>..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="AuthorizeNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AuthorizeNet.1.8.3\lib\AuthorizeNet.dll</HintPath>
@@ -198,7 +198,8 @@
     <Reference Include="Telerik.Sitefinity.Personalization, Version=13.1.7422.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
       <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7422\lib\net472\Telerik.Sitefinity.Personalization.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Resources">
+    <Reference Include="Telerik.Sitefinity.Resources, Version=13.1.7422.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7422\lib\net472\Telerik.Sitefinity.Resources.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Sitefinity.Search, Version=13.1.7422.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
@@ -510,7 +511,6 @@
     <EmbeddedResource Include="Mvc\Views\Products\DesignerView.Simple.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <EmbeddedResource Include="Mvc\Views\CategoryNavigation\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Scripts\jquery.validate.min.js" />
     <EmbeddedResource Include="Mvc\Views\Products\Detail.Index.cshtml" />
@@ -605,16 +605,15 @@
     <EmbeddedResource Include="assets\src\js\components\checkout-navigation.vue" />
     <EmbeddedResource Include="assets\src\js\components\input-field.vue" />
     <EmbeddedResource Include="assets\src\js\components\show-rating.vue" />
+    <None Include="app.config" />
     <None Include="Mvc\Views\CategoryNavigation\StoreNavigation.cshtml" />
     <None Include="node_modules\**" />
     <None Include="assets\src\js\components\checkout-navigation.vue" />
     <None Include="assets\src\js\components\input-field.vue" />
     <EmbeddedResource Include="Mvc\Views\ProductReviews\List.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\AddReview\Detail.Index.cshtml" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="node_modules\**" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UCommerce\Apps\Ucommerce.Search.Widgets\Configuration\" />
