@@ -7,6 +7,7 @@ using Ucommerce.Search.Slugs;
 using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Constants;
+using Ucommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -46,7 +47,7 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPut]
         public IHttpActionResult ChangePriceGroup(ChangePriceGroupDTO model)
         {
-            var priceGroupRepository = ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup>>();
+            var priceGroupRepository = ObjectFactory.Instance.Resolve<IRepository<PriceGroup>>();
             CatalogLibrary.ChangePriceGroup(priceGroupRepository.Get(model.PriceGroupId).Guid);
 
             return Ok();
@@ -76,12 +77,19 @@ namespace UCommerce.Sitefinity.UI.Api
             }
 
             string variantSku = null;
-            var product = CatalogLibrary.GetProduct(model.Sku);
-            var variants = CatalogLibrary.GetVariants(product);
+            var product = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku == null);
+            if (product == null)
+            {
+                var responseDTO = new OperationStatusDTO();
+                responseDTO.Status = "failed";
+                responseDTO.Message = $"No product with SKU: '{ model.Sku}'";
 
+                return this.Json(responseDTO);
+            } 
+            
             if (model.Variants == null || !model.Variants.Any())
             {
-                var variant = variants.FirstOrDefault();
+                var variant = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku != null);
 
                 if (variant == null)
                 {
@@ -91,15 +99,22 @@ namespace UCommerce.Sitefinity.UI.Api
 
                     return this.Json(responseDTO);
                 }
-
+                
                 variantSku = variant.VariantSku;
             }
             else
             {
-                var variant = variants.FirstOrDefault(x => model.Variants.Any(y => y.Value == x.VariantSku));
-                if (variant != null)
+                var productQuery = Product.All().Where(x => x.Sku == model.Sku);
+                foreach (var variant in model.Variants)
                 {
-                    variantSku = variant.VariantSku;
+                    productQuery = productQuery.Where(x =>
+                        x.ProductProperties.Any(y => y.Value == variant.Value && y.ProductDefinitionField.Name == variant.TypeName));
+                }
+                var result = productQuery.FirstOrDefault();
+                
+                if (result != null)
+                {
+                    variantSku = result.VariantSku;
                 }
             }
 
