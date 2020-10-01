@@ -416,6 +416,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				 ));
 			}
 
+			if (facets != null && facets.Any())
+			{
+				return matchingProducts.Where(facets.ToFacetDictionary()).ToFacets().AsQueryable();
+			}
+
 			return matchingProducts.ToList().AsQueryable();
 		}
 
