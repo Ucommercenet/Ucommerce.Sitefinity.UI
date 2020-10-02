@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce;
-using Ucommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -12,11 +11,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     /// </summary>
     public class ConfirmationEmailModel: IConfirmationEmailModel
     {
-        private readonly IRepository<PurchaseOrder> _purchaseOrderRepository;
+        private readonly Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PurchaseOrder> _purchaseOrderRepository;
 
         public ConfirmationEmailModel()
         {
-            _purchaseOrderRepository = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<IRepository<PurchaseOrder>>();
+            _purchaseOrderRepository = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PurchaseOrder>>();
         }
 
         public virtual ConfirmationEmailViewModel GetViewModel(string orderGuid)
@@ -53,10 +52,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        private ConfirmationEmailViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
+        private ConfirmationEmailViewModel MapPurchaseOrder(Ucommerce.EntitiesV2.PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
         {
-            confirmationEmailViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
-            confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Shipment") ?? new OrderAddress();
+            confirmationEmailViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new Ucommerce.EntitiesV2.OrderAddress();
+            confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Shipment") ?? new Ucommerce.EntitiesV2.OrderAddress();
             
             foreach (var orderLine in purchaseOrder.OrderLines)
             {

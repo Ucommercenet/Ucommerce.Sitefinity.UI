@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Ucommerce.EntitiesV2;
 using Ucommerce.Api;
-using Ucommerce.Catalog.Status;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce.Infrastructure;
@@ -30,15 +28,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         {
             var reviewVm = new ProductReviewsRenderingViewModel();
             var clientIp = System.Web.HttpContext.Current.Request.UserHostName;
-            Product currentProduct;
+            Ucommerce.EntitiesV2.Product currentProduct;
 
             if (productId.HasValue && productId >= 0)
             {
-                currentProduct = Product.Get(productId.Value);
+                currentProduct = Ucommerce.EntitiesV2.Product.Get(productId.Value);
             }
             else
             {
-                currentProduct = Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
+                currentProduct = Ucommerce.EntitiesV2.Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
             }
             
 

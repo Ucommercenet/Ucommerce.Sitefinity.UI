@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Telerik.Sitefinity.Multisite;
 using Ucommerce.Api;
 using Ucommerce.Catalog.Status;
-using Ucommerce.EntitiesV2;
 using Ucommerce.Infrastructure;
 using Ucommerce.Pipelines;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
@@ -15,7 +13,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
 		public IOrderContext OrderContext => ObjectFactory.Instance.Resolve<IOrderContext>();
-		public IRepository<ProductReviewStatus> ProductReviewStatusRepository => ObjectFactory.Instance.Resolve<IRepository<ProductReviewStatus>>();
+		public Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.ProductReviewStatus> ProductReviewStatusRepository => ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.ProductReviewStatus>>();
 		public IPipeline<Ucommerce.EntitiesV2.ProductReview> ProductReviewPipeline => ObjectFactory.Instance.Resolve<IPipeline<Ucommerce.EntitiesV2.ProductReview>>();
 
 		public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
@@ -32,15 +30,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 		public virtual AddReviewDTO Add(AddReviewSubmitModel viewModel)
 		{
-			Product product;
+			Ucommerce.EntitiesV2.Product product;
 
 			if (viewModel.ProductId.HasValue)
 			{
-				product = Product.Get(viewModel.ProductId.Value);
+				product = Ucommerce.EntitiesV2.Product.Get(viewModel.ProductId.Value);
 			}
 			else
 			{
-				product = Product.FirstOrDefault(p => p.Guid == CatalogContext.CurrentProduct.Guid);
+				product = Ucommerce.EntitiesV2.Product.FirstOrDefault(p => p.Guid == CatalogContext.CurrentProduct.Guid);
 			}
 
 			var request = System.Web.HttpContext.Current.Request;
@@ -53,7 +51,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			if (basket.PurchaseOrder.Customer == null)
 			{
-				basket.PurchaseOrder.Customer = new Customer()
+				basket.PurchaseOrder.Customer = new Ucommerce.EntitiesV2.Customer()
 				{
 					FirstName = name,
 					LastName = String.Empty,
@@ -72,15 +70,15 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			basket.PurchaseOrder.Customer.Save();
 
-			ProductCatalogGroup catalogGroup;
+			Ucommerce.EntitiesV2.ProductCatalogGroup catalogGroup;
 
 			if (viewModel.CatalogGroupId.HasValue)
 			{
-				catalogGroup = ProductCatalogGroup.Get(viewModel.CatalogGroupId.Value);
+				catalogGroup = Ucommerce.EntitiesV2.ProductCatalogGroup.Get(viewModel.CatalogGroupId.Value);
 			}
 			else
 			{
-				catalogGroup = ProductCatalogGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCatalogGroup.Guid);
+				catalogGroup = Ucommerce.EntitiesV2.ProductCatalogGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCatalogGroup.Guid);
 			}
 
 			var review = new Ucommerce.EntitiesV2.ProductReview

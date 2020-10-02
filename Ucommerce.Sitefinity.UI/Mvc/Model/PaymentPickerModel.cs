@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
 using Ucommerce.Api;
-using Ucommerce.EntitiesV2;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using ObjectFactory = Ucommerce.Infrastructure.ObjectFactory;
 using Ucommerce;
@@ -30,7 +29,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 		public virtual PaymentPickerViewModel GetViewModel()
 		{
-			PurchaseOrder purchaseOrder;
+			Ucommerce.EntitiesV2.PurchaseOrder purchaseOrder;
 			var paymentPickerViewModel = new PaymentPickerViewModel();
 
 			try
@@ -63,7 +62,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				paymentPickerViewModel.SelectedPaymentMethodId = existingPayment != null
 					? existingPayment.PaymentMethod.PaymentMethodId
 					: -1;
-				var priceGroupRepository = ObjectFactory.Instance.Resolve<IRepository<PriceGroup>>();
+				var priceGroupRepository = ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup>>();
 				var priceGroup = priceGroupRepository.SingleOrDefault(pg => pg.Guid == CatalogContext.CurrentPriceGroup.Guid);
 
 				foreach (var availablePaymentMethod in availablePaymentMethods)

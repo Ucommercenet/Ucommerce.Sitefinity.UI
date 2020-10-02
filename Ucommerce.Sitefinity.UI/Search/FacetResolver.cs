@@ -14,33 +14,25 @@ namespace UCommerce.Sitefinity.UI.Search
     {
         public static IList<Facet> ToFacets(this NameValueCollection target)
         {
-            // TODO: revist this to identify if the indexdefinition is correct
-            var productDefinition = new Ucommerce.Search.Definitions.DefaultProductsIndexDefinition();
-
-            var facets = productDefinition.Facets.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToDictionary(x => x.Key, x => x.Value);
-            string[] facetsKeys = new string[facets.Keys.Count];
-
-            facets.Keys.CopyTo(facetsKeys, 0);
-
             var parameters = new Dictionary<string, string>();
-
             foreach (var queryString in HttpContext.Current.Request.QueryString.AllKeys)
             {
                 parameters[queryString] = HttpContext.Current.Request.QueryString[queryString];
             }
 
-            parameters.RemoveAll(p => !facetsKeys.Contains(p.Key));
+            parameters.RemoveAll(kvp =>
+                new [] { "umbDebugShowTrace", "product", "variant", "category", "categories", "catalog", "search"}
+                    .Contains(kvp.Key));
 
             var facetsForQuerying = new List<Facet>();
 
             foreach (var parameter in parameters)
             {
-                var facet = new Facet { FacetValues = new List<FacetValue>(), Name = parameter.Key };
-                foreach (var value in parameter.Value.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                var facet = new Facet {FacetValues = new List<FacetValue>(), Name = parameter.Key};
+                foreach (var value in parameter.Value.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    facet.FacetValues.Add(new FacetValue() { Value = value });
+                    facet.FacetValues.Add(new FacetValue() {Value = value});
                 }
-
 
                 facetsForQuerying.Add(facet);
             }
