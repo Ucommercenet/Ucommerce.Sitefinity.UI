@@ -7,6 +7,7 @@ using Ucommerce.Infrastructure;
 using Ucommerce.Api;
 using System.Linq;
 using System.Collections.Specialized;
+using System.Web.Mvc;
 
 namespace UCommerce.Sitefinity.UI.Search
 {
@@ -15,7 +16,7 @@ namespace UCommerce.Sitefinity.UI.Search
         public static IList<Facet> ToFacets(this NameValueCollection target)
         {
             // TODO: revist this to identify if the indexdefinition is correct
-            var productDefinition = new Ucommerce.Search.Definitions.DefaultProductsIndexDefinition();
+            var productDefinition = ObjectFactory.Instance.Resolve<Ucommerce.Search.IIndexDefinition<Ucommerce.Search.Models.Product>>();
 
             var facets = productDefinition.Facets.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToDictionary(x => x.Key, x => x.Value);
             string[] facetsKeys = new string[facets.Keys.Count];
