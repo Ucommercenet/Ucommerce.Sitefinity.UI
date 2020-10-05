@@ -613,14 +613,12 @@
     <EmbeddedResource Include="Mvc\Views\ProductReviews\List.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\AddReview\Detail.Index.cshtml" />
     <None Include="node_modules\**" />
-    <None Include="OpenAccessNuGet.targets" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UCommerce\Apps\Ucommerce.Search.Widgets\Configuration\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="OpenAccessNuget.targets" />
   <PropertyGroup>
     <PreBuildEvent>
       if '$(Configuration)'=='Release' (
