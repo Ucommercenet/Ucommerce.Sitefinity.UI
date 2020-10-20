@@ -21,6 +21,8 @@
 
         public bool IsSellableProduct { get; set; }
 
+        public bool IsAddableToCart { get; set; }
+
         public bool IsVariant { get; set; }
     }
 }

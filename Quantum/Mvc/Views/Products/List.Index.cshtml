@@ -74,8 +74,14 @@
                                 <span class="sfDiscPrice">@product.Discount</span>
                             }
                         </div>
-                        <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id">
-                        </add-to-basket>
+	                    @if (product.IsAddableToCart && product.IsSellableProduct)
+	                    {
+		                    <add-to-basket :product-sku="'@product.Sku'" :root-id="$el.id"></add-to-basket>
+	                    }
+	                    else
+	                    {
+		                    @Html.Resource("ViewProduct", "UcommerceResources")
+	                    }
                     </div>
                 </div>
                 <div class="sfReviewWrp">
