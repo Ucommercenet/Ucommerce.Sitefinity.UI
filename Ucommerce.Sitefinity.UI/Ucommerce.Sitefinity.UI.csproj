@@ -541,7 +541,6 @@
     <EmbeddedResource Include="Mvc\Views\ConfirmationMessage\Detail.Index.cshtml" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\DesignerView.Simple.cshtml" />
     <EmbeddedResource Include="Mvc\Views\PaymentPicker\DesignerView.Simple.json" />
-    <EmbeddedResource Include="Mvc\Scripts\bootstrap.min.js" />
     <EmbeddedResource Include="Mvc\Scripts\popper.min.js" />
     <EmbeddedResource Include="Mvc\Scripts\jquery.validate.js" />
     <EmbeddedResource Include="Mvc\Scripts\popper.js" />
