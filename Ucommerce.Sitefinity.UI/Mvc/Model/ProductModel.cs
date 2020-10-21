@@ -205,6 +205,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				var imageUrl = imageService.GetImage(currentProduct.PrimaryImageMediaId).Url;
 				var absoluteImageUrl = UrlPath.ResolveAbsoluteUrl(imageUrl);
 
+				var definition = currentProduct.ProductDefinition;
+				var isProductFamily = definition.IsProductFamily();
+
 				productDetailViewModel = new ProductDetailViewModel()
 				{
 					DisplayName = displayName,
@@ -223,6 +226,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 					IsVariant = currentProduct.IsVariant,
 					IsProductFamily = currentProduct.ProductDefinition.IsProductFamily(),
 					AllowOrdering = currentProduct.AllowOrdering,
+					IsSellableProduct = !isProductFamily || currentProduct.Variants.Any()
 				};
 
 				if (currentProduct.ParentProduct != null)
