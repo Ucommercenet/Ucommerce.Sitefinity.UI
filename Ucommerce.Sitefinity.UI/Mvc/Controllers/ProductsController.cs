@@ -33,6 +33,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         public string DetailTemplateName { get; set; } = "Index";
 
+        [OutputCache(Duration = 30, VaryByParam = "*")]
         [RelativeRoute("{categoryName?}")]
         [RelativeRoute("{parentCategory1?}/{categoryName?}")]
         [RelativeRoute("{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
