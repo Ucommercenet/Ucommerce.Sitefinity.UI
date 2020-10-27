@@ -7,7 +7,6 @@ using Telerik.Sitefinity.Localization;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Resources;
 using Ucommerce.Api;
-using Ucommerce.EntitiesV2;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -19,11 +18,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		private Guid nextStepId;
 		private Guid previousStepId;
         public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
-        private readonly IQueryable<Country> _countries;
+        private readonly IQueryable<Ucommerce.EntitiesV2.Country> _countries;
 
 		public AddressModel(Guid? nextStepId = null, Guid? previousStepId = null)
 		{
-			_countries = Country.All();
+			_countries = Ucommerce.EntitiesV2.Country.All();
 			this.nextStepId = nextStepId ?? Guid.Empty;
 			this.previousStepId = previousStepId ?? Guid.Empty;
 		}
@@ -31,17 +30,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		public virtual AddressRenderingViewModel GetViewModel()
 		{
 			var viewModel = new AddressRenderingViewModel();
-			OrderAddress shippingInformation;
-			OrderAddress billingInformation;
-			PurchaseOrder purchaseOrder;
+			Ucommerce.EntitiesV2.OrderAddress shippingInformation;
+			Ucommerce.EntitiesV2.OrderAddress billingInformation;
+			Ucommerce.EntitiesV2.PurchaseOrder purchaseOrder;
 			try
 			{
 				purchaseOrder = TransactionLibrary.GetBasket();
 				shippingInformation =
                     TransactionLibrary.GetBasket()
-						.GetShippingAddress(Ucommerce.Constants.DefaultShipmentAddressName) ?? new OrderAddress();
+						.GetShippingAddress(Ucommerce.Constants.DefaultShipmentAddressName) ?? new Ucommerce.EntitiesV2.OrderAddress();
 				billingInformation = TransactionLibrary.GetBasket().BillingAddress ??
-									 new OrderAddress();
+									 new Ucommerce.EntitiesV2.OrderAddress();
 			}
 			catch (Exception ex)
 			{

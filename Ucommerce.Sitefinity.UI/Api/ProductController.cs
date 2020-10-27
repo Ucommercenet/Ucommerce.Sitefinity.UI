@@ -8,7 +8,6 @@ using Ucommerce;
 using Ucommerce.Api;
 using Ucommerce.Catalog.Models;
 using Ucommerce.Catalog.Status;
-using Ucommerce.EntitiesV2;
 using Ucommerce.Pipelines;
 using Ucommerce.Infrastructure;
 
@@ -40,7 +39,7 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPost]
         public IHttpActionResult GetProductReviews([FromBody] GetProductReviewsDTO model)
         {
-			var productReviews = ProductReview.Find(pr =>
+			var productReviews = Ucommerce.EntitiesV2.ProductReview.Find(pr =>
 							pr.Product.Sku == model.Sku
 							&& pr.Product.VariantSku == null
 							&& pr.ProductReviewStatus.ProductReviewStatusId == (int)ProductReviewStatusCode.Approved
@@ -61,8 +60,8 @@ namespace UCommerce.Sitefinity.UI.Api
         [HttpPost]
         public IHttpActionResult PutProductReview([FromBody] ProductReviewDTO model)
         {
-            var product = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku == null);
-            var productCatalogGroup = ProductCatalogGroup
+            var product = Ucommerce.EntitiesV2.Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku == null);
+            var productCatalogGroup = Ucommerce.EntitiesV2.ProductCatalogGroup
                 .FirstOrDefault(x => x.ProductCatalogGroupId == CatalogContext.CurrentCatalogGroup.ProductCatalogGroupId);
             var request = System.Web.HttpContext.Current.Request;
             var basket = TransactionLibrary.HasBasket() ? TransactionLibrary.GetBasket(false) : null;
@@ -71,15 +70,15 @@ namespace UCommerce.Sitefinity.UI.Api
             {
 				if (basket.Customer == null)
                 {
-					basket.Customer = new Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
+					basket.Customer = new Ucommerce.EntitiesV2.Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
                     basket.Save();
                 }
             }
 
-            var review = new ProductReview()
+            var review = new Ucommerce.EntitiesV2.ProductReview()
             {
 				ProductCatalogGroup = productCatalogGroup,
-				ProductReviewStatus = ProductReviewStatus.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
+				ProductReviewStatus = Ucommerce.EntitiesV2.ProductReviewStatus.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
                 CreatedOn = DateTime.Now,
                 CreatedBy = model.Name,
                 Product = product,
@@ -92,7 +91,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
             product.AddProductReview(review);
 
-            PipelineFactory.Create<ProductReview>("ProductReview").Execute(review);
+            PipelineFactory.Create<Ucommerce.EntitiesV2.ProductReview>("ProductReview").Execute(review);
 
             return Ok();
         }

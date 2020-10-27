@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ucommerce.EntitiesV2;
-using Ucommerce.EntitiesV2.Definitions;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
@@ -14,7 +12,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
         {
             VariantTypes = new List<VariantTypeViewModel>();
             Routes = new Dictionary<string, string>();
-            ProductProperties = new List<IProperty>();
+            ProductProperties = new List<Ucommerce.EntitiesV2.Definitions.IProperty>();
         }
 
         public string DisplayName { get; set; }
@@ -61,6 +59,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 
         public Dictionary<string, string> Routes { get; set; }
 
-        public IList<IProperty> ProductProperties { get; set; }
+        public IList<Ucommerce.EntitiesV2.Definitions.IProperty> ProductProperties { get; set; }
     }
 }

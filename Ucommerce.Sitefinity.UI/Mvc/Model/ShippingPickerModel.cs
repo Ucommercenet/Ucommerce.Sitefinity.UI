@@ -4,9 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
-using Ucommerce.EntitiesV2;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using Ucommerce.Transactions;
 using ObjectFactory = Ucommerce.Infrastructure.ObjectFactory;
 using Ucommerce.Api;
 using Ucommerce;
@@ -49,7 +47,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
             else
             {
-                PurchaseOrder basketPurchaseOrder = null;
+                Ucommerce.EntitiesV2.PurchaseOrder basketPurchaseOrder = null;
                 try
                 {
                     basketPurchaseOrder = TransactionLibrary.GetBasket();
@@ -83,7 +81,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         public virtual ShippingPickerViewModel GetViewModel()
         {
             var shipmentPickerViewModel = new ShippingPickerViewModel();
-            PurchaseOrder basketPurchaseOrder = null;
+            Ucommerce.EntitiesV2.PurchaseOrder basketPurchaseOrder = null;
 
             try
             {
@@ -121,7 +119,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
                     foreach (var availableShippingMethod in availableShippingMethods)
                     {
-                        var priceGroup = PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
+                        var priceGroup = Ucommerce.EntitiesV2.PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
                         var localizedShippingMethod = availableShippingMethod.ShippingMethodDescriptions.FirstOrDefault(s => s.CultureCode.Equals(CultureInfo.CurrentCulture.ToString()));
 
                         var price = availableShippingMethod.GetPriceForPriceGroup(priceGroup);

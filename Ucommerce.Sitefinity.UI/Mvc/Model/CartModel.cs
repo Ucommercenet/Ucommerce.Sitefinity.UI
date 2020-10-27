@@ -6,7 +6,6 @@ using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using Ucommerce.Api;
 using Ucommerce.Content;
-using Ucommerce.EntitiesV2;
 using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce;
@@ -43,7 +42,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				return basketVM;
 			}
 
-			PurchaseOrder basket = TransactionLibrary.GetBasket(false);
+			var basket = TransactionLibrary.GetBasket(false);
 			basketVM.OrderLines = GetOrderLineList(basket, this.productDetailsPageId);
 
 			this.GetDiscounts(basketVM, basket);
@@ -63,7 +62,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			return basketVM;
 		}
 
-		internal static IList<OrderlineViewModel> GetOrderLineList(PurchaseOrder basket, Guid productDetailsPageId)
+		internal static IList<OrderlineViewModel> GetOrderLineList(Ucommerce.EntitiesV2.PurchaseOrder basket, Guid productDetailsPageId)
 		{
             var CatalogLibrary = ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 
@@ -94,7 +93,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			return result;
 		}
 
-		private void GetDiscounts(CartRenderingViewModel basketVM, PurchaseOrder basket)
+		private void GetDiscounts(CartRenderingViewModel basketVM, Ucommerce.EntitiesV2.PurchaseOrder basket)
 		{
 			foreach (var item in basket.Discounts)
 			{
@@ -209,7 +208,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			return updatedBasket;
 		}
 
-		private static CartUpdateBasketViewModel MapOrderline(PurchaseOrder basket)
+		private static CartUpdateBasketViewModel MapOrderline(Ucommerce.EntitiesV2.PurchaseOrder basket)
 		{
 			var updatedBasket = new CartUpdateBasketViewModel();
 

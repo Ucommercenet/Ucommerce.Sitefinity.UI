@@ -8,7 +8,6 @@ using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using Ucommerce.Api;
-using Ucommerce.EntitiesV2;
 using Ucommerce.Extensions;
 using UCommerce.Sitefinity.UI.Constants;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
@@ -44,8 +43,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			var currentCategory = CatalogContext.CurrentCategory != null ? Ucommerce.EntitiesV2.Category.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCategory.Guid) : null;
 			categoryNavigationViewModel.Categories = this.MapCategories(rootCategories, currentCategory);
 
-			var priceGroups = PriceGroup.Find(x => CatalogContext.CurrentCatalog.PriceGroups.Contains(x.Guid));
-			var currentPriceGroup = PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
+			var priceGroups = Ucommerce.EntitiesV2.PriceGroup.Find(x => CatalogContext.CurrentCatalog.PriceGroups.Contains(x.Guid));
+			var currentPriceGroup = Ucommerce.EntitiesV2.PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
 			categoryNavigationViewModel.Currencies = this.MapCurrencies(priceGroups, currentPriceGroup);
 			categoryNavigationViewModel.Localizations = this.GetCurrentCulture();
 			categoryNavigationViewModel.CurrentCurrency = new CategoryNavigationCurrencyViewModel()
@@ -142,8 +141,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			}
 		}
 
-		protected virtual IList<CategoryNavigationCategoryViewModel> MapCategories(ICollection<Category> rootCategories,
-			Category currentCategory)
+		protected virtual IList<CategoryNavigationCategoryViewModel> MapCategories(ICollection<Ucommerce.EntitiesV2.Category> rootCategories,
+			Ucommerce.EntitiesV2.Category currentCategory)
 		{
 			var result = new List<CategoryNavigationCategoryViewModel>();
 
@@ -164,7 +163,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		}
 
 		protected virtual IList<CategoryNavigationCurrencyViewModel> MapCurrencies(
-			ICollection<PriceGroup> currentCatalogAllowedPriceGroups, PriceGroup currentPriceGroup)
+			ICollection<Ucommerce.EntitiesV2.PriceGroup> currentCatalogAllowedPriceGroups, Ucommerce.EntitiesV2.PriceGroup currentPriceGroup)
 		{
 			var categoryNavigationCurrencyViewModels = new List<CategoryNavigationCurrencyViewModel>();
 
@@ -182,7 +181,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			return categoryNavigationCurrencyViewModels;
 		}
 
-		private string GetCategoryUrl(Category category)
+		private string GetCategoryUrl(Ucommerce.EntitiesV2.Category category)
 		{
 			var baseUrl = string.Empty;
 			if (this.categoryPageId == Guid.Empty)
