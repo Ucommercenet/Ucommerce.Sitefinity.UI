@@ -11,7 +11,7 @@
 		<tags>Ucommerce Sitefinity ecommerce commerce</tags>
 		<dependencies>
 			<dependency id="uCommerce.Sitefinity" version="[9.3.1.20275, 9.9.9999]" />
-			<dependency id="Telerik.DataAccess.Core" version="2018.0.1127.1" />
+			<dependency id="Telerik.DataAccess.Core" version="2020.0.428.1" />
 			<dependency id="Telerik.Sitefinity.Core" version="[12.2.7200, 13.9.9999]" />
 			<dependency id="Telerik.Sitefinity.Feather.Core" version="[12.2.7200, 13.9.9999]" />
 			<dependency id="Microsoft.AspNet.Web.Optimization" version="1.1.3" />
