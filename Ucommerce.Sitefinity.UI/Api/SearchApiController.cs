@@ -66,23 +66,24 @@ namespace UCommerce.Sitefinity.UI.Api
 
 			foreach (var product in products)
 			{
-				string catUrl = CategoryModel.DefaultCategoryName;
+				string catUrl = string.Empty;
 
 				if (product.Categories != null && product.Categories.Any())
 				{
-					var productCategoryId = catalog.Categories
-												 .Where(x => x == product.Categories.FirstOrDefault())
-												 .FirstOrDefault();
-
-					if (productCategoryId != null)
+					var productCategoryId = catalog.Categories.FirstOrDefault(x => product.Categories.Any(c => c == x));
+					if (productCategoryId != Guid.Empty)
 					{
 						var category = CatalogContext.CurrentCategories.FirstOrDefault(x => x.Guid == productCategoryId);
 						catUrl = CategoryModel.GetCategoryPath(category);
 					}
 				}
 
-				string detailsPageUrl = string.Empty;
+				if (string.IsNullOrWhiteSpace(catUrl))
+				{
+					catUrl = CategoryModel.DefaultCategoryName;
+				}
 
+				string detailsPageUrl = string.Empty;
 				if (productDetailsPageId != null && productDetailsPageId.Value != Guid.Empty)
 				{
 					detailsPageUrl = Pages.UrlResolver.GetPageNodeUrl(productDetailsPageId.Value);
@@ -92,7 +93,7 @@ namespace UCommerce.Sitefinity.UI.Api
 						detailsPageUrl += "/";
 					}
 
-					detailsPageUrl += $"{catUrl}/{product.Slug}";
+					detailsPageUrl += $"{catUrl}/p/{product.Slug}";
 					detailsPageUrl = Pages.UrlResolver.GetAbsoluteUrl(detailsPageUrl);
 				}
 
@@ -120,5 +121,6 @@ namespace UCommerce.Sitefinity.UI.Api
 
 			return fullTextSearchResultModels;
 		}
+
 	}
 }
