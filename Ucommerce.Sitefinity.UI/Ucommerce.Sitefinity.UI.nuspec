@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>Ucommerce.Sitefinity.UI</id>
-    	<version>3.0.2.20276</version>
+    	<version>3.0.3.20303</version>
 		<authors>Ucommerce</authors>
 		<owners>Ucommerce</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
