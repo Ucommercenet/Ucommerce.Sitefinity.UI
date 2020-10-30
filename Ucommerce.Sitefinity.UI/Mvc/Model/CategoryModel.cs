@@ -238,6 +238,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		private Guid categoryPageId;
 		private Guid searchPageId;
 		private Guid productDetailsPageId;
-		internal static string DefaultCategoryName = "Tops";
+		internal static string DefaultCategoryName = "Category";
 	}
 }
