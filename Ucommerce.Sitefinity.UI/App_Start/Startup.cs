@@ -51,9 +51,6 @@ namespace UCommerce.Sitefinity.UI.App_Start
             //Custom resources
             Res.RegisterResource<UcommerceResources>();
 
-            BundleTable.VirtualPathProvider = HostingEnvironment.VirtualPathProvider;
-            BundleTable.EnableOptimizations = true;
-
             ObjectFactory.Container.RegisterType<PageEditorRouteHandler, UCommerceMvcPageEditorRouteHandler>();
             ObjectFactory.Container.RegisterType<TemplateEditorRouteHandler, UCommerceMvcTemplateEditorRouteHandler>();
         }
