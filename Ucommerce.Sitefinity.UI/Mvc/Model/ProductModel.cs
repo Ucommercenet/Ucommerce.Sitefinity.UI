@@ -439,7 +439,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			if (facets.Count > 0)
 			{
 				matchingProducts.Where(facets.ToFacetDictionary());
-				matchingProducts.PriceGroup(CatalogContext.CurrentPriceGroup.Name);
 			}
 
 			if (currentCategory != null)
