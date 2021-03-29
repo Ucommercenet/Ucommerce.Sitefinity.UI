@@ -10,7 +10,7 @@
 		<description>Ucommerce for Sitefinity website widgets to implement a full e-commerce store on Sitefinity. Catalog browse, faceted navigation, and full checkout.</description>
 		<tags>Ucommerce Sitefinity ecommerce commerce</tags>
 		<dependencies>
-			<dependency id="uCommerce.Sitefinity" version="[9.3.1.20275, 9.9.9999]" />
+			<dependency id="uCommerce.Sitefinity" version="[9.4.1.21068, 9.9.9999]" />
 			<dependency id="Telerik.DataAccess.Core" version="2020.0.428.1" />
 			<dependency id="Telerik.Sitefinity.Core" version="[12.2.7200, 13.9.9999]" />
 			<dependency id="Telerik.Sitefinity.Feather.Core" version="[12.2.7200, 13.9.9999]" />
