@@ -61,7 +61,7 @@ function initCart(rootElement) {
 
                         if (data.Status) {
                             if (fieldName) {
-                                if (typeof data.Data.errors[fieldName] !== 'undefined' && data.Data.errors[fieldName].length > 0)
+                                if (data.Data && data.Data.errors && (typeof data.Data.errors[fieldName] !== 'undefined' && data.Data.errors[fieldName].length > 0))
                                 {
                                     if (data.Data.errors && data.Data.errors[fieldName].length) {
                                         callback(false, data.Data.errors[fieldName]);
