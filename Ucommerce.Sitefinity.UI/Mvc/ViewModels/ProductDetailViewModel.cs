@@ -44,6 +44,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 		public int Rating { get; set; }
 
 		public IList<VariantTypeViewModel> VariantTypes { get; set; }
+		public Ucommerce.Search.ResultSet<Ucommerce.Search.Models.Product> RelatedProducts { get; set; }
 
 		public bool IsVariant { get; set; }
 
