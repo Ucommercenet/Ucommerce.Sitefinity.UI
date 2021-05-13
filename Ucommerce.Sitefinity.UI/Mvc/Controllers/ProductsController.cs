@@ -33,6 +33,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         public string DetailTemplateName { get; set; } = "Index";
 
+        public bool EnableSEOPageTitle { get; set; } = true;
+
         [OutputCache(Duration = 30, VaryByParam = "*")]
         [RelativeRoute("{categoryName?}")]
         [RelativeRoute("{parentCategory1?}/{categoryName?}")]
@@ -91,6 +93,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             var viewModel = productModel.CreateDetailsViewModel();
             var templateName = this.detailTemplateNamePrefix + this.DetailTemplateName;
+
+            if (this.EnableSEOPageTitle)
+            {
+                this.ViewBag.Title = viewModel.DisplayName;
+            }
 
             return this.View(templateName, viewModel);
         }
