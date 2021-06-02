@@ -38,24 +38,6 @@ namespace UCommerce.Sitefinity.UI.Resources
             get { return this["Discounts"]; }
         }
 
-        [ResourceEntry("Availability", Value = "Availability", Description = "Availability", LastModified = "2020/02/21")]
-        public string Availability
-        {
-            get { return this["Availability"]; }
-        }
-
-        [ResourceEntry("InStock", Value = "In Stock", Description = "In Stock", LastModified = "2020/02/21")]
-        public string InStock
-        {
-            get { return this["InStock"]; }
-        }
-
-        [ResourceEntry("OutOfStock", Value = "Out of Stock", Description = "Out of Stock", LastModified = "2020/02/21")]
-        public string OutOfStock
-        {
-            get { return this["OutOfStock"]; }
-        }
-
         [ResourceEntry("NotAvailableForSale", Value = "Not currently available for sale", Description = "Not Available For Sale", LastModified = "2020/02/21")]
         public string NotAvailableForSale
         {

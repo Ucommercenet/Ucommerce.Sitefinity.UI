@@ -56,8 +56,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 
 		public Guid Guid { get; set; }
 
-		public bool AllowOrdering { get; set; }
-
 		public Dictionary<string, string> Routes { get; set; }
 
 		public IList<Ucommerce.EntitiesV2.Definitions.IProperty> ProductProperties { get; set; }
