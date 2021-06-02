@@ -225,7 +225,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 					VariantSku = currentProduct.VariantSku,
 					IsVariant = currentProduct.IsVariant,
 					IsProductFamily = currentProduct.ProductDefinition.IsProductFamily(),
-					AllowOrdering = currentProduct.AllowOrdering,
 					IsSellableProduct = !isProductFamily || currentProduct.Variants.Any()
 				};
 
