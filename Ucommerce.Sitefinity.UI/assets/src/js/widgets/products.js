@@ -33,6 +33,12 @@ function initProducts(rootElement) {
             price: 0,
             listPrice: 0
         },
+        mounted: function () {
+            if(this.variants.length > 0 && this.variants[0].Current != null) {
+                var variant = this.variants[0].Current;
+                this.selectedVariants[variant.TypeName] = variant;
+            }
+        },
         methods: {
             onChange(event, variant) {
                 this.selectedVariants[variant.TypeName] = variant;
