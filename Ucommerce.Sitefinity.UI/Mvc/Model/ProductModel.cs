@@ -246,6 +246,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 						UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct);
 				}
 
+				//Get Related Products
+				var searchProduct = this.ProductIndex.Find().Where(x => x.Guid == productDetailViewModel.Guid).FirstOrDefault();
+				if (searchProduct != null)
+				{
+					var relatedIds = searchProduct.RelatedProducts;
+					productDetailViewModel.RelatedProducts = this.ProductIndex.Find().Where(x => relatedIds.Contains(x.Guid)).ToList();
+				}
+
 				var invariantFields = currentProduct.ProductProperties;
 
 				var localizationContext = ObjectFactory.Instance.Resolve<ILocalizationContext>();
