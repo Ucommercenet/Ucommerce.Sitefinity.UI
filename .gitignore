@@ -264,6 +264,3 @@ paket-files/
 .idea/
 *.sln.iml
 *.orig
-
-# Coderush
-.cr
