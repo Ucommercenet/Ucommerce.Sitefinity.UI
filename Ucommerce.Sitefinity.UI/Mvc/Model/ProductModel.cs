@@ -225,7 +225,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 					VariantSku = currentProduct.VariantSku,
 					IsVariant = currentProduct.IsVariant,
 					IsProductFamily = currentProduct.ProductDefinition.IsProductFamily(),
-					AllowOrdering = currentProduct.AllowOrdering,
 					IsSellableProduct = !isProductFamily || currentProduct.Variants.Any()
 				};
 
@@ -245,6 +244,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 						CatalogContext.CurrentProduct);
 					productDetailViewModel.ProductUrl =
 						UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct);
+				}
+
+				//Get Related Products
+				var searchProduct = this.ProductIndex.Find().Where(x => x.Guid == productDetailViewModel.Guid).FirstOrDefault();
+				if (searchProduct != null)
+				{
+					var relatedIds = searchProduct.RelatedProducts;
+					productDetailViewModel.RelatedProducts = this.ProductIndex.Find().Where(x => relatedIds.Contains(x.Guid)).ToList();
 				}
 
 				var invariantFields = currentProduct.ProductProperties;

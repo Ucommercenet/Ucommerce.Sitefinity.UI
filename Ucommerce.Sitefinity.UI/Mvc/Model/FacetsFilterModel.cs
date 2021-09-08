@@ -97,7 +97,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			var currentPriceGroup = Ucommerce.EntitiesV2.PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
 
-			return facetViewModel.Where(f => f.FacetValues.Any() && (f.Name.ToLower().Contains("price") && (f.Name.ToLower().Contains("price") && f.Name.EndsWith(currentPriceGroup.Name)))).ToList();
+			return (from f in facetViewModel
+					where f.FacetValues.Any()
+					let name = f.Name.ToLower()
+					let isPriceFilter = name.Contains("price")
+					where !isPriceFilter || (isPriceFilter && name.Contains("price") && name.EndsWith(currentPriceGroup.Name.ToLower()))
+					select f
+					).ToList();
 		}
 
 		private readonly IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog" };
