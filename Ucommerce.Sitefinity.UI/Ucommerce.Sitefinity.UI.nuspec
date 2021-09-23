@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>Ucommerce.Sitefinity.UI</id>
-    	<version>3.4.0.0</version>
+    	<version>3.5.1.0</version>
 		<authors>Ucommerce</authors>
 		<owners>Ucommerce</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,8 +12,8 @@
 		<dependencies>
 			<dependency id="uCommerce.Sitefinity" version="[9.4.1.21068, 9.9.9999]" />
 			<dependency id="Telerik.DataAccess.Core" version="2020.0.428.1" />
-			<dependency id="Telerik.Sitefinity.Core" version="[13.0.7300, 13.9.9999]" />
-			<dependency id="Telerik.Sitefinity.Feather.Core" version="[13.0.7300, 13.9.9999]" />
+			<dependency id="Telerik.Sitefinity.Core" version="[13.0.7300, 14.9.9999]" />
+			<dependency id="Telerik.Sitefinity.Feather.Core" version="[13.0.7300, 14.9.9999]" />
 			<dependency id="Microsoft.AspNet.Web.Optimization" version="1.1.3" />
 			<dependency id="Antlr" version="3.5.0.2" />
 			<dependency id="Antlr3.runtime" version="3.5.1.0" />
@@ -34,6 +34,6 @@
 		<file src="MVC\Views\Shared\readme.txt" target="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\readme.txt" />
 		<file src="MVC\Views\Shared\_Warning.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\Shared\_Warning.cshtml" />
 		<file src="MVC\Views\ShippingPicker\Detail.Index.cshtml" target="content\ResourcePackages\Bootstrap4\MVC\Views\ShippingPicker\Detail.Index.cshtml" />
-		<file src="bin\release\UCommerce.Sitefinity.UI.dll" target="lib\net472\UCommerce.Sitefinity.UI.dll" />
+		<file src="bin\release\UCommerce.Sitefinity.UI.dll" target="lib\net48\UCommerce.Sitefinity.UI.dll" />
 	</files>
 </package>
