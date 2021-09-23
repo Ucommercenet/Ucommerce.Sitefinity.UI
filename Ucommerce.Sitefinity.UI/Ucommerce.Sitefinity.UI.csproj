@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UCommerce.Sitefinity.UI</RootNamespace>
     <AssemblyName>UCommerce.Sitefinity.UI</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -40,6 +40,22 @@
     <Reference Include="AuthorizeNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AuthorizeNet.1.8.3\lib\AuthorizeNet.dll</HintPath>
     </Reference>
+    <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604">
+      <HintPath>..\packages\AWSSDK.Core.3.7.0.11\lib\net45\AWSSDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.DynamoDBv2, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604">
+      <HintPath>..\packages\AWSSDK.DynamoDBv2.3.7.0.11\lib\net45\AWSSDK.DynamoDBv2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604">
+      <HintPath>..\packages\AWSSDK.S3.3.7.0.12\lib\net45\AWSSDK.S3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.SQS, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604">
+      <HintPath>..\packages\AWSSDK.SQS.3.7.0.11\lib\net45\AWSSDK.SQS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Braintree-2.22.0, Version=2.22.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Braintree.2.22.0\lib\Braintree-2.22.0.dll</HintPath>
     </Reference>
@@ -62,6 +78,10 @@
       <HintPath>..\packages\Elasticsearch.Net.7.6.2\lib\net461\Elasticsearch.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Enyim.Caching, Version=2.16.0.0, Culture=neutral, PublicKeyToken=cec98615db04012e">
+      <HintPath>..\packages\EnyimMemcached.2.16.0\lib\net35\Enyim.Caching.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EPPlus, Version=4.1.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.1.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
@@ -74,11 +94,17 @@
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Infralution.Licensing, Version=4.7.1.0, Culture=neutral, PublicKeyToken=3e7e8e3744a5c13f, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.9.4.1.21068\lib\net45\Infralution.Licensing.dll</HintPath>
+    <Reference Include="Infralution.Licensing, Version=4.7.1.0, Culture=neutral, PublicKeyToken=3e7e8e3744a5c13f">
+      <HintPath>..\packages\uCommerce.9.5.1.21260\lib\net45\Infralution.Licensing.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="J2N, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f39447d697a969af, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.9.4.1.21068\lib\net45\J2N.dll</HintPath>
+    <Reference Include="J2N, Version=2.0.0.0, Culture=neutral, PublicKeyToken=f39447d697a969af">
+      <HintPath>..\packages\uCommerce.9.5.1.21260\lib\net45\J2N.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CompilerServices.AsyncTargetingPack.Net45, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CompilerServices.AsyncTargetingPack.1.0.1\lib\net45\Microsoft.CompilerServices.AsyncTargetingPack.Net45.dll</HintPath>
@@ -86,16 +112,18 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.XmlTransform, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ucommerce.Sitefinity.9.4.1.21068\lib\Microsoft.Web.XmlTransform.dll</HintPath>
+    <Reference Include="Microsoft.Web.XmlTransform, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Ucommerce.Sitefinity.9.5.1.21260\lib\Microsoft.Web.XmlTransform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Nest, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d">
       <HintPath>..\packages\NEST.7.6.2\lib\net461\Nest.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.5.2.5\lib\net461\NHibernate.dll</HintPath>
@@ -109,6 +137,10 @@
     <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Progress.Sitefinity.Renderer, Version=14.0.7700.38136, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Progress.Sitefinity.Renderer.14.0.7700.38136\lib\netstandard2.0\Progress.Sitefinity.Renderer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RazorEngine, Version=3.0.8.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <HintPath>..\packages\Sitefinity.RazorEngine.3.0.8.0\lib\net40\RazorEngine.dll</HintPath>
     </Reference>
@@ -121,16 +153,61 @@
     <Reference Include="Remotion.Linq.EagerFetching, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.EagerFetching.2.2.0\lib\net45\Remotion.Linq.EagerFetching.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.5.11.0\lib\net472\ServiceStack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Aws, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.Aws.5.11.0\lib\net472\ServiceStack.Aws.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Caching.Memcached, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.Caching.Memcached.5.11.0\lib\net45\ServiceStack.Caching.Memcached.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.Client.5.11.0\lib\net45\ServiceStack.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.Common.5.11.0\lib\net472\ServiceStack.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.Interfaces.5.11.0\lib\net472\ServiceStack.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.OrmLite.5.11.0\lib\net45\ServiceStack.OrmLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite.SqlServer, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.5.11.0\lib\net45\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Redis, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.Redis.5.11.0\lib\net472\ServiceStack.Redis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Server, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.Server.5.11.0\lib\net472\ServiceStack.Server.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587">
+      <HintPath>..\packages\ServiceStack.Text.5.11.0\lib\net45\ServiceStack.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Slugify.Core, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Slugify.Core.2.3.0\lib\net40\Slugify.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ComponentModel.Annotations.4.4.1\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -141,15 +218,37 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Async, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
+      <HintPath>..\packages\System.Linq.Async.4.1.1\lib\net461\System.Linq.Async.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
     </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -198,98 +297,148 @@
     <Reference Include="Telerik.OpenAccess.Runtime, Version=2020.0.428.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL">
       <HintPath>..\packages\Telerik.DataAccess.Core.2020.0.428.1\lib\net40\Telerik.OpenAccess.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Sitefinity, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.dll</HintPath>
+    <Reference Include="Telerik.OpenAccess.Web, Version=2020.0.428.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342">
+      <HintPath>..\packages\Telerik.DataAccess.Web35.2020.0.428.1\lib\net20\Telerik.OpenAccess.Web.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Frontend, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Feather.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Frontend.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Frontend.Data, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Feather.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Frontend.Data.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Frontend, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Feather.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Frontend.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Model, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Model.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Frontend.Data, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Feather.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Frontend.Data.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Mvc, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Mvc.13.1.7400\lib\net472\Telerik.Sitefinity.Mvc.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Model, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Model.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Personalization, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Personalization.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Mvc, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Mvc.14.0.7700\lib\net48\Telerik.Sitefinity.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.Sitefinity.Personalization, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Personalization.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Telerik.Sitefinity.Resources">
       <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Resources.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Search, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Search.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Search, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Search.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Services.Comments, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Services.Comments.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Services.Comments, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Services.Comments.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Services.Documents, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Services.Documents.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Services.Documents, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Services.Documents.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Services.Events, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Services.Events.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Services.Events, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Services.Events.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Services.Notifications, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Services.Notifications.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Services.Notifications, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Services.Notifications.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Services.RecycleBin, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Services.RecycleBin.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Services.RecycleBin, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Services.RecycleBin.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Services.Statistics, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Services.Statistics.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Services.Statistics, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Services.Statistics.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.SiteSync, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.SiteSync.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.SiteSync, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.SiteSync.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.Sitefinity.Utilities, Version=13.1.7400.0, Culture=neutral, PublicKeyToken=b28c218413bdf563, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Sitefinity.Core.13.1.7400\lib\net472\Telerik.Sitefinity.Utilities.dll</HintPath>
+    <Reference Include="Telerik.Sitefinity.Utilities, Version=14.0.7700.0, Culture=neutral, PublicKeyToken=b28c218413bdf563">
+      <HintPath>..\packages\Telerik.Sitefinity.Core.14.0.7700\lib\net48\Telerik.Sitefinity.Utilities.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.dll</HintPath>
+    <Reference Include="Telerik.Web.Design, Version=2021.2.511.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4">
+      <HintPath>..\packages\Telerik.Web.UI.2021.2.511.45\lib\net45\Telerik.Web.Design.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Admin, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.Admin.dll</HintPath>
+    <Reference Include="Telerik.Web.Spreadsheet, Version=2021.2.511.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4">
+      <HintPath>..\packages\Telerik.Web.UI.2021.2.511.45\lib\net45\Telerik.Web.Spreadsheet.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Api, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.Api.dll</HintPath>
+    <Reference Include="Telerik.Web.UI, Version=2021.2.511.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4">
+      <HintPath>..\packages\Telerik.Web.UI.2021.2.511.45\lib\net45\Telerik.Web.UI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Infrastructure, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.Infrastructure.dll</HintPath>
+    <Reference Include="Telerik.Web.UI.Skins, Version=2021.2.511.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4">
+      <HintPath>..\packages\Telerik.Web.UI.2021.2.511.45\lib\net45\Telerik.Web.UI.Skins.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Installer, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.Installer.dll</HintPath>
+    <Reference Include="Ucommerce, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.NHibernate, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.NHibernate.dll</HintPath>
+    <Reference Include="Ucommerce.Admin, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.Admin.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Pipelines, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.Pipelines.dll</HintPath>
+    <Reference Include="Ucommerce.Api, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.Api.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Presentation, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.Presentation.dll</HintPath>
+    <Reference Include="Ucommerce.Infrastructure, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Search, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.Search.dll</HintPath>
+    <Reference Include="Ucommerce.Installer, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.Installer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Sitefinity, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ucommerce.Sitefinity.9.4.1.21068\lib\Ucommerce.Sitefinity.dll</HintPath>
+    <Reference Include="Ucommerce.NHibernate, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.NHibernate.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Sitefinity.Installer, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ucommerce.Sitefinity.9.4.1.21068\lib\Ucommerce.Sitefinity.Installer.dll</HintPath>
+    <Reference Include="Ucommerce.Pipelines, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.Pipelines.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.SqlMultiReaderConnector, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.SqlMultiReaderConnector.dll</HintPath>
+    <Reference Include="Ucommerce.Presentation, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.Presentation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.SystemHttp, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.SystemHttp.dll</HintPath>
+    <Reference Include="Ucommerce.Search, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.Search.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.SystemWeb, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\uCommerce.Core.9.4.1.21068\lib\net45\Ucommerce.SystemWeb.dll</HintPath>
+    <Reference Include="Ucommerce.Sitefinity, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Ucommerce.Sitefinity.9.5.1.21260\lib\Ucommerce.Sitefinity.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ucommerce.Web.Shell, Version=9.4.1.21068, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ucommerce.Sitefinity.9.4.1.21068\lib\Ucommerce.Web.Shell.dll</HintPath>
+    <Reference Include="Ucommerce.Sitefinity.Installer, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Ucommerce.Sitefinity.9.5.1.21260\lib\Ucommerce.Sitefinity.Installer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ucommerce.SqlMultiReaderConnector, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.SqlMultiReaderConnector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ucommerce.SystemHttp, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.SystemHttp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ucommerce.SystemWeb, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\uCommerce.Core.9.5.1.21260\lib\net45\Ucommerce.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ucommerce.Web.Shell, Version=9.5.1.21260, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Ucommerce.Sitefinity.9.5.1.21260\lib\Ucommerce.Web.Shell.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.0.3\lib\net40\WebActivatorEx.dll</HintPath>
