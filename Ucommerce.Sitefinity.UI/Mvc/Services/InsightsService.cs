@@ -18,6 +18,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		void SendAsSentence(Ucommerce.EntitiesV2.Product product, string predicate, string objectName);
 		void SendAsSentence(Ucommerce.Search.Models.Product product, string predicate, string objectName);
 		void SendAsSentence(Ucommerce.EntitiesV2.Customer customer, string predicate, string objectName);
+		void SendBasketAsSentence(string predicate, string objectName);
 		void SendAsSentence(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string objectName);
 	}
 
@@ -68,9 +69,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			ImportInteraction(interaction);
 		}
 
+		public void SendBasketAsSentence(string predicate, string objectName)
+		{
+			SendAsSentence(SafeGetOrder(), predicate, objectName);
+		}
+
 		public void SendAsSentence(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string objectName)
 		{
-			var interaction = GetInteractionForOrder(objectName, predicate, order);
+			var interaction = GetInteractionForOrder(predicate, objectName, order);
 			AddOrderInteractions(interaction, order);
 			ImportInteraction(interaction);
 		}

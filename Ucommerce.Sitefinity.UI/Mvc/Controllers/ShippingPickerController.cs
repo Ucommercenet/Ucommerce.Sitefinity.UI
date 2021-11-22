@@ -82,8 +82,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
                 return this.PartialView("_Warning", message);
             }
 
-            var viewModel = model.GetViewModel();
-
             model.CreateShipment(createShipmentViewModel);
 
             if (ModelState.IsValid)

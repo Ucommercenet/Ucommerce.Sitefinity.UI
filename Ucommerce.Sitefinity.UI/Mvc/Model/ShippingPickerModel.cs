@@ -147,7 +147,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendAsSentence(basketPurchaseOrder, "Shipping Method Selection", "checkout");
+			Insights.SendAsSentence(basketPurchaseOrder, "Checkout", "Shipping Method Selection");
 
 			return shipmentPickerViewModel;
 		}
@@ -157,6 +157,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			TransactionLibrary.CreateShipment(createShipmentViewModel.SelectedShippingMethodId,
 				Ucommerce.Constants.DefaultShipmentAddressName, true);
 			TransactionLibrary.ExecuteBasketPipeline();
+
+			Insights.SendBasketAsSentence("Checkout", $"Shipping Method Selected: {createShipmentViewModel.SelectedShippingMethodId}");
 		}
 
 		private string GetNextStepUrl(Guid nextStepId)
