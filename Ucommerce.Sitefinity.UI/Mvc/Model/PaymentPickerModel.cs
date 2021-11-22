@@ -94,7 +94,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendAsSentence(purchaseOrder, "payment", "checkout");
+			Insights.SendAsSentence(purchaseOrder, "Payment Selection", "checkout");
 
 			return paymentPickerViewModel;
 		}

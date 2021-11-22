@@ -147,7 +147,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendAsSentence(basketPurchaseOrder, "shipping", "checkout");
+			Insights.SendAsSentence(basketPurchaseOrder, "Shipping Method Selection", "checkout");
 
 			return shipmentPickerViewModel;
 		}

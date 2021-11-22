@@ -13,12 +13,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 {
 	public interface IInsightsService
 	{
-		void SendAsSentence(Ucommerce.EntitiesV2.Category category, string objectName, string predicate);
-		void SendAsSentence(Ucommerce.Search.Models.Category category, string objectName, string predicate);
-		void SendAsSentence(Ucommerce.EntitiesV2.Product product, string objectName, string predicate);
-		void SendAsSentence(Ucommerce.Search.Models.Product product, string objectName, string predicate);
-		void SendAsSentence(Ucommerce.EntitiesV2.Customer customer, string objectName, string predicate);
-		void SendAsSentence(Ucommerce.EntitiesV2.PurchaseOrder order, string objectName, string predicate);
+		void SendAsSentence(Ucommerce.EntitiesV2.Category category, string predicate, string objectName);
+		void SendAsSentence(Ucommerce.Search.Models.Category category, string predicate, string objectName);
+		void SendAsSentence(Ucommerce.EntitiesV2.Product product, string predicate, string objectName);
+		void SendAsSentence(Ucommerce.Search.Models.Product product, string predicate, string objectName);
+		void SendAsSentence(Ucommerce.EntitiesV2.Customer customer, string predicate, string objectName);
+		void SendAsSentence(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string objectName);
 	}
 
 	public class InsightsService : IInsightsService
@@ -28,47 +28,47 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		private readonly ITransactionLibrary _transactionLibrary = ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 		//private readonly IInteractionManager _interactionManager = ObjectFactory.Instance.Resolve<IInteractionManager>(); // Telerik.Sitefinity.DataIntelligenceConnector
 
-		public void SendAsSentence(Ucommerce.EntitiesV2.Category category, string objectName, string predicate)
+		public void SendAsSentence(Ucommerce.EntitiesV2.Category category, string predicate, string objectName)
 		{
-			var interaction = CreateInteractionForBasket(objectName, predicate);
+			var interaction = CreateInteractionForBasket(predicate, objectName);
 			AddBasketInteractions(interaction);
 			AddCategoryInteractions(interaction, category);
 			ImportInteraction(interaction);
 		}
 
-		public void SendAsSentence(Ucommerce.Search.Models.Category category, string objectName, string predicate)
+		public void SendAsSentence(Ucommerce.Search.Models.Category category, string predicate, string objectName)
 		{
-			var interaction = CreateInteractionForBasket(objectName, predicate);
+			var interaction = CreateInteractionForBasket(predicate, objectName);
 			AddBasketInteractions(interaction);
 			AddCategoryInteractions(interaction, category);
 			ImportInteraction(interaction);
 		}
 
-		public void SendAsSentence(Ucommerce.EntitiesV2.Product product, string objectName, string predicate)
+		public void SendAsSentence(Ucommerce.EntitiesV2.Product product, string predicate, string objectName)
 		{
-			var interaction = CreateInteractionForBasket(objectName, predicate);
+			var interaction = CreateInteractionForBasket(predicate, objectName);
 			AddBasketInteractions(interaction);
 			AddProductInteractions(interaction, product);
 			ImportInteraction(interaction);
 		}
 
-		public void SendAsSentence(Ucommerce.Search.Models.Product product, string objectName, string predicate)
+		public void SendAsSentence(Ucommerce.Search.Models.Product product, string predicate, string objectName)
 		{
-			var interaction = CreateInteractionForBasket(objectName, predicate);
+			var interaction = CreateInteractionForBasket(predicate, objectName);
 			AddBasketInteractions(interaction);
 			AddProductInteractions(interaction, product);
 			ImportInteraction(interaction);
 		}
 
-		public void SendAsSentence(Ucommerce.EntitiesV2.Customer customer, string objectName, string predicate)
+		public void SendAsSentence(Ucommerce.EntitiesV2.Customer customer, string predicate, string objectName)
 		{
-			var interaction = CreateInteractionForBasket(objectName, predicate);
+			var interaction = CreateInteractionForBasket(predicate, objectName);
 			AddBasketInteractions(interaction);
 			AddCustomerInteractions(interaction, customer);
 			ImportInteraction(interaction);
 		}
 
-		public void SendAsSentence(Ucommerce.EntitiesV2.PurchaseOrder order, string objectName, string predicate)
+		public void SendAsSentence(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string objectName)
 		{
 			var interaction = GetInteractionForOrder(objectName, predicate, order);
 			AddOrderInteractions(interaction, order);
@@ -96,7 +96,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			return order;
 		}
 
-		private Interaction GetInteractionForOrder(string objectName, string predicate, Ucommerce.EntitiesV2.PurchaseOrder order)
+		private Interaction GetInteractionForOrder(string predicate, string objectName, Ucommerce.EntitiesV2.PurchaseOrder order)
 		{
 			var subject = order?.OrderGuid.ToString() ?? FakeBasketId();
 			var interaction = new Interaction()
@@ -151,6 +151,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (category == null) return;
 
 			const string prefix = "Category";
+			AddObjectMetaData(interaction, prefix, "CategoryId", category.CategoryId);
+			AddObjectMetaData(interaction, prefix, "CategoryGuid", category.Guid);
 			AddObjectMetaData(interaction, prefix, "Name", category.Name);
 			AddObjectMetaData(interaction, prefix, "DisplayName", category.DisplayName());
 
@@ -167,6 +169,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (category == null) return;
 
 			const string prefix = "Category";
+			AddObjectMetaData(interaction, prefix, "CategoryGuid", category.Guid);
 			AddObjectMetaData(interaction, prefix, "Name", category.Name);
 			AddObjectMetaData(interaction, prefix, "DisplayName", category.DisplayName);
 
@@ -183,11 +186,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (product == null) return;
 
 			const string prefix = "Product";
+			AddObjectMetaData(interaction, prefix, "ProductId", product.ProductId);
+			AddObjectMetaData(interaction, prefix, "ProductGuid", product.Guid);
 			AddObjectMetaData(interaction, prefix, "Name", product.Name);
 			AddObjectMetaData(interaction, prefix, "DisplayName", product.DisplayName());
 
 			foreach (var property in product.ProductProperties)
-				AddObjectMetaData(interaction, prefix, $"Property{property.ProductDefinitionField.Name}", property.Value);
+				AddObjectMetaData(interaction, prefix, $"Property_{property.ProductDefinitionField.Name}", property.Value);
 
 			AddFacets(interaction);
 		}
@@ -199,11 +204,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (product == null) return;
 
 			const string prefix = "Product";
+			AddObjectMetaData(interaction, prefix, "ProductGuid", product.Guid);
 			AddObjectMetaData(interaction, prefix, "Name", product.Name);
 			AddObjectMetaData(interaction, prefix, "DisplayName", product.DisplayName);
 
 			foreach (var property in product.GetUserDefinedFields())
-				AddObjectMetaData(interaction, prefix, $"Property{property.Key}", property.Value);
+				AddObjectMetaData(interaction, prefix, $"Property_{property.Key}", property.Value);
 
 			AddFacets(interaction);
 		}
@@ -217,10 +223,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			const string prefix = "Order";
 			AddObjectMetaData(interaction, prefix, "CultureCode", order.CultureCode);
 			AddObjectMetaData(interaction, prefix, "BasketId", order.BasketId.ToString());
+			AddObjectMetaData(interaction, prefix, "OrderGuid", order.OrderGuid.ToString());
 			AddObjectMetaData(interaction, prefix, "BillingCurrency", order.BillingCurrency.ToString());
 
 			foreach (var property in order.OrderProperties)
-				AddObjectMetaData(interaction, prefix, $"Property{property.Key}", property.Value);
+				AddObjectMetaData(interaction, prefix, $"Property_{property.Key}", property.Value);
 
 			AddAddressInteractions(interaction, order.BillingAddress);
 			AddCustomerInteractions(interaction, order.Customer);
@@ -246,7 +253,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			interaction.SubjectMetadata.Add("Email", address.EmailAddress);
 			interaction.SubjectMetadata.Add("Country", address.Country.Name);
 			interaction.SubjectMetadata.Add("CountryISO", address.Country.TwoLetterISORegionName);
-			interaction.MappedTo.Add(new Mapping("Email", address.EmailAddress));
 		}
 
 		private void AddFacets(Interaction interaction)

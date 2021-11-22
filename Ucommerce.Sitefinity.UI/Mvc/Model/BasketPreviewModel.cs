@@ -85,7 +85,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			basketPreviewViewModel.NextStepUrl = GetNextStepUrl(nextStepId, purchaseOrder.OrderGuid);
 			basketPreviewViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendAsSentence(purchaseOrder, "preview", "checkout");
+			Insights.SendAsSentence(purchaseOrder, "Order Preview", "checkout");
 
 			return basketPreviewViewModel;
 		}

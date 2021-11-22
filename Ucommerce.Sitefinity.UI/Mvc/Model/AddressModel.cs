@@ -89,7 +89,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendAsSentence(purchaseOrder, "address", "checkout");
+			Insights.SendAsSentence(purchaseOrder, "Set Address", "checkout");
 
 			return viewModel;
 		}
