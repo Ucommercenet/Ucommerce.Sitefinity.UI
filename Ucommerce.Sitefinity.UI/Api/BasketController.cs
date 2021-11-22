@@ -8,6 +8,7 @@ using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Constants;
 using Ucommerce.EntitiesV2;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -16,6 +17,7 @@ namespace UCommerce.Sitefinity.UI.Api
 	/// </summary>
 	public class BasketController : ApiController
 	{
+		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
 		public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 		public IMarketingLibrary MarketingLibrary => ObjectFactory.Instance.Resolve<IMarketingLibrary>();
 		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
@@ -105,6 +107,9 @@ namespace UCommerce.Sitefinity.UI.Api
 			}
 
 			TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku, variantSku);
+
+			Insights.SendAsSentence(product, "add to cart", "checkout");
+
 			return Json(this.GetBasketModel());
 		}
 

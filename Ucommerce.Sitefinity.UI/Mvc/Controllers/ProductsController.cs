@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
+using Ucommerce.Api;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
@@ -82,6 +83,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
         public ActionResult Details()
         {
+            
             var productModel = this.ResolveModel();
             string message;
             var parameters = new System.Collections.Generic.Dictionary<string, object>();

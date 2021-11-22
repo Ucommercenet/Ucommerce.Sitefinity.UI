@@ -10,23 +10,25 @@ using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce;
 using Ucommerce.Search.Slugs;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-    /// <summary>
-    /// The Model class of the Cart MVC widget.
-    /// </summary>
-    public class CartModel : ICartModel
+	/// <summary>
+	/// The Model class of the Cart MVC widget.
+	/// </summary>
+	public class CartModel : ICartModel
 	{
 		private Guid productDetailsPageId;
 		private Guid nextStepId;
 		private Guid redirectPageId;
-        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
-        public IMarketingLibrary MarketingLibrary => ObjectFactory.Instance.Resolve<IMarketingLibrary>();
-        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
-        public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
+		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
+		public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+		public IMarketingLibrary MarketingLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<IMarketingLibrary>();
+		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
+		public IUrlService UrlService => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<IUrlService>();
 
-        public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null, Guid? redirectPageId = null)
+		public CartModel(Guid? nextStepId = null, Guid? productDetailsPageId = null, Guid? redirectPageId = null)
 		{
 			this.nextStepId = nextStepId ?? Guid.Empty;
 			this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
@@ -46,7 +48,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			basketVM.OrderLines = GetOrderLineList(basket, this.productDetailsPageId);
 
 			this.GetDiscounts(basketVM, basket);
-            var currencyIsoCode = basket.BillingCurrency.ISOCode;
+			var currencyIsoCode = basket.BillingCurrency.ISOCode;
 			basketVM.OrderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), currencyIsoCode).ToString();
 			basketVM.DiscountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
 				? new Money(basket.DiscountTotal.GetValueOrDefault(), currencyIsoCode).ToString()
@@ -59,20 +61,22 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
 			basketVM.Discounts = basket.Discounts.Select(d => d.CampaignItemName).ToList();
 
+			Insights.SendAsSentence(basket, "cart", "checkout");
+
 			return basketVM;
 		}
 
 		internal static IList<OrderlineViewModel> GetOrderLineList(Ucommerce.EntitiesV2.PurchaseOrder basket, Guid productDetailsPageId)
 		{
-            var CatalogLibrary = ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+			var CatalogLibrary = ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 
-            var result = new List<OrderlineViewModel>();
+			var result = new List<OrderlineViewModel>();
 			foreach (var orderLine in basket.OrderLines)
 			{
 				var product = CatalogLibrary.GetProduct(orderLine.Sku);
 				var imageService = ObjectFactory.Instance.Resolve<IImageService>();
-                var currencyIsoCode = basket.BillingCurrency.ISOCode;
-                var orderLineViewModel = new OrderlineViewModel
+				var currencyIsoCode = basket.BillingCurrency.ISOCode;
+				var orderLineViewModel = new OrderlineViewModel
 				{
 					Quantity = orderLine.Quantity,
 					ProductName = orderLine.ProductName,
@@ -214,8 +218,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			foreach (var orderLine in basket.OrderLines)
 			{
-                var currencyIsoCode = basket.BillingCurrency.ISOCode;
-                var orderLineViewModel = new CartUpdateOrderline();
+				var currencyIsoCode = basket.BillingCurrency.ISOCode;
+				var orderLineViewModel = new CartUpdateOrderline();
 				orderLineViewModel.OrderlineId = orderLine.OrderLineId;
 				orderLineViewModel.Quantity = orderLine.Quantity;
 				orderLineViewModel.Total = new Money(orderLine.Total.GetValueOrDefault(), currencyIsoCode).ToString();
@@ -235,8 +239,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			var basket = TransactionLibrary.GetBasket(false);
 			var updatedBasket = MapOrderline(basket);
 
-            var currencyIsoCode = basket.BillingCurrency.ISOCode;
-            string orderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+			var currencyIsoCode = basket.BillingCurrency.ISOCode;
+			string orderTotal = new Money(basket.OrderTotal.GetValueOrDefault(), currencyIsoCode).ToString();
 			string discountTotal = basket.DiscountTotal.GetValueOrDefault() > 0
 										? new Money(basket.DiscountTotal.GetValueOrDefault(), currencyIsoCode).ToString()
 										: "";
@@ -267,16 +271,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		}
 
 		private static string GetProductUrl(Ucommerce.Search.Models.Product product, Guid detailPageId)
-        {
-            var CatalogContext = ObjectFactory.Instance.Resolve<ICatalogContext>();
-            var UrlService = ObjectFactory.Instance.Resolve<IUrlService>();
+		{
+			var CatalogContext = ObjectFactory.Instance.Resolve<ICatalogContext>();
+			var UrlService = ObjectFactory.Instance.Resolve<IUrlService>();
 
-            if (detailPageId == Guid.Empty)
-            {
-                return UrlService.GetUrl(CatalogContext.CurrentCatalog, product);
-            }
+			if (detailPageId == Guid.Empty)
+			{
+				return UrlService.GetUrl(CatalogContext.CurrentCatalog, product);
+			}
 
-            var baseUrl = Pages.UrlResolver.GetPageNodeUrl(detailPageId);
+			var baseUrl = Pages.UrlResolver.GetPageNodeUrl(detailPageId);
 
 			string catUrl;
 			var productCategory = product.Categories.FirstOrDefault();
@@ -286,8 +290,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			}
 			else
 			{
-                var category = CatalogContext.CurrentCategories.FirstOrDefault(x => x.Guid == productCategory);
-                catUrl = CategoryModel.GetCategoryPath(category);
+				var category = CatalogContext.CurrentCategories.FirstOrDefault(x => x.Guid == productCategory);
+				catUrl = CategoryModel.GetCategoryPath(category);
 			}
 
 			var rawtUrl = string.Format("{0}/{1}", catUrl, product.Slug);

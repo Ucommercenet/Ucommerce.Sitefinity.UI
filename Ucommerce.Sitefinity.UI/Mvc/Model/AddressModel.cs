@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Localization;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Resources;
 using Ucommerce.Api;
@@ -17,6 +18,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		private Guid nextStepId;
 		private Guid previousStepId;
+		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
         public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
         private readonly IQueryable<Ucommerce.EntitiesV2.Country> _countries;
 
@@ -86,6 +88,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
+
+			Insights.SendAsSentence(purchaseOrder, "address", "checkout");
 
 			return viewModel;
 		}
