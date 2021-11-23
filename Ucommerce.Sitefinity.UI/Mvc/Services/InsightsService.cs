@@ -2,7 +2,10 @@
 using System.Linq;
 using System.Web;
 using Telerik.DigitalExperienceCloud.Client;
-//using Telerik.Sitefinity.DataIntelligenceConnector.Managers;
+using Telerik.Sitefinity.DataIntelligenceConnector.Managers;
+using Telerik.Sitefinity.Services;
+using Telerik.Sitefinity.TrackingConsent;
+using Telerik.Sitefinity.TrackingConsent.Configuration;
 using Ucommerce.Api;
 using Ucommerce.Extensions;
 using Ucommerce.Infrastructure;
@@ -24,14 +27,30 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 	public class InsightsService : IInsightsService
 	{
-		// Name:Sitefinity.Ucommerce.UI DEV
-		private const string dataCenterKey = "564712e4-50f1-caa1-e877-0afdd4b08099";
 		private readonly ITransactionLibrary _transactionLibrary = ObjectFactory.Instance.Resolve<ITransactionLibrary>();
-		//private readonly IInteractionManager _interactionManager = ObjectFactory.Instance.Resolve<IInteractionManager>(); // Telerik.Sitefinity.DataIntelligenceConnector
+
+		private IInteractionManager _interactionManager;
+		public IInteractionManager InteractionManager
+		{
+			get
+			{
+				if (_interactionManager != null) return _interactionManager;
+
+				var moduleEnabled = Telerik.Sitefinity.Abstractions.ObjectFactory.IsTypeRegistered<IInteractionManager>();
+				var canTrack = TrackingConsentManager.CanTrackCurrentUser();
+
+				if (moduleEnabled && canTrack)
+					_interactionManager = Telerik.Sitefinity.Abstractions.ObjectFactory.Resolve<IInteractionManager>(); // Telerik.Sitefinity.DataIntelligenceConnector
+
+				return null;
+			}
+		}
 
 		public void SendAsSentence(Ucommerce.EntitiesV2.Category category, string predicate, string objectName)
 		{
 			var interaction = CreateInteractionForBasket(predicate, objectName);
+			if (interaction == null) return;
+
 			AddBasketInteractions(interaction);
 			AddCategoryInteractions(interaction, category);
 			ImportInteraction(interaction);
@@ -40,6 +59,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		public void SendAsSentence(Ucommerce.Search.Models.Category category, string predicate, string objectName)
 		{
 			var interaction = CreateInteractionForBasket(predicate, objectName);
+			if (interaction == null) return;
+
 			AddBasketInteractions(interaction);
 			AddCategoryInteractions(interaction, category);
 			ImportInteraction(interaction);
@@ -48,6 +69,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		public void SendAsSentence(Ucommerce.EntitiesV2.Product product, string predicate, string objectName)
 		{
 			var interaction = CreateInteractionForBasket(predicate, objectName);
+			if (interaction == null) return;
+
 			AddBasketInteractions(interaction);
 			AddProductInteractions(interaction, product);
 			ImportInteraction(interaction);
@@ -56,6 +79,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		public void SendAsSentence(Ucommerce.Search.Models.Product product, string predicate, string objectName)
 		{
 			var interaction = CreateInteractionForBasket(predicate, objectName);
+			if (interaction == null) return;
+
 			AddBasketInteractions(interaction);
 			AddProductInteractions(interaction, product);
 			ImportInteraction(interaction);
@@ -64,6 +89,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		public void SendAsSentence(Ucommerce.EntitiesV2.Customer customer, string predicate, string objectName)
 		{
 			var interaction = CreateInteractionForBasket(predicate, objectName);
+			if (interaction == null) return;
+
 			AddBasketInteractions(interaction);
 			AddCustomerInteractions(interaction, customer);
 			ImportInteraction(interaction);
@@ -77,6 +104,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		public void SendAsSentence(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string objectName)
 		{
 			var interaction = GetInteractionForOrder(predicate, objectName, order);
+			if (interaction == null) return;
+
 			AddOrderInteractions(interaction, order);
 			ImportInteraction(interaction);
 		}
@@ -104,7 +133,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 		private Interaction GetInteractionForOrder(string predicate, string objectName, Ucommerce.EntitiesV2.PurchaseOrder order)
 		{
-			var subject = order?.OrderGuid.ToString() ?? FakeBasketId();
+			if (InteractionManager == null) return null;
+
+			var subject = InteractionManager.GetTrackingId(); // order?.OrderGuid.ToString() ?? FakeBasketId();
 			var interaction = new Interaction()
 			{
 				Subject = subject, // TODO: Change this to the tracking cookie from the API IInteractionManager
