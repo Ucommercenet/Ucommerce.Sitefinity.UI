@@ -11,6 +11,7 @@ using UCommerce.Sitefinity.UI.Search;
 using Ucommerce.Infrastructure;
 using Ucommerce.Search.Extensions;
 using System.Web;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -21,6 +22,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
 		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
 
 		// TODO: Check if we're manually sorting the products (as we do on the product listing page)
 		public virtual IList<FacetViewModel> CreateViewModel()
@@ -30,6 +32,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			if (CatalogContext.CurrentCategory != null)
 			{
 				currentCategory = Ucommerce.EntitiesV2.Category.FirstOrDefault(c => c.Name == CatalogContext.CurrentCategory.Name);
+				Insights.SendAsSentence(currentCategory, "Filtered Product List", currentCategory.Name);
 				return this.GetAllFacets(currentCategory);
 			}
 
