@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using Telerik.DigitalExperienceCloud.Client;
 using Telerik.Sitefinity.DataIntelligenceConnector.Managers;
@@ -146,31 +148,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			return interaction;
 		}
 
-		private string FakeBasketId()
-		{
-			var cookieName = "tempBasketId";
-
-			var basketId = HttpContext.Current.Request.Cookies[cookieName]?.Value;
-			if (!string.IsNullOrWhiteSpace(basketId)) return basketId;
-
-			basketId = Guid.NewGuid().ToString();
-
-			var cookie = new HttpCookie(cookieName)
-			{
-				Value = basketId
-			};
-			cookie.Expires.Add(TimeSpan.FromDays(30));
-			HttpContext.Current.Response.Cookies.Add(cookie);
-
-			return basketId;
-		}
-
-		private static void ImportInteraction(Interaction interaction)
+		private void ImportInteraction(Interaction interaction)
 		{
 			if (interaction == null) return;
 
-			var interactionClient = new InteractionClient(dataCenterKey);
-			interactionClient.ImportInteraction("ucommerce", interaction).Wait();
+			_interactionManager.SendInteraction(interaction);
 		}
 
 		private void AddBasketInteractions(Interaction interaction)
@@ -188,8 +170,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (category == null) return;
 
 			const string prefix = "Category";
-			AddObjectMetaData(interaction, prefix, "CategoryId", category.CategoryId);
-			AddObjectMetaData(interaction, prefix, "CategoryGuid", category.Guid);
+			AddBaseSiteInfo(interaction, category.Guid, "Product List");
+			AddObjectMetaData(interaction, prefix, "Id", category.CategoryId);
 			AddObjectMetaData(interaction, prefix, "Name", category.Name);
 			AddObjectMetaData(interaction, prefix, "DisplayName", category.DisplayName());
 
@@ -206,7 +188,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (category == null) return;
 
 			const string prefix = "Category";
-			AddObjectMetaData(interaction, prefix, "CategoryGuid", category.Guid);
+			AddBaseSiteInfo(interaction, category.Guid, "Product List");
+			AddObjectMetaData(interaction, prefix, "Guid", category.Guid);
 			AddObjectMetaData(interaction, prefix, "Name", category.Name);
 			AddObjectMetaData(interaction, prefix, "DisplayName", category.DisplayName);
 
@@ -223,13 +206,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (product == null) return;
 
 			const string prefix = "Product";
-			AddObjectMetaData(interaction, prefix, "ProductId", product.ProductId);
-			AddObjectMetaData(interaction, prefix, "ProductGuid", product.Guid);
-			AddObjectMetaData(interaction, prefix, "Name", product.Name);
-			AddObjectMetaData(interaction, prefix, "DisplayName", product.DisplayName());
+			AddBaseSiteInfo(interaction, product.Guid, "Product");
+			AddObjectHierarchyData(interaction, "Id", product.ProductId);
+			AddObjectHierarchyData(interaction, "Guid", product.Guid);
+			AddObjectHierarchyData(interaction, "ProductDefinition", product.ProductDefinition.Name);
+			AddObjectHierarchyData(interaction, "Sku", product.Sku);
+			AddObjectHierarchyData(interaction, "VariantSku", product.VariantSku);
+			AddObjectHierarchyData(interaction, "Name", product.Name);
+			AddObjectHierarchyData(interaction, "DisplayName", product.DisplayName());
 
 			foreach (var property in product.ProductProperties)
-				AddObjectMetaData(interaction, prefix, $"Property_{property.ProductDefinitionField.Name}", property.Value);
+				AddObjectHierarchyData(interaction, $"Property_{property.ProductDefinitionField.Name}", property.Value);
 
 			AddFacets(interaction);
 		}
@@ -241,14 +228,27 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (product == null) return;
 
 			const string prefix = "Product";
-			AddObjectMetaData(interaction, prefix, "ProductGuid", product.Guid);
-			AddObjectMetaData(interaction, prefix, "Name", product.Name);
-			AddObjectMetaData(interaction, prefix, "DisplayName", product.DisplayName);
+			AddBaseSiteInfo(interaction, product.Guid, "Product");
+			AddObjectHierarchyData(interaction, "ProductGuid", product.Guid);
+			// TODO: AddObjectHierarchyData(interaction, prefix, "ProductDefinition", product.ProductDefinition.Name);
+			AddObjectHierarchyData(interaction, "Sku", product.Sku);
+			AddObjectHierarchyData(interaction, "VariantSku", product.VariantSku);
+			AddObjectHierarchyData(interaction, "Name", product.Name);
+			AddObjectHierarchyData(interaction, "DisplayName", product.DisplayName);
 
 			foreach (var property in product.GetUserDefinedFields())
-				AddObjectMetaData(interaction, prefix, $"Property_{property.Key}", property.Value);
+				AddObjectHierarchyData(interaction, $"Property_{property.Key}", property.Value);
 
 			AddFacets(interaction);
+		}
+
+		private static void AddBaseSiteInfo(Interaction interaction, Guid guid, string contentType)
+		{
+			AddObjectMetaData(interaction, string.Empty, "Id", guid);
+			AddObjectMetaData(interaction, string.Empty, "SiteName", SystemManager.CurrentContext.CurrentSite.Name);
+			AddObjectMetaData(interaction, string.Empty, "ContentType", contentType);
+			AddObjectMetaData(interaction, string.Empty, "SFDataProviderName", "Ucommerce");
+			AddObjectMetaData(interaction, string.Empty, "Language", System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag);
 		}
 
 		private static void AddOrderInteractions(Interaction interaction, Ucommerce.EntitiesV2.PurchaseOrder order)
@@ -258,13 +258,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (order == null) return;
 
 			const string prefix = "Order";
-			AddObjectMetaData(interaction, prefix, "CultureCode", order.CultureCode);
-			AddObjectMetaData(interaction, prefix, "BasketId", order.BasketId.ToString());
-			AddObjectMetaData(interaction, prefix, "OrderGuid", order.OrderGuid.ToString());
-			AddObjectMetaData(interaction, prefix, "BillingCurrency", order.BillingCurrency.ToString());
+			AddObjectHierarchyData(interaction, "CultureCode", order.CultureCode);
+			AddObjectHierarchyData(interaction, "BasketId", order.BasketId.ToString());
+			AddObjectHierarchyData(interaction, "OrderGuid", order.OrderGuid.ToString());
+			AddObjectHierarchyData(interaction, "BillingCurrency", order.BillingCurrency.ISOCode);
 
 			foreach (var property in order.OrderProperties)
-				AddObjectMetaData(interaction, prefix, $"Property_{property.Key}", property.Value);
+				AddObjectHierarchyData(interaction, $"Property_{property.Key}", property.Value);
 
 			AddAddressInteractions(interaction, order.BillingAddress);
 			AddCustomerInteractions(interaction, order.Customer);
@@ -301,10 +301,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Facet";
 			foreach (var facet in facets)
-				AddFacetValues(interaction, prefix, facet);
+				AddFacetValues(interaction, facet);
 		}
 
-		private static void AddFacetValues(Interaction interaction, string prefix, Facet facet)
+		private static void AddFacetValues(Interaction interaction, Facet facet)
 		{
 			if (interaction == null) return;
 
@@ -313,7 +313,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			//	AddSubjectMetaData(interaction, prefix, facet.Name, value.Value);
 			// AddObjectMetaData(interaction, prefix, facet.Name, string.Join("|", facet.FacetValues.Select(f => f.Value)));
 			foreach (var value in facet.FacetValues)
-				AddObjectMetaData(interaction, prefix, $"{facet.Name}_{value.Value}".ToLower(), "true");
+				AddObjectHierarchyData(interaction, facet.Name.ToLower(), value.Value.ToLower());
 		}
 
 		private static void AddObjectMetaData(Interaction interaction, string prefix, string key, object valueToAdd)
@@ -326,7 +326,36 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			if (string.IsNullOrWhiteSpace(value)) return;
 
-			interaction.ObjectMetadata.Add($"{prefix}{key}", value);
+			var dataKey = $"{prefix}{key}";
+			if (interaction.ObjectMetadata.ContainsKey(dataKey))
+				interaction.ObjectMetadata.Add(dataKey, value);
+			else
+				interaction.ObjectMetadata[dataKey] = value;
+		}
+
+		private static void AddObjectHierarchyData(Interaction interaction, string key, object valueToAdd)
+		{
+			if (interaction == null) return;
+
+			if (valueToAdd == null) return;
+
+			var value = valueToAdd.ToString();
+
+			if (string.IsNullOrWhiteSpace(value)) return;
+
+			using (var md5 = MD5.Create())
+			{
+				var hash = md5.ComputeHash(Encoding.Default.GetBytes($"{key}_{value}".ToLower().Trim()));
+				var guid = new Guid(hash);
+
+				var hierarchy = new HierarchicalMetadata
+				{
+					{ "Id", guid.ToString() },
+					{ "Title", $"{key}_{value}" }
+				};
+				interaction.ObjectMetadata.Hierarchies.Add(hierarchy);
+			}
+
 		}
 	}
 }
