@@ -91,7 +91,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.PagingUrlTemplate = this.GetPagingUrlTemplate(currentCategory);
 			viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
-			Insights.SendAsSentence(currentCategory, "Product List", currentCategory.Name);
+			Insights.SendInteraction(currentCategory, "Product List", currentCategory.Name);
 
 			return viewModel;
 		}
@@ -320,7 +320,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			productDetailViewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
-			Insights.SendAsSentence(currentProduct, "Product View", $"{currentProduct.Name} ({currentProduct.Sku})");
+			Insights.SendInteraction(currentProduct, "Product View", $"{currentProduct.Name} ({currentProduct.Sku})");
 
 			return productDetailViewModel;
 		}

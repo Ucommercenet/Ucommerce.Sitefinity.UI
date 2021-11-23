@@ -61,7 +61,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
 			basketVM.Discounts = basket.Discounts.Select(d => d.CampaignItemName).ToList();
 
-			Insights.SendAsSentence(basket, "Checkout", "View Cart");
+			Insights.SendInteraction(basket, "Checkout", "View Cart");
 
 			return basketVM;
 		}

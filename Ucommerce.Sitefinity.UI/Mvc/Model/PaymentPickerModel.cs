@@ -94,7 +94,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendAsSentence(purchaseOrder, "Checkout", "View Payment Options");
+			Insights.SendInteraction(purchaseOrder, "Checkout", "View Payment Options");
 
 			return paymentPickerViewModel;
 		}
@@ -127,7 +127,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			TransactionLibrary.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
 			TransactionLibrary.ExecuteBasketPipeline();
 
-			Insights.SendBasketAsSentence("Checkout", $"Payment Method Selected {createPaymentViewModel.SelectedPaymentMethodId}");
+			Insights.SendBasketInteraction("Checkout", $"Payment Method Selected {createPaymentViewModel.SelectedPaymentMethodId}");
 		}
 
 		private string GetNextStepUrl(Guid nextStepId)

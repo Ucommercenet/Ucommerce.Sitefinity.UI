@@ -6,7 +6,6 @@ using UCommerce.Sitefinity.UI.Mvc.Controllers;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
 using Ucommerce.Api;
-using Ucommerce.Search;
 using UCommerce.Sitefinity.UI.Search;
 using Ucommerce.Infrastructure;
 using Ucommerce.Search.Extensions;
@@ -32,7 +31,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			if (CatalogContext.CurrentCategory != null)
 			{
 				currentCategory = Ucommerce.EntitiesV2.Category.FirstOrDefault(c => c.Name == CatalogContext.CurrentCategory.Name);
-				Insights.SendAsSentence(currentCategory, "Filtered Product List", currentCategory.Name);
+				Insights.SendInteraction(currentCategory, "Filtered Product List", currentCategory.Name);
 				return this.GetAllFacets(currentCategory);
 			}
 
