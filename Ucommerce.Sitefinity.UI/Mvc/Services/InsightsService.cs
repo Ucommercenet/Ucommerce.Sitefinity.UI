@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using Telerik.DigitalExperienceCloud.Client;
+using Telerik.Sitefinity.DataIntelligenceConnector.Configuration;
 using Telerik.Sitefinity.DataIntelligenceConnector.Managers;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.TrackingConsent;
@@ -38,12 +39,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 				if (_interactionManager != null) return _interactionManager;
 
 				var moduleEnabled = Telerik.Sitefinity.Abstractions.ObjectFactory.IsTypeRegistered<IInteractionManager>();
+				if (!moduleEnabled) return null;
+
 				var canTrack = TrackingConsentManager.CanTrackCurrentUser();
+				if (!canTrack)
+					return null;
 
-				if (moduleEnabled && canTrack)
-					_interactionManager = Telerik.Sitefinity.Abstractions.ObjectFactory.Resolve<IInteractionManager>(); // Telerik.Sitefinity.DataIntelligenceConnector
+				var insightConfigWrapper = Telerik.Sitefinity.Abstractions.ObjectFactory.Resolve<IDataIntelligenceConnectorConfigWrapper>();
+				if (insightConfigWrapper?.HasValidConnectionForCurrentSite ?? false)
+					_interactionManager = Telerik.Sitefinity.Abstractions.ObjectFactory.Resolve<IInteractionManager>();
 
-				return null;
+				return _interactionManager;
 			}
 		}
 
