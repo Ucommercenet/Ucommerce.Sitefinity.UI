@@ -176,12 +176,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Category";
 			AddBaseSiteInfo(interaction, category.Guid, "Product List");
-			AddObjectMetaData(interaction, prefix, "Id", category.CategoryId);
-			AddObjectMetaData(interaction, prefix, "Name", category.Name);
-			AddObjectMetaData(interaction, prefix, "DisplayName", category.DisplayName());
+			AddObjectHierarchyData(interaction, "CategoryId", category.CategoryId);
+			AddObjectHierarchyData(interaction, "CategoryName", category.Name);
+			AddObjectHierarchyData(interaction, "CategoryDisplayName", category.DisplayName());
 
 			foreach (var property in category.CategoryProperties)
-				AddObjectMetaData(interaction, prefix, $"Property{property.DefinitionField.Name}", property.Value);
+				AddObjectMetaData(interaction, prefix, property.DefinitionField.Name, property.Value);
 
 			AddFacets(interaction);
 		}
@@ -194,12 +194,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Category";
 			AddBaseSiteInfo(interaction, category.Guid, "Product List");
-			AddObjectMetaData(interaction, prefix, "Guid", category.Guid);
-			AddObjectMetaData(interaction, prefix, "Name", category.Name);
-			AddObjectMetaData(interaction, prefix, "DisplayName", category.DisplayName);
+			AddObjectHierarchyData(interaction, "CategoryName", category.Name);
+			AddObjectHierarchyData(interaction, "CategoryDisplayName", category.DisplayName);
 
 			foreach (var property in category.GetUserDefinedFields())
-				AddObjectMetaData(interaction, prefix, $"Property{property.Key}", property.Value);
+				AddObjectMetaData(interaction, prefix, property.Key, property.Value);
 
 			AddFacets(interaction);
 		}
@@ -213,15 +212,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			const string prefix = "Product";
 			AddBaseSiteInfo(interaction, product.Guid, "Product");
 			AddObjectHierarchyData(interaction, "Id", product.ProductId);
-			AddObjectHierarchyData(interaction, "Guid", product.Guid);
 			AddObjectHierarchyData(interaction, "ProductDefinition", product.ProductDefinition.Name);
 			AddObjectHierarchyData(interaction, "Sku", product.Sku);
 			AddObjectHierarchyData(interaction, "VariantSku", product.VariantSku);
-			AddObjectHierarchyData(interaction, "Name", product.Name);
-			AddObjectHierarchyData(interaction, "DisplayName", product.DisplayName());
+			AddObjectHierarchyData(interaction, "ProductName", product.Name);
+			AddObjectHierarchyData(interaction, "ProductDisplayName", product.DisplayName());
 
 			foreach (var property in product.ProductProperties)
-				AddObjectHierarchyData(interaction, $"Property_{property.ProductDefinitionField.Name}", property.Value);
+				AddObjectHierarchyData(interaction, property.ProductDefinitionField.Name, property.Value);
 
 			AddFacets(interaction);
 		}
@@ -238,11 +236,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			// TODO: AddObjectHierarchyData(interaction, prefix, "ProductDefinition", product.ProductDefinition.Name);
 			AddObjectHierarchyData(interaction, "Sku", product.Sku);
 			AddObjectHierarchyData(interaction, "VariantSku", product.VariantSku);
-			AddObjectHierarchyData(interaction, "Name", product.Name);
-			AddObjectHierarchyData(interaction, "DisplayName", product.DisplayName);
+			AddObjectHierarchyData(interaction, "ProductName", product.Name);
+			AddObjectHierarchyData(interaction, "ProductDisplayName", product.DisplayName);
 
 			foreach (var property in product.GetUserDefinedFields())
-				AddObjectHierarchyData(interaction, $"Property_{property.Key}", property.Value);
+				AddObjectHierarchyData(interaction, property.Key, property.Value);
 
 			AddFacets(interaction);
 		}
@@ -348,19 +346,32 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			if (string.IsNullOrWhiteSpace(value)) return;
 
+			var valueGuid = CalculateHash($"{key}_{value}");
+			var parentGuid = CalculateHash(key);
+
+			var hierarchy = new HierarchicalMetadata
+				{
+					{ "Id", valueGuid },
+					{ "Title", $"{value}" }
+				};
+
+			hierarchy.Parent = new HierarchicalMetadata()
+					{
+						{ "Id", parentGuid },
+						{ "Title", $"{key}" }
+					};
+			interaction.ObjectMetadata.Hierarchies.Add(hierarchy);
+
+		}
+
+		private static string CalculateHash(string valueToHash)
+		{
 			using (var md5 = MD5.Create())
 			{
-				var hash = md5.ComputeHash(Encoding.Default.GetBytes($"{key}_{value}".ToLower().Trim()));
+				var hash = md5.ComputeHash(Encoding.Default.GetBytes(valueToHash.ToLower().Trim()));
 				var guid = new Guid(hash);
-
-				var hierarchy = new HierarchicalMetadata
-				{
-					{ "Id", guid.ToString() },
-					{ "Title", $"{key}_{value}" }
-				};
-				interaction.ObjectMetadata.Hierarchies.Add(hierarchy);
+				return guid.ToString();
 			}
-
 		}
 	}
 }
