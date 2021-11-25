@@ -91,7 +91,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.PagingUrlTemplate = this.GetPagingUrlTemplate(currentCategory);
 			viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
-			Insights.SendInteraction(currentCategory, "Product List", currentCategory.Name);
+			if (currentCategory != null)
+				Insights.SendInteraction(currentCategory, "Product List", currentCategory.Name);
 
 			return viewModel;
 		}
