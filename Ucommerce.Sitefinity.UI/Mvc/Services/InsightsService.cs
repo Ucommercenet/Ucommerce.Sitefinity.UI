@@ -8,6 +8,7 @@ using Telerik.Sitefinity.DataIntelligenceConnector.Configuration;
 using Telerik.Sitefinity.DataIntelligenceConnector.Managers;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.TrackingConsent;
+using Telerik.Sitefinity.Web;
 using Ucommerce.Api;
 using Ucommerce.Extensions;
 using Ucommerce.Infrastructure;
@@ -180,6 +181,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			AddObjectHierarchyData(interaction, "CategoryName", category.Name);
 			AddObjectHierarchyData(interaction, "CategoryDisplayName", category.DisplayName());
 
+			interaction.ObjectMetadata.Title = category.DisplayName();
+			interaction.ObjectMetadata.CanonicalTitle = category.Name;
+
 			foreach (var property in category.CategoryProperties)
 				AddObjectMetaData(interaction, prefix, property.DefinitionField.Name, property.Value);
 
@@ -196,6 +200,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			AddBaseSiteInfo(interaction, category.Guid, "Product List");
 			AddObjectHierarchyData(interaction, "CategoryName", category.Name);
 			AddObjectHierarchyData(interaction, "CategoryDisplayName", category.DisplayName);
+
+			interaction.ObjectMetadata.Title = category.DisplayName;
+			interaction.ObjectMetadata.CanonicalTitle = category.Name;
 
 			foreach (var property in category.GetUserDefinedFields())
 				AddObjectMetaData(interaction, prefix, property.Key, property.Value);
@@ -218,6 +225,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			AddObjectHierarchyData(interaction, "ProductName", product.Name);
 			AddObjectHierarchyData(interaction, "ProductDisplayName", product.DisplayName());
 
+			interaction.ObjectMetadata.Title = product.DisplayName();
+			interaction.ObjectMetadata.CanonicalTitle = product.Name;
+
 			foreach (var property in product.ProductProperties)
 				AddObjectHierarchyData(interaction, property.ProductDefinitionField.Name, property.Value);
 
@@ -239,6 +249,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			AddObjectHierarchyData(interaction, "ProductName", product.Name);
 			AddObjectHierarchyData(interaction, "ProductDisplayName", product.DisplayName);
 
+			interaction.ObjectMetadata.Title = product.DisplayName;
+			interaction.ObjectMetadata.CanonicalTitle = product.Name;
+
 			foreach (var property in product.GetUserDefinedFields())
 				AddObjectHierarchyData(interaction, property.Key, property.Value);
 
@@ -247,11 +260,42 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 		private static void AddBaseSiteInfo(Interaction interaction, Guid guid, string contentType)
 		{
-			AddObjectMetaData(interaction, string.Empty, "Id", guid);
-			AddObjectMetaData(interaction, string.Empty, "SiteName", SystemManager.CurrentContext.CurrentSite.Name);
-			AddObjectMetaData(interaction, string.Empty, "ContentType", contentType);
-			AddObjectMetaData(interaction, string.Empty, "SFDataProviderName", "Ucommerce");
-			AddObjectMetaData(interaction, string.Empty, "Language", System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag);
+			interaction.ObjectMetadata.Id = guid.ToString();
+			interaction.ObjectMetadata.ContentType = contentType;
+
+			var currentSite = SystemManager.CurrentContext.CurrentSite;
+			interaction.ObjectMetadata.SiteName = currentSite.Name;
+
+			interaction.ObjectMetadata.Add("SFDataProviderName", "Ucommerce");
+
+			if (SystemManager.CurrentContext.CurrentSite.Cultures.Length > 1)
+			{
+				// provide language if site is multilingual 
+				interaction.ObjectMetadata.Language = SystemManager.CurrentContext.Culture.Name;
+			}
+
+			var pageUrl = SystemManager.CurrentHttpContext?.Request?.Url?.AbsoluteUri ?? string.Empty;
+
+			if (string.IsNullOrWhiteSpace(pageUrl)) return;
+
+			var pagePath = new Uri(pageUrl).AbsolutePath;
+			pagePath = HttpUtility.UrlDecode(pagePath);
+
+			interaction.ObjectMetadata.ReferrerUrl = pageUrl;
+
+			var pageSiteNode = FindSiteMapNode(pagePath);
+			if (pageSiteNode == null) return;
+
+			var pageId = pageSiteNode.Id.ToString();
+			interaction.ObjectMetadata.PageId = pageId;
+			interaction.ObjectMetadata.ReferrerId = pageId;
+		}
+
+		private static PageSiteNode FindSiteMapNode(string pageUrl)
+		{
+			var siteMapProvider = SiteMapBase.GetCurrentProvider();
+			var pageSiteNode = siteMapProvider.FindSiteMapNode(pageUrl) as PageSiteNode;
+			return pageSiteNode;
 		}
 
 		private static void AddOrderInteractions(Interaction interaction, Ucommerce.EntitiesV2.PurchaseOrder order)
