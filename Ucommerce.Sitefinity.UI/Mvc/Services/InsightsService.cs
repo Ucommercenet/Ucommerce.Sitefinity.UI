@@ -33,6 +33,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		private readonly ITransactionLibrary _transactionLibrary = ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
 		private IInteractionManager _interactionManager;
+
 		public IInteractionManager InteractionManager
 		{
 			get
@@ -42,9 +43,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 				var moduleEnabled = Telerik.Sitefinity.Abstractions.ObjectFactory.IsTypeRegistered<IInteractionManager>();
 				if (!moduleEnabled) return null;
 
-				var canTrack = TrackingConsentManager.CanTrackCurrentUser();
-				if (!canTrack)
+				try
+				{
+					var canTrack = TrackingConsentManager.CanTrackCurrentUser();
+					if (!canTrack)
+						return null;
+				}
+				catch (Exception e)
+				{
 					return null;
+				}
 
 				var insightConfigWrapper = Telerik.Sitefinity.Abstractions.ObjectFactory.Resolve<IDataIntelligenceConnectorConfigWrapper>();
 				if (insightConfigWrapper?.HasValidConnectionForCurrentSite ?? false)
@@ -143,11 +151,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		{
 			if (InteractionManager == null) return null;
 
-			var subject = InteractionManager.GetTrackingId(); // order?.OrderGuid.ToString() ?? FakeBasketId();
+			var subject = InteractionManager.GetTrackingId();
 			var interaction = new Interaction()
 			{
-				Subject = subject, // TODO: Change this to the tracking cookie from the API IInteractionManager
-								   //Subject = _interactionManager.GetTrackingId(),
+				Subject = subject,
 				Predicate = predicate,
 				Object = objectName
 			};
