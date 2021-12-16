@@ -10,103 +10,101 @@ using Ucommerce.Search.Models;
 
 namespace UCommerce.Sitefinity.UI.Mvc
 {
-    /// <summary>
-    /// Action attribute class that handles the initilization of the Catalog Context.
-    /// </summary>
-    public class ContextResolverAttribute : ActionFilterAttribute, IActionFilter
-    {
-        public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
-        public IIndex<Category> CategoryIndex => ObjectFactory.Instance.Resolve<IIndex<Category>>();
-        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+	/// <summary>
+	/// Action attribute class that handles the initilization of the Catalog Context.
+	/// </summary>
+	public class ContextResolverAttribute : ActionFilterAttribute, IActionFilter
+	{
+		public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
+		public IIndex<Category> CategoryIndex => ObjectFactory.Instance.Resolve<IIndex<Category>>();
+		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] == null || (bool)SystemManager.CurrentHttpContext.Items[contextInitializedKey] == false)
-            {
-                List<string> urlSegments = null;
+		public override void OnActionExecuting(ActionExecutingContext filterContext)
+		{
+			if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] != null && (bool)SystemManager.CurrentHttpContext.Items[contextInitializedKey] != false) return;
 
-                if (SystemManager.CurrentHttpContext.Request.Url != null)
-                {
-                    urlSegments = SystemManager.CurrentHttpContext.Request.Url.Segments
-                        .Select(i => System.Web.HttpUtility.UrlDecode(i.Replace("/", string.Empty)))
-                        .ToList();
-                }
-                else
-                {
-                    var currentNode = SiteMapBase.GetActualCurrentNode();
+			List<string> urlSegments = null;
 
-                    if (currentNode != null)
-                    {
-                        urlSegments = currentNode.Url.Split('/')
-                            .Select(i => System.Web.HttpUtility.UrlDecode(i))
-                            .ToList();
-                    }
-                }
+			var currentUrl = SystemManager.CurrentHttpContext.Request.RawUrl;
 
-                if (urlSegments != null)
-                {
-                    this.ResolveCurrentProduct(urlSegments);
-                    this.ResolveCurrentCategory(urlSegments);
-                }
+			// NOTE: There are a few urls that aren't relevant
+			if (currentUrl?.Contains("/rest-api/") ?? false) return;
 
-                if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] == null)
-                {
-                    SystemManager.CurrentHttpContext.Items.Add(contextInitializedKey, true); 
-                }
-                else
-                {
-                    SystemManager.CurrentHttpContext.Items[contextInitializedKey] = true;
-                }
-            }
-        }
+			if (!string.IsNullOrWhiteSpace(currentUrl))
+			{
+				urlSegments = SystemManager.CurrentHttpContext.Request.RawUrl.Split('/')
+					.Select(i => System.Web.HttpUtility.UrlDecode(i.Replace("/", string.Empty)))
+					.ToList();
+			}
+			else
+			{
+				var currentNode = SiteMapBase.GetActualCurrentNode();
 
-        private void ResolveCurrentProduct(List<string> urlSegments)
-        {
-            if (CatalogContext.CurrentProduct == null)
-            {
-                var products = ProductIndex.Find()
-                    .Where(p => urlSegments.Contains(p.Slug.ToString()))
-                    .ToList();
+				if (currentNode != null)
+				{
+					urlSegments = currentNode.Url.Split('/')
+						.Select(System.Web.HttpUtility.UrlDecode)
+						.ToList();
+				}
+			}
 
-                if (products != null)
-                {
-                    for (int i = urlSegments.Count - 1; i >= 0; i--)
-                    {
-                        var product = products.FirstOrDefault(p => urlSegments.Contains(p.Slug));
-                        if (product != null)
-                        {
-                            CatalogContext.CurrentProduct = product;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+			if (urlSegments != null)
+			{
+				this.ResolveCurrentProduct(urlSegments);
+				this.ResolveCurrentCategory(urlSegments);
+			}
 
-        private void ResolveCurrentCategory(List<string> urlSegments)
-        {
-            if (CatalogContext.CurrentCategory == null)
-            {
-                var categories = CategoryIndex.Find()
-                    .Where(c => urlSegments.Contains(c.Name.ToString()) && c.ProductCatalog == CatalogContext.CurrentCatalog.Guid)
-                    .ToList();
+			if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] == null)
+			{
+				SystemManager.CurrentHttpContext.Items.Add(contextInitializedKey, true);
+			}
+			else
+			{
+				SystemManager.CurrentHttpContext.Items[contextInitializedKey] = true;
+			}
+		}
 
-                if (categories != null)
-                {
-                    for (int i = urlSegments.Count - 1; i >= 0; i--)
-                    {
-                        var cat = categories.FirstOrDefault(p => urlSegments[i] == p.Name);
+		private void ResolveCurrentProduct(List<string> urlSegments)
+		{
+			if (CatalogContext.CurrentProduct != null) return;
 
-                        if (cat != null)
-                        {
-                            CatalogContext.CurrentCategory = cat;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+			var products = ProductIndex.Find()
+				.Where(p => urlSegments.Contains(p.Slug.ToString()))
+				.ToList();
 
-        private const string contextInitializedKey = "UCommerceContextInitialized";
-    }
+			if (products == null) return;
+
+			for (int i = urlSegments.Count - 1; i >= 0; i--)
+			{
+				var product = products.FirstOrDefault(p => urlSegments.Contains(p.Slug));
+				if (product == null) continue;
+
+				CatalogContext.CurrentProduct = product;
+				break;
+			}
+		}
+
+		private void ResolveCurrentCategory(List<string> urlSegments)
+		{
+			if (CatalogContext.CurrentCategory != null) return;
+
+			var categories = CategoryIndex.Find()
+				.Where(c => urlSegments.Contains(c.Name.ToString()) && c.ProductCatalog == CatalogContext.CurrentCatalog.Guid)
+				.ToList();
+
+			if (categories == null) return;
+
+			for (int i = urlSegments.Count - 1; i >= 0; i--)
+			{
+				var cat = categories.FirstOrDefault(p => urlSegments[i] == p.Name);
+
+				if (cat == null) continue;
+
+				CatalogContext.CurrentCategory = cat;
+				break;
+			}
+		}
+
+		private const string contextInitializedKey = "UCommerceContextInitialized";
+	}
 }

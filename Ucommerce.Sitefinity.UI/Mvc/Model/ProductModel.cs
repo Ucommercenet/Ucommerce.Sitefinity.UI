@@ -17,6 +17,7 @@ using Ucommerce.Extensions;
 using Ucommerce.Infrastructure.Globalization;
 using Ucommerce.Search;
 using Telerik.Sitefinity.Localization;
+using Telerik.Sitefinity.Personalization;
 using Ucommerce.Infrastructure;
 using Ucommerce.Search.Slugs;
 using Ucommerce.Search.Extensions;
@@ -28,7 +29,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	/// <summary>
 	/// The Model class of the Product MVC widget.
 	/// </summary>
-	internal class ProductModel : IProductModel
+	internal class ProductModel : IProductModel, IPersonalizable
 	{
 		public IIndex<Ucommerce.Search.Models.Product> ProductIndex =>
 			ObjectFactory.Instance.Resolve<IIndex<Ucommerce.Search.Models.Product>>();
@@ -370,7 +371,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		private IQueryable<Ucommerce.Search.Models.Product> GetProductsQuery(Ucommerce.Search.Models.Category category,
 			string searchTerm)
 		{
-			if (this.isManualSelectionMode)
+			if (category == null && this.isManualSelectionMode)
 			{
 				// NOTE: The int values will go away soon but the picker still saves as ints at the moment so we need to convert them
 				var productIds = this.productIds?.Split(',').Select(Int32.Parse).ToList() ?? new List<int>();
@@ -384,7 +385,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				return ApplyManualSelection(productGuids, categoryGuids);
 			}
 
-			if (string.IsNullOrWhiteSpace(searchTerm) && category == null && this.enableCategoryFallback == true)
+			if (category == null && string.IsNullOrWhiteSpace(searchTerm) &&  this.enableCategoryFallback == true)
 			{
 				var categoryIds = this.fallbackCategoryIds?.Split(',').Select(Int32.Parse).ToList() ?? new List<int>();
 				var categoryGuids = Ucommerce.EntitiesV2.Category.Find(c => categoryIds.Contains(c.CategoryId))
