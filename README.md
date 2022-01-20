@@ -1,5 +1,10 @@
 # Ucommerce.Sitefinity.UI
 
+## Compatibility
+
+- Sitefinity 14.0
+- Ucommerce 9.5.1
+
 ## Intro
 
 To get started with using the Widgets for Ucommerce on Sitefinity you can watch this youtube video: 
