@@ -93,7 +93,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
 			if (currentCategory != null)
-				InsightUcommerce.SendInteraction(currentCategory, "Product List", currentCategory.Name);
+				InsightUcommerce.SendCategoryInteraction(currentCategory, "Product List", currentCategory.Name);
 
 			return viewModel;
 		}

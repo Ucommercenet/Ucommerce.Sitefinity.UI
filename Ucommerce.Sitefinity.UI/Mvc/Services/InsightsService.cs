@@ -20,7 +20,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 	public interface IInsightUcommerceService
 	{
 		void SendCategoryInteraction(Ucommerce.EntitiesV2.Category category, string predicate, string @object);
-		void SendInteraction(Ucommerce.Search.Models.Category category, string predicate, string @object);
+		void SendCategoryInteraction(Ucommerce.Search.Models.Category category, string predicate, string @object);
 		void SendProductInteraction(Ucommerce.EntitiesV2.Product product, string predicate, string @object);
 		void SendInteraction(Ucommerce.Search.Models.Product product, string predicate, string @object);
 		void SendInteraction(Ucommerce.EntitiesV2.Customer customer, string predicate, string @object);
@@ -72,7 +72,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			ImportInteraction(interaction);
 		}
 
-		public void SendInteraction(Ucommerce.Search.Models.Category category, string predicate, string @object)
+		public void SendCategoryInteraction(Ucommerce.Search.Models.Category category, string predicate, string @object)
 		{
 			var interaction = CreateInteractionForBasket(predicate, @object);
 			if (interaction == null) return;
