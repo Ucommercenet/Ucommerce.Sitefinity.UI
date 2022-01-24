@@ -89,8 +89,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			InsightUcommerce.SendOrderInteraction(purchaseOrder, "Checkout", "Set Address");
-
 			return viewModel;
 		}
 
