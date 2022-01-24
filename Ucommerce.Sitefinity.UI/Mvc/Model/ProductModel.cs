@@ -29,7 +29,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	/// <summary>
 	/// The Model class of the Product MVC widget.
 	/// </summary>
-	internal class ProductModel : IProductModel, IPersonalizable
+	internal class ProductModel : IProductModel
 	{
 		public IIndex<Ucommerce.Search.Models.Product> ProductIndex =>
 			ObjectFactory.Instance.Resolve<IIndex<Ucommerce.Search.Models.Product>>();
@@ -385,7 +385,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				return ApplyManualSelection(productGuids, categoryGuids);
 			}
 
-			if (category == null && string.IsNullOrWhiteSpace(searchTerm) &&  this.enableCategoryFallback == true)
+			if (category == null && string.IsNullOrWhiteSpace(searchTerm) && this.enableCategoryFallback == true)
 			{
 				var categoryIds = this.fallbackCategoryIds?.Split(',').Select(Int32.Parse).ToList() ?? new List<int>();
 				var categoryGuids = Ucommerce.EntitiesV2.Category.Find(c => categoryIds.Contains(c.CategoryId))
