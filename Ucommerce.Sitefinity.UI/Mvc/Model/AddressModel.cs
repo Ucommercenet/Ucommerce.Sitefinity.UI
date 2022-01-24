@@ -89,7 +89,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			InsightUcommerce.SendInteraction(purchaseOrder, "Checkout", "Set Address");
+			InsightUcommerce.SendOrderInteraction(purchaseOrder, "Checkout", "Set Address");
 
 			return viewModel;
 		}
@@ -111,7 +111,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             TransactionLibrary.ExecuteBasketPipeline();
 
-            InsightUcommerce.SendBasketInteraction("Checkout", "Addresses Set");
+            InsightUcommerce.SendInteraction("Checkout", "Addresses Set");
 
             result.Data = new { ShippingUrl = GetNextStepUrl(nextStepId) };
 			return result;

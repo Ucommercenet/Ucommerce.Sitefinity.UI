@@ -322,7 +322,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			productDetailViewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
-			InsightUcommerce.SendInteraction(currentProduct, "Product View", $"{currentProduct.Name} ({currentProduct.Sku})");
+			InsightUcommerce.SendProductInteraction(currentProduct, "Product View", $"{currentProduct.Name} ({currentProduct.Sku})");
 
 			return productDetailViewModel;
 		}

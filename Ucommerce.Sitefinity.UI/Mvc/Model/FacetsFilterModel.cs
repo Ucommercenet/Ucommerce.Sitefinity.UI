@@ -31,7 +31,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			if (CatalogContext.CurrentCategory != null)
 			{
 				currentCategory = Ucommerce.EntitiesV2.Category.FirstOrDefault(c => c.Name == CatalogContext.CurrentCategory.Name);
-				InsightUcommerce.SendInteraction(currentCategory, "Filtered Product List", currentCategory.Name);
+				InsightUcommerce.SendCategoryInteraction(currentCategory, "Filtered Product List", currentCategory.Name);
 				return this.GetAllFacets(currentCategory);
 			}
 

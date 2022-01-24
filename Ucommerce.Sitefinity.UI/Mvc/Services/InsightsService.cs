@@ -19,13 +19,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 {
 	public interface IInsightUcommerceService
 	{
-		void SendInteraction(Ucommerce.EntitiesV2.Category category, string predicate, string objectName);
-		void SendInteraction(Ucommerce.Search.Models.Category category, string predicate, string objectName);
-		void SendInteraction(Ucommerce.EntitiesV2.Product product, string predicate, string objectName);
-		void SendInteraction(Ucommerce.Search.Models.Product product, string predicate, string objectName);
-		void SendInteraction(Ucommerce.EntitiesV2.Customer customer, string predicate, string objectName);
-		void SendBasketInteraction(string predicate, string objectName);
-		void SendInteraction(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string objectName);
+		void SendCategoryInteraction(Ucommerce.EntitiesV2.Category category, string predicate, string @object);
+		void SendInteraction(Ucommerce.Search.Models.Category category, string predicate, string @object);
+		void SendProductInteraction(Ucommerce.EntitiesV2.Product product, string predicate, string @object);
+		void SendInteraction(Ucommerce.Search.Models.Product product, string predicate, string @object);
+		void SendInteraction(Ucommerce.EntitiesV2.Customer customer, string predicate, string @object);
+		void SendInteraction(string predicate, string @object);
+		void SendOrderInteraction(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string @object);
 	}
 
 	public class InsightUcommerceService : IInsightUcommerceService
@@ -62,9 +62,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			}
 		}
 
-		public void SendInteraction(Ucommerce.EntitiesV2.Category category, string predicate, string objectName)
+		public void SendCategoryInteraction(Ucommerce.EntitiesV2.Category category, string predicate, string @object)
 		{
-			var interaction = CreateInteractionForBasket(predicate, objectName);
+			var interaction = CreateInteractionForBasket(predicate, @object);
 			if (interaction == null) return;
 
 			AddBasketInteractions(interaction);
@@ -72,9 +72,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			ImportInteraction(interaction);
 		}
 
-		public void SendInteraction(Ucommerce.Search.Models.Category category, string predicate, string objectName)
+		public void SendInteraction(Ucommerce.Search.Models.Category category, string predicate, string @object)
 		{
-			var interaction = CreateInteractionForBasket(predicate, objectName);
+			var interaction = CreateInteractionForBasket(predicate, @object);
 			if (interaction == null) return;
 
 			AddBasketInteractions(interaction);
@@ -82,9 +82,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			ImportInteraction(interaction);
 		}
 
-		public void SendInteraction(Ucommerce.EntitiesV2.Product product, string predicate, string objectName)
+		public void SendProductInteraction(Ucommerce.EntitiesV2.Product product, string predicate, string @object)
 		{
-			var interaction = CreateInteractionForBasket(predicate, objectName);
+			var interaction = CreateInteractionForBasket(predicate, @object);
 			if (interaction == null) return;
 
 			AddBasketInteractions(interaction);
@@ -92,9 +92,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			ImportInteraction(interaction);
 		}
 
-		public void SendInteraction(Ucommerce.Search.Models.Product product, string predicate, string objectName)
+		public void SendInteraction(Ucommerce.Search.Models.Product product, string predicate, string @object)
 		{
-			var interaction = CreateInteractionForBasket(predicate, objectName);
+			var interaction = CreateInteractionForBasket(predicate, @object);
 			if (interaction == null) return;
 
 			AddBasketInteractions(interaction);
@@ -102,9 +102,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			ImportInteraction(interaction);
 		}
 
-		public void SendInteraction(Ucommerce.EntitiesV2.Customer customer, string predicate, string objectName)
+		public void SendInteraction(Ucommerce.EntitiesV2.Customer customer, string predicate, string @object)
 		{
-			var interaction = CreateInteractionForBasket(predicate, objectName);
+			var interaction = CreateInteractionForBasket(predicate, @object);
 			if (interaction == null) return;
 
 			AddBasketInteractions(interaction);
@@ -112,14 +112,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			ImportInteraction(interaction);
 		}
 
-		public void SendBasketInteraction(string predicate, string objectName)
+		public void SendInteraction(string predicate, string @object)
 		{
-			SendInteraction(SafeGetOrder(), predicate, objectName);
+			SendOrderInteraction(SafeGetOrder(), predicate, @object);
 		}
 
-		public void SendInteraction(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string objectName)
+		public void SendOrderInteraction(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string @object)
 		{
-			var interaction = GetInteractionForOrder(predicate, objectName, order);
+			var interaction = GetInteractionForOrder(predicate, @object, order);
 			if (interaction == null) return;
 
 			AddOrderInteractions(interaction, order);
