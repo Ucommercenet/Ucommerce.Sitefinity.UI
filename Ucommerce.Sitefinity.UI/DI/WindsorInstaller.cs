@@ -109,8 +109,8 @@ namespace UCommerce.Sitefinity.UI.DI
 
             container.Register(
                 Component
-                    .For<IInsightsService>()
-                    .ImplementedBy<InsightsService>()
+                    .For<IInsightUcommerceService>()
+                    .ImplementedBy<InsightUcommerceService>()
                     .LifestyleTransient());
         }
     }

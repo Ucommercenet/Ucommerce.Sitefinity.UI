@@ -18,7 +18,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		private Guid nextStepId;
 		private Guid previousStepId;
-		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
         public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
         private readonly IQueryable<Ucommerce.EntitiesV2.Country> _countries;
 
@@ -89,7 +89,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			viewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendInteraction(purchaseOrder, "Checkout", "Set Address");
+			InsightUcommerce.SendInteraction(purchaseOrder, "Checkout", "Set Address");
 
 			return viewModel;
 		}
@@ -111,7 +111,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             TransactionLibrary.ExecuteBasketPipeline();
 
-            Insights.SendBasketInteraction("Checkout", "Addresses Set");
+            InsightUcommerce.SendBasketInteraction("Checkout", "Addresses Set");
 
             result.Data = new { ShippingUrl = GetNextStepUrl(nextStepId) };
 			return result;

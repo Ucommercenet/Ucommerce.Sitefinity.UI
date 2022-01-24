@@ -18,7 +18,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		private Guid nextStepId;
 		private Guid previousStepId;
-		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
 
@@ -147,7 +147,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			shipmentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			shipmentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendInteraction(basketPurchaseOrder, "Checkout", "Shipping Method Selection");
+			InsightUcommerce.SendInteraction(basketPurchaseOrder, "Checkout", "Shipping Method Selection");
 
 			return shipmentPickerViewModel;
 		}
@@ -158,7 +158,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				Ucommerce.Constants.DefaultShipmentAddressName, true);
 			TransactionLibrary.ExecuteBasketPipeline();
 
-			Insights.SendBasketInteraction("Checkout", $"Shipping Method Selected: {createShipmentViewModel.SelectedShippingMethodId}");
+			InsightUcommerce.SendBasketInteraction("Checkout", $"Shipping Method Selected: {createShipmentViewModel.SelectedShippingMethodId}");
 		}
 
 		private string GetNextStepUrl(Guid nextStepId)

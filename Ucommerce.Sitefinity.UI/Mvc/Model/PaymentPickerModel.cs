@@ -18,7 +18,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		private Guid nextStepId;
 		private Guid previousStepId;
-		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
 		public Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup> PriceGroupRepository = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup>>();
@@ -94,7 +94,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
 			paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			Insights.SendInteraction(purchaseOrder, "Checkout", "View Payment Options");
+			InsightUcommerce.SendInteraction(purchaseOrder, "Checkout", "View Payment Options");
 
 			return paymentPickerViewModel;
 		}
@@ -127,7 +127,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			TransactionLibrary.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
 			TransactionLibrary.ExecuteBasketPipeline();
 
-			Insights.SendBasketInteraction("Checkout", $"Payment Method Selected {createPaymentViewModel.SelectedPaymentMethodId}");
+			InsightUcommerce.SendBasketInteraction("Checkout", $"Payment Method Selected {createPaymentViewModel.SelectedPaymentMethodId}");
 		}
 
 		private string GetNextStepUrl(Guid nextStepId)

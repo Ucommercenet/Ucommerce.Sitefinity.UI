@@ -34,7 +34,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		public IIndex<Ucommerce.Search.Models.Product> ProductIndex =>
 			ObjectFactory.Instance.Resolve<IIndex<Ucommerce.Search.Models.Product>>();
 
-		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
 		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 		public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
@@ -93,7 +93,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
 			if (currentCategory != null)
-				Insights.SendInteraction(currentCategory, "Product List", currentCategory.Name);
+				InsightUcommerce.SendInteraction(currentCategory, "Product List", currentCategory.Name);
 
 			return viewModel;
 		}
@@ -322,7 +322,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			productDetailViewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
-			Insights.SendInteraction(currentProduct, "Product View", $"{currentProduct.Name} ({currentProduct.Sku})");
+			InsightUcommerce.SendInteraction(currentProduct, "Product View", $"{currentProduct.Name} ({currentProduct.Sku})");
 
 			return productDetailViewModel;
 		}

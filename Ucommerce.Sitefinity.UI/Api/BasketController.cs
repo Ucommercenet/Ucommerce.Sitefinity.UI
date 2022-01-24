@@ -17,7 +17,7 @@ namespace UCommerce.Sitefinity.UI.Api
 	/// </summary>
 	public class BasketController : ApiController
 	{
-		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 		public IMarketingLibrary MarketingLibrary => ObjectFactory.Instance.Resolve<IMarketingLibrary>();
 		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
@@ -108,7 +108,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
 			TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku, variantSku);
 
-			Insights.SendInteraction(product, "Add To Cart", product.Name);
+			InsightUcommerce.SendInteraction(product, "Add To Cart", product.Name);
 
 			return Json(this.GetBasketModel());
 		}

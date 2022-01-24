@@ -22,7 +22,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		private Guid productDetailsPageId;
 		private Guid nextStepId;
 		private Guid redirectPageId;
-		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 		public IMarketingLibrary MarketingLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<IMarketingLibrary>();
 		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
@@ -61,7 +61,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			basketVM.RemoveOrderlineUrl = removeOrderLineUrl;
 			basketVM.Discounts = basket.Discounts.Select(d => d.CampaignItemName).ToList();
 
-			Insights.SendInteraction(basket, "Checkout", "View Cart");
+			InsightUcommerce.SendInteraction(basket, "Checkout", "View Cart");
 
 			return basketVM;
 		}

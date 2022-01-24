@@ -21,7 +21,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	/// </summary>
 	internal class CategoryModel : ICategoryModel
 	{
-		public IInsightsService Insights => UCommerceUIModule.Container.Resolve<IInsightsService>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ICatalogLibrary CatalogLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
 

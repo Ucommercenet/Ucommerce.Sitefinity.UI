@@ -17,7 +17,7 @@ using UCommerce.Sitefinity.UI.Search;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Services
 {
-	public interface IInsightsService
+	public interface IInsightUcommerceService
 	{
 		void SendInteraction(Ucommerce.EntitiesV2.Category category, string predicate, string objectName);
 		void SendInteraction(Ucommerce.Search.Models.Category category, string predicate, string objectName);
@@ -28,7 +28,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 		void SendInteraction(Ucommerce.EntitiesV2.PurchaseOrder order, string predicate, string objectName);
 	}
 
-	public class InsightsService : IInsightsService
+	public class InsightUcommerceService : IInsightUcommerceService
 	{
 		private readonly ITransactionLibrary _transactionLibrary = ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
