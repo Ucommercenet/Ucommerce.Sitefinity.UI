@@ -10,7 +10,6 @@ using Telerik.Sitefinity.Web;
 using Ucommerce.Api;
 using Ucommerce.Extensions;
 using UCommerce.Sitefinity.UI.Constants;
-using UCommerce.Sitefinity.UI.Mvc.Services;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
 
@@ -21,7 +20,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	/// </summary>
 	internal class CategoryModel : ICategoryModel
 	{
-		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ICatalogLibrary CatalogLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
 
