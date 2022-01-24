@@ -59,6 +59,13 @@ namespace UCommerce.Sitefinity.UI.Api
 		[HttpPost]
 		public IHttpActionResult UpdateLineItem(UpdateLineItemDTO model)
 		{
+			if (model.NewQuantity == 0)
+			{
+				var orderLine = Ucommerce.EntitiesV2.Product.Get(model.OrderlineId);
+				var product = Ucommerce.EntitiesV2.Product.Get(orderLine.ProductId);
+				InsightUcommerce.SendProductInteraction(product, "Remove product from cart", product.Name);
+			}
+
 			TransactionLibrary.UpdateLineItem(model.OrderlineId, model.NewQuantity);
 			TransactionLibrary.ExecuteBasketPipeline();
 
