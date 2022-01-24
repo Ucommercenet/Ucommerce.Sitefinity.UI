@@ -156,7 +156,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				Ucommerce.Constants.DefaultShipmentAddressName, true);
 			TransactionLibrary.ExecuteBasketPipeline();
 
-			InsightUcommerce.SendInteraction("Checkout", $"Shipping Method Selected: {createShipmentViewModel.SelectedShippingMethodId}");
+			var shippingMethod = Ucommerce.EntitiesV2.ShippingMethod.Get(createShipmentViewModel.SelectedShippingMethodId);
+			InsightUcommerce.SendInteraction("Checkout", $"Shipping Method Selected: {shippingMethod.Name}");
 		}
 
 		private string GetNextStepUrl(Guid nextStepId)

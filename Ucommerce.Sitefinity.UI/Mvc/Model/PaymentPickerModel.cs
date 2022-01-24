@@ -125,7 +125,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			TransactionLibrary.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
 			TransactionLibrary.ExecuteBasketPipeline();
 
-			InsightUcommerce.SendInteraction("Checkout", $"Payment Method Selected {createPaymentViewModel.SelectedPaymentMethodId}");
+			var paymentMethod = Ucommerce.EntitiesV2.PaymentMethod.Get(createPaymentViewModel.SelectedPaymentMethodId);
+			InsightUcommerce.SendInteraction("Checkout", $"Selected payment method {paymentMethod.Name}");
 		}
 
 		private string GetNextStepUrl(Guid nextStepId)

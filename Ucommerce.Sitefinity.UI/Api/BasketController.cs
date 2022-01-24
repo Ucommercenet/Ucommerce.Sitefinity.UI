@@ -108,7 +108,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
 			TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku, variantSku);
 
-			InsightUcommerce.SendProductInteraction(product, "Add To Cart", product.Name);
+			InsightUcommerce.SendProductInteraction(product, "Add to shopping cart", product.Name);
 
 			return Json(this.GetBasketModel());
 		}

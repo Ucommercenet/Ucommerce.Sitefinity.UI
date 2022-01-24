@@ -93,7 +93,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
 			if (currentCategory != null)
-				InsightUcommerce.SendCategoryInteraction(currentCategory, "Product List", currentCategory.Name);
+				InsightUcommerce.SendCategoryInteraction(currentCategory, "View product list", currentCategory.Name);
 
 			return viewModel;
 		}
@@ -322,7 +322,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			productDetailViewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
-			InsightUcommerce.SendProductInteraction(currentProduct, "Product View", $"{currentProduct.Name} ({currentProduct.Sku})");
+			InsightUcommerce.SendProductInteraction(currentProduct, "View product", $"{currentProduct.Name} ({currentProduct.Sku})");
 
 			return productDetailViewModel;
 		}
