@@ -312,10 +312,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			if (order == null) return;
 
 			const string prefix = "Order";
-			AddObjectHierarchyData(interaction, "CultureCode", order.CultureCode);
-			AddObjectHierarchyData(interaction, "BasketId", order.BasketId.ToString());
-			AddObjectHierarchyData(interaction, "OrderGuid", order.OrderGuid.ToString());
-			AddObjectHierarchyData(interaction, "BillingCurrency", order.BillingCurrency.ISOCode);
+			AddObjectMetaData(interaction, prefix, "CultureCode", order.CultureCode);
+			AddObjectMetaData(interaction, prefix, "BasketId", order.BasketId.ToString());
+			AddObjectMetaData(interaction, prefix, "OrderGuid", order.OrderGuid.ToString());
+			AddObjectMetaData(interaction, prefix, "BillingCurrency", order.BillingCurrency.ISOCode);
 
 			foreach (var property in order.OrderProperties)
 				AddObjectHierarchyData(interaction, $"Property_{property.Key}", property.Value);
