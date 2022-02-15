@@ -92,7 +92,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.PagingUrlTemplate = this.GetPagingUrlTemplate(currentCategory);
 			viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
-			if (currentCategory != null)
+			var facets = HttpContext.Current.Request.QueryString.ToFacets();
+			if (currentCategory != null && (facets?.Any() ?? false) == false)
 				InsightUcommerce.SendCategoryInteraction(currentCategory, "View product list", currentCategory.Name);
 
 			return viewModel;
