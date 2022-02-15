@@ -26,13 +26,17 @@ namespace UCommerce.Sitefinity.UI.Mvc
 			List<string> urlSegments = null;
 
 			var currentUrl = SystemManager.CurrentHttpContext.Request.RawUrl;
+			if (currentUrl.Contains("?"))
+			{
+				currentUrl = currentUrl.Substring(0, currentUrl.IndexOf("?"));
+			}
 
 			// NOTE: There are a few urls that aren't relevant
 			if (currentUrl?.Contains("/rest-api/") ?? false) return;
 
 			if (!string.IsNullOrWhiteSpace(currentUrl))
 			{
-				urlSegments = SystemManager.CurrentHttpContext.Request.RawUrl.Split('/')
+				urlSegments = currentUrl.Split('/')
 					.Select(i => System.Web.HttpUtility.UrlDecode(i.Replace("/", string.Empty)))
 					.ToList();
 			}
