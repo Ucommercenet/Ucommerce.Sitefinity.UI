@@ -189,7 +189,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			AddObjectMetaData(interaction, prefix, "CategoryName", category.Name);
 			AddObjectMetaData(interaction, prefix, "CategoryDisplayName", category.DisplayName());
 
-
 			interaction.ObjectMetadata.Title = GetFilteredCategoryName(category);
 			interaction.ObjectMetadata.CanonicalTitle = category.Name;
 
