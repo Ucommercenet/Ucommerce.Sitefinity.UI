@@ -184,9 +184,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Category";
 			AddBaseSiteInfo(interaction, category.Guid, "Product List");
-			AddObjectHierarchyData(interaction, "CategoryId", category.CategoryId);
-			AddObjectHierarchyData(interaction, "CategoryName", category.Name);
-			AddObjectHierarchyData(interaction, "CategoryDisplayName", category.DisplayName());
+			AddObjectMetaData(interaction, prefix, "CategoryId", category.CategoryId);
+			AddObjectMetaData(interaction, prefix, "CategoryName", category.Name);
+			AddObjectMetaData(interaction, prefix, "CategoryDisplayName", category.DisplayName());
 
 			interaction.ObjectMetadata.Title = category.DisplayName();
 			interaction.ObjectMetadata.CanonicalTitle = category.Name;
@@ -205,8 +205,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Category";
 			AddBaseSiteInfo(interaction, category.Guid, "Product List");
-			AddObjectHierarchyData(interaction, "CategoryName", category.Name);
-			AddObjectHierarchyData(interaction, "CategoryDisplayName", category.DisplayName);
+			AddObjectMetaData(interaction, prefix, "CategoryName", category.Name);
+			AddObjectMetaData(interaction, prefix, "CategoryDisplayName", category.DisplayName);
 
 			interaction.ObjectMetadata.Title = category.DisplayName;
 			interaction.ObjectMetadata.CanonicalTitle = category.Name;
