@@ -100,16 +100,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			{
 				EditBillingInformation(addressRendering.BillingAddress);
 				EditShippingInformation(addressRendering.ShippingAddress);
+				InsightUcommerce.SendInteraction("Checkout", "Set address billing");
+				InsightUcommerce.SendInteraction("Checkout", "Set address shipping");
 			}
 			else
 			{
 				EditBillingInformation(addressRendering.BillingAddress);
 				EditShippingInformation(addressRendering.BillingAddress);
+				InsightUcommerce.SendInteraction("Checkout", "Set address billing & shipping");
 			}
 
-            TransactionLibrary.ExecuteBasketPipeline();
-
-            InsightUcommerce.SendInteraction("Checkout", "Addresses Set");
+			TransactionLibrary.ExecuteBasketPipeline();
 
             result.Data = new { ShippingUrl = GetNextStepUrl(nextStepId) };
 			return result;
