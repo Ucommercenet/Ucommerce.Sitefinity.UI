@@ -10,6 +10,7 @@ using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.TrackingConsent;
 using Telerik.Sitefinity.Web;
 using Ucommerce.Api;
+using Ucommerce.EntitiesV2;
 using Ucommerce.Extensions;
 using Ucommerce.Infrastructure;
 using Ucommerce.Search.Facets;
@@ -188,13 +189,24 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			AddObjectMetaData(interaction, prefix, "CategoryName", category.Name);
 			AddObjectMetaData(interaction, prefix, "CategoryDisplayName", category.DisplayName());
 
-			interaction.ObjectMetadata.Title = category.DisplayName();
+
+			interaction.ObjectMetadata.Title = GetFilteredCategoryName(category);
 			interaction.ObjectMetadata.CanonicalTitle = category.Name;
 
 			foreach (var property in category.CategoryProperties)
 				AddObjectMetaData(interaction, prefix, property.DefinitionField.Name, property.Value);
 
 			AddFacets(interaction);
+		}
+
+		private static string GetFilteredCategoryName(Category category)
+		{
+			var facets = HttpContext.Current.Request.QueryString.ToFacets();
+			if (!(facets?.Any() ?? false))
+				return category.DisplayName();
+
+			var selectedValues = facets.Select(f => $"{f.Name}: {string.Join(",", f.FacetValues)}");
+			return $"{category.DisplayName()} filtered by {string.Join(",", selectedValues)}";
 		}
 
 		private void AddCategoryInteractions(Interaction interaction, Ucommerce.Search.Models.Category category)
