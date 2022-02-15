@@ -225,7 +225,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Product";
 			AddBaseSiteInfo(interaction, product.Guid, "Product");
-			AddObjectMetaData(interaction, prefix, "Id", product.ProductId);
+			AddObjectMetaData(interaction, prefix, "ProductId", product.ProductId);
+			AddObjectMetaData(interaction, prefix, "ProductGuid", product.Guid);
 			AddObjectMetaData(interaction, prefix, "ProductDefinition", product.ProductDefinition.Name);
 			AddObjectMetaData(interaction, prefix, "Sku", product.Sku);
 			AddObjectMetaData(interaction, prefix, "VariantSku", product.VariantSku);
@@ -249,8 +250,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Product";
 			AddBaseSiteInfo(interaction, product.Guid, "Product");
-			AddObjectMetaData(interaction, prefix, "ProductId", product.Guid);
-			AddObjectHierarchyData(interaction, "ProductGuid", product.Guid);
+			AddObjectMetaData(interaction, prefix, "ProductGuid", product.Guid);
 			// TODO: AddObjectHierarchyData(interaction, prefix, "ProductDefinition", product.ProductDefinition.Name);
 			AddObjectMetaData(interaction, prefix, "Sku", product.Sku);
 			AddObjectMetaData(interaction, prefix, "VariantSku", product.VariantSku);
