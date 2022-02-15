@@ -249,18 +249,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Product";
 			AddBaseSiteInfo(interaction, product.Guid, "Product");
+			AddObjectMetaData(interaction, prefix, "ProductId", product.Guid);
 			AddObjectHierarchyData(interaction, "ProductGuid", product.Guid);
 			// TODO: AddObjectHierarchyData(interaction, prefix, "ProductDefinition", product.ProductDefinition.Name);
-			AddObjectHierarchyData(interaction, "Sku", product.Sku);
-			AddObjectHierarchyData(interaction, "VariantSku", product.VariantSku);
-			AddObjectHierarchyData(interaction, "ProductName", product.Name);
-			AddObjectHierarchyData(interaction, "ProductDisplayName", product.DisplayName);
+			AddObjectMetaData(interaction, prefix, "Sku", product.Sku);
+			AddObjectMetaData(interaction, prefix, "VariantSku", product.VariantSku);
+			AddObjectMetaData(interaction, prefix, "ProductName", product.Name);
+			AddObjectMetaData(interaction, prefix, "ProductDisplayName", product.DisplayName);
 
 			interaction.ObjectMetadata.Title = product.DisplayName;
 			interaction.ObjectMetadata.CanonicalTitle = product.Name;
 
 			foreach (var property in product.GetUserDefinedFields())
-				AddObjectHierarchyData(interaction, property.Key, property.Value);
+				AddObjectMetaData(interaction, prefix, property.Key, property.Value);
 
 			AddFacets(interaction);
 		}
