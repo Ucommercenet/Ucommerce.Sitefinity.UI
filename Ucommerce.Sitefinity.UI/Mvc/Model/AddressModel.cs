@@ -96,18 +96,26 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			var result = new JsonResult();
 
+			/* TODO-REVIEW #1: When user toggles the checkbox for same/different address,
+			an interaction(s) are sent for the specific case although the step is not completed yet. */
+
 			if (addressRendering.IsShippingAddressDifferent)
 			{
 				EditBillingInformation(addressRendering.BillingAddress);
 				EditShippingInformation(addressRendering.ShippingAddress);
-				InsightUcommerce.SendInteraction("Checkout", "Set address billing");
-				InsightUcommerce.SendInteraction("Checkout", "Set address shipping");
+				InsightUcommerce.SendInteraction("Checkout > Set address", "billing");
+				InsightUcommerce.SendInteraction("Checkout > Set address", "shipping");
 			}
 			else
 			{
+				/* TODO-REVIEW #2: First time on this step, default behavior - addresses are the same.
+				On next step click, there are still 2 interactions sent:
+				(1)Checkout > Set address billing & shipping
+				(2)Checkout > Set address billing & shipping
+				Probably still related to the Save method in the controller and the [HttpPost] behaviour */
 				EditBillingInformation(addressRendering.BillingAddress);
 				EditShippingInformation(addressRendering.BillingAddress);
-				InsightUcommerce.SendInteraction("Checkout", "Set address billing & shipping");
+				InsightUcommerce.SendInteraction("Checkout > Set address", "billing & shipping");
 			}
 
 			TransactionLibrary.ExecuteBasketPipeline();

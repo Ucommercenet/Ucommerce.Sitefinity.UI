@@ -185,9 +185,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Category";
 			AddBaseSiteInfo(interaction, category.Guid, "Product List");
-			AddObjectMetaData(interaction, prefix, "CategoryId", category.CategoryId);
-			AddObjectMetaData(interaction, prefix, "CategoryName", category.Name);
-			AddObjectMetaData(interaction, prefix, "CategoryDisplayName", category.DisplayName());
+			AddObjectMetaData(interaction, prefix, "Id", category.CategoryId);
+			// We might make use of these 2 reported as hierarchical metadata
+			AddObjectHierarchyData(interaction, $"{prefix}Name", category.Name);
+			AddObjectHierarchyData(interaction, $"{prefix}DisplayName", category.DisplayName());
 
 			interaction.ObjectMetadata.Title = GetFilteredCategoryName(category);
 			interaction.ObjectMetadata.CanonicalTitle = category.Name;
@@ -216,8 +217,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Category";
 			AddBaseSiteInfo(interaction, category.Guid, "Product List");
-			AddObjectMetaData(interaction, prefix, "CategoryName", category.Name);
-			AddObjectMetaData(interaction, prefix, "CategoryDisplayName", category.DisplayName);
+			// We might make use of these 2 reported as hierarchical metadata
+			AddObjectHierarchyData(interaction, $"{prefix}Name", category.Name);
+			AddObjectHierarchyData(interaction, $"{prefix}DisplayName", category.DisplayName);
 
 			interaction.ObjectMetadata.Title = category.DisplayName;
 			interaction.ObjectMetadata.CanonicalTitle = category.Name;
@@ -236,19 +238,32 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			const string prefix = "Product";
 			AddBaseSiteInfo(interaction, product.Guid, "Product");
-			AddObjectMetaData(interaction, prefix, "ProductId", product.ProductId);
-			AddObjectMetaData(interaction, prefix, "ProductGuid", product.Guid);
-			AddObjectMetaData(interaction, prefix, "ProductDefinition", product.ProductDefinition.Name);
+			AddObjectMetaData(interaction, prefix, "Id", product.ProductId);
+			AddObjectMetaData(interaction, prefix, "Guid", product.Guid);
+			AddObjectMetaData(interaction, prefix, "Definition", product.ProductDefinition.Name);
 			AddObjectMetaData(interaction, prefix, "Sku", product.Sku);
 			AddObjectMetaData(interaction, prefix, "VariantSku", product.VariantSku);
-			AddObjectMetaData(interaction, prefix, "ProductName", product.Name);
-			AddObjectMetaData(interaction, prefix, "ProductDisplayName", product.DisplayName());
+			// We might make use of these 2 reported as hierarchical metadata to cover some additional cases
+			AddObjectHierarchyData(interaction, $"{prefix}Name", product.Name);
+			AddObjectHierarchyData(interaction, $"{prefix}DisplayName", product.DisplayName());
 
 			interaction.ObjectMetadata.Title = product.DisplayName();
 			interaction.ObjectMetadata.CanonicalTitle = product.Name;
 
 			foreach (var property in product.ProductProperties)
-				AddObjectHierarchyData(interaction, property.ProductDefinitionField.Name, property.Value);
+			{
+				/* 
+				Since data types could be different, only check for the length.
+				Add to OM if exceeded, otherwise hierarchical data.
+				In the perfect case, we'd only add to hierarchies properties that are used as filtering facets and everything else in the OM. 
+				*/
+
+				bool exceedsHierarchicalMetadataTitleLimit = property.Value.Length > 255;
+				if (exceedsHierarchicalMetadataTitleLimit)
+					AddObjectMetaData(interaction, prefix, property.ProductDefinitionField.Name, property.Value);
+				else
+					AddObjectHierarchyData(interaction, property.ProductDefinitionField.Name, property.Value);
+			}
 
 			AddFacets(interaction);
 		}
@@ -259,20 +274,36 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			if (product == null) return;
 
+			/* TODO-REVIEW #4: Can we provide the metadata in the below 2 commented lines just to make it consistent with the other product method above? */
 			const string prefix = "Product";
 			AddBaseSiteInfo(interaction, product.Guid, "Product");
-			AddObjectMetaData(interaction, prefix, "ProductGuid", product.Guid);
-			// TODO: AddObjectHierarchyData(interaction, prefix, "ProductDefinition", product.ProductDefinition.Name);
+			// AddObjectMetaData(interaction, prefix, "Id", product.ProductId); 
+			AddObjectMetaData(interaction, prefix, "Guid", product.Guid);
+			// AddObjectMetaData(interaction, prefix, "Definition", product.ProductDefinition.Name);
 			AddObjectMetaData(interaction, prefix, "Sku", product.Sku);
 			AddObjectMetaData(interaction, prefix, "VariantSku", product.VariantSku);
-			AddObjectMetaData(interaction, prefix, "ProductName", product.Name);
-			AddObjectMetaData(interaction, prefix, "ProductDisplayName", product.DisplayName);
+			// We might make use of these 2 reported as hierarchical metadata to cover some additional cases
+			AddObjectHierarchyData(interaction, $"{prefix}Name", product.Name);
+			AddObjectHierarchyData(interaction, $"{prefix}DisplayName", product.DisplayName);
 
 			interaction.ObjectMetadata.Title = product.DisplayName;
 			interaction.ObjectMetadata.CanonicalTitle = product.Name;
 
 			foreach (var property in product.GetUserDefinedFields())
-				AddObjectMetaData(interaction, prefix, property.Key, property.Value);
+			{
+				/* 
+				Since data types could be different, only check for the length.
+				Add to OM if exceeded, otherwise hierarchical data.
+				In the perfect case, we'd only add to hierarchies properties that are used as filtering facets and everything else in the OM. 
+				*/
+
+				var propertyValue = property.Value.ToString();
+				bool exceedsHierarchicalMetadataTitleLimit = propertyValue.Length > 255;
+				if (exceedsHierarchicalMetadataTitleLimit)
+					AddObjectMetaData(interaction, prefix, property.Key, propertyValue);
+				else
+					AddObjectHierarchyData(interaction, property.Key, propertyValue);
+			}
 
 			AddFacets(interaction);
 		}
@@ -326,11 +357,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			const string prefix = "Order";
 			AddObjectMetaData(interaction, prefix, "CultureCode", order.CultureCode);
 			AddObjectMetaData(interaction, prefix, "BasketId", order.BasketId.ToString());
-			AddObjectMetaData(interaction, prefix, "OrderGuid", order.OrderGuid.ToString());
+			AddObjectMetaData(interaction, prefix, "Guid", order.OrderGuid.ToString());
 			AddObjectMetaData(interaction, prefix, "BillingCurrency", order.BillingCurrency.ISOCode);
 
 			foreach (var property in order.OrderProperties)
-				AddObjectHierarchyData(interaction, $"Property_{property.Key}", property.Value);
+				// for order interactions, we don't need the metadata reported as hierarchies, only in OM
+				AddObjectMetaData(interaction, prefix, property.Key, property.Value);
 
 			AddAddressInteractions(interaction, order.BillingAddress);
 			AddCustomerInteractions(interaction, order.Customer);
@@ -379,7 +411,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 			//	AddSubjectMetaData(interaction, prefix, facet.Name, value.Value);
 			// AddObjectMetaData(interaction, prefix, facet.Name, string.Join("|", facet.FacetValues.Select(f => f.Value)));
 			foreach (var value in facet.FacetValues)
-				AddObjectHierarchyData(interaction, facet.Name.ToLower(), value.Value.ToLower());
+				AddObjectHierarchyData(interaction, facet.Name, value.Value);
 		}
 
 		private static void AddObjectMetaData(Interaction interaction, string prefix, string key, object valueToAdd)

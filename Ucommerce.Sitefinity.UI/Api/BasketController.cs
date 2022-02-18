@@ -61,9 +61,10 @@ namespace UCommerce.Sitefinity.UI.Api
 		{
 			if (model.NewQuantity == 0)
 			{
+				/* TODO-REVIEW #3: couldn't get this one to work, at least in our Quantum sample */
 				var orderLine = Ucommerce.EntitiesV2.Product.Get(model.OrderlineId);
 				var product = Ucommerce.EntitiesV2.Product.Get(orderLine.ProductId);
-				InsightUcommerce.SendProductInteraction(product, "Remove product from cart", product.Name);
+				InsightUcommerce.SendProductInteraction(product, "Remove product from cart", $"{product.Name} ({product.Sku})");
 			}
 
 			TransactionLibrary.UpdateLineItem(model.OrderlineId, model.NewQuantity);
@@ -115,7 +116,7 @@ namespace UCommerce.Sitefinity.UI.Api
 
 			TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku, variantSku);
 
-			InsightUcommerce.SendProductInteraction(product, "Add to shopping cart", product.Name);
+			InsightUcommerce.SendProductInteraction(product, "Add to shopping cart", $"{product.Name} ({product.Sku})");
 
 			return Json(this.GetBasketModel());
 		}
