@@ -6,6 +6,7 @@ using Ucommerce.Api;
 using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
@@ -21,6 +22,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 		public Guid? RedirectPageId { get; set; }
 		public string TemplateName { get; set; } = "Index";
 
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
 		public ActionResult Index()
@@ -73,6 +75,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 			{
 				return this.PartialView("_Warning", message);
 			}
+
+			var orderLine = Ucommerce.EntitiesV2.OrderLine.Get(orderlineId);
+			var product = Ucommerce.EntitiesV2.Product.FirstOrDefault(p => p.Sku == orderLine.Sku && p.VariantSku == orderLine.VariantSku);
+			InsightUcommerce.SendProductInteraction(product, "Remove product from cart", $"{product?.Name} ({product?.Sku})");
 
 			TransactionLibrary.UpdateLineItemByOrderLineId(orderlineId, 0);
 			TransactionLibrary.ExecuteBasketPipeline();

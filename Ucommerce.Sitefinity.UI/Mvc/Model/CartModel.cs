@@ -150,10 +150,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			foreach (var updateOrderline in model.RefreshBasket)
 			{
+				var orderLine = Ucommerce.EntitiesV2.OrderLine.Get(updateOrderline.OrderLineId);
+				var product = Ucommerce.EntitiesV2.Product.FirstOrDefault(p => p.Sku == orderLine.Sku && p.VariantSku == orderLine.VariantSku);
 				var newQuantity = updateOrderline.OrderLineQty;
 				if (newQuantity <= 0)
 				{
 					newQuantity = 0;
+					InsightUcommerce.SendProductInteraction(product, "Remove product from cart", $"{product?.Name} ({product?.Sku})");
+				}
+				else
+				{
+					InsightUcommerce.SendProductInteraction(product, "Changed quantity of product in cart", $"{product.Name} ({product.Sku})");
 				}
 
 				TransactionLibrary.UpdateLineItemByOrderLineId(updateOrderline.OrderLineId, newQuantity);
@@ -170,19 +177,24 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			var basket = TransactionLibrary.GetBasket(false);
 
-			foreach (var item in model.Vouchers)
+			foreach (var voucher in model.Vouchers)
 			{
-				var itemForDeletion = basket.Discounts.FirstOrDefault(d => d.CampaignItemName == item);
+				var itemForDeletion = basket.Discounts.FirstOrDefault(d => d.CampaignItemName == voucher);
 
 				if (itemForDeletion != null)
 				{
 					basket.RemoveDiscount(itemForDeletion);
 					var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
-					if (prop != null)
-					{
-						prop.Value = prop.Value.Replace(item + ",", string.Empty);
-						prop.Save();
-					}
+					if (prop == null) continue;
+
+					prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
+					prop.Save();
+
+					InsightUcommerce.SendOrderInteraction(basket, "Removed voucher from cart", voucher);
+				}
+				else
+				{
+					InsightUcommerce.SendOrderInteraction(basket, "Added voucher to cart", voucher);
 				}
 			}
 
