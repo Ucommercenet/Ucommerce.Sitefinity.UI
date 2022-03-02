@@ -20,7 +20,7 @@ https://docs.ucommerce.net/ucommerce/v8.1/sitefinity/setting-up-ucommerce-sitefi
 The Vue app uses Webpack for build configuration. The main entry point is `index.js` located in the `assets\src` folder
 
 ### To run the project in Prod mode
-1. CMD into the root of the Ucommerce.Sitefinity.UI project
+1. CMD into the root of the Ucommerce.Sitefinity.UI project i.e. `Ucommerce.Sitefinity.UI v14.0\Ucommerce.Sitefinity.UI`
 2. Run `npm install`
 3. Run `npm run build`
 

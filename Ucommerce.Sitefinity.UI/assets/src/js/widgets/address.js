@@ -36,7 +36,9 @@ function initCart(rootElement) {
             inputField
         },
         methods: {
-            submit: function(fieldName, doNotHighlight, callback) {
+            submit: function (fieldName, doNotHighlight, callback) {
+                if (fieldName != null) return;
+                
                 var fields = this.$el.querySelectorAll('input[name], select[name]');
                 var requestData = {};
                 var store = this.$store;
