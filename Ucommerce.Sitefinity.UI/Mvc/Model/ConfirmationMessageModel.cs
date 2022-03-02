@@ -27,11 +27,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			return viewModel;
 		}
 
-		public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+		public virtual bool CanProcessRequest(Dictionary<string, object> parameters, string orderGuid, out string message)
 		{
 			if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
 			{
 				message = "The widget is in Page Edit mode.";
+				return false;
+			}
+
+			if (string.IsNullOrWhiteSpace(orderGuid))
+			{
+				message = "No order id was specified - the widget is likely in Page Edit mode.";
 				return false;
 			}
 

@@ -22,7 +22,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
             var orderGuid = Request.QueryString["orderGuid"];
-            if (!model.CanProcessRequest(parameters, out message))
+            if (!model.CanProcessRequest(parameters, orderGuid, out message))
             {
                 return this.PartialView("_Warning", message);
             }
