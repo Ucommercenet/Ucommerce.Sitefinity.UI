@@ -11,7 +11,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 
-		public virtual ConfirmationMessageViewModel GetViewModel(string headline, string message)
+		public virtual ConfirmationMessageViewModel GetViewModel(string headline, string message, string orderGuid)
 		{
 			var viewModel = new ConfirmationMessageViewModel()
 			{
@@ -19,10 +19,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				Message = message
 			};
 
-			// TODO-REVIEW #5: Can we resolve the order Id here and use it for the interaction object?
-			// TODO-REVIEW #6: Invalid interaction (w/o subject) is sent when you place this widget on a page and publish it. Can we avoid this?
-			string interactionObject = string.Empty;
-			InsightUcommerce.SendInteraction("Checkout > Complete order", interactionObject);
+			var purchaseOrder = Ucommerce.EntitiesV2.PurchaseOrder.FirstOrDefault(po => po.OrderGuid.ToString() == orderGuid);
+			var orderNumber = purchaseOrder?.OrderNumber;
+			if (string.IsNullOrWhiteSpace(orderNumber)) orderNumber = orderGuid;
+			InsightUcommerce.SendInteraction("Checkout > Complete order", orderNumber);
 
 			return viewModel;
 		}

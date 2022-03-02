@@ -9,6 +9,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public interface IConfirmationMessageModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
-        ConfirmationMessageViewModel GetViewModel(string headline, string message);
+        ConfirmationMessageViewModel GetViewModel(string headline, string message, string orderGuid);
     }
 }
