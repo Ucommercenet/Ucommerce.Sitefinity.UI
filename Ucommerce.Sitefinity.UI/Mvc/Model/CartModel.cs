@@ -181,21 +181,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			{
 				var itemForDeletion = basket.Discounts.FirstOrDefault(d => d.CampaignItemName == voucher);
 
-				if (itemForDeletion != null)
-				{
-					basket.RemoveDiscount(itemForDeletion);
-					var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
-					if (prop == null) continue;
+				if (itemForDeletion == null) continue;
 
-					prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
-					prop.Save();
+				basket.RemoveDiscount(itemForDeletion);
+				var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
+				if (prop == null) continue;
 
-					InsightUcommerce.SendOrderInteraction(basket, "Removed voucher from cart", voucher);
-				}
-				else
-				{
-					InsightUcommerce.SendOrderInteraction(basket, "Added voucher to cart", voucher);
-				}
+				prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
+				prop.Save();
+
+				InsightUcommerce.SendOrderInteraction(basket, "Removed voucher from cart", voucher);
 			}
 
 			basket.Save();
@@ -209,11 +204,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 		public virtual CartUpdateBasketViewModel AddVoucher(CartUpdateBasket model)
 		{
+			var basket = TransactionLibrary.GetBasket(false);
 			if (model.Vouchers.Any())
 			{
 				foreach (var modelVoucher in model.Vouchers)
 				{
 					MarketingLibrary.AddVoucher(modelVoucher);
+					InsightUcommerce.SendOrderInteraction(basket, "Added voucher to cart", modelVoucher);
 				}
 			}
 
