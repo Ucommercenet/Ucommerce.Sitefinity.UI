@@ -160,7 +160,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				}
 				else
 				{
-					InsightUcommerce.SendProductInteraction(product, "Changed quantity of product in cart", $"{product.Name} ({product.Sku}) x{newQuantity}");
+					InsightUcommerce.SendProductInteraction(product, "Change quantity of product in cart", $"{product.Name} ({product.Sku}) x{newQuantity}");
 				}
 
 				TransactionLibrary.UpdateLineItemByOrderLineId(updateOrderline.OrderLineId, newQuantity);
@@ -179,7 +179,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			foreach (var voucher in model.Vouchers)
 			{
-				InsightUcommerce.SendOrderInteraction(basket, "Removed voucher from cart", voucher);
+				InsightUcommerce.SendOrderInteraction(basket, "Remove voucher from cart", voucher);
 
 				var itemForDeletion = basket.Discounts.FirstOrDefault(d => d.CampaignItemName == voucher);
 
@@ -211,7 +211,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				foreach (var modelVoucher in model.Vouchers)
 				{
 					MarketingLibrary.AddVoucher(modelVoucher);
-					InsightUcommerce.SendOrderInteraction(basket, "Added voucher to cart", modelVoucher);
+					InsightUcommerce.SendOrderInteraction(basket, "Add voucher to cart", modelVoucher);
 				}
 			}
 
