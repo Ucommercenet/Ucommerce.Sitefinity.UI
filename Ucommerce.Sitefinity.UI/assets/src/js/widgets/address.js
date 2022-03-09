@@ -104,11 +104,7 @@ function initCart(rootElement) {
                     }
                 }
             },
-            handleIsShippingAddressDifferent: function() {
-                setTimeout(() => {
-                        this.submit(null, true);
-                    },
-                    500);
+            handleIsShippingAddressDifferent: function() {                
             }
         },
         created: function () {
