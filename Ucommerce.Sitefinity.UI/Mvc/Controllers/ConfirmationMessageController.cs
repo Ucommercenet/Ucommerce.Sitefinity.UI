@@ -21,12 +21,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             string message;
             var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            if (!model.CanProcessRequest(parameters, out message))
+            var orderGuid = Request.QueryString["orderGuid"];
+            if (!model.CanProcessRequest(parameters, orderGuid, out message))
             {
                 return this.PartialView("_Warning", message);
             }
 
-            var confirmationMessageVM = model.GetViewModel(Headline, Message);
+            var confirmationMessageVM = model.GetViewModel(Headline, Message, orderGuid);
             var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
             return View(detailTemplateName, confirmationMessageVM);

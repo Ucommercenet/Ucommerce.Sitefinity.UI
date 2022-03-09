@@ -20,7 +20,7 @@ https://docs.ucommerce.net/ucommerce/v8.1/sitefinity/setting-up-ucommerce-sitefi
 The Vue app uses Webpack for build configuration. The main entry point is `index.js` located in the `assets\src` folder
 
 ### To run the project in Prod mode
-1. CMD into the root of the Ucommerce.Sitefinity.UI project
+1. CMD into the root of the Ucommerce.Sitefinity.UI project i.e. `Ucommerce.Sitefinity.UI v14.0\Ucommerce.Sitefinity.UI`
 2. Run `npm install`
 3. Run `npm run build`
 
@@ -38,3 +38,6 @@ The Vue app uses Webpack for build configuration. The main entry point is `index
 ### Confirmation mail
 
 To use all the benefits of the confirmation email template the page where the widget is dropped must be based on Email Page Template
+
+### Order Confirmation Page
+There is a known redirect to the order confirmation page which redirects to `localhost` instead of `localhost:60876`. This is an issue with the Ucommerce core so when testing when you end up on `http://localhost/shop/checkout/confirmation?orderGuid={orderGuid}` you will need to add the port i.e. `http://localhost:60876/shop/checkout/confirmation?orderGuid={orderGuid}`

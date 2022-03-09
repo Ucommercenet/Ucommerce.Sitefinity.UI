@@ -274,7 +274,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Services
 
 			if (product == null) return;
 
-			/* TODO-REVIEW #4: Can we provide the metadata in the below 2 commented lines just to make it consistent with the other product method above? */
 			const string prefix = "Product";
 			AddBaseSiteInfo(interaction, product.Guid, "Product");
 			// AddObjectMetaData(interaction, prefix, "Id", product.ProductId); 
