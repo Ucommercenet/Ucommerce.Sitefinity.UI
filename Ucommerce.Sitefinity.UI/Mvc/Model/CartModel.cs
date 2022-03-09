@@ -179,18 +179,19 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			foreach (var voucher in model.Vouchers)
 			{
+				InsightUcommerce.SendOrderInteraction(basket, "Removed voucher from cart", voucher);
+
 				var itemForDeletion = basket.Discounts.FirstOrDefault(d => d.CampaignItemName == voucher);
 
 				if (itemForDeletion == null) continue;
 
 				basket.RemoveDiscount(itemForDeletion);
+
 				var prop = basket.OrderProperties.FirstOrDefault(v => v.Key == "voucherCodes");
 				if (prop == null) continue;
 
 				prop.Value = prop.Value.Replace(voucher + ",", string.Empty);
 				prop.Save();
-
-				InsightUcommerce.SendOrderInteraction(basket, "Removed voucher from cart", voucher);
 			}
 
 			basket.Save();
