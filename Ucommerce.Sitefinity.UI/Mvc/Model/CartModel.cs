@@ -160,7 +160,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				}
 				else
 				{
-					InsightUcommerce.SendProductInteraction(product, "Changed quantity of product in cart", $"{product.Name} ({product.Sku})");
+					InsightUcommerce.SendProductInteraction(product, "Changed quantity of product in cart", $"{product.Name} ({product.Sku}) x{newQuantity}");
 				}
 
 				TransactionLibrary.UpdateLineItemByOrderLineId(updateOrderline.OrderLineId, newQuantity);
