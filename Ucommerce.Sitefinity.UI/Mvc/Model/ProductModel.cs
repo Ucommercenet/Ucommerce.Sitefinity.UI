@@ -95,7 +95,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			if (currentCategory != null)
 			{
 				var facets = HttpContext.Current.Request.QueryString.ToFacets();
-				var actionName = facets?.Any() == true ? "Filtered" : "View";
+				var actionName = facets?.Any() == true ? "Filter" : "View";
 				InsightUcommerce.SendCategoryInteraction(currentCategory, $"{actionName} product list", currentCategory.Name);
 			}
 
