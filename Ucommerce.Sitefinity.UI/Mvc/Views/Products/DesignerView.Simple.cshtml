@@ -23,7 +23,7 @@
 
         <div ng-show="properties.IsManualSelectionMode.PropertyValue === 'True'">
             <h3 class="tree__heading">Select products</h3>
-            <div>
+            <div sf-change-observer>
                 <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="product" load-on-compile="true"
                                         content-picker-type="products" icon-folder="uCommerce" selected-node-style="none"
                                         form-name="ProductIds" pre-selected-values="{{properties.ProductIds.PropertyValue}}">
@@ -32,7 +32,7 @@
 
             <h3 class="tree__heading">Select Categories you want to show products for</h3>
 
-            <div>
+            <div sf-change-observer>
                 <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="productCategory"
                                         load-on-compile="true" content-picker-type="products" icon-folder="uCommerce"
                                         selected-node-style="none" form-name="CategoryIds" pre-selected-values="{{properties.CategoryIds.PropertyValue}}">
@@ -54,7 +54,7 @@
 
 
             <div ng-show="properties.EnableCategoryFallback.PropertyValue === 'True'">
-                <div>
+                <div sf-change-observer>
                     <ucommerce-multi-picker class="tree" tree="data" has-checkbox-for="productCategory"
                                             load-on-compile="true" content-picker-type="products" icon-folder="uCommerce"
                                             selected-node-style="none" form-name="CategoryIds" pre-selected-values="{{properties.FallbackCategoryIds.PropertyValue}}">

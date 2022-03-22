@@ -8,6 +8,7 @@ using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Constants;
 using Ucommerce.EntitiesV2;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -16,6 +17,7 @@ namespace UCommerce.Sitefinity.UI.Api
 	/// </summary>
 	public class BasketController : ApiController
 	{
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 		public IMarketingLibrary MarketingLibrary => ObjectFactory.Instance.Resolve<IMarketingLibrary>();
 		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
@@ -57,6 +59,13 @@ namespace UCommerce.Sitefinity.UI.Api
 		[HttpPost]
 		public IHttpActionResult UpdateLineItem(UpdateLineItemDTO model)
 		{
+			if (model.NewQuantity == 0)
+			{
+				var orderLine = Ucommerce.EntitiesV2.OrderLine.Get(model.OrderlineId);
+				var product = Ucommerce.EntitiesV2.Product.FirstOrDefault(p => p.Sku == orderLine.Sku && p.VariantSku == orderLine.VariantSku);
+				InsightUcommerce.SendProductInteraction(product, "Remove product from cart", $"{product?.Name} ({product?.Sku})");
+			}
+
 			TransactionLibrary.UpdateLineItem(model.OrderlineId, model.NewQuantity);
 			TransactionLibrary.ExecuteBasketPipeline();
 
@@ -105,6 +114,9 @@ namespace UCommerce.Sitefinity.UI.Api
 			}
 
 			TransactionLibrary.AddToBasket((int)model.Quantity, model.Sku, variantSku);
+
+			InsightUcommerce.SendProductInteraction(product, "Add to shopping cart", $"{product.Name} ({product.Sku})");
+
 			return Json(this.GetBasketModel());
 		}
 

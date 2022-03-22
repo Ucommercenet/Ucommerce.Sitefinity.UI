@@ -6,6 +6,7 @@ using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using Ucommerce.Api;
 using Ucommerce;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -16,6 +17,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		private Guid nextStepId;
 		private Guid previousStepId;
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
         public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
         public BasketPreviewModel(Guid? nextStepId = null, Guid? previousStepId = null)
@@ -82,6 +84,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
 			basketPreviewViewModel.NextStepUrl = GetNextStepUrl(nextStepId, purchaseOrder.OrderGuid);
 			basketPreviewViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
+
+			InsightUcommerce.SendOrderInteraction(purchaseOrder, "Checkout > Preview order", string.Empty);
 
 			return basketPreviewViewModel;
 		}
