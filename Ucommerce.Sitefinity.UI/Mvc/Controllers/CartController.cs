@@ -6,219 +6,224 @@ using Ucommerce.Api;
 using Ucommerce.Infrastructure;
 using UCommerce.Sitefinity.UI.Api.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    /// <summary>
-    /// The controller class for the Cart MVC widget.
-    /// </summary>
-    [ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnCart sfMvcIcn")]
-    public class CartController : Controller, IPersonalizable
-    {
-        public Guid? NextStepId { get; set; }
-        public Guid? ProductDetailsPageId { get; set; }
-        public Guid? RedirectPageId { get; set; }
-        public string TemplateName { get; set; } = "Index";
+	/// <summary>
+	/// The controller class for the Cart MVC widget.
+	/// </summary>
+	[ControllerToolboxItem(Name = "uCart_MVC", Title = "Cart", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnCart sfMvcIcn")]
+	public class CartController : Controller, IPersonalizable
+	{
+		public Guid? NextStepId { get; set; }
+		public Guid? ProductDetailsPageId { get; set; }
+		public Guid? RedirectPageId { get; set; }
+		public string TemplateName { get; set; } = "Index";
 
-        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
+		public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
-        public ActionResult Index()
-        {
-            var model = ResolveModel();
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+		public ActionResult Index()
+		{
+			var model = ResolveModel();
+			string message;
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
-            
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-            return View(detailTemplateName);
-        }
-        
-        [HttpGet]
-        [RelativeRoute("uc/checkout/cart")]
-        public ActionResult Data()
-        {
-            var model = ResolveModel();
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
-            }
+			return View(detailTemplateName);
+		}
 
-            var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
-            
-            var responseDTO = new OperationStatusDTO();
-            responseDTO.Status = "success";
-            responseDTO.Data.Add("data", vm);
+		[HttpGet]
+		[RelativeRoute("uc/checkout/cart")]
+		public ActionResult Data()
+		{
+			var model = ResolveModel();
+			string message;
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
 
-            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
-        }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+			}
 
-        [HttpPost]
-        [RelativeRoute("uc/checkout/cart/remove-orderline")]
-        public ActionResult RemoveOrderline(int orderlineId)
-        {
-            var model = ResolveModel();
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
-            string message;
+			var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
+			var responseDTO = new OperationStatusDTO();
+			responseDTO.Status = "success";
+			responseDTO.Data.Add("data", vm);
 
-            TransactionLibrary.UpdateLineItemByOrderLineId(orderlineId, 0);
-            TransactionLibrary.ExecuteBasketPipeline();
-            var vm = model.GetViewModel(Url.Action("UpdateBasket"), Url.Action("RemoveOrderline"));
+			return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
+		}
 
-            var miniBasketModel = ResolveMiniBasketModel();
+		[HttpPost]
+		[RelativeRoute("uc/checkout/cart/remove-orderline")]
+		public ActionResult RemoveOrderline(int orderlineId)
+		{
+			var model = ResolveModel();
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			string message;
 
-            return Json(new
-            {
-                MiniBasketRefresh = miniBasketModel.Refresh(),
-                orderlineId,
-                vm.OrderTotal,
-                vm.DiscountTotal,
-                vm.TaxTotal,
-                vm.SubTotal,
-                vm.OrderLines,
-                vm.RedirectUrl
-            });
-        }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.PartialView("_Warning", message);
+			}
 
-        [HttpPost]
-        [RelativeRoute("uc/checkout/cart/update-basket")]
-        public ActionResult UpdateBasket(CartUpdateBasket updateModel)
-        {
-            var model = ResolveModel();
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
-            string message;
+			var orderLine = Ucommerce.EntitiesV2.OrderLine.Get(orderlineId);
+			var product = Ucommerce.EntitiesV2.Product.FirstOrDefault(p => p.Sku == orderLine.Sku && p.VariantSku == orderLine.VariantSku);
+			InsightUcommerce.SendProductInteraction(product, "Remove product from cart", $"{product?.Name} ({product?.Sku})");
 
-            parameters.Add("submitModel", updateModel);
+			TransactionLibrary.UpdateLineItemByOrderLineId(orderlineId, 0);
+			TransactionLibrary.ExecuteBasketPipeline();
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
-                   JsonRequestBehavior.AllowGet);
-            }
+			var miniBasketModel = ResolveMiniBasketModel();
+			var refresh = miniBasketModel.Refresh();
+			return Json(new
+			{
+				MiniBasketRefresh = refresh,
+				orderlineId,
+				refresh.Total,
+				refresh.DiscountTotal,
+				refresh.TaxTotal,
+				refresh.SubTotal,
+				refresh.OrderLines,
+				refresh.CartPageUrl
+			});
+		}
 
-            var updatedVM = model.Update(updateModel);
+		[HttpPost]
+		[RelativeRoute("uc/checkout/cart/update-basket")]
+		public ActionResult UpdateBasket(CartUpdateBasket updateModel)
+		{
+			var model = ResolveModel();
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			string message;
 
-            var miniBasketModel = ResolveMiniBasketModel();
+			parameters.Add("submitModel", updateModel);
 
-            return Json(new
-            {
-                MiniBasketRefresh = miniBasketModel.Refresh(),
-                updatedVM.OrderTotal,
-                updatedVM.DiscountTotal,
-                updatedVM.TaxTotal,
-                updatedVM.SubTotal,
-                updatedVM.OrderLines
-            });
-        }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
+				   JsonRequestBehavior.AllowGet);
+			}
 
-        [HttpPost]
-        [RelativeRoute("uc/checkout/cart/vouchers/add")]
-        public ActionResult AddVoucher(CartUpdateBasket updateModel)
-        {
-            var model = ResolveModel();
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
-            string message;
+			var updatedVM = model.Update(updateModel);
 
-            parameters.Add("submitModel", updateModel);
+			var miniBasketModel = ResolveMiniBasketModel();
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
-                    JsonRequestBehavior.AllowGet);
-            }
+			return Json(new
+			{
+				MiniBasketRefresh = miniBasketModel.Refresh(),
+				updatedVM.OrderTotal,
+				updatedVM.DiscountTotal,
+				updatedVM.TaxTotal,
+				updatedVM.SubTotal,
+				updatedVM.OrderLines
+			});
+		}
 
-            var updatedVM = model.AddVoucher(updateModel);
+		[HttpPost]
+		[RelativeRoute("uc/checkout/cart/vouchers/add")]
+		public ActionResult AddVoucher(CartUpdateBasket updateModel)
+		{
+			var model = ResolveModel();
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			string message;
 
-            return Json(new
-            {
-                updatedVM.OrderTotal,
-                updatedVM.DiscountTotal,
-                updatedVM.TaxTotal,
-                updatedVM.SubTotal,
-                Voucher = updatedVM.Vouchers,
-                updatedVM.OrderLines
-            });
-        }
+			parameters.Add("submitModel", updateModel);
 
-        [HttpPost]
-        [RelativeRoute("uc/checkout/cart/vouchers/remove")]
-        public ActionResult RemoveVoucher(CartUpdateBasket updateModel)
-        {
-            var model = ResolveModel();
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
-            string message;
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
+					JsonRequestBehavior.AllowGet);
+			}
 
-            parameters.Add("submitModel", updateModel);
+			var updatedVM = model.AddVoucher(updateModel);
 
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
-                    JsonRequestBehavior.AllowGet);
-            }
+			return Json(new
+			{
+				updatedVM.OrderTotal,
+				updatedVM.DiscountTotal,
+				updatedVM.TaxTotal,
+				updatedVM.SubTotal,
+				Voucher = updatedVM.Vouchers,
+				updatedVM.OrderLines
+			});
+		}
 
-            var updatedVM = model.RemoveVoucher(updateModel);
+		[HttpPost]
+		[RelativeRoute("uc/checkout/cart/vouchers/remove")]
+		public ActionResult RemoveVoucher(CartUpdateBasket updateModel)
+		{
+			var model = ResolveModel();
+			var parameters = new System.Collections.Generic.Dictionary<string, object>();
+			string message;
 
-            return Json(new
-            {
-                updatedVM.OrderTotal,
-                updatedVM.DiscountTotal,
-                updatedVM.TaxTotal,
-                updatedVM.SubTotal,
-                Voucher = updatedVM.Vouchers,
-                updatedVM.OrderLines
-            });
-        }
+			parameters.Add("submitModel", updateModel);
 
-        protected override void HandleUnknownAction(string actionName)
-        {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
-        }
+			if (!model.CanProcessRequest(parameters, out message))
+			{
+				return this.Json(new OperationStatusDTO() { Status = "failed", Message = message },
+					JsonRequestBehavior.AllowGet);
+			}
 
-        private ICartModel ResolveModel()
-        {
-            var args = new Castle.MicroKernel.Arguments();
+			var updatedVM = model.RemoveVoucher(updateModel);
 
-            args.AddProperties(new
-            {
-                nextStepId = this.NextStepId,
-                productDetailsPageId = this.ProductDetailsPageId,
-                redirectPageId = this.RedirectPageId
-            });
+			return Json(new
+			{
+				updatedVM.OrderTotal,
+				updatedVM.DiscountTotal,
+				updatedVM.TaxTotal,
+				updatedVM.SubTotal,
+				Voucher = updatedVM.Vouchers,
+				updatedVM.OrderLines
+			});
+		}
 
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<ICartModel>(args);
+		protected override void HandleUnknownAction(string actionName)
+		{
+			this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+		}
 
-            return model;
-        }
+		private ICartModel ResolveModel()
+		{
+			var args = new Castle.MicroKernel.Arguments();
 
-        private IMiniBasketModel ResolveMiniBasketModel()
-        {
-            var args = new Castle.MicroKernel.Arguments();
+			args.AddProperties(new
+			{
+				nextStepId = this.NextStepId,
+				productDetailsPageId = this.ProductDetailsPageId,
+				redirectPageId = this.RedirectPageId
+			});
 
-            args.AddProperties(new
-            {
-                cartPageId = Guid.Empty
-            });
+			var container = UCommerceUIModule.Container;
+			var model = container.Resolve<ICartModel>(args);
 
-            var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IMiniBasketModel>(args);
-               
-            return model;
-        }
+			return model;
+		}
 
-        private string detailTemplateNamePrefix = "Detail.";
-    }
+		private IMiniBasketModel ResolveMiniBasketModel()
+		{
+			var args = new Castle.MicroKernel.Arguments();
+
+			args.AddProperties(new
+			{
+				cartPageId = Guid.Empty
+			});
+
+			var container = UCommerceUIModule.Container;
+			var model = container.Resolve<IMiniBasketModel>(args);
+
+			return model;
+		}
+
+		private string detailTemplateNamePrefix = "Detail.";
+	}
 }

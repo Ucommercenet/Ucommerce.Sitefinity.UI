@@ -17,10 +17,12 @@ using Ucommerce.Extensions;
 using Ucommerce.Infrastructure.Globalization;
 using Ucommerce.Search;
 using Telerik.Sitefinity.Localization;
+using Telerik.Sitefinity.Personalization;
 using Ucommerce.Infrastructure;
 using Ucommerce.Search.Slugs;
 using Ucommerce.Search.Extensions;
 using Ucommerce.Search.Models;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -32,6 +34,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		public IIndex<Ucommerce.Search.Models.Product> ProductIndex =>
 			ObjectFactory.Instance.Resolve<IIndex<Ucommerce.Search.Models.Product>>();
 
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
 		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 		public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
@@ -88,6 +91,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			viewModel.ShowPager = viewModel.TotalPagesCount > 1;
 			viewModel.PagingUrlTemplate = this.GetPagingUrlTemplate(currentCategory);
 			viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
+
+			if (currentCategory != null)
+			{
+				var facets = HttpContext.Current.Request.QueryString.ToFacets();
+				var actionName = facets?.Any() == true ? "Filter" : "View";
+				InsightUcommerce.SendCategoryInteraction(currentCategory, $"{actionName} product list", currentCategory.Name);
+			}
 
 			return viewModel;
 		}
@@ -169,155 +179,154 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			ProductDetailViewModel productDetailViewModel = null;
 
-			var currentProduct =
-				Ucommerce.EntitiesV2.Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
+			var currentProduct = Ucommerce.EntitiesV2.Product.FirstOrDefault(x => x.Guid == CatalogContext.CurrentProduct.Guid);
 
-			if (currentProduct != null)
+			if (currentProduct == null) return productDetailViewModel;
+
+			var imageService = ObjectFactory.Instance.Resolve<IImageService>();
+			var currentCategory = CatalogContext.CurrentCategory;
+			string displayName = string.Empty;
+			if (currentProduct.ParentProduct != null)
 			{
-				var imageService = ObjectFactory.Instance.Resolve<IImageService>();
-				var currentCategory = CatalogContext.CurrentCategory;
-				string displayName = string.Empty;
-				if (currentProduct.ParentProduct != null)
+				displayName = $"{currentProduct.ParentProduct.DisplayName()} ";
+			}
+
+			displayName += currentProduct.DisplayName();
+
+			var productPrice = CatalogLibrary.CalculatePrices(new List<Guid>() { currentProduct.Guid }).Items
+				.FirstOrDefault();
+
+			decimal price = 0;
+			decimal discount = 0;
+
+			if (productPrice != null)
+			{
+				price = productPrice.PriceExclTax;
+				discount = productPrice.DiscountExclTax;
+				var currentCatalog = CatalogContext.CurrentCatalog;
+				if (currentCatalog != null && currentCatalog.ShowPricesIncludingTax)
 				{
-					displayName = $"{currentProduct.ParentProduct.DisplayName()} ";
+					price = productPrice.PriceInclTax;
+					discount = productPrice.DiscountInclTax;
 				}
+			}
 
-				displayName += currentProduct.DisplayName();
+			var imageUrl = imageService.GetImage(currentProduct.PrimaryImageMediaId).Url;
+			var absoluteImageUrl = UrlPath.ResolveAbsoluteUrl(imageUrl);
 
-				var productPrice = CatalogLibrary.CalculatePrices(new List<Guid>() { currentProduct.Guid }).Items
+			var definition = currentProduct.ProductDefinition;
+			var isProductFamily = definition.IsProductFamily();
+
+			productDetailViewModel = new ProductDetailViewModel()
+			{
+				DisplayName = displayName,
+				Guid = currentProduct.Guid,
+				PrimaryImageMediaUrl = absoluteImageUrl,
+				LongDescription = currentProduct.LongDescription(),
+				ShortDescription = currentProduct.ShortDescription(),
+				ProductUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct),
+				Price = new Money(price, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString(),
+				Discount = discount > 0
+					? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
+					: "",
+				Sku = currentProduct.Sku,
+				Rating = Convert.ToInt32(Math.Round(currentProduct.Rating.GetValueOrDefault())),
+				VariantSku = currentProduct.VariantSku,
+				IsVariant = currentProduct.IsVariant,
+				IsProductFamily = currentProduct.ProductDefinition.IsProductFamily(),
+				IsSellableProduct = !isProductFamily || currentProduct.Variants.Any()
+			};
+
+			if (currentProduct.ParentProduct != null)
+			{
+				var parentProduct = CatalogLibrary.GetProduct(currentProduct.ParentProduct.Sku);
+				productDetailViewModel.ParentProductUrl =
+					UrlService.GetUrl(CatalogContext.CurrentCatalog, parentProduct);
+				productDetailViewModel.ParentProductDisplayName = currentProduct.ParentProduct.DisplayName();
+			}
+
+			if (currentCategory != null)
+			{
+				productDetailViewModel.CategoryDisplayName = currentCategory.DisplayName;
+				productDetailViewModel.CategoryUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog,
+					CatalogContext.CurrentCategories.Append(CatalogContext.CurrentCategory).Compact(),
+					CatalogContext.CurrentProduct);
+				productDetailViewModel.ProductUrl =
+					UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct);
+			}
+
+			//Get Related Products
+			var searchProduct = this.ProductIndex.Find().Where(x => x.Guid == productDetailViewModel.Guid).FirstOrDefault();
+			if (searchProduct != null)
+			{
+				var relatedIds = searchProduct.RelatedProducts;
+				productDetailViewModel.RelatedProducts = this.ProductIndex.Find().Where(x => relatedIds.Contains(x.Guid)).ToList();
+			}
+
+			var invariantFields = currentProduct.ProductProperties;
+
+			var localizationContext = ObjectFactory.Instance.Resolve<ILocalizationContext>();
+
+			var fieldsForCurrentLanguage =
+				currentProduct.GetProperties(localizationContext.CurrentCultureCode).ToList();
+
+			productDetailViewModel.ProductProperties = invariantFields.Concat(fieldsForCurrentLanguage).ToList();
+
+
+			var uniqueVariants = from v in currentProduct.Variants.SelectMany(p => p.ProductProperties)
+								 where v.ProductDefinitionField.DisplayOnSite
+								 group v by v.ProductDefinitionField
+				into g
+								 select g;
+
+			foreach (var vt in uniqueVariants)
+			{
+				var typeViewModel = productDetailViewModel.VariantTypes
+					.Where(z => z.Id == vt.Key.ProductDefinitionFieldId)
 					.FirstOrDefault();
 
-				decimal price = 0;
-				decimal discount = 0;
-
-				if (productPrice != null)
+				if (typeViewModel == null)
 				{
-					price = productPrice.PriceExclTax;
-					discount = productPrice.DiscountExclTax;
-					var currentCatalog = CatalogContext.CurrentCatalog;
-					if (currentCatalog != null && currentCatalog.ShowPricesIncludingTax)
+					typeViewModel = new VariantTypeViewModel
 					{
-						price = productPrice.PriceInclTax;
-						discount = productPrice.DiscountInclTax;
-					}
+						Id = vt.Key.ProductDefinitionFieldId,
+						Name = vt.Key.Name,
+						DisplayName = vt.Key.GetDisplayName()
+					};
+
+					productDetailViewModel.VariantTypes.Add(typeViewModel);
 				}
 
-				var imageUrl = imageService.GetImage(currentProduct.PrimaryImageMediaId).Url;
-				var absoluteImageUrl = UrlPath.ResolveAbsoluteUrl(imageUrl);
+				var variants = vt.ToList();
 
-				var definition = currentProduct.ProductDefinition;
-				var isProductFamily = definition.IsProductFamily();
-
-				productDetailViewModel = new ProductDetailViewModel()
+				foreach (var variant in variants)
 				{
-					DisplayName = displayName,
-					Guid = currentProduct.Guid,
-					PrimaryImageMediaUrl = absoluteImageUrl,
-					LongDescription = currentProduct.LongDescription(),
-					ShortDescription = currentProduct.ShortDescription(),
-					ProductUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct),
-					Price = new Money(price, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString(),
-					Discount = discount > 0
-						? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
-						: "",
-					Sku = currentProduct.Sku,
-					Rating = Convert.ToInt32(Math.Round(currentProduct.Rating.GetValueOrDefault())),
-					VariantSku = currentProduct.VariantSku,
-					IsVariant = currentProduct.IsVariant,
-					IsProductFamily = currentProduct.ProductDefinition.IsProductFamily(),
-					IsSellableProduct = !isProductFamily || currentProduct.Variants.Any()
-				};
-
-				if (currentProduct.ParentProduct != null)
-				{
-					var parentProduct = CatalogLibrary.GetProduct(currentProduct.ParentProduct.Sku);
-					productDetailViewModel.ParentProductUrl =
-						UrlService.GetUrl(CatalogContext.CurrentCatalog, parentProduct);
-					productDetailViewModel.ParentProductDisplayName = currentProduct.ParentProduct.DisplayName();
-				}
-
-				if (currentCategory != null)
-				{
-					productDetailViewModel.CategoryDisplayName = currentCategory.DisplayName;
-					productDetailViewModel.CategoryUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog,
-						CatalogContext.CurrentCategories.Append(CatalogContext.CurrentCategory).Compact(),
-						CatalogContext.CurrentProduct);
-					productDetailViewModel.ProductUrl =
-						UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct);
-				}
-
-				//Get Related Products
-				var searchProduct = this.ProductIndex.Find().Where(x => x.Guid == productDetailViewModel.Guid).FirstOrDefault();
-				if (searchProduct != null)
-				{
-					var relatedIds = searchProduct.RelatedProducts;
-					productDetailViewModel.RelatedProducts = this.ProductIndex.Find().Where(x => relatedIds.Contains(x.Guid)).ToList();
-				}
-
-				var invariantFields = currentProduct.ProductProperties;
-
-				var localizationContext = ObjectFactory.Instance.Resolve<ILocalizationContext>();
-
-				var fieldsForCurrentLanguage =
-					currentProduct.GetProperties(localizationContext.CurrentCultureCode).ToList();
-
-				productDetailViewModel.ProductProperties = invariantFields.Concat(fieldsForCurrentLanguage).ToList();
-
-
-				var uniqueVariants = from v in currentProduct.Variants.SelectMany(p => p.ProductProperties)
-									 where v.ProductDefinitionField.DisplayOnSite
-									 group v by v.ProductDefinitionField
-					into g
-									 select g;
-
-				foreach (var vt in uniqueVariants)
-				{
-					var typeViewModel = productDetailViewModel.VariantTypes
-						.Where(z => z.Id == vt.Key.ProductDefinitionFieldId)
+					var variantViewModel = typeViewModel.Values
+						.Where(v => v.Value == variant.Value)
 						.FirstOrDefault();
 
-					if (typeViewModel == null)
+					if (variantViewModel == null)
 					{
-						typeViewModel = new VariantTypeViewModel
+						variantViewModel = new VariantViewModel
 						{
-							Id = vt.Key.ProductDefinitionFieldId,
-							Name = vt.Key.Name,
-							DisplayName = vt.Key.GetDisplayName()
+							Value = variant.Value,
+							TypeName = typeViewModel.Name
 						};
 
-						productDetailViewModel.VariantTypes.Add(typeViewModel);
-					}
-
-					var variants = vt.ToList();
-
-					foreach (var variant in variants)
-					{
-						var variantViewModel = typeViewModel.Values
-							.Where(v => v.Value == variant.Value)
-							.FirstOrDefault();
-
-						if (variantViewModel == null)
+						if (!string.IsNullOrEmpty(variant.Product.PrimaryImageMediaId))
 						{
-							variantViewModel = new VariantViewModel
-							{
-								Value = variant.Value,
-								TypeName = typeViewModel.Name
-							};
-
-							if (!string.IsNullOrEmpty(variant.Product.PrimaryImageMediaId))
-							{
-								var variantImageUrl = imageService.GetImage(variant.Product.PrimaryImageMediaId).Url;
-								variantViewModel.PrimaryImageMediaUrl = UrlPath.ResolveAbsoluteUrl(variantImageUrl);
-							}
-
-							typeViewModel.Values.Add(variantViewModel);
+							var variantImageUrl = imageService.GetImage(variant.Product.PrimaryImageMediaId).Url;
+							variantViewModel.PrimaryImageMediaUrl = UrlPath.ResolveAbsoluteUrl(variantImageUrl);
 						}
+
+						typeViewModel.Values.Add(variantViewModel);
 					}
 				}
-
-				productDetailViewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME,
-					RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 			}
+
+			productDetailViewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
+
+			InsightUcommerce.SendProductInteraction(currentProduct, "View product", $"{currentProduct.Name} ({currentProduct.Sku})");
 
 			return productDetailViewModel;
 		}
@@ -366,7 +375,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		private IQueryable<Ucommerce.Search.Models.Product> GetProductsQuery(Ucommerce.Search.Models.Category category,
 			string searchTerm)
 		{
-			if (this.isManualSelectionMode)
+			if (category == null && this.isManualSelectionMode)
 			{
 				// NOTE: The int values will go away soon but the picker still saves as ints at the moment so we need to convert them
 				var productIds = this.productIds?.Split(',').Select(Int32.Parse).ToList() ?? new List<int>();
@@ -380,7 +389,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				return ApplyManualSelection(productGuids, categoryGuids);
 			}
 
-			if (string.IsNullOrWhiteSpace(searchTerm) && category == null && this.enableCategoryFallback == true)
+			if (category == null && string.IsNullOrWhiteSpace(searchTerm) && this.enableCategoryFallback == true)
 			{
 				var categoryIds = this.fallbackCategoryIds?.Split(',').Select(Int32.Parse).ToList() ?? new List<int>();
 				var categoryGuids = Ucommerce.EntitiesV2.Category.Find(c => categoryIds.Contains(c.CategoryId))

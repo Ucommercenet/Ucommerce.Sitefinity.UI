@@ -71,7 +71,6 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         public ActionResult Save(AddressSaveViewModel addressRendering)
         {
             var model = ResolveModel();
-            var viewModel = model.GetViewModel();
             string message;
 
             var parameters = new System.Collections.Generic.Dictionary<string, object>();
