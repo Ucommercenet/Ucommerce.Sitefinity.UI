@@ -8,126 +8,132 @@ using Ucommerce;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-    /// <summary>
-    /// The Model class of the Mini Basket MVC widget.
-    /// </summary>
-    public class MiniBasketModel : IMiniBasketModel
-    {
-        private Guid cartPageId;
-        private Guid productDetailsPageId;
-        private Guid checkoutPageId;
-        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+	/// <summary>
+	/// The Model class of the Mini Basket MVC widget.
+	/// </summary>
+	public class MiniBasketModel : IMiniBasketModel
+	{
+		private Guid cartPageId;
+		private Guid productDetailsPageId;
+		private Guid checkoutPageId;
+		public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
-        public MiniBasketModel(Guid? cartPageId = null, Guid? productDetailsPageId = null, Guid? checkoutPageId = null)
-        {
-            this.cartPageId = cartPageId ?? Guid.Empty;
-            this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
-            this.checkoutPageId = checkoutPageId ?? Guid.Empty;
-        }
+		public MiniBasketModel(Guid? cartPageId = null, Guid? productDetailsPageId = null, Guid? checkoutPageId = null)
+		{
+			this.cartPageId = cartPageId ?? Guid.Empty;
+			this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
+			this.checkoutPageId = checkoutPageId ?? Guid.Empty;
+		}
 
-        public virtual MiniBasketRenderingViewModel CreateViewModel(string refreshUrl)
-        {
-            var viewModel = new MiniBasketRenderingViewModel();
+		public virtual MiniBasketRenderingViewModel CreateViewModel(string refreshUrl)
+		{
+			var viewModel = new MiniBasketRenderingViewModel();
 
-            if (!TransactionLibrary.HasBasket())
-            {
-                return viewModel;
-            }
+			if (!TransactionLibrary.HasBasket())
+			{
+				return viewModel;
+			}
 
-            Ucommerce.EntitiesV2.PurchaseOrder basket = TransactionLibrary.GetBasket(false);
-            viewModel.OrderLines = CartModel.GetOrderLineList(basket, this.productDetailsPageId);
+			Ucommerce.EntitiesV2.PurchaseOrder basket = TransactionLibrary.GetBasket(false);
+			viewModel.OrderLines = CartModel.GetOrderLineList(basket, this.productDetailsPageId);
 
-            viewModel.NumberOfItems = GetNumberOfItemsInBasket();
-            viewModel.IsEmpty = IsBasketEmpty(viewModel);
-            viewModel.Total = GetBasketTotal();
-            viewModel.RefreshUrl = refreshUrl;
-            viewModel.CartPageUrl = GetPageAbsoluteUrl(this.cartPageId);
-            viewModel.CheckoutPageUrl = GetPageAbsoluteUrl(this.checkoutPageId);
+			viewModel.NumberOfItems = GetNumberOfItemsInBasket();
+			viewModel.IsEmpty = IsBasketEmpty(viewModel);
+			viewModel.Total = GetBasketTotal();
+			viewModel.RefreshUrl = refreshUrl;
+			viewModel.CartPageUrl = GetPageAbsoluteUrl(this.cartPageId);
+			viewModel.CheckoutPageUrl = GetPageAbsoluteUrl(this.checkoutPageId);
 
-            return viewModel;
-        }
+			return viewModel;
+		}
 
-        public virtual MiniBasketRefreshViewModel Refresh()
-        {
-            var viewModel = new MiniBasketRefreshViewModel
-            {
-                IsEmpty = true
-            };
+		public virtual MiniBasketRefreshViewModel Refresh()
+		{
+			var viewModel = new MiniBasketRefreshViewModel
+			{
+				IsEmpty = true
+			};
 
-            if (!TransactionLibrary.HasBasket())
-            {
-                return viewModel;
-            }
+			if (!TransactionLibrary.HasBasket())
+			{
+				return viewModel;
+			}
 
-            var purchaseOrder = TransactionLibrary.GetBasket(false);
-            
-            viewModel.OrderLines = CartModel.GetOrderLineList(purchaseOrder, this.productDetailsPageId);
+			var purchaseOrder = TransactionLibrary.GetBasket(false);
 
-            var quantity = purchaseOrder.OrderLines.Sum(x => x.Quantity);
+			viewModel.OrderLines = CartModel.GetOrderLineList(purchaseOrder, this.productDetailsPageId);
 
-            var total = purchaseOrder.OrderTotal.HasValue
-                ? new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency.ISOCode)
-                : new Money(0, purchaseOrder.BillingCurrency.ISOCode);
+			var quantity = purchaseOrder.OrderLines.Sum(x => x.Quantity);
 
-            viewModel.NumberOfItems = quantity.ToString();
-            viewModel.IsEmpty = quantity == 0;
-            viewModel.Total = total.ToString();
-            viewModel.CartPageUrl = GetPageAbsoluteUrl(cartPageId);
-            viewModel.CheckoutPageUrl = GetPageAbsoluteUrl(this.checkoutPageId);
+			var currencyIsoCode = purchaseOrder.BillingCurrency.ISOCode;
+			var total = purchaseOrder.OrderTotal.HasValue
+				? new Money(purchaseOrder.OrderTotal.Value, currencyIsoCode)
+				: new Money(0, currencyIsoCode);
 
-            return viewModel;
-        }
+			viewModel.NumberOfItems = quantity.ToString();
+			viewModel.IsEmpty = quantity == 0;
+			viewModel.Total = total.ToString();
+			viewModel.CartPageUrl = GetPageAbsoluteUrl(cartPageId);
+			viewModel.CheckoutPageUrl = GetPageAbsoluteUrl(this.checkoutPageId);
+			viewModel.DiscountTotal = purchaseOrder.DiscountTotal.GetValueOrDefault() > 0
+				? new Money(purchaseOrder.DiscountTotal.GetValueOrDefault(), currencyIsoCode).ToString()
+				: "";
+			viewModel.TaxTotal = new Money(purchaseOrder.TaxTotal.GetValueOrDefault(), currencyIsoCode).ToString();
+			viewModel.SubTotal = new Money(purchaseOrder.SubTotal.GetValueOrDefault(), currencyIsoCode).ToString();
 
-        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
-        {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-            {
-                message = "The widget is in Page Edit mode.";
-                return false;
-            }
+			return viewModel;
+		}
 
-            message = null;
-            return true;
-        }
+		public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+		{
+			if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+			{
+				message = "The widget is in Page Edit mode.";
+				return false;
+			}
 
-        private int GetNumberOfItemsInBasket()
-        {
-            if (TransactionLibrary.HasBasket())
-            {
-                return TransactionLibrary.GetBasket(false).OrderLines.Sum(x => x.Quantity);
-            }
-            else
-            {
-                return 0;
-            }
-        }
+			message = null;
+			return true;
+		}
 
-        private string GetPageAbsoluteUrl(Guid pageId)
-        {
-            var pageUrl = Pages.UrlResolver.GetPageNodeUrl(pageId);
+		private int GetNumberOfItemsInBasket()
+		{
+			if (TransactionLibrary.HasBasket())
+			{
+				return TransactionLibrary.GetBasket(false).OrderLines.Sum(x => x.Quantity);
+			}
+			else
+			{
+				return 0;
+			}
+		}
 
-            return Pages.UrlResolver.GetAbsoluteUrl(pageUrl);
-        }
+		private string GetPageAbsoluteUrl(Guid pageId)
+		{
+			var pageUrl = Pages.UrlResolver.GetPageNodeUrl(pageId);
 
-        private bool IsBasketEmpty(MiniBasketRenderingViewModel model)
-        {
-            return model.NumberOfItems == 0;
-        }
+			return Pages.UrlResolver.GetAbsoluteUrl(pageUrl);
+		}
 
-        private Money GetBasketTotal()
-        {
+		private bool IsBasketEmpty(MiniBasketRenderingViewModel model)
+		{
+			return model.NumberOfItems == 0;
+		}
 
-            if (TransactionLibrary.HasBasket())
-            {
-                var purchaseOrder = TransactionLibrary.GetBasket(false);
+		private Money GetBasketTotal()
+		{
 
-                if (purchaseOrder.OrderTotal.HasValue)
-                {
-                    return new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency.ISOCode);
-                }
-                else return new Money(0, purchaseOrder.BillingCurrency.ISOCode);
-            }
-            else return new Money(0, TransactionLibrary.GetBasket(true).BillingCurrency.ISOCode);
-        }
-    }
+			if (TransactionLibrary.HasBasket())
+			{
+				var purchaseOrder = TransactionLibrary.GetBasket(false);
+
+				if (purchaseOrder.OrderTotal.HasValue)
+				{
+					return new Money(purchaseOrder.OrderTotal.Value, purchaseOrder.BillingCurrency.ISOCode);
+				}
+				else return new Money(0, purchaseOrder.BillingCurrency.ISOCode);
+			}
+			else return new Money(0, TransactionLibrary.GetBasket(true).BillingCurrency.ISOCode);
+		}
+	}
 }

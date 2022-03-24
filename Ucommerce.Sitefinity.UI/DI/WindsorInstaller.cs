@@ -4,6 +4,7 @@ using Castle.Windsor;
 using System.Web.Mvc;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.DI
 {
@@ -104,6 +105,12 @@ namespace UCommerce.Sitefinity.UI.DI
                 Component
                     .For<IAddReviewModel>()
                     .ImplementedBy<AddReviewModel>()
+                    .LifestyleTransient());
+
+            container.Register(
+                Component
+                    .For<IInsightUcommerceService>()
+                    .ImplementedBy<InsightUcommerceService>()
                     .LifestyleTransient());
         }
     }

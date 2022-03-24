@@ -24,7 +24,6 @@
     "/ucommerce/scripts/app/Directives/ucommerce-tree/ucommerce.tree.directive.js",
     "/ucommerce/scripts/app/Directives/ucommerce-content-tree/ucommerce.content-tree.directive.js",
     "/ucommerce/scripts/app/Directives/ucommerce-multi-picker/ucommerce.multi-picker.directive.js",
-    "/ucommerce/scripts/app/Directives/ucommerce-multi-picker/ucommerce.multi-picker.directive.js",
     "/Frontend-Assembly/Ucommerce.Sitefinity.UI/assets/dist/javascript/WidgetDesigner/factory.js"
   ]
 }

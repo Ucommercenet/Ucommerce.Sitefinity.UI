@@ -6,11 +6,11 @@ using UCommerce.Sitefinity.UI.Mvc.Controllers;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
 using Ucommerce.Api;
-using Ucommerce.Search;
 using UCommerce.Sitefinity.UI.Search;
 using Ucommerce.Infrastructure;
 using Ucommerce.Search.Extensions;
 using System.Web;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -21,6 +21,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
 		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 
 		// TODO: Check if we're manually sorting the products (as we do on the product listing page)
 		public virtual IList<FacetViewModel> CreateViewModel()

@@ -6,8 +6,8 @@ using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
 using Ucommerce.Api;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using ObjectFactory = Ucommerce.Infrastructure.ObjectFactory;
 using Ucommerce;
+using UCommerce.Sitefinity.UI.Mvc.Services;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -18,8 +18,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 	{
 		private Guid nextStepId;
 		private Guid previousStepId;
-		public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
-		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
+		public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
+		public Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup> PriceGroupRepository = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup>>();
 
 		public PaymentPickerModel(Guid? nextStepId = null, Guid? previousStepId = null)
 		{
@@ -62,8 +64,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 				paymentPickerViewModel.SelectedPaymentMethodId = existingPayment != null
 					? existingPayment.PaymentMethod.PaymentMethodId
 					: -1;
-				var priceGroupRepository = ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup>>();
-				var priceGroup = priceGroupRepository.SingleOrDefault(pg => pg.Guid == CatalogContext.CurrentPriceGroup.Guid);
+				var priceGroup = PriceGroupRepository.SingleOrDefault(pg => pg.Guid == CatalogContext.CurrentPriceGroup.Guid);
 
 				foreach (var availablePaymentMethod in availablePaymentMethods)
 				{
@@ -77,11 +78,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 					if (localizedPaymentMethod != null)
 					{
 						var displayName = localizedPaymentMethod.DisplayName;
-						if(string.IsNullOrWhiteSpace(displayName)) displayName = availablePaymentMethod.Name;
+						if (string.IsNullOrWhiteSpace(displayName)) displayName = availablePaymentMethod.Name;
 
 						option.Text = String.Format(" {0} ({1} + {2}%)", displayName, formattedFee, feePercent.ToString("0.00"));
 						option.Value = availablePaymentMethod.PaymentMethodId.ToString();
-						option.Selected = availablePaymentMethod.PaymentMethodId == paymentPickerViewModel.SelectedPaymentMethodId;						
+						option.Selected = availablePaymentMethod.PaymentMethodId == paymentPickerViewModel.SelectedPaymentMethodId;
 					}
 
 					paymentPickerViewModel.AvailablePaymentMethods.Add(option);
@@ -123,6 +124,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			TransactionLibrary.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
 			TransactionLibrary.ExecuteBasketPipeline();
+
+			var paymentMethod = Ucommerce.EntitiesV2.PaymentMethod.Get(createPaymentViewModel.SelectedPaymentMethodId);
+			InsightUcommerce.SendInteraction("Checkout > Select payment method", paymentMethod.Name);
 		}
 
 		private string GetNextStepUrl(Guid nextStepId)
