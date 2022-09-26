@@ -3,6 +3,7 @@ using Castle.Windsor.Installer;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using Castle.MicroKernel.Releasers;
 using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity;
 using Telerik.Sitefinity.Abstractions;
@@ -162,6 +163,9 @@ namespace UCommerce.Sitefinity.UI
         internal static void InitializeContainer()
         {
             var windsorContainer = new WindsorContainer();
+#pragma warning disable CS0618
+            windsorContainer.Kernel.ReleasePolicy = new NoTrackingReleasePolicy();
+#pragma warning restore CS0618
 
             var widgetAssemblies = ControllerContainerResolver.RetrieveAssemblies();
             foreach (var assembly in widgetAssemblies)
