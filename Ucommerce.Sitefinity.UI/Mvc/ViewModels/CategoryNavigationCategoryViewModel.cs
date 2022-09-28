@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
@@ -7,7 +8,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
     /// </summary>
     public class CategoryNavigationCategoryViewModel
     {
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public string DisplayName { get; set; }
 
         public string Url { get; set; }

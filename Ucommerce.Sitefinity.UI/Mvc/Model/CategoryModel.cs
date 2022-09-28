@@ -8,7 +8,6 @@ using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using Ucommerce.Api;
-using Ucommerce.Extensions;
 using UCommerce.Sitefinity.UI.Constants;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
@@ -38,9 +37,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 		{
 			var categoryNavigationViewModel = new CategoryNavigationViewModel();
 			// HACK: This is a temporary work around while we dig into the best way to do this with the new API
-			var rootCategoryGuids = CatalogLibrary.GetRootCategories().Select(c => c.Guid);
-			var rootCategories = Ucommerce.EntitiesV2.Category.Find(c => rootCategoryGuids.Contains(c.Guid));
-			var currentCategory = CatalogContext.CurrentCategory != null ? Ucommerce.EntitiesV2.Category.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCategory.Guid) : null;
+			var rootCategories = CatalogLibrary.GetRootCategories().ToList();
+			var currentCategory = CatalogContext.CurrentCategory;
 			categoryNavigationViewModel.Categories = this.MapCategories(rootCategories, currentCategory);
 
 			var priceGroups = Ucommerce.EntitiesV2.PriceGroup.Find(x => CatalogContext.CurrentCatalog.PriceGroups.Contains(x.Guid));
@@ -141,25 +139,49 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			}
 		}
 
-		protected virtual IList<CategoryNavigationCategoryViewModel> MapCategories(ICollection<Ucommerce.EntitiesV2.Category> rootCategories,
-			Ucommerce.EntitiesV2.Category currentCategory)
+		protected virtual IList<CategoryNavigationCategoryViewModel> MapCategories(IList<Ucommerce.Search.Models.Category> rootCategories,
+			Ucommerce.Search.Models.Category currentCategory, string parentCategoryRelativePath = "")
 		{
 			var result = new List<CategoryNavigationCategoryViewModel>();
 
+			var subCategories = CatalogLibrary.GetCategories(rootCategories.SelectMany(x => x.Categories).ToList()).ToList();
 			foreach (var category in rootCategories)
 			{
+				var relativeCategoryPath = GetCategoryPath(parentCategoryRelativePath, category);
 				result.Add(new CategoryNavigationCategoryViewModel()
 				{
-					CategoryId = category.CategoryId,
-					DisplayName = category.DisplayName(),
-					Url = this.GetCategoryUrl(category),
-					Categories = this.MapCategories(category.Categories.Where(x => x.DisplayOnSite).ToList(),
-						currentCategory),
+					CategoryId = category.Guid,
+					DisplayName = category.DisplayName,
+					Url = GetAbsoluteCategoryUrl(relativeCategoryPath),
+					Categories = this.MapCategories(subCategories.Where(x => category.Categories.Any(y => y.Equals(x.Guid))).ToList(),
+						currentCategory, relativeCategoryPath),
 					IsActive = currentCategory != null && currentCategory.Guid == category.Guid,
 				});
 			}
 
 			return result;
+		}
+
+		private string GetAbsoluteCategoryUrl(string relativeCategoryPath)
+		{
+			string baseUrl;
+			if (this.categoryPageId == Guid.Empty)
+			{
+				baseUrl = UrlResolver.GetCurrentPageNodeUrl();
+			}
+			else
+			{
+				baseUrl = UrlResolver.GetPageNodeUrl(this.categoryPageId);
+			}
+
+			var relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", relativeCategoryPath);
+
+			if (SystemManager.CurrentHttpContext.Request.Url != null)
+			{
+				return UrlPath.ResolveUrl(relativeUrl, true);
+			}
+
+			return  UrlResolver.GetAbsoluteUrl(SiteMapBase.GetActualCurrentNode().Url);
 		}
 
 		protected virtual IList<CategoryNavigationCurrencyViewModel> MapCurrencies(
@@ -181,33 +203,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 			return categoryNavigationCurrencyViewModels;
 		}
 
-		private string GetCategoryUrl(Ucommerce.EntitiesV2.Category category)
+		protected virtual string GetCategoryPath(string path, Ucommerce.Search.Models.Category category)
 		{
-			var baseUrl = string.Empty;
-			if (this.categoryPageId == Guid.Empty)
+			if (path == "")
 			{
-				baseUrl = UrlResolver.GetCurrentPageNodeUrl();
-			}
-			else
-			{
-				baseUrl = UrlResolver.GetPageNodeUrl(this.categoryPageId);
+				return category.Name;
 			}
 
-			var searchCategory = CatalogLibrary.GetCategory(category.Guid);
-			var catUrl = GetCategoryPath(searchCategory);
-			string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", catUrl);
-			string url;
-
-			if (SystemManager.CurrentHttpContext.Request.Url != null)
-			{
-				url = UrlPath.ResolveUrl(relativeUrl, true);
-			}
-			else
-			{
-				url = UrlResolver.GetAbsoluteUrl(SiteMapBase.GetActualCurrentNode().Url);
-			}
-
-			return url;
+			return $"{path}/{category.Name}";
 		}
 
 		internal static string GetCategoryPath(Ucommerce.Search.Models.Category category)
