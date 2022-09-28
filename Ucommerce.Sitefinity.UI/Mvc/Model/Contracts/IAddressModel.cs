@@ -10,8 +10,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public interface IAddressModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
+        Dictionary<string, string> ErrorMessage(ModelStateDictionary status);
         AddressRenderingViewModel GetViewModel();
         JsonResult Save(AddressSaveViewModel addressRendering);
-        Dictionary<string, string> ErrorMessage(ModelStateDictionary status);
     }
 }

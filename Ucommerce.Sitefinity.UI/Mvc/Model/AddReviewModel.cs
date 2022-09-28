@@ -1,117 +1,122 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
+using Telerik.Sitefinity.Services;
 using Ucommerce.Api;
 using Ucommerce.Catalog.Status;
+using Ucommerce.EntitiesV2;
 using Ucommerce.Infrastructure;
 using Ucommerce.Pipelines;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using ProductReview = Ucommerce.EntitiesV2.ProductReview;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-	public class AddReviewModel : IAddReviewModel
-	{
-		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
-		public IOrderContext OrderContext => ObjectFactory.Instance.Resolve<IOrderContext>();
-		public Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.ProductReviewStatus> ProductReviewStatusRepository => ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.ProductReviewStatus>>();
-		public IPipeline<Ucommerce.EntitiesV2.ProductReview> ProductReviewPipeline => ObjectFactory.Instance.Resolve<IPipeline<Ucommerce.EntitiesV2.ProductReview>>();
+    public class AddReviewModel : IAddReviewModel
+    {
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public IOrderContext OrderContext => ObjectFactory.Instance.Resolve<IOrderContext>();
+        public IPipeline<ProductReview> ProductReviewPipeline => ObjectFactory.Instance.Resolve<IPipeline<ProductReview>>();
+        public IRepository<ProductReviewStatus> ProductReviewStatusRepository => ObjectFactory.Instance.Resolve<IRepository<ProductReviewStatus>>();
 
-		public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
-		{
-			if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-			{
-				message = "The widget is in Page Edit mode.";
-				return false;
-			}
+        public virtual AddReviewDTO Add(AddReviewSubmitModel viewModel)
+        {
+            Product product;
 
-			message = null;
-			return true;
-		}
+            if (viewModel.ProductId.HasValue)
+            {
+                product = Product.Get(viewModel.ProductId.Value);
+            }
+            else
+            {
+                product = Product.FirstOrDefault(p => p.Guid == CatalogContext.CurrentProduct.Guid);
+            }
 
-		public virtual AddReviewDTO Add(AddReviewSubmitModel viewModel)
-		{
-			Ucommerce.EntitiesV2.Product product;
+            var request = HttpContext.Current.Request;
+            var basket = OrderContext.GetBasket();
+            var name = viewModel.Name;
+            var email = viewModel.Email;
+            var rating = viewModel.Rating * 20;
+            var reviewHeadline = viewModel.Title;
+            var reviewText = viewModel.Comments;
 
-			if (viewModel.ProductId.HasValue)
-			{
-				product = Ucommerce.EntitiesV2.Product.Get(viewModel.ProductId.Value);
-			}
-			else
-			{
-				product = Ucommerce.EntitiesV2.Product.FirstOrDefault(p => p.Guid == CatalogContext.CurrentProduct.Guid);
-			}
+            if (basket.PurchaseOrder.Customer == null)
+            {
+                basket.PurchaseOrder.Customer = new Customer
+                {
+                    FirstName = name,
+                    LastName = string.Empty,
+                    EmailAddress = email
+                };
+            }
+            else
+            {
+                basket.PurchaseOrder.Customer.FirstName = name;
+                if (basket.PurchaseOrder.Customer.LastName == null)
+                {
+                    basket.PurchaseOrder.Customer.LastName = string.Empty;
+                }
 
-			var request = System.Web.HttpContext.Current.Request;
-			var basket = OrderContext.GetBasket();
-			var name = viewModel.Name;
-			var email = viewModel.Email;
-			var rating = viewModel.Rating * 20;
-			var reviewHeadline = viewModel.Title;
-			var reviewText = viewModel.Comments;
+                basket.PurchaseOrder.Customer.EmailAddress = email;
+            }
 
-			if (basket.PurchaseOrder.Customer == null)
-			{
-				basket.PurchaseOrder.Customer = new Ucommerce.EntitiesV2.Customer()
-				{
-					FirstName = name,
-					LastName = String.Empty,
-					EmailAddress = email
-				};
-			}
-			else
-			{
-				basket.PurchaseOrder.Customer.FirstName = name;
-				if (basket.PurchaseOrder.Customer.LastName == null)
-				{
-					basket.PurchaseOrder.Customer.LastName = String.Empty;
-				}
-				basket.PurchaseOrder.Customer.EmailAddress = email;
-			}
+            basket.PurchaseOrder.Customer.Save();
 
-			basket.PurchaseOrder.Customer.Save();
+            ProductCatalogGroup catalogGroup;
 
-			Ucommerce.EntitiesV2.ProductCatalogGroup catalogGroup;
+            if (viewModel.CatalogGroupId.HasValue)
+            {
+                catalogGroup = ProductCatalogGroup.Get(viewModel.CatalogGroupId.Value);
+            }
+            else
+            {
+                catalogGroup = ProductCatalogGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCatalogGroup.Guid);
+            }
 
-			if (viewModel.CatalogGroupId.HasValue)
-			{
-				catalogGroup = Ucommerce.EntitiesV2.ProductCatalogGroup.Get(viewModel.CatalogGroupId.Value);
-			}
-			else
-			{
-				catalogGroup = Ucommerce.EntitiesV2.ProductCatalogGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCatalogGroup.Guid);
-			}
+            var review = new ProductReview
+            {
+                ProductCatalogGroup = catalogGroup,
+                ProductReviewStatus = ProductReviewStatusRepository.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
+                CreatedOn = DateTime.Now,
+                CreatedBy = "System",
+                Product = product,
+                Customer = basket.PurchaseOrder.Customer,
+                Rating = rating,
+                ReviewHeadline = reviewHeadline,
+                ReviewText = reviewText,
+                Ip = request.UserHostName
+            };
 
-			var review = new Ucommerce.EntitiesV2.ProductReview
-			{
-				ProductCatalogGroup = catalogGroup,
-				ProductReviewStatus = ProductReviewStatusRepository.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
-				CreatedOn = DateTime.Now,
-				CreatedBy = "System",
-				Product = product,
-				Customer = basket.PurchaseOrder.Customer,
-				Rating = rating,
-				ReviewHeadline = reviewHeadline,
-				ReviewText = reviewText,
-				Ip = request.UserHostName
-			};
+            product.AddProductReview(review);
+            ProductReviewPipeline.Execute(review);
 
-			product.AddProductReview(review);
-			ProductReviewPipeline.Execute(review);
+            var reviewDTO = new AddReviewDTO
+            {
+                Rating = rating,
+                Comments = reviewText,
+                ReviewHeadline = reviewHeadline,
+                CreatedBy = review.CreatedBy,
+                CreatedOn = review.CreatedOn.ToString("MMM dd, yyyy"),
+                CreatedOnForMeta = review.CreatedOn.ToString("yyyy-MM-dd")
+            };
 
-			var reviewDTO = new AddReviewDTO
-			{
-				Rating = rating,
-				Comments = reviewText,
-				ReviewHeadline = reviewHeadline,
-				CreatedBy = review.CreatedBy,
-				CreatedOn = review.CreatedOn.ToString("MMM dd, yyyy"),
-				CreatedOnForMeta = review.CreatedOn.ToString("yyyy-MM-dd")
-			};
+            product.AddProductReview(review);
 
-			product.AddProductReview(review);
+            ProductReviewPipeline.Execute(review);
+            return reviewDTO;
+        }
 
-			ProductReviewPipeline.Execute(review);
-			return reviewDTO;
-		}
-	}
+        public bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
+
+            message = null;
+            return true;
+        }
+    }
 }

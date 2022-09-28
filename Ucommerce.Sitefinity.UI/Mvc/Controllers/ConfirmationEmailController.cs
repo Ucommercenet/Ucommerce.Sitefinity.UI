@@ -1,9 +1,7 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
@@ -11,9 +9,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Confirmation Email MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uConfirmationEmail_MVC", Title = "Confirmation Email", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnConfirmationEmail sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uConfirmationEmail_MVC",
+        Title = "Confirmation Email",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnConfirmationEmail sfMvcIcn")]
     public class ConfirmationEmailController : Controller, IPersonalizable
     {
+        private readonly string detailTemplateNamePrefix = "Detail.";
         public string TemplateName { get; set; } = "Index";
 
         public ActionResult Index()
@@ -22,12 +25,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var orderGuid = System.Web.HttpContext.Current.Request.QueryString["orderGuid"];
             string message;
 
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
             parameters.Add("orderGuid", orderGuid);
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return PartialView("_Warning", message);
             }
 
             var confirmationEmailVM = model.GetViewModel(orderGuid);
@@ -37,23 +40,20 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             {
                 ViewBag.RowSpan++;
             }
+
             if (confirmationEmailVM.ShipmentAmount > 0)
             {
                 ViewBag.RowSpan++;
             }
+
             if (confirmationEmailVM.PaymentAmount > 0)
             {
                 ViewBag.RowSpan++;
             }
 
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+            var detailTemplateName = detailTemplateNamePrefix + TemplateName;
 
             return View(detailTemplateName, confirmationEmailVM);
-        }
-
-        protected override void HandleUnknownAction(string actionName)
-        {
-            base.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
         }
 
         public IConfirmationEmailModel ResolveModel()
@@ -64,6 +64,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             return model;
         }
 
-        private string detailTemplateNamePrefix = "Detail.";
+        protected override void HandleUnknownAction(string actionName)
+        {
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
+        }
     }
 }

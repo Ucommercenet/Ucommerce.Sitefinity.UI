@@ -1,7 +1,8 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using System;
+using System.Web.Mvc;
+using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using System.Web.Mvc;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 using UCommerce.Sitefinity.UI.Mvc.Services;
@@ -23,7 +24,9 @@ namespace UCommerce.Sitefinity.UI.DI
         private void InstallControllers(IWindsorContainer container)
         {
             container.Register(
-                Classes.FromThisAssembly().BasedOn<IController>().If(c => c.Name.EndsWith("Controller"))
+                Classes.FromThisAssembly()
+                    .BasedOn<IController>()
+                    .If(c => c.Name.EndsWith("Controller", StringComparison.Ordinal))
                     .LifestyleTransient());
         }
 

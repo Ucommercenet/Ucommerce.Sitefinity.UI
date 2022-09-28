@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
-using Telerik.Sitefinity.Data.Events;
 using Telerik.Sitefinity.GenericContent.Model;
 using Telerik.Sitefinity.Model;
 using Telerik.Sitefinity.Modules.Pages;
@@ -23,6 +22,28 @@ namespace UCommerce.Sitefinity.UI.Pages
     /// </summary>
     internal static class HttpContextExtensions
     {
+        public const string PAGE_CONTEXT_FIELD_NAME = "UCommerceContext";
+
+        public static Dictionary<string, string> GetProductsContext(this HttpContextBase httpContext)
+        {
+            var contextDictionary = new Dictionary<string, string>();
+            var smp = SiteMapBase.GetCurrentProvider();
+            var pageDataId = ((PageSiteNode)smp.CurrentNode)?.PageId;
+
+            var mgr = PageManager.GetManager();
+            var pageData = mgr.GetPageDataList()
+                .Where(pd => pd.Id == pageDataId && pd.Status == ContentLifecycleStatus.Live && pd.Visible == true)
+                .FirstOrDefault();
+
+            if (pageData != null)
+            {
+                pageData.LoadToContextDictionary<ProductsController>(x => x.CategoryIds, contextDictionary);
+                pageData.LoadToContextDictionary<ProductsController>(x => x.ProductIds, contextDictionary);
+            }
+
+            return contextDictionary;
+        }
+
         public static string GetValue<T>(this Dictionary<string, string> context, Expression<Func<T, object>> expression)
             where T : Controller, new()
         {
@@ -45,30 +66,72 @@ namespace UCommerce.Sitefinity.UI.Pages
             {
                 result = context[propertyName];
                 if (!string.IsNullOrEmpty(result))
+                {
                     isSuccess = true;
+                }
             }
 
             return isSuccess;
         }
 
-        private static void LoadToContextDictionary<T>(this PageData pageData, Expression<Func<T, object>> expression, Dictionary<string, string> contextDictionary)
-            where T : Controller, new()
+        internal static void PublishinManager_Executing(object sender, ExecutingEventArgs e)
         {
-            if (contextDictionary == null)
-                throw new ArgumentNullException(nameof(contextDictionary));
-
-            var controllerName = typeof(T).FullName;
-            var propertyName = GetMemberName(expression.Body);
-
-            var propertyValue = GetPropertyValueInternal(pageData, controllerName, propertyName);
-
-            if (!string.IsNullOrEmpty(propertyValue))
+            if (e.CommandName == "CommitTransaction" || e.CommandName == "FlushTransaction")
             {
-                if (contextDictionary.ContainsKey(propertyName))
-                    contextDictionary[propertyName] = propertyValue;
-                else
-                    contextDictionary.Add(propertyName, propertyValue);
+                try
+                {
+                    var provider = sender as PageDataProvider;
+                    var dirtyItems = provider?.GetDirtyItems();
+                    if (dirtyItems != null && dirtyItems.Count != 0)
+                    {
+                        foreach (var item in dirtyItems)
+                        {
+                            var pageData = item as PageData;
+
+                            if (IsValidPublishingOperation(item, pageData, provider))
+                            {
+                                var contextDictionary = new Dictionary<string, string>();
+                                var isManualSelectionMode = pageData.GetPropertyValue<ProductsController>(p => p.IsManualSelectionMode);
+                                if (!string.IsNullOrEmpty(isManualSelectionMode) && bool.TryParse(isManualSelectionMode, out var result) && result)
+                                {
+                                    pageData.LoadToContextDictionary<ProductsController>(x => x.CategoryIds, contextDictionary);
+                                    pageData.LoadToContextDictionary<ProductsController>(x => x.ProductIds, contextDictionary);
+                                }
+
+                                pageData?.NavigationNode.SetValue(PAGE_CONTEXT_FIELD_NAME, JsonConvert.SerializeObject(contextDictionary));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(
+                        $"Page context was not set due to unhandled exception, which occured during the page publishing event handler. The following exception was thrown: {Environment.NewLine} {ex}",
+                        ConfigurationPolicy.ErrorLog);
+                }
             }
+        }
+
+        private static string GetMemberName(Expression expression)
+        {
+            if (expression == null)
+            {
+                throw new ArgumentNullException(nameof(expression));
+            }
+
+            if (expression is MemberExpression)
+            {
+                var memberExpression = expression as MemberExpression;
+                return memberExpression.Member.Name;
+            }
+
+            var unaryExpression = expression as UnaryExpression;
+            if (unaryExpression != null && unaryExpression.Operand is MemberExpression)
+            {
+                return ((MemberExpression)unaryExpression.Operand).Member.Name;
+            }
+
+            return null;
         }
 
         private static string GetPropertyValue<T>(this PageData pageData, Expression<Func<T, object>> expression)
@@ -80,81 +143,28 @@ namespace UCommerce.Sitefinity.UI.Pages
             return GetPropertyValueInternal(pageData, controllerName, propertyName);
         }
 
-        internal static void PublishinManager_Executing(object sender, ExecutingEventArgs e)
-        {
-
-            if (e.CommandName == "CommitTransaction" || e.CommandName == "FlushTransaction")
-            {
-                try
-                {
-                    var provider = sender as PageDataProvider;
-                    var dirtyItems = provider.GetDirtyItems();
-                    if (dirtyItems.Count != 0)
-                    {
-                        foreach (var item in dirtyItems)
-                        {
-                            var pageData = item as PageData;
-                            var url = System.Web.HttpContext.Current.Request.Url.ToString();
-
-                            if (IsValidPublishingOperation(item, pageData, provider))
-                            {
-                                var contextDictionary = new Dictionary<string, string>();
-                                var isManualSelectionMode = pageData.GetPropertyValue<ProductsController>(p => p.IsManualSelectionMode);
-                                if (!string.IsNullOrEmpty(isManualSelectionMode) && bool.TryParse(isManualSelectionMode, out bool result) && result == true)
-                                {
-                                    pageData.LoadToContextDictionary<ProductsController>(x => x.CategoryIds, contextDictionary);
-                                    pageData.LoadToContextDictionary<ProductsController>(x => x.ProductIds, contextDictionary);
-                                }
-
-                                pageData.NavigationNode.SetValue(PAGE_CONTEXT_FIELD_NAME, JsonConvert.SerializeObject(contextDictionary));
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Write($"Page context was not set due to unhandled exception, which occured during the page publishing event handler. The following exception was thrown: {Environment.NewLine} {ex}", ConfigurationPolicy.ErrorLog);
-                }
-            }
-        }
-
-        public static Dictionary<string, string> GetProductsContext(this HttpContextBase httpContext)
-        {
-            var contextDictionary = new Dictionary<string, string>();
-            var smp = SiteMapBase.GetCurrentProvider();
-            var pageDataId = ((PageSiteNode)smp.CurrentNode).PageId;
-
-            var mgr = PageManager.GetManager();
-            var pageData = mgr.GetPageDataList()
-                .Where(pd => pd.Id == pageDataId && pd.Status == ContentLifecycleStatus.Live && pd.Visible == true)
-                .FirstOrDefault();
-
-            if (pageData != null)
-            {
-                pageData.LoadToContextDictionary<ProductsController>(x => x.CategoryIds, contextDictionary);
-                pageData.LoadToContextDictionary<ProductsController>(x => x.ProductIds, contextDictionary);
-            }
-
-            return contextDictionary;
-        }
-
         private static string GetPropertyValueInternal(PageData pageData, string controllerName, string propertyName)
         {
             if (pageData == null)
+            {
                 throw new ArgumentNullException(nameof(pageData));
+            }
 
             var result = string.Empty;
             var mvcWidget = pageData.Controls
-                                  .Where(c => c.IsLayoutControl == false && c.ObjectType == "Telerik.Sitefinity.Mvc.Proxy.MvcControllerProxy" && c.Properties.Any(p => p.Name == "ControllerName" && p.Value == controllerName))
-                                  .FirstOrDefault();
+                .Where(c => c.IsLayoutControl == false && c.ObjectType == "Telerik.Sitefinity.Mvc.Proxy.MvcControllerProxy"
+                    && c.Properties.Any(p => p.Name == "ControllerName" && p.Value == controllerName))
+                .FirstOrDefault();
 
             if (mvcWidget != null)
             {
-                var widgetSettings = mvcWidget.Properties.Where(p => p.Name == "Settings").FirstOrDefault();
+                var widgetSettings = mvcWidget.Properties.Where(p => p.Name == "Settings")
+                    .FirstOrDefault();
                 if (widgetSettings != null)
                 {
                     var childProperties = widgetSettings.ChildProperties;
-                    var property = childProperties.Where(c => c.Name == propertyName).SingleOrDefault();
+                    var property = childProperties.Where(c => c.Name == propertyName)
+                        .SingleOrDefault();
                     if (property != null && !string.IsNullOrEmpty(property.Value))
                     {
                         result = property.Value;
@@ -165,34 +175,16 @@ namespace UCommerce.Sitefinity.UI.Pages
             return result;
         }
 
-        private static string GetMemberName(Expression expression)
-        {
-            if (expression == null)
-                throw new ArgumentNullException(nameof(expression));
-
-            if (expression is MemberExpression)
-            {
-                var memberExpression = expression as MemberExpression;
-                return memberExpression.Member?.Name;
-            }
-
-            var unaryExpression = expression as UnaryExpression;
-            if (unaryExpression != null && unaryExpression.Operand is MemberExpression)
-                return ((MemberExpression)unaryExpression.Operand).Member?.Name;
-
-            return null;
-        }
-
         private static bool IsValidPublishingOperation(object dirtyItem, PageData pageData, PageDataProvider pageDataProvider)
         {
             var result = false;
 
             if (pageData != null && pageDataProvider != null)
             {
-                SecurityConstants.TransactionActionType itemStatus = pageDataProvider.GetDirtyItemStatus(dirtyItem);
+                var itemStatus = pageDataProvider.GetDirtyItemStatus(dirtyItem);
                 if (itemStatus == SecurityConstants.TransactionActionType.Updated)
                 {
-                    var url = System.Web.HttpContext.Current.Request.Url.ToString();
+                    var url = HttpContext.Current.Request.Url.ToString();
                     if (url.Contains("workflowOperation=Publish") || url.Contains("/batchPublishDraft/"))
                     {
                         result = true;
@@ -203,6 +195,32 @@ namespace UCommerce.Sitefinity.UI.Pages
             return result;
         }
 
-        public const string PAGE_CONTEXT_FIELD_NAME = "UCommerceContext";
+        private static void LoadToContextDictionary<T>(this PageData pageData,
+            Expression<Func<T, object>> expression,
+            Dictionary<string, string> contextDictionary)
+            where T : Controller, new()
+        {
+            if (contextDictionary == null)
+            {
+                throw new ArgumentNullException(nameof(contextDictionary));
+            }
+
+            var controllerName = typeof(T).FullName;
+            var propertyName = GetMemberName(expression.Body);
+
+            var propertyValue = GetPropertyValueInternal(pageData, controllerName, propertyName);
+
+            if (!string.IsNullOrEmpty(propertyValue))
+            {
+                if (contextDictionary.ContainsKey(propertyName))
+                {
+                    contextDictionary[propertyName] = propertyValue;
+                }
+                else
+                {
+                    contextDictionary.Add(propertyName, propertyValue);
+                }
+            }
+        }
     }
 }

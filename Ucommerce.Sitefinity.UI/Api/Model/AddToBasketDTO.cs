@@ -8,14 +8,8 @@ namespace UCommerce.Sitefinity.UI.Api.Model
     /// </summary>
     public class AddToBasketDTO
     {
-        public AddToBasketDTO()
-        {
-        }
-
         public uint Quantity { get; set; }
-
         public string Sku { get; set; }
-
         public List<VariantViewModel> Variants { get; set; }
     }
 }

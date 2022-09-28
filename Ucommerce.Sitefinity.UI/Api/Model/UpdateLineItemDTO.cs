@@ -5,8 +5,7 @@
     /// </summary>
     public class UpdateLineItemDTO
     {
-        public int OrderlineId { get; set; }
-
         public int NewQuantity { get; set; }
+        public int OrderlineId { get; set; }
     }
 }

@@ -8,10 +8,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     /// </summary>
     public interface ICartModel
     {
+        CartUpdateBasketViewModel AddVoucher(CartUpdateBasket model);
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
         CartRenderingViewModel GetViewModel(string refreshUrl, string removeOrderLineUrl);
-        CartUpdateBasketViewModel Update(CartUpdateBasket model);
         CartUpdateBasketViewModel RemoveVoucher(CartUpdateBasket model);
-        CartUpdateBasketViewModel AddVoucher(CartUpdateBasket model);
+        CartUpdateBasketViewModel Update(CartUpdateBasket model);
     }
 }

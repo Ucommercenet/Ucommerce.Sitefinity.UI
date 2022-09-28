@@ -7,10 +7,8 @@ namespace UCommerce.Sitefinity.UI.Api.Model
     /// </summary>
     public class ProductPricesDTO
     {
-        public Guid ProductGuid { get; set; }
-
-        public string Price { get; set; }
-
         public string ListPrice { get; set; }
+        public string Price { get; set; }
+        public Guid ProductGuid { get; set; }
     }
 }

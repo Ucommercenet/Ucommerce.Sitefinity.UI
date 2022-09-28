@@ -6,7 +6,6 @@
     public class CategoryNavigationCurrencyViewModel
     {
         public string DisplayName { get; set; }
-
         public int PriceGroupId { get; set; }
     }
 }

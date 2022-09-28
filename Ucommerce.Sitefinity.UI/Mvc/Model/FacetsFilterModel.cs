@@ -1,112 +1,119 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Telerik.Sitefinity.Services;
-using UCommerce.Sitefinity.UI.Mvc.Controllers;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using UCommerce.Sitefinity.UI.Pages;
 using Ucommerce.Api;
-using UCommerce.Sitefinity.UI.Search;
+using Ucommerce.EntitiesV2;
 using Ucommerce.Infrastructure;
 using Ucommerce.Search.Extensions;
-using System.Web;
+using Ucommerce.Search.Facets;
+using UCommerce.Sitefinity.UI.Mvc.Controllers;
 using UCommerce.Sitefinity.UI.Mvc.Services;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Pages;
+using UCommerce.Sitefinity.UI.Search;
+using FacetValue = UCommerce.Sitefinity.UI.Mvc.ViewModels.FacetValue;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-	/// <summary>
-	/// The Model class of the Facet Filter MVC widget.
-	/// </summary>
-	public class FacetsFilterModel : IFacetsFilterModel
-	{
-		public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
-		public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
-		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
+    /// <summary>
+    /// The Model class of the Facet Filter MVC widget.
+    /// </summary>
+    public class FacetsFilterModel : IFacetsFilterModel
+    {
+        private readonly IList<string> queryStringBlackList = new List<string>
+            { "product", "category", "catalog" };
 
-		// TODO: Check if we're manually sorting the products (as we do on the product listing page)
-		public virtual IList<FacetViewModel> CreateViewModel()
-		{
-			Ucommerce.EntitiesV2.Category currentCategory = null;
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+        public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
 
-			if (CatalogContext.CurrentCategory != null)
-			{
-				currentCategory = Ucommerce.EntitiesV2.Category.FirstOrDefault(c => c.Name == CatalogContext.CurrentCategory.Name);
-				return this.GetAllFacets(currentCategory);
-			}
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
 
-			var pageContext = SystemManager.CurrentHttpContext.GetProductsContext();
-			var categoryIds = pageContext.GetValue<ProductsController>(p => p.CategoryIds);
-			var productIds = pageContext.GetValue<ProductsController>(p => p.ProductIds);
-			if (!string.IsNullOrEmpty(categoryIds) || !string.IsNullOrEmpty(productIds))
-			{
-				return this.MapFacetsByManualSelection(categoryIds, productIds);
-			}
+            message = null;
+            return true;
+        }
 
-			return this.GetAllFacets(currentCategory);
-		}
+        // TODO: Check if we're manually sorting the products (as we do on the product listing page)
+        public virtual IList<FacetViewModel> CreateViewModel()
+        {
+            Category currentCategory = null;
 
-		public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
-		{
-			if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-			{
-				message = "The widget is in Page Edit mode.";
-				return false;
-			}
+            if (CatalogContext.CurrentCategory != null)
+            {
+                currentCategory = Category.FirstOrDefault(c => c.Name == CatalogContext.CurrentCategory.Name);
+                return GetAllFacets(currentCategory);
+            }
 
-			message = null;
-			return true;
-		}
+            var pageContext = SystemManager.CurrentHttpContext.GetProductsContext();
+            var categoryIds = pageContext.GetValue<ProductsController>(p => p.CategoryIds);
+            var productIds = pageContext.GetValue<ProductsController>(p => p.ProductIds);
+            if (!string.IsNullOrEmpty(categoryIds) || !string.IsNullOrEmpty(productIds))
+            {
+                return MapFacetsByManualSelection(categoryIds, productIds);
+            }
 
-		private IList<FacetViewModel> GetAllFacets(Ucommerce.EntitiesV2.Category category)
-		{
-			var facets = HttpContext.Current.Request.QueryString.ToFacets();
-			IList<Ucommerce.Search.Facets.Facet> allFacets;
+            return GetAllFacets(currentCategory);
+        }
 
-			if (category != null)
-			{
-				allFacets = CatalogLibrary.GetFacets(category.Guid, facets.ToFacetDictionary());
-			}
-			else
-			{
-				allFacets = CatalogLibrary.GetFacets(CatalogContext.CurrentCatalog.Categories, facets.ToFacetDictionary());
-			}
+        private IList<FacetViewModel> GetAllFacets(Category category)
+        {
+            var facets = HttpContext.Current.Request.QueryString.ToFacets();
+            IList<Facet> allFacets;
 
-			return this.MapToFacetsViewModel(allFacets);
-		}
+            if (category != null)
+            {
+                allFacets = CatalogLibrary.GetFacets(category.Guid, facets.ToFacetDictionary());
+            }
+            else
+            {
+                allFacets = CatalogLibrary.GetFacets(CatalogContext.CurrentCatalog.Categories, facets.ToFacetDictionary());
+            }
 
-		private IList<FacetViewModel> MapFacetsByManualSelection(string categoryIdsString, string productIdsString)
-		{
-			var categoryIds = categoryIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
-			var productIds = productIdsString?.Split(',').Select(x => Convert.ToInt32(x)).ToList() ?? new List<int>();
-			var facets = HttpContext.Current.Request.QueryString.ToFacets();
-			var categories = Ucommerce.EntitiesV2.Category.Find(x => categoryIds.Contains(x.CategoryId));
+            return MapToFacetsViewModel(allFacets);
+        }
 
-			return this.MapToFacetsViewModel(
-				CatalogLibrary.GetFacets(categories.Select(x => x.Guid).ToList(), facets.ToFacetDictionary()));
-		}
+        private IList<FacetViewModel> MapFacetsByManualSelection(string categoryIdsString, string productIdsString)
+        {
+            var categoryIds = categoryIdsString?.Split(',')
+                .Select(x => Convert.ToInt32(x))
+                .ToList() ?? new List<int>();
+            var facets = HttpContext.Current.Request.QueryString.ToFacets();
+            var categories = Category.Find(x => categoryIds.Contains(x.CategoryId));
 
-		private IList<FacetViewModel> MapToFacetsViewModel(IList<Ucommerce.Search.Facets.Facet> facets)
-		{
-			var facetViewModel = facets.Select(x => new FacetViewModel()
-			{
-				DisplayName = x.DisplayName,
-				Name = x.Name,
-				FacetValues = x.FacetValues
-					.Select(y => new FacetValue(y.Value, (int)y.Count))
-					.ToList(),
-			});
+            return MapToFacetsViewModel(
+                CatalogLibrary.GetFacets(categories.Select(x => x.Guid)
+                        .ToList(),
+                    facets.ToFacetDictionary()));
+        }
 
-			var currentPriceGroup = Ucommerce.EntitiesV2.PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
+        private IList<FacetViewModel> MapToFacetsViewModel(IList<Facet> facets)
+        {
+            var facetViewModel = facets.Select(x => new FacetViewModel
+            {
+                DisplayName = x.DisplayName,
+                Name = x.Name,
+                FacetValues = x.FacetValues
+                    .Select(y => new FacetValue(y.Value, (int)y.Count))
+                    .ToList(),
+            });
 
-			return (from f in facetViewModel
-					where f.FacetValues.Any()
-					let name = f.Name.ToLower()
-					let isPriceFilter = name.Contains("price")
-					where !isPriceFilter || (isPriceFilter && name.Contains("price") && name.EndsWith(currentPriceGroup.Name.ToLower()))
-					select f
-					).ToList();
-		}
+            var currentPriceGroup = PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
 
-		private readonly IList<string> queryStringBlackList = new List<string>() { "product", "category", "catalog" };
-	}
+            return (from f in facetViewModel
+                    where f.FacetValues.Any()
+                    let name = f.Name.ToLower()
+                    let isPriceFilter = name.Contains("price")
+                    where !isPriceFilter || (isPriceFilter && name.Contains("price") && name.EndsWith(currentPriceGroup.Name.ToLower(), StringComparison.Ordinal))
+                    select f
+                ).ToList();
+        }
+    }
 }
