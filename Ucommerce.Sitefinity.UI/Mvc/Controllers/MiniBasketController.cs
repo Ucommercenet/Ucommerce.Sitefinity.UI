@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using Castle.MicroKernel;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using Ucommerce.Api;
@@ -12,31 +14,34 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Mini Basket MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uMiniBasket_MVC", Title = "Mini Basket", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnMiniBasket sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uMiniBasket_MVC",
+        Title = "Mini Basket",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnMiniBasket sfMvcIcn")]
     public class MiniBasketController : Controller, IPersonalizable
     {
-        private string detailTemplateNamePrefix = "Detail.";
-        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
-
+        private readonly string detailTemplateNamePrefix = "Detail.";
         public Guid? CartPageId { get; set; }
-        public Guid? ProductDetailsPageId { get; set; }
         public Guid? CheckoutPageId { get; set; }
+        public Guid? ProductDetailsPageId { get; set; }
         public string TemplateName { get; set; } = "Index";
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
         public ActionResult Index()
         {
             var miniBasketModel = ResolveModel();
             string message;
 
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
 
             if (!miniBasketModel.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return PartialView("_Warning", message);
             }
 
             var miniBasketRenderingViewModel = miniBasketModel.CreateViewModel(Url.Action("Refresh"));
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+            var detailTemplateName = detailTemplateNamePrefix + TemplateName;
 
             if (!TransactionLibrary.HasBasket())
             {
@@ -57,11 +62,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             var viewModel = model.Refresh();
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
 
             if (!model.CanProcessRequest(parameters, out var message))
             {
-                return this.Json(new OperationStatusDTO { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+                return Json(new OperationStatusDTO { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
             }
 
             var responseDTO = new OperationStatusDTO();
@@ -73,26 +78,24 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         protected override void HandleUnknownAction(string actionName)
         {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
         }
 
         private IMiniBasketModel ResolveModel()
         {
-            var args = new Castle.MicroKernel.Arguments();
+            var args = new Arguments();
 
             args.AddProperties(new
             {
-                cartPageId = this.CartPageId,
-                productDetailsPageId = this.ProductDetailsPageId,
-                checkoutPageId = this.CheckoutPageId
-
+                cartPageId = CartPageId,
+                productDetailsPageId = ProductDetailsPageId,
+                checkoutPageId = CheckoutPageId
             });
 
             var container = UCommerceUIModule.Container;
             var model = container.Resolve<IMiniBasketModel>(args);
-               
+
             return model;
         }
-
     }
 }

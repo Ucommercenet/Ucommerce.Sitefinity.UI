@@ -5,15 +5,15 @@
     /// </summary>
     public class AddressSaveViewModel
     {
+        public AddressSave BillingAddress { get; set; }
+        public bool IsShippingAddressDifferent { get; set; }
+        public AddressSave ShippingAddress { get; set; }
+
         public AddressSaveViewModel()
         {
             ShippingAddress = new AddressSave();
             BillingAddress = new AddressSave();
             IsShippingAddressDifferent = false;
         }
-
-        public AddressSave ShippingAddress { get; set; }
-        public AddressSave BillingAddress { get; set; }
-        public bool IsShippingAddressDifferent { get; set; }
     }
 }

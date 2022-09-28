@@ -9,7 +9,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public interface IPaymentPickerModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
-        PaymentPickerViewModel GetViewModel();
         void CreatePayment(PaymentPickerViewModel createPaymentViewModel);
+        PaymentPickerViewModel GetViewModel();
     }
 }

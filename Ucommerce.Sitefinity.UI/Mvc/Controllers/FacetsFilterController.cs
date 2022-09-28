@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
@@ -9,9 +10,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Facets Filter MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uFacetsFilter_MVC", Title = "Facets Filter", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnFacetsFilter sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uFacetsFilter_MVC",
+        Title = "Facets Filter",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnFacetsFilter sfMvcIcn")]
     public class FacetsFilterController : Controller, IPersonalizable
     {
+        private readonly string detailTemplateNamePrefix = "Detail.";
         public string TemplateName { get; set; } = "Index";
 
         [OutputCache(Duration = 30, VaryByParam = "*")]
@@ -25,44 +31,40 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         {
             try
             {
-                var model = this.ResolveModel();
+                var model = ResolveModel();
                 string message;
 
-                var parameters = new System.Collections.Generic.Dictionary<string, object>();
+                var parameters = new Dictionary<string, object>();
 
                 if (!model.CanProcessRequest(parameters, out message))
                 {
-                    return this.PartialView("_Warning", message);
+                    return PartialView("_Warning", message);
                 }
 
                 var viewModel = model.CreateViewModel();
-                var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+                var detailTemplateName = detailTemplateNamePrefix + TemplateName;
 
-                return this.View(detailTemplateName, viewModel);
+                return View(detailTemplateName, viewModel);
             }
             catch (Exception ex)
             {
-                if (UCommerceUIModule.TryHandleSystemError(ex, out ActionResult actionResult))
+                if (UCommerceUIModule.TryHandleSystemError(ex, out var actionResult))
                 {
                     return actionResult;
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
         }
 
         protected override void HandleUnknownAction(string actionName)
         {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
         }
 
         private IFacetsFilterModel ResolveModel()
         {
             return UCommerceUIModule.Container.Resolve<IFacetsFilterModel>();
         }
-
-        private string detailTemplateNamePrefix = "Detail.";
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using Castle.MicroKernel;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using UCommerce.Sitefinity.UI.Api.Model;
@@ -11,32 +13,17 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Address MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uAddressInformation_MVC", Title = "Address Information",
-        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
+    [ControllerToolboxItem(Name = "uAddressInformation_MVC",
+        Title = "Address Information",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
         CssClass = "ucIcnAddressInformation sfMvcIcn")]
     public class AddressController : Controller, IPersonalizable
     {
+        private readonly string detailTemplateNamePrefix = "Detail.";
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
         public string TemplateName { get; set; } = "Index";
-
-        public ActionResult Index()
-        {
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
-            var model = ResolveModel();
-
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
-
-            parameters.Add("mode", "index");
-
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
-
-            return View(detailTemplateName);
-        }
 
         [HttpGet]
         [RelativeRoute("uc/checkout/address")]
@@ -45,9 +32,10 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             string message;
 
-            if (!model.CanProcessRequest(new System.Collections.Generic.Dictionary<string, object>(), out message))
+            if (!model.CanProcessRequest(new Dictionary<string, object>(), out message))
             {
-                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                return Json(new OperationStatusDTO
+                        { Status = "failed", Message = message },
                     JsonRequestBehavior.AllowGet);
             }
 
@@ -63,7 +51,25 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             responseDTO.Data.Add("data", viewModel);
 
-            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
+            return Json(responseDTO, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Index()
+        {
+            var detailTemplateName = detailTemplateNamePrefix + TemplateName;
+            var model = ResolveModel();
+
+            string message;
+            var parameters = new Dictionary<string, object>();
+
+            parameters.Add("mode", "index");
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return PartialView("_Warning", message);
+            }
+
+            return View(detailTemplateName);
         }
 
         [HttpPost]
@@ -73,47 +79,47 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             string message;
 
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
             parameters.Add("addressRendering", addressRendering);
             parameters.Add("modelState", ModelState);
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                return Json(new OperationStatusDTO
+                        { Status = "failed", Message = message },
                     JsonRequestBehavior.AllowGet);
             }
 
             if (ModelState.IsValid)
             {
                 model.Save(addressRendering);
-                return this.Json(new OperationStatusDTO() {Status = "success"}, JsonRequestBehavior.AllowGet);
+                return Json(new OperationStatusDTO
+                        { Status = "success" },
+                    JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                var errorList = model.ErrorMessage(ModelState);
 
-                var responseDTO = new OperationStatusDTO();
-                responseDTO.Status = "failed";
-                responseDTO.Data.Add("errors", errorList);
+            var errorList = model.ErrorMessage(ModelState);
 
-                return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
-            }
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "failed";
+            responseDTO.Data.Add("errors", errorList);
+
+            return Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         protected override void HandleUnknownAction(string actionName)
         {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
         }
 
         private IAddressModel ResolveModel()
         {
-            var args = new Castle.MicroKernel.Arguments();
+            var args = new Arguments();
 
             args.AddProperties(new
             {
-                nextStepId = this.NextStepId,
-                previousStepId = this.PreviousStepId
+                nextStepId = NextStepId,
+                previousStepId = PreviousStepId
             });
 
             var container = UCommerceUIModule.Container;
@@ -121,7 +127,5 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
-
-        private string detailTemplateNamePrefix = "Detail.";
     }
 }

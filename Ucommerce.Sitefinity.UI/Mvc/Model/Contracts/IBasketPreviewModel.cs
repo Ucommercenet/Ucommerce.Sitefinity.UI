@@ -9,7 +9,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public interface IBasketPreviewModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
-        BasketPreviewViewModel GetViewModel();
         string GetPaymentUrl();
+        BasketPreviewViewModel GetViewModel();
     }
 }

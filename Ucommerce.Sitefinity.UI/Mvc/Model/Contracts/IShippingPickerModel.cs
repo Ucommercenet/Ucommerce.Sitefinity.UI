@@ -9,7 +9,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public interface IShippingPickerModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
-        ShippingPickerViewModel GetViewModel();
         void CreateShipment(ShippingPickerViewModel createShipmentViewModel);
+        ShippingPickerViewModel GetViewModel();
     }
 }

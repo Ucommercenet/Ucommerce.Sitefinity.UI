@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Castle.MicroKernel;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using UCommerce.Sitefinity.UI.Api.Model;
@@ -12,29 +14,51 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Payment Picker MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uPaymentPicker_MVC", Title = "Payment Picker",
-        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
+    [ControllerToolboxItem(Name = "uPaymentPicker_MVC",
+        Title = "Payment Picker",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
         CssClass = "ucIcnPaymentPicker sfMvcIcn")]
     public class PaymentPickerController : Controller, IPersonalizable
     {
+        private readonly string detailTemplateNamePrefix = "Detail.";
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
         public string TemplateName { get; set; } = "Index";
 
-        public ActionResult Index()
+        [HttpPost]
+        [RelativeRoute("uc/checkout/payment")]
+        public ActionResult CreatePayment(PaymentPickerViewModel createPaymentViewModel)
         {
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
             var model = ResolveModel();
-            parameters.Add("mode", "index");
+            string message;
+            var parameters = new Dictionary<string, object>();
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return PartialView("_Warning", message);
             }
 
-            return View(detailTemplateName);
+            model.CreatePayment(createPaymentViewModel);
+
+            if (ModelState.IsValid)
+            {
+                return Json(new OperationStatusDTO
+                        { Status = "success" },
+                    JsonRequestBehavior.AllowGet);
+            }
+
+            var errorList = ModelState.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.Errors.Select(e => e.ErrorMessage)
+                    .ToArray()
+            );
+
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "failed";
+            responseDTO.Data.Add("errors", errorList);
+
+            return Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -43,11 +67,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                return Json(new OperationStatusDTO
+                        { Status = "failed", Message = message },
                     JsonRequestBehavior.AllowGet);
             }
 
@@ -63,64 +88,44 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             responseDTO.Data.Add("data", paymentPickerVM);
 
-            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
+            return Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        [RelativeRoute("uc/checkout/payment")]
-        public ActionResult CreatePayment(PaymentPickerViewModel createPaymentViewModel)
+        public ActionResult Index()
         {
-            var model = ResolveModel();
+            var detailTemplateName = detailTemplateNamePrefix + TemplateName;
             string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
+            var model = ResolveModel();
+            parameters.Add("mode", "index");
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return PartialView("_Warning", message);
             }
 
-            model.CreatePayment(createPaymentViewModel);
-
-            if (ModelState.IsValid)
-            {
-                return this.Json(new OperationStatusDTO() {Status = "success"}, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                var errorList = ModelState.ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
-
-                var responseDTO = new OperationStatusDTO();
-                responseDTO.Status = "failed";
-                responseDTO.Data.Add("errors", errorList);
-
-                return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
-            }
+            return View(detailTemplateName);
         }
 
         protected override void HandleUnknownAction(string actionName)
         {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
         }
 
         private IPaymentPickerModel ResolveModel()
         {
-            var args = new Castle.MicroKernel.Arguments();
+            var args = new Arguments();
 
             args.AddProperties(new
             {
-                nextStepId = this.NextStepId,
-                previousStepId = this.PreviousStepId
+                nextStepId = NextStepId,
+                previousStepId = PreviousStepId
             });
 
             var container = UCommerceUIModule.Container;
             var model = container.Resolve<IPaymentPickerModel>(args);
-            
+
             return model;
         }
-
-        private string detailTemplateNamePrefix = "Detail.";
     }
 }

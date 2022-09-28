@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
+﻿namespace UCommerce.Sitefinity.UI.Mvc.ViewModels
 {
     /// <summary>
     /// DTO class used for updating an item in a order.

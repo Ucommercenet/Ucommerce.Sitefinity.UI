@@ -1,38 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using Telerik.Sitefinity.Services;
 using Ucommerce;
+using Ucommerce.EntitiesV2;
+using Ucommerce.Infrastructure;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
     /// <summary>
     /// The Model class of the Confirmation Email MVC widget.
     /// </summary>
-    public class ConfirmationEmailModel: IConfirmationEmailModel
+    public class ConfirmationEmailModel : IConfirmationEmailModel
     {
-        private readonly Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PurchaseOrder> _purchaseOrderRepository;
+        private readonly IRepository<PurchaseOrder> _purchaseOrderRepository;
 
         public ConfirmationEmailModel()
         {
-            _purchaseOrderRepository = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PurchaseOrder>>();
-        }
-
-        public virtual ConfirmationEmailViewModel GetViewModel(string orderGuid)
-        {
-            var confirmationEmailViewModel = new ConfirmationEmailViewModel();
-
-            if (!string.IsNullOrWhiteSpace(orderGuid))
-            {
-                var purchaseOrder = _purchaseOrderRepository.SingleOrDefault(x => x.OrderGuid == new Guid(orderGuid));
-                confirmationEmailViewModel = MapPurchaseOrder(purchaseOrder, confirmationEmailViewModel);
-            }
-            return confirmationEmailViewModel;
+            _purchaseOrderRepository = ObjectFactory.Instance.Resolve<IRepository<PurchaseOrder>>();
         }
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
         {
-            if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+            if (SystemManager.IsDesignMode)
             {
                 message = "The widget is in Page Edit mode.";
                 return false;
@@ -52,11 +43,24 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return true;
         }
 
-        private ConfirmationEmailViewModel MapPurchaseOrder(Ucommerce.EntitiesV2.PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
+        public virtual ConfirmationEmailViewModel GetViewModel(string orderGuid)
         {
-            confirmationEmailViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new Ucommerce.EntitiesV2.OrderAddress();
-            confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Shipment") ?? new Ucommerce.EntitiesV2.OrderAddress();
-            
+            var confirmationEmailViewModel = new ConfirmationEmailViewModel();
+
+            if (!string.IsNullOrWhiteSpace(orderGuid))
+            {
+                var purchaseOrder = _purchaseOrderRepository.SingleOrDefault(x => x.OrderGuid == new Guid(orderGuid));
+                confirmationEmailViewModel = MapPurchaseOrder(purchaseOrder, confirmationEmailViewModel);
+            }
+
+            return confirmationEmailViewModel;
+        }
+
+        private ConfirmationEmailViewModel MapPurchaseOrder(PurchaseOrder purchaseOrder, ConfirmationEmailViewModel confirmationEmailViewModel)
+        {
+            confirmationEmailViewModel.BillingAddress = purchaseOrder.BillingAddress ?? new OrderAddress();
+            confirmationEmailViewModel.ShipmentAddress = purchaseOrder.GetShippingAddress("Shipment") ?? new OrderAddress();
+
             foreach (var orderLine in purchaseOrder.OrderLines)
             {
                 var orderLineCurrencyIsoCode = orderLine.PurchaseOrder.BillingCurrency.ISOCode;
