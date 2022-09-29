@@ -4,143 +4,150 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Telerik.Sitefinity.Abstractions;
-using Ucommerce.Api;
-using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using Telerik.Sitefinity.Services;
 using Ucommerce;
+using Ucommerce.Api;
+using Ucommerce.EntitiesV2;
 using UCommerce.Sitefinity.UI.Mvc.Services;
+using UCommerce.Sitefinity.UI.Mvc.ViewModels;
+using UCommerce.Sitefinity.UI.Pages;
+using ObjectFactory = Ucommerce.Infrastructure.ObjectFactory;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-	/// <summary>
-	/// The Model class of the Payment Picker MVC widget.
-	/// </summary>
-	public class PaymentPickerModel : IPaymentPickerModel
-	{
-		private Guid nextStepId;
-		private Guid previousStepId;
-		public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
-		public ITransactionLibrary TransactionLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ITransactionLibrary>();
-		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
-		public Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup> PriceGroupRepository = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<Ucommerce.EntitiesV2.IRepository<Ucommerce.EntitiesV2.PriceGroup>>();
+    /// <summary>
+    /// The Model class of the Payment Picker MVC widget.
+    /// </summary>
+    public class PaymentPickerModel : IPaymentPickerModel
+    {
+        public IRepository<PriceGroup> PriceGroupRepository = ObjectFactory.Instance.Resolve<IRepository<PriceGroup>>();
+        private readonly Guid nextStepId;
+        private readonly Guid previousStepId;
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
+        public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
 
-		public PaymentPickerModel(Guid? nextStepId = null, Guid? previousStepId = null)
-		{
-			this.nextStepId = nextStepId ?? Guid.Empty;
-			this.previousStepId = previousStepId ?? Guid.Empty;
-		}
+        public PaymentPickerModel(Guid? nextStepId = null, Guid? previousStepId = null)
+        {
+            this.nextStepId = nextStepId ?? Guid.Empty;
+            this.previousStepId = previousStepId ?? Guid.Empty;
+        }
 
-		public virtual PaymentPickerViewModel GetViewModel()
-		{
-			Ucommerce.EntitiesV2.PurchaseOrder purchaseOrder;
-			var paymentPickerViewModel = new PaymentPickerViewModel();
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            object mode = null;
 
-			try
-			{
-				purchaseOrder = TransactionLibrary.GetBasket();
-			}
-			catch (Exception ex)
-			{
-				Log.Write(ex, ConfigurationPolicy.ErrorLog);
-				return null;
-			}
+            if (parameters.TryGetValue("mode", out mode) && mode != null)
+            {
+                if (mode.ToString() == "index")
+                {
+                    if (SystemManager.IsDesignMode)
+                    {
+                        message = "The widget is in Page Edit mode.";
+                        return false;
+                    }
+                }
 
-			if (!purchaseOrder.OrderLines.Any())
-			{
-				return null;
-			}
+                message = null;
+                return true;
+            }
 
-			var shippingAddress =
-				 TransactionLibrary.GetShippingInformation(Ucommerce.Constants.DefaultShipmentAddressName);
+            message = null;
+            return true;
+        }
 
-			var shippingCountry = shippingAddress.Country;
+        public virtual void CreatePayment(PaymentPickerViewModel createPaymentViewModel)
+        {
+            TransactionLibrary.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
+            TransactionLibrary.ExecuteBasketPipeline();
 
-			if (shippingCountry != null)
-			{
-				paymentPickerViewModel.ShippingCountry = shippingCountry.Name;
+            var paymentMethod = PaymentMethod.Get(createPaymentViewModel.SelectedPaymentMethodId);
+            InsightUcommerce.SendInteraction("Checkout > Select payment method", paymentMethod.Name);
+        }
 
-				var availablePaymentMethods = TransactionLibrary.GetPaymentMethods(shippingCountry);
+        public virtual PaymentPickerViewModel GetViewModel()
+        {
+            PurchaseOrder purchaseOrder;
+            var paymentPickerViewModel = new PaymentPickerViewModel();
 
-				var existingPayment = purchaseOrder.Payments.FirstOrDefault();
-				paymentPickerViewModel.SelectedPaymentMethodId = existingPayment != null
-					? existingPayment.PaymentMethod.PaymentMethodId
-					: -1;
-				var priceGroup = PriceGroupRepository.SingleOrDefault(pg => pg.Guid == CatalogContext.CurrentPriceGroup.Guid);
+            try
+            {
+                purchaseOrder = TransactionLibrary.GetBasket();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex, ConfigurationPolicy.ErrorLog);
+                return null;
+            }
 
-				foreach (var availablePaymentMethod in availablePaymentMethods)
-				{
-					var option = new SelectListItem();
-					decimal feePercent = availablePaymentMethod.FeePercent;
-					var localizedPaymentMethod = availablePaymentMethod.PaymentMethodDescriptions.FirstOrDefault(s =>
-						s.CultureCode.Equals(CultureInfo.CurrentCulture.ToString()));
-					var fee = availablePaymentMethod.GetFeeForPriceGroup(priceGroup);
-					var formattedFee = new Money(fee == null ? 0 : fee.Fee, purchaseOrder.BillingCurrency.ISOCode);
+            if (!purchaseOrder.OrderLines.Any())
+            {
+                return null;
+            }
 
-					if (localizedPaymentMethod != null)
-					{
-						var displayName = localizedPaymentMethod.DisplayName;
-						if (string.IsNullOrWhiteSpace(displayName)) displayName = availablePaymentMethod.Name;
+            var shippingAddress =
+                TransactionLibrary.GetShippingInformation(Ucommerce.Constants.DefaultShipmentAddressName);
 
-						option.Text = String.Format(" {0} ({1} + {2}%)", displayName, formattedFee, feePercent.ToString("0.00"));
-						option.Value = availablePaymentMethod.PaymentMethodId.ToString();
-						option.Selected = availablePaymentMethod.PaymentMethodId == paymentPickerViewModel.SelectedPaymentMethodId;
-					}
+            var shippingCountry = shippingAddress.Country;
 
-					paymentPickerViewModel.AvailablePaymentMethods.Add(option);
-				}
-			}
+            if (shippingCountry != null)
+            {
+                paymentPickerViewModel.ShippingCountry = shippingCountry.Name;
 
-			TransactionLibrary.ExecuteBasketPipeline();
+                var availablePaymentMethods = TransactionLibrary.GetPaymentMethods(shippingCountry);
 
-			paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
-			paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
+                var existingPayment = purchaseOrder.Payments.FirstOrDefault();
+                paymentPickerViewModel.SelectedPaymentMethodId = existingPayment != null
+                    ? existingPayment.PaymentMethod.PaymentMethodId
+                    : -1;
+                var priceGroup = PriceGroupRepository.SingleOrDefault(pg => pg.Guid == CatalogContext.CurrentPriceGroup.Guid);
 
-			return paymentPickerViewModel;
-		}
+                foreach (var availablePaymentMethod in availablePaymentMethods)
+                {
+                    var option = new SelectListItem();
+                    var feePercent = availablePaymentMethod.FeePercent;
+                    var localizedPaymentMethod = availablePaymentMethod.PaymentMethodDescriptions.FirstOrDefault(s =>
+                        s.CultureCode.Equals(CultureInfo.CurrentCulture.ToString()));
+                    var fee = availablePaymentMethod.GetFeeForPriceGroup(priceGroup);
+                    var formattedFee = new Money(fee == null ? 0 : fee.Fee, purchaseOrder.BillingCurrency.ISOCode);
 
-		public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
-		{
-			object mode = null;
+                    if (localizedPaymentMethod != null)
+                    {
+                        var displayName = localizedPaymentMethod.DisplayName;
+                        if (string.IsNullOrWhiteSpace(displayName))
+                        {
+                            displayName = availablePaymentMethod.Name;
+                        }
 
-			if (parameters.TryGetValue("mode", out mode) && mode != null)
-			{
-				if (mode.ToString() == "index")
-				{
-					if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-					{
-						message = "The widget is in Page Edit mode.";
-						return false;
-					}
-				}
+                        option.Text = string.Format(" {0} ({1} + {2}%)", displayName, formattedFee, feePercent.ToString("0.00"));
+                        option.Value = availablePaymentMethod.PaymentMethodId.ToString();
+                        option.Selected = availablePaymentMethod.PaymentMethodId == paymentPickerViewModel.SelectedPaymentMethodId;
+                    }
 
-				message = null;
-				return true;
-			}
+                    paymentPickerViewModel.AvailablePaymentMethods.Add(option);
+                }
+            }
 
-			message = null;
-			return true;
-		}
+            TransactionLibrary.ExecuteBasketPipeline();
 
-		public virtual void CreatePayment(PaymentPickerViewModel createPaymentViewModel)
-		{
-			TransactionLibrary.CreatePayment(createPaymentViewModel.SelectedPaymentMethodId, -1m, false, true);
-			TransactionLibrary.ExecuteBasketPipeline();
+            paymentPickerViewModel.NextStepUrl = GetNextStepUrl(nextStepId);
+            paymentPickerViewModel.PreviousStepUrl = GetPreviousStepUrl(previousStepId);
 
-			var paymentMethod = Ucommerce.EntitiesV2.PaymentMethod.Get(createPaymentViewModel.SelectedPaymentMethodId);
-			InsightUcommerce.SendInteraction("Checkout > Select payment method", paymentMethod.Name);
-		}
+            return paymentPickerViewModel;
+        }
 
-		private string GetNextStepUrl(Guid nextStepId)
-		{
-			var nextStepUrl = Pages.UrlResolver.GetPageNodeUrl(nextStepId);
+        private string GetNextStepUrl(Guid nextStepId)
+        {
+            var nextStepUrl = UrlResolver.GetPageNodeUrl(nextStepId);
 
-			return Pages.UrlResolver.GetAbsoluteUrl(nextStepUrl);
-		}
+            return UrlResolver.GetAbsoluteUrl(nextStepUrl);
+        }
 
-		private string GetPreviousStepUrl(Guid previousStepId)
-		{
-			var previousStepUrl = Pages.UrlResolver.GetPageNodeUrl(previousStepId);
+        private string GetPreviousStepUrl(Guid previousStepId)
+        {
+            var previousStepUrl = UrlResolver.GetPageNodeUrl(previousStepId);
 
-			return Pages.UrlResolver.GetAbsoluteUrl(previousStepUrl);
-		}
-	}
+            return UrlResolver.GetAbsoluteUrl(previousStepUrl);
+        }
+    }
 }

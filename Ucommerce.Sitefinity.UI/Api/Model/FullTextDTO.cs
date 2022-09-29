@@ -7,8 +7,7 @@ namespace UCommerce.Sitefinity.UI.Api.Model
     /// </summary>
     public class FullTextDTO
     {
-        public string SearchQuery { get; set; }
-
         public Guid? ProductDetailsPageId { get; set; }
+        public string SearchQuery { get; set; }
     }
 }

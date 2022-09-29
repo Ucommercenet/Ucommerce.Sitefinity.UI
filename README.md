@@ -4,6 +4,7 @@
 
 - Sitefinity 14.0
 - Ucommerce 9.5.1
+- Node 14.16.0
 
 ## Intro
 

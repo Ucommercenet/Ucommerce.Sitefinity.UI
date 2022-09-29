@@ -14,8 +14,6 @@ namespace UCommerce.Sitefinity.UI.Mvc
     /// </summary>
     public class ControllerContainerResolver
     {
-        #region Public members
-
         /// <summary>
         /// Gets the assemblies that are marked as controller containers with the <see cref="ControllerContainerAttribute"/> attribute.
         /// </summary>
@@ -23,27 +21,86 @@ namespace UCommerce.Sitefinity.UI.Mvc
         {
             IEnumerable<string> assemblyFileNames;
 
-            assemblyFileNames = RetrieveAssembliesFileNames().Distinct().ToArray();
+            assemblyFileNames = RetrieveAssembliesFileNames()
+                .Distinct()
+                .ToArray();
 
             IDictionary<string, Task<Assembly>> retrieveAssemblyTasks = new Dictionary<string, Task<Assembly>>();
 
-            foreach (string assemblyFileName in assemblyFileNames)
+            foreach (var assemblyFileName in assemblyFileNames)
             {
                 retrieveAssemblyTasks.Add(assemblyFileName, RetrieveAssemblyAsync(assemblyFileName));
             }
 
             Task.WaitAll(retrieveAssemblyTasks.Values.ToArray());
 
-            IEnumerable<Assembly> result = retrieveAssemblyTasks.Values
+            var result = retrieveAssemblyTasks.Values
                 .Select(v => v.Result)
                 .Where(a => a != null);
 
             return result;
         }
 
-        #endregion
+        private static Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var assignedWithPolicy = AppDomain.CurrentDomain.ApplyPolicy(args.Name);
 
-        #region Private members
+            return Assembly.ReflectionOnlyLoad(assignedWithPolicy);
+        }
+
+        /// <summary>
+        /// Determines whether the given <paramref name="assemblyFileName"/> is an assembly file that is marked as <see cref="ContainerControllerAttribute"/>.
+        /// </summary>
+        /// <param name="assemblyFileName">Filename of the assembly.</param>
+        /// <returns>True if the given file name is of an assembly file that is marked as <see cref="ContainerControllerAttribute"/>, false otherwise.</returns>
+        private static bool IsControllerContainer(string assemblyFileName)
+        {
+            return IsMarkedAssembly<ControllerContainerAttribute>(assemblyFileName);
+        }
+
+        /// <summary>
+        /// Determines whether the specified assembly file name is marked with a given attribute.
+        /// </summary>
+        /// <typeparam name="TAttribute">The type of the attribute.</typeparam>
+        /// <param name="assemblyFileName">File name of the assembly.</param>
+        /// <returns>True if the assembly has the given attribute.</returns>
+        private static bool IsMarkedAssembly<TAttribute>(string assemblyFileName)
+            where TAttribute : Attribute
+        {
+            if (assemblyFileName == null)
+            {
+                return false;
+            }
+
+            bool result;
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
+            try
+            {
+                try
+                {
+                    var reflOnlyAssembly = Assembly.ReflectionOnlyLoadFrom(assemblyFileName);
+
+                    result = reflOnlyAssembly != null &&
+                        reflOnlyAssembly.GetCustomAttributesData()
+                            .Any(d => d.Constructor.DeclaringType.AssemblyQualifiedName == typeof(TAttribute).AssemblyQualifiedName);
+                }
+                catch (IOException)
+                {
+                    // We might not be able to load some .DLL files as .NET assemblies. Those files cannot contain controllers.
+                    result = false;
+                }
+                catch (BadImageFormatException)
+                {
+                    result = false;
+                }
+            }
+            finally
+            {
+                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Loads the assembly file into the current application domain.
@@ -64,26 +121,11 @@ namespace UCommerce.Sitefinity.UI.Mvc
             return Directory.EnumerateFiles(controllerAssemblyPath, "*.dll", SearchOption.TopDirectoryOnly);
         }
 
-        /// <summary>
-        /// Determines whether the given <paramref name="assemblyFileName"/> is an assembly file that is marked as <see cref="ContainerControllerAttribute"/>.
-        /// </summary>
-        /// <param name="assemblyFileName">Filename of the assembly.</param>
-        /// <returns>True if the given file name is of an assembly file that is marked as <see cref="ContainerControllerAttribute"/>, false otherwise.</returns>
-        private static bool IsControllerContainer(string assemblyFileName)
-        {
-            return IsMarkedAssembly<ControllerContainerAttribute>(assemblyFileName);
-        }
-
-        private static Task<Assembly> RetrieveAssemblyAsync(string assemblyFileName)
-        {
-            return Task.Run(() => RetrieveAssembly(assemblyFileName));
-        }
-
         private static Assembly RetrieveAssembly(string assemblyFileName)
         {
             if (IsControllerContainer(assemblyFileName))
             {
-                Assembly assembly = LoadAssembly(assemblyFileName);
+                var assembly = LoadAssembly(assemblyFileName);
 
                 return assembly;
             }
@@ -91,55 +133,9 @@ namespace UCommerce.Sitefinity.UI.Mvc
             return null;
         }
 
-        /// <summary>
-        /// Determines whether the specified assembly file name is marked with a given attribute.
-        /// </summary>
-        /// <typeparam name="TAttribute">The type of the attribute.</typeparam>
-        /// <param name="assemblyFileName">File name of the assembly.</param>
-        /// <returns>True if the assembly has the given attribute.</returns>
-        private static bool IsMarkedAssembly<TAttribute>(string assemblyFileName)
-            where TAttribute : Attribute
+        private static Task<Assembly> RetrieveAssemblyAsync(string assemblyFileName)
         {
-            if (assemblyFileName == null)
-                return false;
-
-            bool result;
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-            try
-            {
-                try
-                {
-                    var reflOnlyAssembly = Assembly.ReflectionOnlyLoadFrom(assemblyFileName);
-
-                    result = reflOnlyAssembly != null &&
-                            reflOnlyAssembly.GetCustomAttributesData()
-                                .Any(d => d.Constructor.DeclaringType.AssemblyQualifiedName == typeof(TAttribute).AssemblyQualifiedName);
-                }
-                catch (IOException)
-                {
-                    // We might not be able to load some .DLL files as .NET assemblies. Those files cannot contain controllers.
-                    result = false;
-                }
-                catch (BadImageFormatException)
-                {
-                    result = false;
-                }
-            }
-            finally
-            {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-            }
-
-            return result;
+            return Task.Run(() => RetrieveAssembly(assemblyFileName));
         }
-
-        private static Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            var assignedWithPolicy = AppDomain.CurrentDomain.ApplyPolicy(args.Name);
-
-            return Assembly.ReflectionOnlyLoad(assignedWithPolicy);
-        }
-
-        #endregion
     }
 }

@@ -1,128 +1,121 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using Castle.MicroKernel;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Telerik.Sitefinity.Services;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-	/// <summary>
-	/// The controller class for the Category Navigation MVC widget.
-	/// </summary>
-	[ControllerToolboxItem(Name = "uCategoryNavigation_MVC", Title = "Category Navigation", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnCategoryNavigation sfMvcIcn")]
-	public class CategoryNavigationController : Controller, IPersonalizable
-	{
-		public Guid? ImageId { get; set; }
+    /// <summary>
+    /// The controller class for the Category Navigation MVC widget.
+    /// </summary>
+    [ControllerToolboxItem(Name = "uCategoryNavigation_MVC",
+        Title = "Category Navigation",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnCategoryNavigation sfMvcIcn")]
+    public class CategoryNavigationController : Controller, IPersonalizable
+    {
+        private readonly string detailTemplateNamePrefix = "Detail.";
+        public bool AllowChangingCurrency { get; set; } = true;
+        public Guid? CategoryPageId { get; set; }
+        public bool HideMiniBasket { get; set; }
+        public Guid? ImageId { get; set; }
+        public Guid? ProductDetailsPageId { get; set; }
+        public string ProviderName { get; set; }
+        public Guid? SearchPageId { get; set; }
+        public string TemplateName { get; set; } = "Index";
 
-		public string ProviderName { get; set; }
+        public ActionResult Index()
+        {
+            CategoryNavigationViewModel categoryNavigationViewModel = null;
 
-		public bool HideMiniBasket { get; set; }
+            try
+            {
+                var model = ResolveModel();
+                string message;
 
-		public bool AllowChangingCurrency { get; set; } = true;
+                var parameters = new Dictionary<string, object>();
 
-		public Guid? CategoryPageId { get; set; }
+                if (!model.CanProcessRequest(parameters, out message))
+                {
+                    return PartialView("_Warning", message);
+                }
 
-		public Guid? SearchPageId { get; set; }
+                categoryNavigationViewModel = model.CreateViewModel();
 
-		public Guid? ProductDetailsPageId { get; set; }
+                var detailTemplateName = detailTemplateNamePrefix + TemplateName;
 
-		public string TemplateName { get; set; } = "Index";
+                return View(detailTemplateName, categoryNavigationViewModel);
+            }
+            catch (Exception ex)
+            {
+                if (UCommerceUIModule.TryHandleSystemError(ex, out var actionResult))
+                {
+                    return actionResult;
+                }
 
-		public ActionResult Index()
-		{
-			CategoryNavigationViewModel categoryNavigationViewModel = null;
+                throw;
+            }
+        }
 
-			try
-			{
-				var model = this.ResolveModel();
-				string message;
+        public ActionResult StoreNavigation(Guid categoryPageId)
+        {
+            CategoryNavigationViewModel categoryNavigationViewModel = null;
 
-				var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            CategoryPageId = categoryPageId;
+            try
+            {
+                var model = ResolveModel();
+                string message;
 
-				if (!model.CanProcessRequest(parameters, out message))
-				{
-					return this.PartialView("_Warning", message);
-				}
+                var parameters = new Dictionary<string, object>();
 
-				categoryNavigationViewModel = model.CreateViewModel();
+                if (!model.CanProcessRequest(parameters, out message))
+                {
+                    return PartialView("_Warning", message);
+                }
 
-				var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+                categoryNavigationViewModel = model.CreateViewModel();
+                return View(categoryNavigationViewModel);
+            }
+            catch (Exception ex)
+            {
+                if (UCommerceUIModule.TryHandleSystemError(ex, out var actionResult))
+                {
+                    return actionResult;
+                }
 
-				return this.View(detailTemplateName, categoryNavigationViewModel);
-			}
-			catch (Exception ex)
-			{
-				if (UCommerceUIModule.TryHandleSystemError(ex, out ActionResult actionResult))
-				{
-					return actionResult;
-				}
-				else
-				{
-					throw;
-				}
-			}
-		}
+                throw;
+            }
+        }
 
-		public ActionResult StoreNavigation(Guid categoryPageId)
-		{
-			CategoryNavigationViewModel categoryNavigationViewModel = null;
+        protected override void HandleUnknownAction(string actionName)
+        {
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
+        }
 
-			this.CategoryPageId = categoryPageId;
-			try
-			{
-				var model = this.ResolveModel();
-				string message;
+        private ICategoryModel ResolveModel()
+        {
+            var args = new Arguments();
 
-				var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            args.AddProperties(new
+            {
+                hideMiniBasket = HideMiniBasket,
+                allowChangingCurrency = AllowChangingCurrency,
+                imageId = ImageId,
+                categoryPageId = CategoryPageId,
+                searchPageId = SearchPageId,
+                productDetailsPageId = ProductDetailsPageId
+            });
 
-				if (!model.CanProcessRequest(parameters, out message))
-				{
-					return this.PartialView("_Warning", message);
-				}
+            var container = UCommerceUIModule.Container;
+            var model = container.Resolve<ICategoryModel>(args);
 
-				categoryNavigationViewModel = model.CreateViewModel();
-				return View(categoryNavigationViewModel);
-			}
-			catch (Exception ex)
-			{
-				if (UCommerceUIModule.TryHandleSystemError(ex, out ActionResult actionResult))
-				{
-					return actionResult;
-				}
-				else
-				{
-					throw;
-				}
-			}
-		}
-
-		protected override void HandleUnknownAction(string actionName)
-		{
-			this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
-		}
-
-		private ICategoryModel ResolveModel()
-		{
-			var args = new Castle.MicroKernel.Arguments();
-
-			args.AddProperties(new
-			{
-				hideMiniBasket = this.HideMiniBasket,
-				allowChangingCurrency = this.AllowChangingCurrency,
-				imageId = this.ImageId,
-				categoryPageId = this.CategoryPageId,
-				searchPageId = this.SearchPageId,
-				productDetailsPageId = this.ProductDetailsPageId
-			});
-
-			var container = UCommerceUIModule.Container;
-			var model = container.Resolve<ICategoryModel>(args);
-
-			return model;
-		}
-
-		private string detailTemplateNamePrefix = "Detail.";
-	}
+            return model;
+        }
+    }
 }

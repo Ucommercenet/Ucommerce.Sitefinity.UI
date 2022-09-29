@@ -2,19 +2,25 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
 using RazorGenerator.Mvc;
+using UCommerce.Sitefinity.UI;
+using WebActivatorEx;
 
-[assembly: WebActivatorEx.PostApplicationStartMethod(typeof(UCommerce.Sitefinity.UI.RazorGeneratorMvcStart), "Start")]
+[assembly: PostApplicationStartMethod(typeof(RazorGeneratorMvcStart), "Start")]
 
-namespace UCommerce.Sitefinity.UI {
-    public static class RazorGeneratorMvcStart {
-        public static void Start() {
-            var engine = new PrecompiledMvcEngine(typeof(RazorGeneratorMvcStart).Assembly) {
+namespace UCommerce.Sitefinity.UI
+{
+    public static class RazorGeneratorMvcStart
+    {
+        public static void Start()
+        {
+            var engine = new PrecompiledMvcEngine(typeof(RazorGeneratorMvcStart).Assembly)
+            {
                 UsePhysicalViewsIfNewer = HttpContext.Current.Request.IsLocal
             };
 
             ViewEngines.Engines.Insert(0, engine);
 
-            // StartPage lookups are done by WebPages. 
+            // StartPage lookups are done by WebPages.
             VirtualPathFactoryManager.RegisterVirtualPathFactory(engine);
         }
     }

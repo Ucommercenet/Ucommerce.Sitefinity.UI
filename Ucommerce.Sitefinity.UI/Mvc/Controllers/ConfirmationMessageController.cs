@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using UCommerce.Sitefinity.UI.Mvc.Model;
@@ -8,9 +9,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Confirmation Message MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uConfirmationMessage_MVC", Title = "Confirmation Message", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnConfirmationMessage sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uConfirmationMessage_MVC",
+        Title = "Confirmation Message",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnConfirmationMessage sfMvcIcn")]
     public class ConfirmationMessageController : Controller, IPersonalizable
     {
+        private readonly string detailTemplateNamePrefix = "Detail.";
         public string Headline { get; set; }
         public string Message { get; set; }
         public string TemplateName { get; set; } = "Index";
@@ -19,16 +25,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
 
             var orderGuid = Request.QueryString["orderGuid"];
             if (!model.CanProcessRequest(parameters, orderGuid, out message))
             {
-                return this.PartialView("_Warning", message);
+                return PartialView("_Warning", message);
             }
 
             var confirmationMessageVM = model.GetViewModel(Headline, Message, orderGuid);
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
+            var detailTemplateName = detailTemplateNamePrefix + TemplateName;
 
             return View(detailTemplateName, confirmationMessageVM);
         }
@@ -43,9 +49,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
         protected override void HandleUnknownAction(string actionName)
         {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
         }
-
-        private string detailTemplateNamePrefix = "Detail.";
     }
 }

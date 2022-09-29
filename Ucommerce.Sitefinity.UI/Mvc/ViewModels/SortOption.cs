@@ -2,8 +2,8 @@
 {
     public class SortOption
     {
-        public string Title { get; set; }
-        public string Key { get; set; }
         public bool IsActive { get; set; }
+        public string Key { get; set; }
+        public string Title { get; set; }
     }
 }

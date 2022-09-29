@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using UCommerce.Sitefinity.UI.Api.Model;
@@ -6,26 +7,15 @@ using UCommerce.Sitefinity.UI.Mvc.Model.Contracts;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-    [ControllerToolboxItem(Name = "uProductReviews_MVC", Title = "Product Reviews", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnProductReviews sfMvcIcn")]
+    [ControllerToolboxItem(Name = "uProductReviews_MVC",
+        Title = "Product Reviews",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnProductReviews sfMvcIcn")]
     public class ProductReviewsController : Controller, IPersonalizable
     {
+        private readonly string listTemplateNamePrefix = "List.";
         public string TemplateName { get; set; } = "Index";
-
-        public ActionResult Index()
-        {
-            var model = ResolveModel();
-            string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
-
-            if (!model.CanProcessRequest(parameters, out message))
-            {
-                return this.PartialView("_Warning", message);
-            }
-
-            var listTemplateName = this.listTemplateNamePrefix + this.TemplateName;
-
-            return View(listTemplateName);
-        }
 
         [HttpGet]
         [RelativeRoute("reviews/data")]
@@ -38,11 +28,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
         {
             var model = ResolveModel();
             string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.Json(new OperationStatusDTO() { Status = "failed", Message = message }, JsonRequestBehavior.AllowGet);
+                return Json(new OperationStatusDTO
+                        { Status = "failed", Message = message },
+                    JsonRequestBehavior.AllowGet);
             }
 
             var vm = model.GetReviews(productId);
@@ -51,12 +43,28 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             responseDTO.Status = "success";
             responseDTO.Data.Add("Reviews", vm.Reviews);
 
-            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
+            return Json(responseDTO, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Index()
+        {
+            var model = ResolveModel();
+            string message;
+            var parameters = new Dictionary<string, object>();
+
+            if (!model.CanProcessRequest(parameters, out message))
+            {
+                return PartialView("_Warning", message);
+            }
+
+            var listTemplateName = listTemplateNamePrefix + TemplateName;
+
+            return View(listTemplateName);
         }
 
         protected override void HandleUnknownAction(string actionName)
         {
-            base.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
         }
 
         private IReviewsModel ResolveModel()
@@ -66,7 +74,5 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             return model;
         }
-
-        private string listTemplateNamePrefix = "List.";
     }
 }

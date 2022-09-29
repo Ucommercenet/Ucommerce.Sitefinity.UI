@@ -9,9 +9,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public interface IMiniBasketModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
-        
         MiniBasketRenderingViewModel CreateViewModel(string refreshUrl);
-
         MiniBasketRefreshViewModel Refresh();
     }
 }

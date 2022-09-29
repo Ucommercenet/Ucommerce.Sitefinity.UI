@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Web;
 using System.Web.Http;
-using UCommerce.Sitefinity.UI.Api.Model;
 using Ucommerce;
 using Ucommerce.Api;
 using Ucommerce.Catalog.Models;
 using Ucommerce.Catalog.Status;
-using Ucommerce.Pipelines;
+using Ucommerce.EntitiesV2;
 using Ucommerce.Infrastructure;
+using Ucommerce.Pipelines;
+using UCommerce.Sitefinity.UI.Api.Model;
 
 namespace UCommerce.Sitefinity.UI.Api
 {
@@ -20,9 +22,31 @@ namespace UCommerce.Sitefinity.UI.Api
     [RoutePrefix("ProductApi")]
     public class WidgetProductController : ApiController
     {
-        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
         public ITransactionLibrary TransactionLibrary => ObjectFactory.Instance.Resolve<ITransactionLibrary>();
+
+        [Route("productReviews")]
+        [HttpPost]
+        public IHttpActionResult GetProductReviews([FromBody] GetProductReviewsDTO model)
+        {
+            var productReviews = ProductReview.Find(pr =>
+                pr.Product.Sku == model.Sku
+                && pr.Product.VariantSku == null
+                && pr.ProductReviewStatus.ProductReviewStatusId == (int)ProductReviewStatusCode.Approved
+                && (pr.CultureCode == null || pr.CultureCode == string.Empty || pr.CultureCode == Thread.CurrentThread.CurrentUICulture.Name)
+            );
+
+            return Json(productReviews.OrderByDescending(pr => pr.CreatedOn)
+                .Select(x => new ProductReviewDTO
+                {
+                    Name = x.CreatedBy,
+                    Rating = x.Rating.GetValueOrDefault(),
+                    Comments = x.ReviewText,
+                    Title = x.ReviewHeadline,
+                    Submitted = x.CreatedOn,
+                }));
+        }
 
         [Route("productPrices")]
         [HttpPost]
@@ -35,50 +59,30 @@ namespace UCommerce.Sitefinity.UI.Api
             return Json(MapToProductPricesViewModels(productsPrices, currencyIsoCode));
         }
 
-        [Route("productReviews")]
-        [HttpPost]
-        public IHttpActionResult GetProductReviews([FromBody] GetProductReviewsDTO model)
-        {
-			var productReviews = Ucommerce.EntitiesV2.ProductReview.Find(pr =>
-							pr.Product.Sku == model.Sku
-							&& pr.Product.VariantSku == null
-							&& pr.ProductReviewStatus.ProductReviewStatusId == (int)ProductReviewStatusCode.Approved
-							&& (pr.CultureCode == null || pr.CultureCode == string.Empty || pr.CultureCode == Thread.CurrentThread.CurrentUICulture.Name)
-						);
-
-			return Json(productReviews.OrderByDescending(pr => pr.CreatedOn).Select(x => new ProductReviewDTO()
-            {
-                Name = x.CreatedBy,
-                Rating = x.Rating.GetValueOrDefault(),
-                Comments = x.ReviewText,
-                Title = x.ReviewHeadline,
-                Submitted = x.CreatedOn,
-            }));
-        }
-
         [Route("productReviews/put")]
         [HttpPost]
         public IHttpActionResult PutProductReview([FromBody] ProductReviewDTO model)
         {
-            var product = Ucommerce.EntitiesV2.Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku == null);
-            var productCatalogGroup = Ucommerce.EntitiesV2.ProductCatalogGroup
+            var product = Product.FirstOrDefault(x => x.Sku == model.Sku && x.VariantSku == null);
+            var productCatalogGroup = ProductCatalogGroup
                 .FirstOrDefault(x => x.ProductCatalogGroupId == CatalogContext.CurrentCatalogGroup.ProductCatalogGroupId);
-            var request = System.Web.HttpContext.Current.Request;
-            var basket = TransactionLibrary.HasBasket() ? TransactionLibrary.GetBasket(false) : null;
+            var request = HttpContext.Current.Request;
+            var basket = TransactionLibrary.HasBasket() ? TransactionLibrary.GetBasket() : null;
 
             if (basket != null)
             {
-				if (basket.Customer == null)
+                if (basket.Customer == null)
                 {
-					basket.Customer = new Ucommerce.EntitiesV2.Customer() { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
+                    basket.Customer = new Customer
+                        { FirstName = model.Name, LastName = string.Empty, EmailAddress = model.Email };
                     basket.Save();
                 }
             }
 
-            var review = new Ucommerce.EntitiesV2.ProductReview()
+            var review = new ProductReview
             {
-				ProductCatalogGroup = productCatalogGroup,
-				ProductReviewStatus = Ucommerce.EntitiesV2.ProductReviewStatus.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
+                ProductCatalogGroup = productCatalogGroup,
+                ProductReviewStatus = ProductReviewStatus.SingleOrDefault(s => s.ProductReviewStatusId == (int)ProductReviewStatusCode.New),
                 CreatedOn = DateTime.Now,
                 CreatedBy = model.Name,
                 Product = product,
@@ -91,7 +95,8 @@ namespace UCommerce.Sitefinity.UI.Api
 
             product.AddProductReview(review);
 
-            PipelineFactory.Create<Ucommerce.EntitiesV2.ProductReview>("ProductReview").Execute(review);
+            PipelineFactory.Create<ProductReview>("ProductReview")
+                .Execute(review);
 
             return Ok();
         }
@@ -104,9 +109,9 @@ namespace UCommerce.Sitefinity.UI.Api
             {
                 var productPricesViewModel = new ProductPricesDTO
                 {
-	                ProductGuid = productsPricesItem.ProductGuid,
-	                Price = new Money(productsPricesItem.PriceInclTax, currencyIsoCode).ToString(),
-	                ListPrice = new Money(productsPricesItem.ListPriceInclTax, currencyIsoCode).ToString()
+                    ProductGuid = productsPricesItem.ProductGuid,
+                    Price = new Money(productsPricesItem.PriceInclTax, currencyIsoCode).ToString(),
+                    ListPrice = new Money(productsPricesItem.ListPriceInclTax, currencyIsoCode).ToString()
                 };
 
                 prices.Add(productPricesViewModel);

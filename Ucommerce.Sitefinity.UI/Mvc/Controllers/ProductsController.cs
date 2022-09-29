@@ -1,137 +1,128 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using Castle.MicroKernel;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
-using Ucommerce.Api;
 using UCommerce.Sitefinity.UI.Mvc.Model;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 {
-	/// <summary>
-	/// The controller class for the Products MVC widget.
-	/// </summary>
-	[ControllerToolboxItem(Name = "uProducts_MVC", Title = "Products", SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME, CssClass = "ucIcnProducts sfMvcIcn")]
-	public class ProductsController : Controller, IPersonalizable
-	{
-		public int ItemsPerPage { get; set; } = 10;
+    /// <summary>
+    /// The controller class for the Products MVC widget.
+    /// </summary>
+    [ControllerToolboxItem(Name = "uProducts_MVC",
+        Title = "Products",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
+        CssClass = "ucIcnProducts sfMvcIcn")]
+    public class ProductsController : Controller, IPersonalizable
+    {
+        private readonly string detailTemplateNamePrefix = "Detail.";
+        private readonly string listTemplateNamePrefix = "List.";
+        public string CategoryIds { get; set; }
+        public Guid DetailsPageId { get; set; }
+        public string DetailTemplateName { get; set; } = "Index";
+        public bool EnableCategoryFallback { get; set; }
+        public bool EnableSEOPageTitle { get; set; } = true;
+        public string FallbackCategoryIds { get; set; }
+        public bool IsManualSelectionMode { get; set; }
+        public int ItemsPerPage { get; set; } = 10;
+        public string ListTemplateName { get; set; } = "Index";
+        public bool OpenInSamePage { get; set; } = true;
+        public string ProductIds { get; set; }
 
-		public bool OpenInSamePage { get; set; } = true;
+        [RelativeRoute("{categoryName}/p/{productId}")]
+        [RelativeRoute("{parentCategory1?}/{categoryName}/p/{productId}")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
+        public ActionResult Details()
+        {
+            var productModel = ResolveModel();
+            string message;
+            var parameters = new Dictionary<string, object>();
 
-		public Guid DetailsPageId { get; set; }
+            if (!productModel.CanProcessRequest(parameters, out message))
+            {
+                return PartialView("_Warning", message);
+            }
 
-		public bool IsManualSelectionMode { get; set; }
+            var viewModel = productModel.CreateDetailsViewModel();
+            var templateName = detailTemplateNamePrefix + DetailTemplateName;
 
-		public string ProductIds { get; set; }
+            if (EnableSEOPageTitle)
+            {
+                ViewBag.Title = viewModel.DisplayName;
+            }
 
-		public string CategoryIds { get; set; }
+            return View(templateName, viewModel);
+        }
 
-		public bool EnableCategoryFallback { get; set; }
+        [OutputCache(Duration = 30, VaryByParam = "*")]
+        [RelativeRoute("{categoryName?}")]
+        [RelativeRoute("{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        [RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
+        public ActionResult Index()
+        {
+            ProductListViewModel viewModel;
+            try
+            {
+                var productModel = ResolveModel();
+                string message;
+                var parameters = new Dictionary<string, object>();
 
-		public string FallbackCategoryIds { get; set; }
+                if (!productModel.CanProcessRequest(parameters, out message))
+                {
+                    return PartialView("_Warning", message);
+                }
 
-		public string ListTemplateName { get; set; } = "Index";
+                viewModel = productModel.CreateListViewModel();
+                var templateName = listTemplateNamePrefix + ListTemplateName;
 
-		public string DetailTemplateName { get; set; } = "Index";
+                return View(templateName, viewModel);
+            }
+            catch (Exception ex)
+            {
+                if (UCommerceUIModule.TryHandleSystemError(ex, out var actionResult))
+                {
+                    return actionResult;
+                }
 
-		public bool EnableSEOPageTitle { get; set; } = true;
+                throw;
+            }
+        }
 
-		[OutputCache(Duration = 30, VaryByParam = "*")]
-		[RelativeRoute("{categoryName?}")]
-		[RelativeRoute("{parentCategory1?}/{categoryName?}")]
-		[RelativeRoute("{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
-		[RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
-		[RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
-		[RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName?}")]
-		public ActionResult Index()
-		{
-			ProductListViewModel viewModel;
-			try
-			{
-				var productModel = this.ResolveModel();
-				string message;
-				var parameters = new System.Collections.Generic.Dictionary<string, object>();
+        protected override void HandleUnknownAction(string actionName)
+        {
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
+        }
 
-				if (!productModel.CanProcessRequest(parameters, out message))
-				{
-					return this.PartialView("_Warning", message);
-				}
+        private IProductModel ResolveModel()
+        {
+            var args = new Arguments();
 
-				viewModel = productModel.CreateListViewModel();
-				var templateName = listTemplateNamePrefix + this.ListTemplateName;
+            args.AddProperties(new
+            {
+                itemsPerPage = ItemsPerPage,
+                openInSamePage = OpenInSamePage,
+                isManualSelectionMode = IsManualSelectionMode,
+                enableCategoryFallback = EnableCategoryFallback,
+                detailsPageId = DetailsPageId,
+                productIds = ProductIds,
+                categoryIds = CategoryIds,
+                fallbackCategoryIds = FallbackCategoryIds
+            });
 
-				return this.View(templateName, viewModel);
-			}
-			catch (Exception ex)
-			{
-				if (UCommerceUIModule.TryHandleSystemError(ex, out ActionResult actionResult))
-				{
-					return actionResult;
-				}
-				else
-				{
-					throw;
-				}
-			}
-		}
+            var container = UCommerceUIModule.Container;
+            var model = container.Resolve<IProductModel>(args);
 
-		[RelativeRoute("{categoryName}/p/{productId}")]
-		[RelativeRoute("{parentCategory1?}/{categoryName}/p/{productId}")]
-		[RelativeRoute("{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
-		[RelativeRoute("{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
-		[RelativeRoute("{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
-		[RelativeRoute("{parentCategory5?}/{parentCategory4?}/{parentCategory3?}/{parentCategory2?}/{parentCategory1?}/{categoryName}/p/{productId}")]
-		public ActionResult Details()
-		{
-
-			var productModel = this.ResolveModel();
-			string message;
-			var parameters = new System.Collections.Generic.Dictionary<string, object>();
-
-			if (!productModel.CanProcessRequest(parameters, out message))
-			{
-				return this.PartialView("_Warning", message);
-			}
-
-			var viewModel = productModel.CreateDetailsViewModel();
-			var templateName = this.detailTemplateNamePrefix + this.DetailTemplateName;
-
-			if (this.EnableSEOPageTitle)
-			{
-				this.ViewBag.Title = viewModel.DisplayName;
-			}
-
-			return this.View(templateName, viewModel);
-		}
-
-		protected override void HandleUnknownAction(string actionName)
-		{
-			this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
-		}
-
-		private IProductModel ResolveModel()
-		{
-			var args = new Castle.MicroKernel.Arguments();
-
-			args.AddProperties(new
-			{
-				itemsPerPage = this.ItemsPerPage,
-				openInSamePage = this.OpenInSamePage,
-				isManualSelectionMode = this.IsManualSelectionMode,
-				enableCategoryFallback = this.EnableCategoryFallback,
-				detailsPageId = this.DetailsPageId,
-				productIds = this.ProductIds,
-				categoryIds = this.CategoryIds,
-				fallbackCategoryIds = this.FallbackCategoryIds
-			});
-
-			var container = UCommerceUIModule.Container;
-			var model = container.Resolve<IProductModel>(args);
-
-			return model;
-		}
-
-		private string listTemplateNamePrefix = "List.";
-		private string detailTemplateNamePrefix = "Detail.";
-	}
+            return model;
+        }
+    }
 }

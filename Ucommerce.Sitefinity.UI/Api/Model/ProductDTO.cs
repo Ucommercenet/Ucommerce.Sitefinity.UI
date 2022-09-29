@@ -8,7 +8,6 @@ namespace UCommerce.Sitefinity.UI.Api.Model
     public class ProductDTO
     {
         public Guid ProductGuid { get; set; }
-
         public Guid VariantGuid { get; set; }
     }
 }

@@ -1,243 +1,270 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Modules.Libraries;
 using Telerik.Sitefinity.Services;
 using Telerik.Sitefinity.Web;
 using Ucommerce.Api;
-using Ucommerce.Extensions;
+using Ucommerce.Search.Models;
 using UCommerce.Sitefinity.UI.Constants;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
+using ObjectFactory = Ucommerce.Infrastructure.ObjectFactory;
+using PriceGroup = Ucommerce.EntitiesV2.PriceGroup;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
-	/// <summary>
-	/// The Model class of the Category MVC widget.
-	/// </summary>
-	internal class CategoryModel : ICategoryModel
-	{
-		public ICatalogLibrary CatalogLibrary => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogLibrary>();
-		public ICatalogContext CatalogContext => Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogContext>();
+    /// <summary>
+    /// The Model class of the Category MVC widget.
+    /// </summary>
+    internal class CategoryModel : ICategoryModel
+    {
+        internal static string DefaultCategoryName = "Category";
+        private readonly bool allowChangingCurrency;
+        private readonly Guid categoryPageId;
+        private readonly bool hideMiniBasket;
+        private readonly Guid imageId;
+        private readonly Guid productDetailsPageId;
+        private readonly Guid searchPageId;
+        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 
-		public CategoryModel(bool hideMiniBasket, bool allowChangingCurrency, Guid? imageId = null,
-			Guid? categoryPageId = null, Guid? searchPageId = null, Guid? productDetailsPageId = null)
-		{
-			this.hideMiniBasket = hideMiniBasket;
-			this.allowChangingCurrency = allowChangingCurrency;
-			this.imageId = imageId ?? Guid.Empty;
-			this.categoryPageId = categoryPageId ?? Guid.Empty;
-			this.searchPageId = searchPageId ?? Guid.Empty;
-			this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
-		}
+        public CategoryModel(bool hideMiniBasket,
+            bool allowChangingCurrency,
+            Guid? imageId = null,
+            Guid? categoryPageId = null,
+            Guid? searchPageId = null,
+            Guid? productDetailsPageId = null)
+        {
+            this.hideMiniBasket = hideMiniBasket;
+            this.allowChangingCurrency = allowChangingCurrency;
+            this.imageId = imageId ?? Guid.Empty;
+            this.categoryPageId = categoryPageId ?? Guid.Empty;
+            this.searchPageId = searchPageId ?? Guid.Empty;
+            this.productDetailsPageId = productDetailsPageId ?? Guid.Empty;
+        }
 
-		public virtual CategoryNavigationViewModel CreateViewModel()
-		{
-			var categoryNavigationViewModel = new CategoryNavigationViewModel();
-			// HACK: This is a temporary work around while we dig into the best way to do this with the new API
-			var rootCategoryGuids = CatalogLibrary.GetRootCategories().Select(c => c.Guid);
-			var rootCategories = Ucommerce.EntitiesV2.Category.Find(c => rootCategoryGuids.Contains(c.Guid));
-			var currentCategory = CatalogContext.CurrentCategory != null ? Ucommerce.EntitiesV2.Category.FirstOrDefault(x => x.Guid == CatalogContext.CurrentCategory.Guid) : null;
-			categoryNavigationViewModel.Categories = this.MapCategories(rootCategories, currentCategory);
+        public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
+        {
+            if (SystemManager.IsDesignMode)
+            {
+                message = "The widget is in Page Edit mode.";
+                return false;
+            }
 
-			var priceGroups = Ucommerce.EntitiesV2.PriceGroup.Find(x => CatalogContext.CurrentCatalog.PriceGroups.Contains(x.Guid));
-			var currentPriceGroup = Ucommerce.EntitiesV2.PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
-			categoryNavigationViewModel.Currencies = this.MapCurrencies(priceGroups, currentPriceGroup);
-			categoryNavigationViewModel.Localizations = this.GetCurrentCulture();
-			categoryNavigationViewModel.CurrentCurrency = new CategoryNavigationCurrencyViewModel()
-			{
-				DisplayName = currentPriceGroup.Name,
-				PriceGroupId = currentPriceGroup.PriceGroupId,
-			};
-			GetCurrentCulture();
+            message = null;
+            return true;
+        }
 
-			categoryNavigationViewModel.ProductDetailsPageId = this.productDetailsPageId;
+        public virtual CategoryNavigationViewModel CreateViewModel()
+        {
+            var categoryNavigationViewModel = new CategoryNavigationViewModel();
+            // HACK: This is a temporary work around while we dig into the best way to do this with the new API
+            var rootCategories = CatalogLibrary.GetRootCategories()
+                .ToList();
+            var currentCategory = CatalogContext.CurrentCategory;
+            categoryNavigationViewModel.Categories = MapCategories(rootCategories, currentCategory);
 
-			this.MapConfigurationFields(categoryNavigationViewModel);
+            var priceGroups = PriceGroup.Find(x => CatalogContext.CurrentCatalog.PriceGroups.Contains(x.Guid));
+            var currentPriceGroup = PriceGroup.FirstOrDefault(x => x.Guid == CatalogContext.CurrentPriceGroup.Guid);
+            categoryNavigationViewModel.Currencies = MapCurrencies(priceGroups, currentPriceGroup);
+            categoryNavigationViewModel.Localizations = GetCurrentCulture();
+            categoryNavigationViewModel.CurrentCurrency = new CategoryNavigationCurrencyViewModel
+            {
+                DisplayName = currentPriceGroup.Name,
+                PriceGroupId = currentPriceGroup.PriceGroupId,
+            };
+            GetCurrentCulture();
 
-			categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_ROUTE_NAME, RouteConstants.SEARCH_ROUTE_VALUE);
-			categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_NAME,
-				RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE);
-			categoryNavigationViewModel.Routes.Add(RouteConstants.PRICE_GROUP_ROUTE_NAME,
-				RouteConstants.PRICE_GROUP_ROUTE_VALUE);
-			categoryNavigationViewModel.Routes.Add(RouteConstants.GET_BASKET_ROUTE_NAME,
-				RouteConstants.GET_BASKET_ROUTE_VALUE);
+            categoryNavigationViewModel.ProductDetailsPageId = productDetailsPageId;
 
-			if (this.categoryPageId == Guid.Empty)
-			{
-				categoryNavigationViewModel.BaseUrl = UrlResolver.GetCurrentPageNodeUrl();
-			}
-			else
-			{
-				categoryNavigationViewModel.BaseUrl = UrlResolver.GetAbsoluteUrl(UrlResolver.GetPageNodeUrl(this.categoryPageId));
-			}
+            MapConfigurationFields(categoryNavigationViewModel);
 
-			return categoryNavigationViewModel;
-		}
+            categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_ROUTE_NAME, RouteConstants.SEARCH_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.SEARCH_SUGGESTIONS_ROUTE_NAME,
+                RouteConstants.SEARCH_SUGGESTIONS_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.PRICE_GROUP_ROUTE_NAME,
+                RouteConstants.PRICE_GROUP_ROUTE_VALUE);
+            categoryNavigationViewModel.Routes.Add(RouteConstants.GET_BASKET_ROUTE_NAME,
+                RouteConstants.GET_BASKET_ROUTE_VALUE);
 
-		private string GetCurrentCulture()
-		{
-			var actualSiteMapNode = SiteMapBase.GetActualCurrentNode();
-			var localization = new Dictionary<string, string>();
-			var siteMapProvider = SiteMapBase.GetCurrentProvider();
-			var currentPageSiteNode = siteMapProvider.CurrentNode as PageSiteNode;
+            if (categoryPageId == Guid.Empty)
+            {
+                categoryNavigationViewModel.BaseUrl = UrlResolver.GetCurrentPageNodeUrl();
+            }
+            else
+            {
+                categoryNavigationViewModel.BaseUrl = UrlResolver.GetAbsoluteUrl(UrlResolver.GetPageNodeUrl(categoryPageId));
+            }
 
-			if (actualSiteMapNode != null)
-			{
-				if (currentPageSiteNode != null)
-				{
-					foreach (var availableLanguage in currentPageSiteNode.AvailableLanguages)
-					{
-						localization.Add(availableLanguage.Name, currentPageSiteNode.GetUrl(availableLanguage));
-					}
-				}
-			}
+            return categoryNavigationViewModel;
+        }
 
-			return JsonConvert.SerializeObject(localization, Formatting.Indented);
-		}
+        protected virtual string GetCategoryPath(string path, Category category)
+        {
+            if (path == "")
+            {
+                return category.Name;
+            }
 
-		public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
-		{
-			if (Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
-			{
-				message = "The widget is in Page Edit mode.";
-				return false;
-			}
+            return $"{path}/{category.Name}";
+        }
 
-			message = null;
-			return true;
-		}
+        protected virtual IList<CategoryNavigationCategoryViewModel> MapCategories(IList<Category> rootCategories,
+            Category currentCategory,
+            string parentCategoryRelativePath = "")
+        {
+            var result = new List<CategoryNavigationCategoryViewModel>();
 
-		protected virtual void MapConfigurationFields(CategoryNavigationViewModel categoryNavigationViewModel)
-		{
-			categoryNavigationViewModel.HideMiniBasket = this.hideMiniBasket;
-			categoryNavigationViewModel.AllowChangingCurrency = this.allowChangingCurrency;
+            var subCategories = CatalogLibrary.GetCategories(rootCategories.SelectMany(x => x.Categories)
+                    .ToList())
+                .ToList();
+            foreach (var category in rootCategories)
+            {
+                var relativeCategoryPath = GetCategoryPath(parentCategoryRelativePath, category);
+                result.Add(new CategoryNavigationCategoryViewModel
+                {
+                    CategoryId = category.Guid,
+                    DisplayName = category.DisplayName,
+                    Url = GetAbsoluteCategoryUrl(relativeCategoryPath),
+                    Categories = MapCategories(subCategories.Where(x => category.Categories.Any(y => y.Equals(x.Guid)))
+                            .ToList(),
+                        currentCategory,
+                        relativeCategoryPath),
+                    IsActive = currentCategory != null && currentCategory.Guid == category.Guid,
+                });
+            }
 
-			if (this.imageId != Guid.Empty)
-			{
-				try
-				{
-					var manager = LibrariesManager.GetManager();
-					var image = manager.GetImage(this.imageId);
-					categoryNavigationViewModel.ImageUrl = MediaContentExtensions.ResolveMediaUrl(image, false);
-				}
-				catch (Exception ex)
-				{
-					Log.Write(
-						$"Categories Model: Image cannot be retrieved. Cannot resolve image with Id: {this.imageId} due to the following exception: {Environment.NewLine} {ex}",
-						ConfigurationPolicy.ErrorLog);
-				}
-			}
+            return result;
+        }
 
-			if (this.searchPageId != Guid.Empty)
-			{
-				var nextSearchUrl = UrlResolver.GetPageNodeUrl(this.searchPageId);
+        protected virtual void MapConfigurationFields(CategoryNavigationViewModel categoryNavigationViewModel)
+        {
+            categoryNavigationViewModel.HideMiniBasket = hideMiniBasket;
+            categoryNavigationViewModel.AllowChangingCurrency = allowChangingCurrency;
 
-				if (nextSearchUrl != null)
-					categoryNavigationViewModel.SearchPageUrl = nextSearchUrl;
-			}
-		}
+            if (imageId != Guid.Empty)
+            {
+                try
+                {
+                    var manager = LibrariesManager.GetManager();
+                    var image = manager.GetImage(imageId);
+                    categoryNavigationViewModel.ImageUrl = image.ResolveMediaUrl();
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(
+                        $"Categories Model: Image cannot be retrieved. Cannot resolve image with Id: {imageId} due to the following exception: {Environment.NewLine} {ex}",
+                        ConfigurationPolicy.ErrorLog);
+                }
+            }
 
-		protected virtual IList<CategoryNavigationCategoryViewModel> MapCategories(ICollection<Ucommerce.EntitiesV2.Category> rootCategories,
-			Ucommerce.EntitiesV2.Category currentCategory)
-		{
-			var result = new List<CategoryNavigationCategoryViewModel>();
+            if (searchPageId != Guid.Empty)
+            {
+                var nextSearchUrl = UrlResolver.GetPageNodeUrl(searchPageId);
 
-			foreach (var category in rootCategories)
-			{
-				result.Add(new CategoryNavigationCategoryViewModel()
-				{
-					CategoryId = category.CategoryId,
-					DisplayName = category.DisplayName(),
-					Url = this.GetCategoryUrl(category),
-					Categories = this.MapCategories(category.Categories.Where(x => x.DisplayOnSite).ToList(),
-						currentCategory),
-					IsActive = currentCategory != null && currentCategory.Guid == category.Guid,
-				});
-			}
+                if (nextSearchUrl != null)
+                {
+                    categoryNavigationViewModel.SearchPageUrl = nextSearchUrl;
+                }
+            }
+        }
 
-			return result;
-		}
+        protected virtual IList<CategoryNavigationCurrencyViewModel> MapCurrencies(ICollection<PriceGroup> currentCatalogAllowedPriceGroups,
+            PriceGroup currentPriceGroup)
+        {
+            var categoryNavigationCurrencyViewModels = new List<CategoryNavigationCurrencyViewModel>();
 
-		protected virtual IList<CategoryNavigationCurrencyViewModel> MapCurrencies(
-			ICollection<Ucommerce.EntitiesV2.PriceGroup> currentCatalogAllowedPriceGroups, Ucommerce.EntitiesV2.PriceGroup currentPriceGroup)
-		{
-			var categoryNavigationCurrencyViewModels = new List<CategoryNavigationCurrencyViewModel>();
+            foreach (var currentCatalogAllowedPriceGroup in currentCatalogAllowedPriceGroups)
+            {
+                if (currentPriceGroup == currentCatalogAllowedPriceGroup)
+                {
+                    continue;
+                }
 
-			foreach (var currentCatalogAllowedPriceGroup in currentCatalogAllowedPriceGroups)
-			{
-				if (currentPriceGroup == currentCatalogAllowedPriceGroup) continue;
-				var categoryNavigationCurrencyViewModel = new CategoryNavigationCurrencyViewModel();
+                var categoryNavigationCurrencyViewModel = new CategoryNavigationCurrencyViewModel();
 
-				categoryNavigationCurrencyViewModel.DisplayName = currentCatalogAllowedPriceGroup.Name;
-				categoryNavigationCurrencyViewModel.PriceGroupId = currentCatalogAllowedPriceGroup.PriceGroupId;
+                categoryNavigationCurrencyViewModel.DisplayName = currentCatalogAllowedPriceGroup.Name;
+                categoryNavigationCurrencyViewModel.PriceGroupId = currentCatalogAllowedPriceGroup.PriceGroupId;
 
-				categoryNavigationCurrencyViewModels.Add(categoryNavigationCurrencyViewModel);
-			}
+                categoryNavigationCurrencyViewModels.Add(categoryNavigationCurrencyViewModel);
+            }
 
-			return categoryNavigationCurrencyViewModels;
-		}
+            return categoryNavigationCurrencyViewModels;
+        }
 
-		private string GetCategoryUrl(Ucommerce.EntitiesV2.Category category)
-		{
-			var baseUrl = string.Empty;
-			if (this.categoryPageId == Guid.Empty)
-			{
-				baseUrl = UrlResolver.GetCurrentPageNodeUrl();
-			}
-			else
-			{
-				baseUrl = UrlResolver.GetPageNodeUrl(this.categoryPageId);
-			}
+        private string GetAbsoluteCategoryUrl(string relativeCategoryPath)
+        {
+            string baseUrl;
+            if (categoryPageId == Guid.Empty)
+            {
+                baseUrl = UrlResolver.GetCurrentPageNodeUrl();
+            }
+            else
+            {
+                baseUrl = UrlResolver.GetPageNodeUrl(categoryPageId);
+            }
 
-			var searchCategory = CatalogLibrary.GetCategory(category.Guid);
-			var catUrl = GetCategoryPath(searchCategory);
-			string relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", catUrl);
-			string url;
+            var relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", relativeCategoryPath);
 
-			if (SystemManager.CurrentHttpContext.Request.Url != null)
-			{
-				url = UrlPath.ResolveUrl(relativeUrl, true);
-			}
-			else
-			{
-				url = UrlResolver.GetAbsoluteUrl(SiteMapBase.GetActualCurrentNode().Url);
-			}
+            if (SystemManager.CurrentHttpContext.Request.Url != null)
+            {
+                return UrlPath.ResolveUrl(relativeUrl, true);
+            }
 
-			return url;
-		}
+            return UrlResolver.GetAbsoluteUrl(SiteMapBase.GetActualCurrentNode()
+                .Url);
+        }
 
-		internal static string GetCategoryPath(Ucommerce.Search.Models.Category category)
-		{
-			var catalogLibrary = Ucommerce.Infrastructure.ObjectFactory.Instance.Resolve<ICatalogLibrary>();
+        private string GetCurrentCulture()
+        {
+            var actualSiteMapNode = SiteMapBase.GetActualCurrentNode();
+            var localization = new Dictionary<string, string>();
+            var siteMapProvider = SiteMapBase.GetCurrentProvider();
+            var currentPageSiteNode = siteMapProvider.CurrentNode as PageSiteNode;
 
-			var catNames = new List<string>();
-			var cat = category;
+            if (actualSiteMapNode != null)
+            {
+                if (currentPageSiteNode != null)
+                {
+                    foreach (var availableLanguage in currentPageSiteNode.AvailableLanguages)
+                    {
+                        localization.Add(availableLanguage.Name, currentPageSiteNode.GetUrl(availableLanguage));
+                    }
+                }
+            }
 
-			while (cat != null)
-			{
-				catNames.Add(cat.Name);
-				if (cat.ParentCategory.HasValue)
-					cat = catalogLibrary.GetCategories(new List<Guid> { cat.ParentCategory.Value }).FirstOrDefault();
-				else
-					cat = null;
-			}
+            return JsonConvert.SerializeObject(localization, Formatting.Indented);
+        }
 
-			catNames.Reverse();
-			var catUrl = String.Join("/", catNames.ToArray());
+        internal static string GetCategoryPath(Category category)
+        {
+            var catalogLibrary = ObjectFactory.Instance.Resolve<ICatalogLibrary>();
 
-			return catUrl;
-		}
+            var catNames = new List<string>();
+            var cat = category;
 
-		private Guid imageId;
-		private bool hideMiniBasket;
-		private bool allowChangingCurrency;
-		private Guid categoryPageId;
-		private Guid searchPageId;
-		private Guid productDetailsPageId;
-		internal static string DefaultCategoryName = "Category";
-	}
+            while (cat != null)
+            {
+                catNames.Add(cat.Name);
+                if (cat.ParentCategory.HasValue)
+                {
+                    cat = catalogLibrary.GetCategories(new List<Guid> { cat.ParentCategory.Value })
+                        .FirstOrDefault();
+                }
+                else
+                {
+                    cat = null;
+                }
+            }
+
+            catNames.Reverse();
+            var catUrl = string.Join("/", catNames.ToArray());
+
+            return catUrl;
+        }
+    }
 }

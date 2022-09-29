@@ -5,7 +5,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model.Contracts
 {
     public interface IAddReviewModel
     {
-        bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
         AddReviewDTO Add(AddReviewSubmitModel viewModel);
+        bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
     }
 }

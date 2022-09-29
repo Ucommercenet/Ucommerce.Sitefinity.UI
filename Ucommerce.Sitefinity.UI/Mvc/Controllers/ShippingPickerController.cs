@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Castle.MicroKernel;
 using Telerik.Sitefinity.Mvc;
 using Telerik.Sitefinity.Personalization;
 using UCommerce.Sitefinity.UI.Api.Model;
@@ -12,31 +14,51 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
     /// <summary>
     /// The controller class for the Shipping Picker MVC widget.
     /// </summary>
-    [ControllerToolboxItem(Name = "uShippingPicker_MVC", Title = "Shipping Picker",
-        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION, ModuleName = UCommerceUIModule.NAME,
+    [ControllerToolboxItem(Name = "uShippingPicker_MVC",
+        Title = "Shipping Picker",
+        SectionName = UCommerceUIModule.UCOMMERCE_WIDGET_SECTION,
+        ModuleName = UCommerceUIModule.NAME,
         CssClass = "ucIcnShippingPicker sfMvcIcn")]
     public class ShippingPickerController : Controller, IPersonalizable
     {
+        private readonly string detailTemplateNamePrefix = "Detail.";
         public Guid? NextStepId { get; set; }
         public Guid? PreviousStepId { get; set; }
         public string TemplateName { get; set; } = "Index";
 
-        public ActionResult Index()
+        [HttpPost]
+        [RelativeRoute("uc/checkout/shipping")]
+        public ActionResult CreateShipment(ShippingPickerViewModel createShipmentViewModel)
         {
-            var detailTemplateName = this.detailTemplateNamePrefix + this.TemplateName;
             var model = ResolveModel();
-
             string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
-
-            parameters.Add("mode","index");
+            var parameters = new Dictionary<string, object>();
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return PartialView("_Warning", message);
             }
 
-            return View(detailTemplateName);
+            model.CreateShipment(createShipmentViewModel);
+
+            if (ModelState.IsValid)
+            {
+                return Json(new OperationStatusDTO
+                        { Status = "success" },
+                    JsonRequestBehavior.AllowGet);
+            }
+
+            var errorList = ModelState.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.Errors.Select(e => e.ErrorMessage)
+                    .ToArray()
+            );
+
+            var responseDTO = new OperationStatusDTO();
+            responseDTO.Status = "failed";
+            responseDTO.Data.Add("errors", errorList);
+
+            return Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -46,11 +68,12 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
             var model = ResolveModel();
             string message;
 
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.Json(new OperationStatusDTO() {Status = "failed", Message = message},
+                return Json(new OperationStatusDTO
+                        { Status = "failed", Message = message },
                     JsonRequestBehavior.AllowGet);
             }
 
@@ -66,64 +89,46 @@ namespace UCommerce.Sitefinity.UI.Mvc.Controllers
 
             responseDTO.Data.Add("data", sippingPickerVM);
 
-            return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
+            return Json(responseDTO, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        [RelativeRoute("uc/checkout/shipping")]
-        public ActionResult CreateShipment(ShippingPickerViewModel createShipmentViewModel)
+        public ActionResult Index()
         {
+            var detailTemplateName = detailTemplateNamePrefix + TemplateName;
             var model = ResolveModel();
+
             string message;
-            var parameters = new System.Collections.Generic.Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
+
+            parameters.Add("mode", "index");
 
             if (!model.CanProcessRequest(parameters, out message))
             {
-                return this.PartialView("_Warning", message);
+                return PartialView("_Warning", message);
             }
 
-            model.CreateShipment(createShipmentViewModel);
-
-            if (ModelState.IsValid)
-            {
-                return this.Json(new OperationStatusDTO() {Status = "success"}, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                var errorList = ModelState.ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
-
-                var responseDTO = new OperationStatusDTO();
-                responseDTO.Status = "failed";
-                responseDTO.Data.Add("errors", errorList);
-
-                return this.Json(responseDTO, JsonRequestBehavior.AllowGet);
-            }
+            return View(detailTemplateName);
         }
 
         public IShippingPickerModel ResolveModel()
         {
-            var args = new Castle.MicroKernel.Arguments();
+            var args = new Arguments();
 
             args.AddProperties(new
             {
-                nextStepId = this.NextStepId,
-                previousStepId = this.PreviousStepId
+                nextStepId = NextStepId,
+                previousStepId = PreviousStepId
             });
 
             var container = UCommerceUIModule.Container;
-            var model = container.Resolve<IShippingPickerModel>(args);                
+            var model = container.Resolve<IShippingPickerModel>(args);
 
             return model;
         }
 
         protected override void HandleUnknownAction(string actionName)
         {
-            this.ActionInvoker.InvokeAction(this.ControllerContext, "Index");
+            ActionInvoker.InvokeAction(ControllerContext, "Index");
         }
-
-        private string detailTemplateNamePrefix = "Detail.";
     }
 }

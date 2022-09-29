@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ucommerce.Search.Models;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
-using System.Collections.Generic;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
 {
@@ -11,11 +11,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     public interface IProductModel
     {
         bool CanProcessRequest(Dictionary<string, object> parameters, out string message);
-
-        ProductListViewModel CreateListViewModel();
-
         ProductDetailViewModel CreateDetailsViewModel();
-
+        ProductListViewModel CreateListViewModel();
         string GetProductUrl(Category category, Product product, bool openInSamePage, Guid detailPageId);
     }
 }

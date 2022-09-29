@@ -1,8 +1,4 @@
-﻿@using System.Web.Mvc
-@using System.Web.Mvc.Html
-@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
-@using Telerik.Sitefinity.Modules.Pages;
-@using Telerik.Sitefinity.UI.MVC;
+﻿@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
 @using Telerik.Sitefinity.Services;
 @using Telerik.Sitefinity.Web;
 @using Newtonsoft.Json;
@@ -18,9 +14,9 @@
 @{
 	Layout = null;
 	var catalogLibrary = ObjectFactory.Instance.Resolve<ICatalogContext>();
-	string pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
-	string currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
-	Guid productId = Guid.Empty;
+	var pageNodeUrl = SiteMapBase.GetActualCurrentNode().Url.ToString();
+	var currentPageUrl = UrlPath.ResolveUrl(pageNodeUrl, true, true);
+	var productId = Guid.Empty;
 
 	if (catalogLibrary.CurrentProduct != null)
 	{

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Web.Hosting;
-using System.Web.Optimization;
 using Telerik.Microsoft.Practices.Unity;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
