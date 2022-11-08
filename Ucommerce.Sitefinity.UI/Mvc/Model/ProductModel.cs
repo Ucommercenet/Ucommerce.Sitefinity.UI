@@ -52,13 +52,13 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         private IRepository<Ucommerce.EntitiesV2.Product> ProductRepository => ObjectFactory.Instance.Resolve<IRepository<Ucommerce.EntitiesV2.Product>>();
 
         public ProductModel(int itemsPerPage,
-                            bool openInSamePage,
-                            bool isManualSelectionMode,
-                            bool enableCategoryFallback,
-                            Guid? detailsPageId = null,
-                            string productIds = null,
-                            string categoryIds = null,
-                            string fallbackCategoryIds = null)
+            bool openInSamePage,
+            bool isManualSelectionMode,
+            bool enableCategoryFallback,
+            Guid? detailsPageId = null,
+            string productIds = null,
+            string categoryIds = null,
+            string fallbackCategoryIds = null)
         {
             this.itemsPerPage = itemsPerPage;
             this.openInSamePage = openInSamePage;
@@ -71,7 +71,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         }
 
         public virtual IRawSearch<Product> ApplySorting(IRawSearch<Product> productsQuery,
-                                                        ProductListViewModel listVm)
+            ProductListViewModel listVm)
         {
             var sortingOptions = new List<SortOption>();
 
@@ -207,8 +207,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     ProductUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct),
                     Price = new Money(price, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString(),
                     Discount = discount > 0
-                                   ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
-                                   : "",
+                        ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
+                        : "",
                     Sku = currentProduct.Sku,
                     Rating = Convert.ToInt32(Math.Round(currentProduct.Rating.GetValueOrDefault())),
                     VariantSku = currentProduct.VariantSku,
@@ -341,16 +341,16 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         }
 
         public virtual string GetProductUrl(Ucommerce.Search.Models.Category category,
-                                            Product product,
-                                            bool openInSamePage,
-                                            Guid detailPageId)
+            Product product,
+            bool openInSamePage,
+            Guid detailPageId)
         {
             var baseUrl = openInSamePage ? UrlResolver.GetCurrentPageNodeUrl() : UrlResolver.GetPageNodeUrl(detailPageId);
 
             var productCategory = category?.Guid ?? product?.Categories.FirstOrDefault();
             var catUrl = productCategory == null
-                             ? CategoryModel.DefaultCategoryName
-                             : CategoryModel.GetCategoryPath(CatalogLibrary.GetCategory(productCategory));
+                ? CategoryModel.DefaultCategoryName
+                : CategoryModel.GetCategoryPath(CatalogLibrary.GetCategory(productCategory));
 
             var rawValue = $"{catUrl}/p/{product?.Slug}";
             var relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", rawValue);
@@ -401,12 +401,14 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         }
 
         private IRawSearch<Product> ApplyManualSelection(IReadOnlyList<Guid> productIds,
-                                                         IReadOnlyList<Guid> categoryIds)
+            IReadOnlyList<Guid> categoryIds)
         {
             var facets = HttpContext.Current.Request.QueryString.ToFacets();
+            var i = productIds.ToList();
+            var i2 = categoryIds.ToList();
 
             var products = ProductIndex.Find<Product>()
-                .Where(x => productIds.Contains(x.Guid) || categoryIds.Any(c => x.Categories.Contains(c)));
+                .Where(x => i.Contains(x.Guid) || i2.Contains(x.Categories));
 
             if (facets != null && facets.Any())
             {
@@ -454,7 +456,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             else
             {
                 url = UrlResolver.GetAbsoluteUrl(SiteMapBase.GetActualCurrentNode()
-                                                     .Url + "?{0}");
+                    .Url + "?{0}");
             }
 
             return url;
@@ -484,7 +486,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         }
 
         private IRawSearch<Product> GetProductsQuery(Ucommerce.Search.Models.Category category,
-                                                     string searchTerm)
+            string searchTerm)
         {
             if (isManualSelectionMode)
             {
@@ -517,9 +519,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         }
 
         private IList<ProductDTO> MapProducts(IList<Product> products,
-                                              Ucommerce.Search.Models.Category category,
-                                              bool openInSamePage,
-                                              Guid detailPageId)
+            Ucommerce.Search.Models.Category category,
+            bool openInSamePage,
+            Guid detailPageId)
         {
             var result = new List<ProductDTO>();
             var currentCatalog = CatalogContext.CurrentCatalog;
@@ -550,8 +552,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     VariantSku = product.VariantSku,
                     Price = new Money(price, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString(),
                     Discount = discount > 0
-                                   ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
-                                   : "",
+                        ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
+                        : "",
                     DisplayName = product.DisplayName,
                     ThumbnailImageMediaUrl = product.ThumbnailImageUrl,
                     ProductUrl = GetProductUrl(category, product, openInSamePage, detailPageId),
