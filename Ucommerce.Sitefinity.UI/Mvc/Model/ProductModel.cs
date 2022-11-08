@@ -22,7 +22,7 @@ using UCommerce.Sitefinity.UI.Mvc.Services;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
 using UCommerce.Sitefinity.UI.Search;
-using Category = Ucommerce.Search.Models.Category;
+using Category = Ucommerce.EntitiesV2.Category;
 using Product = Ucommerce.Search.Models.Product;
 
 namespace UCommerce.Sitefinity.UI.Mvc.Model
@@ -33,45 +33,45 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
     internal class ProductModel : IProductModel
     {
         public const string PAGER_QUERY_STRING_KEY = "page";
-        private const string NO_CATALOG_ERROR_MESSAGE = "There is no product catalog configured.";
-        private const string NO_CATEGORIES_ERROR_MESSAGE = "There are no product categories configured.";
-        private readonly string categoryIds;
+        private readonly Lazy<IReadOnlyList<Guid>> _categoryIds;
+        private readonly Lazy<IReadOnlyList<Guid>> _fallbackCategoryIds;
+        private readonly Lazy<IReadOnlyList<Guid>> _productIds;
         private readonly Guid detailsPageId;
         private readonly bool enableCategoryFallback;
-        private readonly string fallbackCategoryIds;
         private readonly bool isManualSelectionMode;
         private readonly int itemsPerPage;
         private readonly bool openInSamePage;
-        private readonly string productIds;
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
         public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
         public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
         public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
         public IUrlService UrlService => ObjectFactory.Instance.Resolve<IUrlService>();
+        private IRepository<Category> CategoryRepository => ObjectFactory.Instance.Resolve<IRepository<Category>>();
         private ILocalizationContext LocalizationContext => ObjectFactory.Instance.Resolve<ILocalizationContext>();
         private IIndexDefinition<Product> ProductIndexDefinition => ObjectFactory.Instance.Resolve<IIndexDefinition<Product>>();
+        private IRepository<Ucommerce.EntitiesV2.Product> ProductRepository => ObjectFactory.Instance.Resolve<IRepository<Ucommerce.EntitiesV2.Product>>();
 
         public ProductModel(int itemsPerPage,
-            bool openInSamePage,
-            bool isManualSelectionMode,
-            bool enableCategoryFallback,
-            Guid? detailsPageId = null,
-            string productIds = null,
-            string categoryIds = null,
-            string fallbackCategoryIds = null)
+                            bool openInSamePage,
+                            bool isManualSelectionMode,
+                            bool enableCategoryFallback,
+                            Guid? detailsPageId = null,
+                            string productIds = null,
+                            string categoryIds = null,
+                            string fallbackCategoryIds = null)
         {
             this.itemsPerPage = itemsPerPage;
             this.openInSamePage = openInSamePage;
             this.isManualSelectionMode = isManualSelectionMode;
             this.enableCategoryFallback = enableCategoryFallback;
-            this.detailsPageId = detailsPageId.HasValue ? detailsPageId.Value : Guid.Empty;
-            this.productIds = productIds;
-            this.categoryIds = categoryIds;
-            this.fallbackCategoryIds = fallbackCategoryIds;
+            this.detailsPageId = detailsPageId ?? Guid.Empty;
+            _productIds = new Lazy<IReadOnlyList<Guid>>(() => GetProductIds(productIds));
+            _categoryIds = new Lazy<IReadOnlyList<Guid>>(() => GetCategoryIds(categoryIds));
+            _fallbackCategoryIds = new Lazy<IReadOnlyList<Guid>>(() => GetCategoryIds(fallbackCategoryIds));
         }
 
-        public virtual void ApplySorting(ref IQueryable<Product> productsQuery,
-            ref ProductListViewModel listVm)
+        public virtual IRawSearch<Product> ApplySorting(IRawSearch<Product> productsQuery,
+                                                        ProductListViewModel listVm)
         {
             var sortingOptions = new List<SortOption>();
 
@@ -149,6 +149,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
 
             listVm.Sorting = sortingOptions;
+            return productsQuery;
         }
 
         public virtual bool CanProcessRequest(Dictionary<string, object> parameters, out string message)
@@ -206,8 +207,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     ProductUrl = UrlService.GetUrl(CatalogContext.CurrentCatalog, CatalogContext.CurrentProduct),
                     Price = new Money(price, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString(),
                     Discount = discount > 0
-                        ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
-                        : "",
+                                   ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
+                                   : "",
                     Sku = currentProduct.Sku,
                     Rating = Convert.ToInt32(Math.Round(currentProduct.Rating.GetValueOrDefault())),
                     VariantSku = currentProduct.VariantSku,
@@ -313,20 +314,20 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             var searchTerm = HttpContext.Current.Request.QueryString["search"];
 
             var queryResult = GetProductsQuery(currentCategory, searchTerm);
-            ApplySorting(ref queryResult, ref viewModel);
+            queryResult = ApplySorting(queryResult, viewModel);
 
             var itemsToSkip = viewModel.CurrentPage > 1 ? itemsPerPage * (viewModel.CurrentPage - 1) : 0;
 
             var products = queryResult
-                .Skip(itemsToSkip)
-                .Take(itemsPerPage)
+                .Skip((uint)itemsToSkip)
+                .Take((uint)itemsPerPage)
                 .ToList();
 
-            viewModel.TotalCount = queryResult.Count();
-            viewModel.Products = MapProducts(products, currentCategory, openInSamePage, detailsPageId);
+            viewModel.TotalCount = (int)products.TotalCount;
+            viewModel.Products = MapProducts(products.ToList(), currentCategory, openInSamePage, detailsPageId);
             viewModel.TotalPagesCount = (viewModel.TotalCount + itemsPerPage - 1) / itemsPerPage;
             viewModel.ShowPager = viewModel.TotalPagesCount > 1;
-            viewModel.PagingUrlTemplate = GetPagingUrlTemplate(currentCategory);
+            viewModel.PagingUrlTemplate = GetPagingUrlTemplate();
             viewModel.Routes.Add(RouteConstants.ADD_TO_BASKET_ROUTE_NAME, RouteConstants.ADD_TO_BASKET_ROUTE_VALUE);
 
             if (currentCategory != null)
@@ -339,34 +340,20 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return viewModel;
         }
 
-        public virtual string GetProductUrl(Category category,
-            Product product,
-            bool openInSamePage,
-            Guid detailPageId)
+        public virtual string GetProductUrl(Ucommerce.Search.Models.Category category,
+                                            Product product,
+                                            bool openInSamePage,
+                                            Guid detailPageId)
         {
-            var baseUrl = string.Empty;
-            if (openInSamePage)
-            {
-                baseUrl = UrlResolver.GetCurrentPageNodeUrl();
-            }
-            else
-            {
-                baseUrl = UrlResolver.GetPageNodeUrl(detailPageId);
-            }
+            var baseUrl = openInSamePage ? UrlResolver.GetCurrentPageNodeUrl() : UrlResolver.GetPageNodeUrl(detailPageId);
 
-            string catUrl;
             var productCategory = category?.Guid ?? product?.Categories.FirstOrDefault();
-            if (productCategory == null)
-            {
-                catUrl = CategoryModel.DefaultCategoryName;
-            }
-            else
-            {
-                catUrl = CategoryModel.GetCategoryPath(CatalogLibrary.GetCategory(productCategory));
-            }
+            var catUrl = productCategory == null
+                             ? CategoryModel.DefaultCategoryName
+                             : CategoryModel.GetCategoryPath(CatalogLibrary.GetCategory(productCategory));
 
-            var rawtUrl = string.Format("{0}/p/{1}", catUrl, product.Slug);
-            var relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", rawtUrl);
+            var rawValue = $"{catUrl}/p/{product?.Slug}";
+            var relativeUrl = string.Concat(VirtualPathUtility.RemoveTrailingSlash(baseUrl), "/", rawValue);
 
             string url;
 
@@ -382,7 +369,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             return url;
         }
 
-        private IQueryable<Product> ApplyAutoSelection(Category currentCategory, string searchTerm)
+        private IRawSearch<Product> ApplyAutoSelection(Ucommerce.Search.Models.Category currentCategory, string searchTerm)
         {
             var facets = HttpContext.Current.Request.QueryString.ToFacets();
 
@@ -410,12 +397,11 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 );
             }
 
-            return matchingProducts.ToList()
-                .AsQueryable();
+            return matchingProducts;
         }
 
-        private IQueryable<Product> ApplyManualSelection(List<Guid> productIds,
-            List<Guid> categoryIds)
+        private IRawSearch<Product> ApplyManualSelection(IReadOnlyList<Guid> productIds,
+                                                         IReadOnlyList<Guid> categoryIds)
         {
             var facets = HttpContext.Current.Request.QueryString.ToFacets();
 
@@ -424,16 +410,36 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
 
             if (facets != null && facets.Any())
             {
-                return products.Where(facets.ToFacetDictionary())
-                    .ToFacets()
-                    .AsQueryable();
+                return products.Where(facets.ToFacetDictionary());
             }
 
-            return products.ToList()
-                .AsQueryable();
+            return products;
         }
 
-        private string GetPagingUrlTemplate(Category category)
+        private IReadOnlyList<Guid> GetCategoryIds(string categoryIds)
+        {
+            if (categoryIds.IsNullOrWhitespace())
+            {
+                return new List<Guid>();
+            }
+
+            var ids = categoryIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var guids = ids.Where(x => Guid.TryParse(x, out _))
+                .Select(Guid.Parse)
+                .ToList();
+            var integers = ids.Where(x => int.TryParse(x, out _))
+                .Select(int.Parse)
+                .ToList();
+
+            var fromIntegers = CategoryRepository.Select(x => integers.Contains(x.CategoryId))
+                .Select(x => x.Guid)
+                .ToList();
+
+            return guids.Concat(fromIntegers)
+                .ToList();
+        }
+
+        private string GetPagingUrlTemplate()
         {
             string url;
 
@@ -448,58 +454,46 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             else
             {
                 url = UrlResolver.GetAbsoluteUrl(SiteMapBase.GetActualCurrentNode()
-                    .Url + "?{0}");
+                                                     .Url + "?{0}");
             }
 
             return url;
         }
 
-        private IList<Ucommerce.EntitiesV2.Product> GetProductsFromSelectedCategoryIds(List<Guid> categoryIds)
+        private IReadOnlyList<Guid> GetProductIds(string productIds)
         {
-            var result = new List<Ucommerce.EntitiesV2.Product>();
-            var productsFromCategories = CategoryProductRelation.All()
-                .Where(x => categoryIds.Contains(x.Category.Guid))
-                .ToList()
-                .GroupBy(x => x.Category);
-
-            foreach (var productsFromCategory in productsFromCategories)
+            if (productIds.IsNullOrWhitespace())
             {
-                result.AddRange(productsFromCategory.Select(x => x.Product)
-                    .ToList());
+                return new List<Guid>();
             }
 
-            return result;
+            var ids = productIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var guids = ids.Where(x => Guid.TryParse(x, out _))
+                .Select(Guid.Parse)
+                .ToList();
+            var integers = ids.Where(x => int.TryParse(x, out _))
+                .Select(int.Parse)
+                .ToList();
+
+            var fromIntegers = ProductRepository.Select(x => integers.Contains(x.ProductId))
+                .Select(x => x.Guid)
+                .ToList();
+
+            return guids.Concat(fromIntegers)
+                .ToList();
         }
 
-        private ICollection<Product> GetProductsFromSelectedProductIds(List<Guid> productIds)
-        {
-            return ProductIndex.Find<Product>()
-                .Where(p => productIds.Contains(p.Guid))
-                .ToList()
-                .Results;
-        }
-
-        private IQueryable<Product> GetProductsQuery(Category category,
-            string searchTerm)
+        private IRawSearch<Product> GetProductsQuery(Ucommerce.Search.Models.Category category,
+                                                     string searchTerm)
         {
             if (isManualSelectionMode)
             {
-                var productGuids = productIds?.Split(',')
-                    .Select(Guid.Parse)
-                    .ToList() ?? new List<Guid>();
-                var categoryGuids = categoryIds?.Split(',')
-                    .Select(Guid.Parse)
-                    .ToList() ?? new List<Guid>();
-
-                return ApplyManualSelection(productGuids, categoryGuids);
+                return ApplyManualSelection(_productIds.Value, _categoryIds.Value);
             }
 
             if (string.IsNullOrWhiteSpace(searchTerm) && category == null && enableCategoryFallback)
             {
-                var categoryGuids = fallbackCategoryIds?.Split(',')
-                    .Select(Guid.Parse)
-                    .ToList() ?? new List<Guid>();
-                return ApplyManualSelection(new List<Guid>(), categoryGuids);
+                return ApplyManualSelection(new List<Guid>(), _fallbackCategoryIds.Value);
             }
 
             return ApplyAutoSelection(category, searchTerm);
@@ -523,9 +517,9 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         }
 
         private IList<ProductDTO> MapProducts(IList<Product> products,
-            Category category,
-            bool openInSamePage,
-            Guid detailPageId)
+                                              Ucommerce.Search.Models.Category category,
+                                              bool openInSamePage,
+                                              Guid detailPageId)
         {
             var result = new List<ProductDTO>();
             var currentCatalog = CatalogContext.CurrentCatalog;
@@ -556,8 +550,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     VariantSku = product.VariantSku,
                     Price = new Money(price, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString(),
                     Discount = discount > 0
-                        ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
-                        : "",
+                                   ? new Money(discount, CatalogContext.CurrentPriceGroup.CurrencyISOCode).ToString()
+                                   : "",
                     DisplayName = product.DisplayName,
                     ThumbnailImageMediaUrl = product.ThumbnailImageUrl,
                     ProductUrl = GetProductUrl(category, product, openInSamePage, detailPageId),
