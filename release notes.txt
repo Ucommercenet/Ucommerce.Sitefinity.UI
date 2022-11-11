@@ -1,12 +1,15 @@
 Change log for vNext
+
+Change log for 4.0.1
+Fix: When selecting products in the product selector, it threw an exception when using the `Product` widget.
+
+Change log for 4.0.0
 Fix: Setting Castle Windsor release policy to 'NoTrackingReleasePolicy'
 BRK: Changing ProductModel and CategoryModel to use Bolt to resolve products and categories. This change will require you to setup a IndexDefintion to resolve `UserDefinedFields`
 
-
 Change log for 3.6.1
-Fix: ProductViewModel now has access to product properties  
+Fix: ProductViewModel now has access to product properties
 Fix: "Add to basket" button only appears for parent products at the category level
 Fix: PaymentPicker widget only displays payment providers available for the selected shipping country
 Fix: Mini Basket now updates the price when adding new products
 Fix: Added "storeapi" route prefix to not clash with other CMS pages
-
