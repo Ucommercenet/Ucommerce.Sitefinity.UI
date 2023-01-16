@@ -15,7 +15,7 @@ namespace UCommerce.Sitefinity.UI.Api
     /// <summary>
     /// API Controller exposing endpoints for managing the basket.
     /// </summary>
-    public class BasketController : ApiController
+    public class UcommerceSitefintyUiBasketController : ApiController
     {
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
         public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();

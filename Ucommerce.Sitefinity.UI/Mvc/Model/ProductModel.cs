@@ -214,7 +214,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     VariantSku = currentProduct.VariantSku,
                     IsVariant = currentProduct.ProductType == ProductType.Variant,
                     IsProductFamily = currentProduct.ProductType == ProductType.ProductFamily,
-                    IsSellableProduct = currentProduct.ProductType == ProductType.ProductFamily || currentProduct.ProductType == ProductType.Variant
+                    IsSellableProduct = currentProduct.ProductType != ProductType.ProductFamily || currentProduct.ProductType == ProductType.Variant
                 };
 
                 if (currentProduct.ParentProduct != null)
@@ -557,7 +557,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                     DisplayName = product.DisplayName,
                     ThumbnailImageMediaUrl = product.ThumbnailImageUrl,
                     ProductUrl = GetProductUrl(category, product, openInSamePage, detailPageId),
-                    IsSellableProduct = product.ProductType == ProductType.ProductFamily || product.ProductType == ProductType.Variant
+                    IsSellableProduct = product.ProductType != ProductType.ProductFamily || product.ProductType == ProductType.Variant,
+                    IsAddableToCart = product.ProductType != ProductType.ProductFamily
                 };
 
                 result.Add(productViewModel);

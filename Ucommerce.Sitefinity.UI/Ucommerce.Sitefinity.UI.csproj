@@ -470,7 +470,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\BasketController.cs" />
+    <Compile Include="Api\UcommerceSitefintyUIBasketController.cs" />
     <Compile Include="Api\Model\AddToBasketDTO.cs" />
     <Compile Include="Api\Model\AddVoucherDTO.cs" />
     <Compile Include="Api\Model\BasketDTO.cs" />
@@ -485,8 +485,8 @@
     <Compile Include="Api\Model\ProductPricesDTO.cs" />
     <Compile Include="Api\Model\ProductReviewDTO.cs" />
     <Compile Include="Api\Model\UpdateLineItemDTO.cs" />
-    <Compile Include="Api\ProductController.cs" />
-    <Compile Include="Api\SearchApiController.cs" />
+    <Compile Include="Api\UcommerceSitefinityUIProductController.cs" />
+    <Compile Include="Api\UcommerceSitefinityUISearchApiController.cs" />
     <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Constants\RouteConstants.cs" />
