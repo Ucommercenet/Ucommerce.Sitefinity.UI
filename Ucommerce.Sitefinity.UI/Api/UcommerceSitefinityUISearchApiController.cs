@@ -18,7 +18,7 @@ namespace UCommerce.Sitefinity.UI.Api
     /// <summary>
     /// API Controller exposing endpoints related to search.
     /// </summary>
-    public class SearchApiController : ApiController
+    public class UcommerceSitefinityUISearchApiController : ApiController
     {
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
         public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
