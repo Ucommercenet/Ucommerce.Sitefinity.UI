@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,14 +18,21 @@ namespace UCommerce.Sitefinity.UI.Mvc
     /// </summary>
     public class ContextResolverAttribute : ActionFilterAttribute, IActionFilter
     {
-        private const string contextInitializedKey = "UCommerceContextInitialized";
-        public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
-        public IIndex<Category> CategoryIndex => ObjectFactory.Instance.Resolve<IIndex<Category>>();
-        public IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
+        private const string CONTEXT_INITIALIZED_KEY = "UcommerceContextInitialized";
+        private const string RESERVED_DOMAINS = "Ucommerce:Reserved:Domains";
+        private ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
+        private IIndex<Category> CategoryIndex => ObjectFactory.Instance.Resolve<IIndex<Category>>();
+        private IIndex<Product> ProductIndex => ObjectFactory.Instance.Resolve<IIndex<Product>>();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] != null && (bool)SystemManager.CurrentHttpContext.Items[contextInitializedKey])
+            if (!TryValidateReservedDomain(out _))
+            {
+                return;
+            }
+
+            if (SystemManager.CurrentHttpContext.Items[CONTEXT_INITIALIZED_KEY] != null
+                && (bool)SystemManager.CurrentHttpContext.Items[CONTEXT_INITIALIZED_KEY])
             {
                 return;
             }
@@ -31,9 +40,9 @@ namespace UCommerce.Sitefinity.UI.Mvc
             List<string> urlSegments = null;
 
             var currentUrl = SystemManager.CurrentHttpContext.Request.RawUrl;
-            if (currentUrl.Contains("?"))
+            if (currentUrl?.Contains("?") ?? false)
             {
-                currentUrl = currentUrl.Substring(0, currentUrl.IndexOf("?"));
+                currentUrl = currentUrl.Substring(0, currentUrl.IndexOf("?", StringComparison.Ordinal));
             }
 
             // NOTE: There are a few urls that aren't relevant
@@ -66,13 +75,13 @@ namespace UCommerce.Sitefinity.UI.Mvc
                 ResolveCurrentCategory(urlSegments);
             }
 
-            if (SystemManager.CurrentHttpContext.Items[contextInitializedKey] == null)
+            if (SystemManager.CurrentHttpContext.Items[CONTEXT_INITIALIZED_KEY] == null)
             {
-                SystemManager.CurrentHttpContext.Items.Add(contextInitializedKey, true);
+                SystemManager.CurrentHttpContext.Items.Add(CONTEXT_INITIALIZED_KEY, true);
             }
             else
             {
-                SystemManager.CurrentHttpContext.Items[contextInitializedKey] = true;
+                SystemManager.CurrentHttpContext.Items[CONTEXT_INITIALIZED_KEY] = true;
             }
         }
 
@@ -133,6 +142,22 @@ namespace UCommerce.Sitefinity.UI.Mvc
                 CatalogContext.CurrentProduct = product;
                 break;
             }
+        }
+
+        private static bool TryValidateReservedDomain(out string domain)
+        {
+            domain = null;
+            if (HttpContext.Current == null)
+            {
+                return false;
+            }
+
+            var reservedDomainsString = ConfigurationManager.AppSettings[RESERVED_DOMAINS] ?? string.Empty;
+            var reservedDomains = reservedDomainsString.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            domain = reservedDomains.FirstOrDefault(d => HttpContext.Current.Request.Url.Host.ToLowerInvariant()
+                .Contains(d.ToLowerInvariant()));
+
+            return domain.IsNullOrWhitespace();
         }
     }
 }
