@@ -22,6 +22,7 @@ using UCommerce.Sitefinity.UI.Mvc.Services;
 using UCommerce.Sitefinity.UI.Mvc.ViewModels;
 using UCommerce.Sitefinity.UI.Pages;
 using UCommerce.Sitefinity.UI.Search;
+using Ucommerce.Web;
 using Category = Ucommerce.EntitiesV2.Category;
 using Product = Ucommerce.Search.Models.Product;
 
@@ -41,6 +42,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
         private readonly bool isManualSelectionMode;
         private readonly int itemsPerPage;
         private readonly bool openInSamePage;
+        public IAbsoluteUrlService AbsoluteUrlService => ObjectFactory.Instance.Resolve<IAbsoluteUrlService>();
         public ICatalogContext CatalogContext => ObjectFactory.Instance.Resolve<ICatalogContext>();
         public ICatalogLibrary CatalogLibrary => ObjectFactory.Instance.Resolve<ICatalogLibrary>();
         public IInsightUcommerceService InsightUcommerce => UCommerceUIModule.Container.Resolve<IInsightUcommerceService>();
@@ -254,7 +256,7 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
                 if (variants.Count() != 0)
                 {
                     foreach (var userDefinedField in variants.First()
-                                 .GetUserDefinedFields())
+                        .GetUserDefinedFields())
                     {
                         var typeViewModel = new VariantTypeViewModel
                         {
@@ -363,6 +365,8 @@ namespace UCommerce.Sitefinity.UI.Mvc.Model
             }
             else
             {
+                // NOTE: This is what we should probably be using but it has the same issue
+                // url = AbsoluteUrlService.GetAbsoluteUrl(relativeUrl);
                 url = UrlResolver.GetAbsoluteUrl(relativeUrl);
             }
 
