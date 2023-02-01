@@ -20,7 +20,7 @@ namespace UCommerce.Sitefinity.UI.Pages
 
             if (HttpContext.Current?.Request?.Url == null)
             {
-                return relativeUrl;
+                return VirtualPathUtility.ToAbsolute(relativeUrl);
             }
 
             if (relativeUrl.StartsWith("/", StringComparison.Ordinal))
