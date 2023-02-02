@@ -51,7 +51,7 @@
     "url-loader": "^2.3.0",
     "vue": "^2.6.11",
     "vue-loader": "^15.9.2",
-    "vue-resource": "^1.5.1",
+    "vue-resource": "^1.5.3",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
