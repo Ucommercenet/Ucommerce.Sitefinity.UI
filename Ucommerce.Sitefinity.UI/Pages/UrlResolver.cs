@@ -18,9 +18,9 @@ namespace UCommerce.Sitefinity.UI.Pages
                 return relativeUrl;
             }
 
-            if (HttpContext.Current == null)
+            if (HttpContext.Current?.Request?.Url == null)
             {
-                return relativeUrl;
+                return VirtualPathUtility.ToAbsolute(relativeUrl);
             }
 
             if (relativeUrl.StartsWith("/", StringComparison.Ordinal))
