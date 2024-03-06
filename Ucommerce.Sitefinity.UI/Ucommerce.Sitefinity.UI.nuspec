@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 	<metadata>
 		<id>Ucommerce.Sitefinity.UI</id>
-		<version>4.0.2.22353</version>
+		<version>4.0.5.24066</version>
 		<authors>Ucommerce</authors>
 		<owners>Ucommerce</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,9 +12,9 @@
 		<dependencies>
 			<dependency id="uCommerce.Sitefinity" version="[9.5.1.21265, 9.9.9999]" />
 			<dependency id="Telerik.DataAccess.Core" version="2020.0.428.1" />
-			<dependency id="Telerik.Sitefinity.Core" version="[14.0.7721, 14.9.9999]" />
-			<dependency id="Telerik.Sitefinity.Feather.Core" version="[14.0.7721, 14.9.9999]" />
-			<dependency id="Telerik.Sitefinity.DigitalExperienceCloudConnector" version="[14.0.7721, 14.9.9999]" />
+			<dependency id="Telerik.Sitefinity.Core" version="[14.0.7721, 15.9.9999]" />
+			<dependency id="Telerik.Sitefinity.Feather.Core" version="[14.0.7721, 15.9.9999]" />
+			<dependency id="Telerik.Sitefinity.DigitalExperienceCloudConnector" version="[14.0.7721, 15.9.9999]" />
 			<dependency id="Microsoft.AspNet.Web.Optimization" version="1.1.3" />
 			<dependency id="Antlr" version="3.5.0.2" />
 			<dependency id="Antlr3.runtime" version="3.5.1.0" />
