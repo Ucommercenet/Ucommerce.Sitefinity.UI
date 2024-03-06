@@ -35,8 +35,8 @@ using UCommerce.Sitefinity.UI.App_Start;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.0.3.23013")]
-[assembly: AssemblyFileVersion("4.0.3.23013")]
+[assembly: AssemblyVersion("4.0.5.24066")]
+[assembly: AssemblyFileVersion("4.0.5.24066")]
 
 [assembly: ControllerContainer]
 [assembly: ResourcePackage]
