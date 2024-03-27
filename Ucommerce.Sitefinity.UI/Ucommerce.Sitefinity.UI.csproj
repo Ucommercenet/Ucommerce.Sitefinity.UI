@@ -750,6 +750,8 @@
     <EmbeddedResource Include="Mvc\Views\Shared\_Warning.cshtml" />
     <EmbeddedResource Include="assets\src\images\icons\product-reviews.png" />
     <EmbeddedResource Include="assets\src\images\icons\add-review.png" />
+    <EmbeddedResource Include="assets\build\js\main.js" />
+    <EmbeddedResource Include="assets\build\js\vendor.bundle.js" />
     <EmbeddedResource Include="assets\src\css\b4-category-navigation.css" />
     <EmbeddedResource Include="assets\src\css\uc-vue-styles.css" />
     <EmbeddedResource Include="assets\src\images\icons\icon-fb.png" />
@@ -783,7 +785,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="assets\build\js\" />
     <Folder Include="UCommerce\Apps\Ucommerce.Search.Widgets\Configuration\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
